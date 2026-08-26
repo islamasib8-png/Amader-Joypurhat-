@@ -73,8 +73,16 @@
       font-size: 16px;
     }
 
+    /* Firebase-এর লেখা যেভাবে থাকবে,
+       সেভাবেই paragraph/line break দেখাবে */
+    .content-card p {
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
     .card {
       cursor: pointer;
+      transition: 0.2s;
     }
 
     .card:active {
@@ -107,8 +115,10 @@
       color: #b91c1c;
     }
 
-    .hidden {
-      display: none;
+    .section-title {
+      font-size: 20px;
+      font-weight: bold;
+      margin: 20px 0 12px;
     }
 
     footer {
@@ -148,7 +158,9 @@
 
   <div class="container">
 
-    <a href="index.html" class="back">← ফিরে যান</a>
+    <a href="index.html" class="back">
+      ← ফিরে যান
+    </a>
 
     <div id="categoryBox"></div>
 
@@ -157,6 +169,7 @@
     <div id="contents"></div>
 
   </div>
+
 
   <footer>
 
@@ -226,8 +239,11 @@
     const db = getFirestore(app);
 
 
-    const params = new URLSearchParams(window.location.search);
-    const categoryId = params.get("id");
+    const params =
+      new URLSearchParams(window.location.search);
+
+    const categoryId =
+      params.get("id");
 
 
     async function loadData() {
@@ -258,14 +274,20 @@
         ========================= */
 
         const categorySnapshot =
-          await getDocs(collection(db, "categories"));
+          await getDocs(
+            collection(db, "categories")
+          );
+
 
         let categoryData = null;
+
 
         categorySnapshot.forEach((doc) => {
 
           if (doc.id === categoryId) {
+
             categoryData = doc.data();
+
           }
 
         });
@@ -281,6 +303,7 @@
 
 
         categoryBox.innerHTML = `
+
           <div class="title">
 
             <div class="icon">
@@ -296,6 +319,7 @@
             </p>
 
           </div>
+
         `;
 
 
@@ -304,7 +328,9 @@
         ========================= */
 
         const contentSnapshot =
-          await getDocs(collection(db, "contents"));
+          await getDocs(
+            collection(db, "contents")
+          );
 
 
         const allContents = [];
@@ -313,6 +339,7 @@
         contentSnapshot.forEach((doc) => {
 
           const data = doc.data();
+
 
           if (data.categoryId === categoryId) {
 
@@ -338,19 +365,26 @@
         if (isUpazila) {
 
           upazilaList.innerHTML = `
-            <div class="section-title"
-                 style="font-size:20px;font-weight:bold;margin:20px 0 12px;">
+
+            <div class="section-title">
               🏘️ উপজেলা সমূহ
             </div>
+
           `;
 
 
           const upazilas = [
+
             "জয়পুরহাট সদর উপজেলা",
+
             "পাঁচবিবি উপজেলা",
+
             "আক্কেলপুর উপজেলা",
+
             "কালাই উপজেলা",
+
             "ক্ষেতলাল উপজেলা"
+
           ];
 
 
@@ -359,18 +393,33 @@
             const card =
               document.createElement("div");
 
+
             card.className = "card";
 
+
             card.innerHTML = `
-              <div class="icon">🏘️</div>
-              <h3>${name}</h3>
-              <p>বিস্তারিত তথ্য দেখতে চাপ দিন</p>
+
+              <div class="icon">
+                🏘️
+              </div>
+
+              <h3>
+                ${name}
+              </h3>
+
+              <p>
+                বিস্তারিত তথ্য দেখতে চাপ দিন
+              </p>
+
             `;
 
 
             card.onclick = () => {
 
-              showUpazila(name, allContents);
+              showUpazila(
+                name,
+                allContents
+              );
 
             };
 
@@ -381,15 +430,20 @@
 
 
           contents.innerHTML = `
+
             <div class="loading">
-              উপরের তালিকা থেকে একটি উপজেলা নির্বাচন করুন।
+
+              উপরের তালিকা থেকে
+              একটি উপজেলা নির্বাচন করুন।
+
             </div>
+
           `;
 
 
         } else {
 
-          /* অন্য Category হলে আগের মতো
+          /* অন্য Category হলে
              সব Content একসাথে দেখাবে */
 
           showAllContents(allContents);
@@ -401,10 +455,15 @@
 
         console.error(error);
 
+
         categoryBox.innerHTML = `
+
           <div class="error">
+
             তথ্য লোড করা যাচ্ছে না।
+
           </div>
+
         `;
 
       }
@@ -416,17 +475,29 @@
        SHOW UPAZILA
        ========================= */
 
-    function showUpazila(name, allContents) {
+    function showUpazila(
+      name,
+      allContents
+    ) {
 
       const contents =
         document.getElementById("contents");
 
 
+      /*
+       Title-এর মধ্যে উপজেলা নাম আছে
+       কিনা সেটা পরীক্ষা করবে
+      */
+
       const matched =
         allContents.filter((item) => {
 
-          return item.title &&
-                 item.title.includes(name);
+          if (!item.title) {
+            return false;
+          }
+
+          return item.title.trim()
+            .includes(name);
 
         });
 
@@ -434,126 +505,11 @@
       if (matched.length === 0) {
 
         contents.innerHTML = `
+
           <div class="content-card">
 
-            <h3>${name}</h3>
+            <h3>
+              ${name}
+            </h3>
 
-            <p>
-              এই উপজেলার তথ্য এখনো যোগ করা হয়নি।
-            </p>
-
-          </div>
-        `;
-
-        return;
-
-      }
-
-
-      contents.innerHTML = `
-
-        <div class="title">
-
-          <div class="icon">🏘️</div>
-
-          <h2>${name}</h2>
-
-        </div>
-
-      `;
-
-
-      matched.forEach((item) => {
-
-        const card =
-          document.createElement("div");
-
-        card.className = "content-card";
-
-
-        card.innerHTML = `
-
-          <h3>
-            ${item.title}
-          </h3>
-
-          <p>
-            ${item.content || ""}
-          </p>
-
-        `;
-
-
-        contents.appendChild(card);
-
-      });
-
-
-      window.scrollTo({
-        top: contents.offsetTop - 15,
-        behavior: "smooth"
-      });
-
-    }
-
-
-    /* =========================
-       SHOW ALL CONTENT
-       ========================= */
-
-    function showAllContents(allContents) {
-
-      const contents =
-        document.getElementById("contents");
-
-
-      contents.innerHTML = "";
-
-
-      if (allContents.length === 0) {
-
-        contents.innerHTML = `
-          <div class="loading">
-            এই Topic-এর তথ্য এখনো যোগ করা হয়নি।
-          </div>
-        `;
-
-        return;
-
-      }
-
-
-      allContents.forEach((item) => {
-
-        const card =
-          document.createElement("div");
-
-        card.className = "content-card";
-
-
-        card.innerHTML = `
-
-          <h3>
-            ${item.title || ""}
-          </h3>
-
-          <p>
-            ${item.content || ""}
-          </p>
-
-        `;
-
-
-        contents.appendChild(card);
-
-      });
-
-    }
-
-
-    loadData();
-
-  </script>
-
-</body>
-</html>
+            <p
