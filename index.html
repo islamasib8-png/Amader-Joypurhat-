@@ -375,7 +375,31 @@
           `;
 
 
+          /* =========================
+             CARD CLICK
+             ========================= */
+
           card.onclick = () => {
+
+            /*
+              বাসের সময়সূচি হলে
+              সরাসরি Shohoz খুলবে
+            */
+
+            if (category.name === "বাসের সময়সূচি") {
+
+              window.location.href =
+                "https://www.shohoz.com/bus-tickets";
+
+              return;
+
+            }
+
+
+            /*
+              অন্যান্য সব Topic
+              আগের মতো topic.html খুলবে
+            */
 
             window.location.href =
               `topic.html?id=${category.id}`;
