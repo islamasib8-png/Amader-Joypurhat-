@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>আমাদের জয়পুরহাট</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f7fa;
+      color: #222;
+    }
+
+    header {
+      background: linear-gradient(135deg, #0f766e, #14b8a6);
+      color: white;
+      padding: 28px 20px;
+      text-align: center;
+    }
+
+    header h1 {
+      font-size: 28px;
+      margin-bottom: 8px;
+    }
+
+    header p {
+      font-size: 15px;
+      opacity: 0.95;
+    }
+
+    .hero {
+      margin: 15px;
+      height: 190px;
+      border-radius: 18px;
+      background: linear-gradient(
+        rgba(0,0,0,0.25),
+        rgba(0,0,0,0.25)
+      ),
+      url("https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1200&q=80")
+      center/cover;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      text-align: center;
+    }
+
+    .hero h2 {
+      font-size: 25px;
+      text-shadow: 0 2px 5px rgba(0,0,0,0.5);
+    }
+
+    .container {
+      padding: 5px 15px 30px;
+    }
+
+    .section-title {
+      font-size: 20px;
+      margin: 18px 0 12px;
+      font-weight: bold;
+    }
+
+    #categories {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 14px;
+    }
+
+    .card {
+      background: white;
+      border-radius: 16px;
+      padding: 20px;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.08);
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .card:active {
+      transform: scale(0.98);
+    }
+
+    .icon {
+      font-size: 36px;
+      margin-bottom: 10px;
+    }
+
+    .card h3 {
+      font-size: 19px;
+      margin-bottom: 7px;
+    }
+
+    .card p {
+      color: #666;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .loading {
+      text-align: center;
+      padding: 30px;
+      color: #666;
+    }
+
+    footer {
+      text-align: center;
+      padding: 25px 15px;
+      color: #777;
+      font-size: 13px;
+    }
+
+    @media (min-width: 600px) {
+      #categories {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <h1>আমাদের জয়পুরহাট</h1>
+    <p>জয়পুরহাট জেলার তথ্যভান্ডার</p>
+  </header>
+
+  <div class="hero">
+    <h2>আমাদের জয়পুরহাট ❤️</h2>
+  </div>
+
+  <div class="container">
+
+    <div class="section-title">
+      📚 বিভাগসমূহ
+    </div>
+
+    <div id="categories">
+      <div class="loading">
+        তথ্য লোড হচ্ছে...
+      </div>
+    </div>
+
+  </div>
+
+  <footer>
+    © 2026 আমাদের জয়পুরহাট
+  </footer>
+
+
+  <!-- Firebase -->
+  <script type="module">
+
+    import { initializeApp } 
+      from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+
+    import { 
+      getFirestore,
+      collection,
+      getDocs
+    } 
+      from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyAG05o2MjHH3UL8Gp7VNmrQGeqq-4YrDEk",
+      authDomain: "amader-joypurhat-7b3fb.firebaseapp.com",
+      projectId: "amader-joypurhat-7b3fb",
+      storageBucket: "amader-joypurhat-7b3fb.firebasestorage.app",
+      messagingSenderId: "542366008798",
+      appId: "1:542366008798:web:4f9a7c210b561406a5494f"
+    };
+
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+
+    async function loadCategories() {
+
+      const container = document.getElementById("categories");
+
+      try {
+
+        const snapshot = await getDocs(
+          collection(db, "categories")
+        );
+
+        container.innerHTML = "";
+
+        snapshot.forEach((doc) => {
+
+          const data = doc.data();
+
+          const card = document.createElement("div");
+
+          card.className = "card";
+
+          card.innerHTML = `
+            <div class="icon">
+              ${data.icon || "📌"}
+            </div>
+
+            <h3>
+              ${data.name || ""}
+            </h3>
+
+            <p>
+              ${data.description || ""}
+            </p>
+          `;
+
+          container.appendChild(card);
+
+        });
+
+      } catch (error) {
+
+        console.error(error);
+
+        container.innerHTML =
+          "<div class='loading'>তথ্য লোড করা যাচ্ছে না।</div>";
+
+      }
+
+    }
+
+
+    loadCategories();
+
+  </script>
+
+</body>
+</html>
