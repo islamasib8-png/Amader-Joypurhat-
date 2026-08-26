@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Admin Panel - আমাদের জয়পুরহাট</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f7fa;
+      color: #222;
+    }
+
+    header {
+      background: linear-gradient(135deg, #0f766e, #14b8a6);
+      color: white;
+      padding: 22px 18px;
+      text-align: center;
+    }
+
+    header h1 {
+      font-size: 24px;
+      margin-bottom: 5px;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: auto;
+      padding: 20px 15px 40px;
+    }
+
+    .box {
+      background: white;
+      padding: 20px;
+      border-radius: 16px;
+      margin-bottom: 16px;
+      box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+    }
+
+    h2 {
+      font-size: 20px;
+      margin-bottom: 15px;
+    }
+
+    label {
+      display: block;
+      margin: 12px 0 6px;
+      font-weight: bold;
+    }
+
+    input,
+    textarea,
+    select {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      font-size: 15px;
+    }
+
+    textarea {
+      min-height: 120px;
+      resize: vertical;
+    }
+
+    button {
+      width: 100%;
+      border: none;
+      border-radius: 10px;
+      padding: 13px;
+      margin-top: 12px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      background: #0f766e;
+      color: white;
+    }
+
+    button.logout {
+      background: #dc2626;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .message {
+      margin-top: 12px;
+      padding: 10px;
+      border-radius: 8px;
+      background: #f0fdf4;
+      color: #166534;
+    }
+
+    .item {
+      border: 1px solid #eee;
+      border-radius: 12px;
+      padding: 15px;
+      margin-top: 10px;
+    }
+
+    .item strong {
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    .delete {
+      background: #dc2626;
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <h1>🔐 Admin Panel</h1>
+    <p>আমাদের জয়পুরহাট</p>
+  </header>
+
+
+  <div class="container">
+
+    <!-- LOGIN -->
+    <div id="loginBox" class="box">
+
+      <h2>Admin Login</h2>
+
+      <label>Email</label>
+      <input
+        type="email"
+        id="email"
+        placeholder="Admin Email"
+      >
+
+      <label>Password</label>
+      <input
+        type="password"
+        id="password"
+        placeholder="Password"
+      >
+
+      <button id="loginBtn">
+        Login
+      </button>
+
+      <div id="loginMessage"></div>
+
+    </div>
+
+
+    <!-- ADMIN PANEL -->
+    <div id="adminPanel" class="hidden">
+
+      <div class="box">
+
+        <h2>➕ নতুন Topic যোগ করুন</h2>
+
+        <label>Topic Name</label>
+        <input
+          type="text"
+          id="categoryName"
+          placeholder="যেমন: হাসপাতাল তথ্য"
+        >
+
+        <label>Icon</label>
+        <input
+          type="text"
+          id="categoryIcon"
+          placeholder="যেমন: 🏥"
+        >
+
+        <label>Description</label>
+        <textarea
+          id="categoryDescription"
+          placeholder="Topic সম্পর্কে সংক্ষিপ্ত তথ্য"
+        ></textarea>
+
+        <button id="addCategoryBtn">
+          Topic যোগ করুন
+        </button>
+
+        <div id="categoryMessage"></div>
+
+      </div>
+
+
+      <div class="box">
+
+        <h2>📚 নতুন Content যোগ করুন</h2>
+
+        <label>Category নির্বাচন</label>
+
+        <select id="categorySelect">
+          <option value="">
+            Topic নির্বাচন করুন
+          </option>
+        </select>
+
+
+        <label>Title</label>
+
+        <input
+          type="text"
+          id="contentTitle"
+          placeholder="যেমন: জয়পুরহাট সদর উপজেলা"
+        >
+
+
+        <label>Content</label>
+
+        <textarea
+          id="contentText"
+          placeholder="বিস্তারিত তথ্য লিখুন"
+        ></textarea>
+
+
+        <label>Image URL (Optional)</label>
+
+        <input
+          type="text"
+          id="contentImage"
+          placeholder="ছবির URL"
+        >
+
+
+        <button id="addContentBtn">
+          Content যোগ করুন
+        </button>
+
+        <div id="contentMessage"></div>
+
+      </div>
+
+
+      <div class="box">
+
+        <h2>📋 বর্তমান Topic</h2>
+
+        <div id="categoryList">
+          Loading...
+        </div>
+
+      </div>
+
+
+      <button class="logout" id="logoutBtn">
+        Logout
+      </button>
+
+    </div>
+
+  </div>
+
+
+  <script type="module">
+
+    import { initializeApp }
+      from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+
+    import {
+      getFirestore,
+      collection,
+      getDocs,
+      addDoc,
+      deleteDoc,
+      doc
+    }
+      from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+
+    import {
+      getAuth,
+      signInWithEmailAndPassword,
+      onAuthStateChanged,
+      signOut
+    }
+      from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyAG05o2MjHH3UL8Gp7VNmrQGeqq-4YrDEk",
+      authDomain: "amader-joypurhat-7b3fb.firebaseapp.com",
+      projectId: "amader-joypurhat-7b3fb",
+      storageBucket: "amader-joypurhat-7b3fb.firebasestorage.app",
+      messagingSenderId: "542366008798",
+      appId: "1:542366008798:web:4f9a7c210b561406a5494f"
+    };
+
+
+    const app = initializeApp(firebaseConfig);
+
+    const db = getFirestore(app);
+
+    const auth = getAuth(app);
+
+
+    const loginBox =
+      document.getElementById("loginBox");
+
+    const adminPanel =
+      document.getElementById("adminPanel");
+
+
+    // LOGIN
+
+    document
+      .getElementById("loginBtn")
+      .addEventListener("click", async () => {
+
+        const email =
+          document.getElementById("email").value.trim();
+
+        const password =
+          document.getElementById("password").value;
+
+
+        const message =
+          document.getElementById("loginMessage");
+
+
+        if (!email || !password) {
+
+          message.innerHTML =
+            "<div class='message'>Email ও Password দিন।</div>";
+
+          return;
+        }
+
+
+        try {
+
+          await signInWithEmailAndPassword(
+            auth,
+            email,
+            password
+          );
+
+          message.innerHTML =
+            "<div class='message'>Login সফল হয়েছে।</div>";
+
+        } catch (error) {
+
+          message.innerHTML =
+            "<div class='message'>Login করা যায়নি। Email/Password পরীক্ষা করুন।</div>";
+
+        }
+
+      });
+
+
+    // AUTH STATE
+
+    onAuthStateChanged(auth, (user) => {
+
+      if (user) {
+
+        loginBox.classList.add("hidden");
+
+        adminPanel.classList.remove("hidden");
+
+        loadCategories();
+
+      } else {
+
+        loginBox.classList.remove("hidden");
+
+        adminPanel.classList.add("hidden");
+
+      }
+
+    });
+
+
+    // LOGOUT
+
+    document
+      .getElementById("logoutBtn")
+      .addEventListener("click", () => {
+
+        signOut(auth);
+
+      });
+
+
+    // LOAD CATEGORIES
+
+    async function loadCategories() {
+
+      const select =
+        document.getElementById("categorySelect");
+
+      const list =
+        document.getElementById("categoryList");
+
+
+      select.innerHTML =
+        "<option value=''>Topic নির্বাচন করুন</option>";
+
+      list.innerHTML = "";
+
+
+      try {
+
+        const snapshot =
+          await getDocs(
+            collection(db, "categories")
+          );
+
+
+        snapshot.forEach((categoryDoc) => {
+
+          const data = categoryDoc.data();
+
+
+          // Select option
+
+          const option =
+            document.createElement("option");
+
+          option.value = categoryDoc.id;
+
+          option.textContent =
+            `${data.icon || "📌"} ${data.name || ""}`;
+
+          select.appendChild(option);
+
+
+          // List item
+
+          const item =
+            document.createElement("div");
+
+          item.className = "item";
+
+
+          item.innerHTML = `
+
+            <strong>
+              ${data.icon || "📌"} ${data.name || ""}
+            </strong>
+
+            <span>
+              ${data.description || ""}
+            </span>
+
+            <button
+              class="delete"
+              data-id="${categoryDoc.id}">
+              Topic Delete
+            </button>
+
+          `;
+
+
+          list.appendChild(item);
+
+        });
+
+
+        // Delete buttons
+
+        document
+          .querySelectorAll(".delete")
+          .forEach((button) => {
+
+            button.addEventListener(
+              "click",
+              async () => {
+
+                const id =
+                  button.dataset.id;
+
+
+                if (
+                  confirm(
+                    "এই Topic Delete করবেন?"
+                  )
+                ) {
+
+                  await deleteDoc(
+                    doc(
+                      db,
+                      "categories",
+                      id
+                    )
+                  );
+
+
+                  loadCategories();
+
+                }
+
+              }
+            );
+
+          });
+
+
+      } catch (error) {
+
+        list.innerHTML =
+          "<div class='message'>Topic লোড করা যায়নি।</div>";
+
+      }
+
+    }
+
+
+    // ADD CATEGORY
+
+    document
+      .getElementById("addCategoryBtn")
+      .addEventListener(
+        "click",
+        async () => {
+
+          const name =
+            document
+              .getElementById("categoryName")
+              .value
+              .trim();
+
+
+          const icon =
+            document
+              .getElementById("categoryIcon")
+              .value
+              .trim();
+
+
+          const description =
+            document
+              .getElementById("categoryDescription")
+              .value
+              .trim();
+
+
+          if (!name) {
+
+            document
+              .getElementById("categoryMessage")
+              .innerHTML =
+              "<div class='message'>Topic Name দিন।</div>";
+
+            return;
+
+          }
+
+
+          try {
+
+            await addDoc(
+              collection(db, "categories"),
+              {
+                name: name,
+                icon: icon,
+                description: description
+              }
+            );
+
+
+            document
+              .getElementById("categoryName")
+              .value = "";
+
+            document
+              .getElementById("categoryIcon")
+              .value = "";
+
+            document
+              .getElementById("categoryDescription")
+              .value = "";
+
+
+            document
+              .getElementById("categoryMessage")
+              .innerHTML =
+              "<div class='message'>Topic সফলভাবে যোগ হয়েছে।</div>";
+
+
+            loadCategories();
+
+
+          } catch (error) {
+
+            document
+              .getElementById("categoryMessage")
+              .innerHTML =
+              "<div class='message'>Topic যোগ করা যায়নি।</div>";
+
+          }
+
+        }
+      );
+
+
+    // ADD CONTENT
+
+    document
+      .getElementById("addContentBtn")
+      .addEventListener(
+        "click",
+        async () => {
+
+          const categoryId =
+            document
+              .getElementById("categorySelect")
+              .value;
+
+
+          const title =
+            document
+              .getElementById("contentTitle")
+              .value
+              .trim();
+
+
+          const content =
+            document
+              .getElementById("contentText")
+              .value
+              .trim();
+
+
+          const image =
+            document
+              .getElementById("contentImage")
+              .value
+              .trim();
+
+
+          if (!categoryId || !title || !content) {
+
+            document
+              .getElementById("contentMessage")
+              .innerHTML =
+              "<div class='message'>Topic, Title এবং Content দিন।</div>";
+
+            return;
+
+          }
+
+
+          try {
+
+            await addDoc(
+              collection(db, "contents"),
+              {
+                categoryId: categoryId,
+                title: title,
+                content: content,
+                image: image
+              }
+            );
+
+
+            document
+              .getElementById("contentTitle")
+              .value = "";
+
+            document
+              .getElementById("contentText")
+              .value = "";
+
+            document
+              .getElementById("contentImage")
+              .value = "";
+
+
+            document
+              .getElementById("contentMessage")
+              .innerHTML =
+              "<div class='message'>Content সফলভাবে যোগ হয়েছে।</div>";
+
+          } catch (error) {
+
+            document
+              .getElementById("contentMessage")
+              .innerHTML =
+              "<div class='message'>Content যোগ করা যায়নি।</div>";
+
+          }
+
+        }
+      );
+
+  </script>
+
+</body>
+</html>
