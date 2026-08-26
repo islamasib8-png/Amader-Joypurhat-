@@ -381,6 +381,7 @@
 
           card.onclick = () => {
 
+
             /* 🚌 বাসের সময়সূচি */
 
             if (category.name === "বাসের সময়সূচি") {
@@ -399,6 +400,18 @@
 
               window.location.href =
                 "https://eticket.railway.gov.bd/";
+
+              return;
+
+            }
+
+
+            /* 📰 আজকের খবর */
+
+            if (category.name === "আজকের খবর") {
+
+              window.location.href =
+                "https://www.jagonews24.com/bangladesh/rajshahi/jaipurhat";
 
               return;
 
