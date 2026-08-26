@@ -36,25 +36,73 @@
       opacity: 0.95;
     }
 
+
+    /* =========================
+       IMAGE CAROUSEL
+       ========================= */
+
     .hero {
+      position: relative;
       margin: 15px;
       height: 220px;
       border-radius: 18px;
+      overflow: hidden;
+      touch-action: pan-y;
+      background: #ddd;
+    }
 
-      background:
-        linear-gradient(
-          rgba(0,0,0,0.20),
-          rgba(0,0,0,0.20)
-        ),
-        url("./joypurhat.jpg")
-        center/cover;
+    .slides {
+      display: flex;
+      width: 100%;
+      height: 100%;
+      transition: transform 0.5s ease;
+    }
+
+    .slide {
+      min-width: 100%;
+      height: 100%;
+      flex-shrink: 0;
+    }
+
+    .slide img {
+      width: 100%;
+      height: 100%;
+      display: block;
+      object-fit: cover;
+    }
+
+
+    /* =========================
+       INDICATOR DOTS
+       ========================= */
+
+    .dots {
+      position: absolute;
+      bottom: 10px;
+      left: 0;
+      right: 0;
 
       display: flex;
-      align-items: center;
       justify-content: center;
+      align-items: center;
 
-      overflow: hidden;
+      gap: 7px;
     }
+
+    .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.65);
+      transition: 0.3s;
+    }
+
+    .dot.active {
+      width: 10px;
+      height: 10px;
+      background: white;
+    }
+
 
     .container {
       padding: 5px 15px 30px;
@@ -146,6 +194,7 @@
     }
 
     @media (min-width: 600px) {
+
       #categories {
         grid-template-columns: repeat(3, 1fr);
       }
@@ -153,6 +202,7 @@
       .hero {
         height: 280px;
       }
+
     }
   </style>
 </head>
@@ -165,9 +215,55 @@
   </header>
 
 
-  <!-- জয়পুরহাটের ছবি -->
+  <!-- =========================
+       জয়পুরহাটের IMAGE SLIDER
+       ========================= -->
 
-  <div class="hero"></div>
+  <div class="hero">
+
+    <div class="slides" id="slides">
+
+      <div class="slide">
+        <img src="./joypurhat.jpg" alt="Joypurhat">
+      </div>
+
+      <div class="slide">
+        <img src="./joypurhat2.jpg" alt="Joypurhat">
+      </div>
+
+      <div class="slide">
+        <img src="./joypurhat3.jpg" alt="Joypurhat">
+      </div>
+
+      <div class="slide">
+        <img src="./joypurhat4.jpg" alt="Joypurhat">
+      </div>
+
+      <div class="slide">
+        <img src="./joypurhat5.jpg" alt="Joypurhat">
+      </div>
+
+      <div class="slide">
+        <img src="./joypurhat6.jpg" alt="Joypurhat">
+      </div>
+
+    </div>
+
+
+    <!-- Indicator Dots -->
+
+    <div class="dots" id="dots">
+
+      <span class="dot active"></span>
+      <span class="dot"></span>
+      <span class="dot"></span>
+      <span class="dot"></span>
+      <span class="dot"></span>
+      <span class="dot"></span>
+
+    </div>
+
+  </div>
 
 
   <div class="container">
@@ -187,6 +283,10 @@
   </div>
 
 
+  <!-- =========================
+       FOOTER
+       ========================= -->
+
   <footer>
 
     <div style="font-weight:bold; margin-bottom:10px;">
@@ -204,7 +304,7 @@
     </div>
 
     <div style="font-size:14px;">
-      Uchan, Dharanji, Panchbibi, Joypurhat
+      Uchna, Dharanji, Panchbibi, Joypurhat
     </div>
 
     <div style="margin-top:15px;">
@@ -228,7 +328,9 @@
   </footer>
 
 
-  <!-- Firebase -->
+  <!-- =========================
+       FIREBASE
+       ========================= -->
 
   <script type="module">
 
@@ -272,6 +374,10 @@
     const db =
       getFirestore(app);
 
+
+    /* =========================
+       CATEGORY LOAD
+       ========================= */
 
     async function loadCategories() {
 
@@ -419,7 +525,7 @@
 
 
             /* =========================
-               অন্যান্য সব Topic
+               অন্যান্য Topic
                ========================= */
 
             window.location.href =
@@ -452,6 +558,121 @@
 
 
     loadCategories();
+
+
+    /* =========================
+       IMAGE CAROUSEL
+       AUTO + SWIPE
+       ========================= */
+
+    const slides =
+      document.getElementById("slides");
+
+    const dots =
+      document.querySelectorAll(".dot");
+
+    let currentSlide = 0;
+
+    const totalSlides = 6;
+
+
+    function showSlide(index) {
+
+      if (index >= totalSlides) {
+        index = 0;
+      }
+
+      if (index < 0) {
+        index = totalSlides - 1;
+      }
+
+      currentSlide = index;
+
+
+      slides.style.transform =
+        `translateX(-${currentSlide * 100}%)`;
+
+
+      dots.forEach((dot, i) => {
+
+        dot.classList.toggle(
+          "active",
+          i === currentSlide
+        );
+
+      });
+
+    }
+
+
+    /* প্রতি ৪ সেকেন্ডে ছবি পরিবর্তন */
+
+    setInterval(() => {
+
+      showSlide(currentSlide + 1);
+
+    }, 4000);
+
+
+    /* =========================
+       DOT CLICK
+       ========================= */
+
+    dots.forEach((dot, index) => {
+
+      dot.addEventListener("click", () => {
+
+        showSlide(index);
+
+      });
+
+    });
+
+
+    /* =========================
+       SWIPE
+       ========================= */
+
+    let startX = 0;
+    let endX = 0;
+
+
+    slides.addEventListener("touchstart", (e) => {
+
+      startX =
+        e.touches[0].clientX;
+
+    });
+
+
+    slides.addEventListener("touchend", (e) => {
+
+      endX =
+        e.changedTouches[0].clientX;
+
+
+      const difference =
+        startX - endX;
+
+
+      /* বাম দিকে Swipe */
+
+      if (difference > 50) {
+
+        showSlide(currentSlide + 1);
+
+      }
+
+
+      /* ডান দিকে Swipe */
+
+      if (difference < -50) {
+
+        showSlide(currentSlide - 1);
+
+      }
+
+    });
 
   </script>
 
