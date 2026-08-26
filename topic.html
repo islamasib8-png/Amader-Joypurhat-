@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>আমাদের জয়পুরহাট</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f7fa;
+      color: #222;
+    }
+
+    header {
+      background: linear-gradient(135deg, #0f766e, #14b8a6);
+      color: white;
+      padding: 22px 18px;
+      text-align: center;
+    }
+
+    header h1 {
+      font-size: 23px;
+    }
+
+    .container {
+      padding: 18px 15px 35px;
+      max-width: 800px;
+      margin: auto;
+    }
+
+    .back {
+      display: inline-block;
+      margin-bottom: 15px;
+      color: #0f766e;
+      font-weight: bold;
+      text-decoration: none;
+    }
+
+    .title {
+      background: white;
+      padding: 20px;
+      border-radius: 16px;
+      margin-bottom: 15px;
+      box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+    }
+
+    .title .icon {
+      font-size: 40px;
+      margin-bottom: 8px;
+    }
+
+    .title h2 {
+      font-size: 23px;
+      margin-bottom: 8px;
+    }
+
+    .content-card {
+      background: white;
+      padding: 20px;
+      border-radius: 16px;
+      margin-bottom: 14px;
+      box-shadow: 0 3px 12px rgba(0,0,0,0.07);
+    }
+
+    .content-card h3 {
+      color: #0f766e;
+      margin-bottom: 10px;
+      font-size: 19px;
+    }
+
+    .content-card p {
+      line-height: 1.8;
+      color: #444;
+      font-size: 16px;
+    }
+
+    .loading {
+      text-align: center;
+      padding: 30px;
+      color: #666;
+    }
+
+    .error {
+      background: #fff;
+      padding: 20px;
+      border-radius: 15px;
+      text-align: center;
+      color: #b91c1c;
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <h1>আমাদের জয়পুরহাট</h1>
+  </header>
+
+  <div class="container">
+
+    <a href="index.html" class="back">← ফিরে যান</a>
+
+    <div id="categoryBox">
+      <div class="loading">তথ্য লোড হচ্ছে...</div>
+    </div>
+
+    <div id="contents">
+      <div class="loading">তথ্য লোড হচ্ছে...</div>
+    </div>
+
+  </div>
+
+
+  <script type="module">
+
+    import { initializeApp }
+      from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+
+    import {
+      getFirestore,
+      collection,
+      getDocs
+    }
+      from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyAG05o2MjHH3UL8Gp7VNmrQGeqq-4YrDEk",
+      authDomain: "amader-joypurhat-7b3fb.firebaseapp.com",
+      projectId: "amader-joypurhat-7b3fb",
+      storageBucket: "amader-joypurhat-7b3fb.firebasestorage.app",
+      messagingSenderId: "542366008798",
+      appId: "1:542366008798:web:4f9a7c210b561406a5494f"
+    };
+
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+
+    const params = new URLSearchParams(window.location.search);
+    const categoryId = params.get("id");
+
+
+    async function loadData() {
+
+      const categoryBox =
+        document.getElementById("categoryBox");
+
+      const contents =
+        document.getElementById("contents");
+
+
+      if (!categoryId) {
+
+        categoryBox.innerHTML =
+          "<div class='error'>Topic পাওয়া যায়নি।</div>";
+
+        contents.innerHTML = "";
+
+        return;
+      }
+
+
+      try {
+
+        // Categories load
+        const categorySnapshot =
+          await getDocs(collection(db, "categories"));
+
+
+        let categoryData = null;
+
+
+        categorySnapshot.forEach((doc) => {
+
+          const data = doc.data();
+
+          if (doc.id === categoryId) {
+            categoryData = data;
+          }
+
+        });
+
+
+        if (categoryData) {
+
+          categoryBox.innerHTML = `
+            <div class="title">
+
+              <div class="icon">
+                ${categoryData.icon || "📌"}
+              </div>
+
+              <h2>
+                ${categoryData.name || ""}
+              </h2>
+
+              <p>
+                ${categoryData.description || ""}
+              </p>
+
+            </div>
+          `;
+
+        }
+
+
+        // Contents load
+        const contentSnapshot =
+          await getDocs(collection(db, "contents"));
+
+
+        contents.innerHTML = "";
+
+
+        let found = false;
+
+
+        contentSnapshot.forEach((doc) => {
+
+          const data = doc.data();
+
+
+          if (data.categoryId === categoryId) {
+
+            found = true;
+
+
+            const card =
+              document.createElement("div");
+
+            card.className = "content-card";
+
+
+            card.innerHTML = `
+
+              <h3>
+                ${data.title || ""}
+              </h3>
+
+              <p>
+                ${data.content || ""}
+              </p>
+
+            `;
+
+
+            contents.appendChild(card);
+
+          }
+
+        });
+
+
+        if (!found) {
+
+          contents.innerHTML = `
+            <div class="loading">
+              এই Topic-এর তথ্য এখনো যোগ করা হয়নি।
+            </div>
+          `;
+
+        }
+
+
+      } catch (error) {
+
+        console.error(error);
+
+        contents.innerHTML = `
+          <div class="error">
+            তথ্য লোড করা যাচ্ছে না।
+          </div>
+        `;
+
+      }
+
+    }
+
+
+    loadData();
+
+  </script>
+
+</body>
+</html>
