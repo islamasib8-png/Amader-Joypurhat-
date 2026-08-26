@@ -381,10 +381,7 @@
 
           card.onclick = () => {
 
-            /*
-              বাসের সময়সূচি হলে
-              সরাসরি Shohoz খুলবে
-            */
+            /* 🚌 বাসের সময়সূচি */
 
             if (category.name === "বাসের সময়সূচি") {
 
@@ -396,10 +393,21 @@
             }
 
 
-            /*
-              অন্যান্য সব Topic
-              আগের মতো topic.html খুলবে
-            */
+            /* 🚆 ট্রেনের সময়সূচি */
+
+            if (category.name === "ট্রেনের সময়সূচি") {
+
+              window.location.href =
+                "https://eticket.railway.gov.bd/";
+
+              return;
+
+            }
+
+
+            /* =========================
+               অন্যান্য সব Topic
+               ========================= */
 
             window.location.href =
               `topic.html?id=${category.id}`;
