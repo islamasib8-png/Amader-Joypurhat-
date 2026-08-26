@@ -203,6 +203,9 @@
 
           card.className = "card";
 
+card.onclick = () => {
+  window.location.href = `topic.html?id=${doc.id}`;
+};
           card.innerHTML = `
             <div class="icon">
               ${data.icon || "📌"}
