@@ -8,11 +8,10 @@
   <style>
     * {
       box-sizing: border-box;
-      margin: 0;
-      padding: 0;
     }
 
     body {
+      margin: 0;
       font-family: Arial, sans-serif;
       background: #f5f7fa;
       color: #222;
@@ -21,13 +20,13 @@
     header {
       background: linear-gradient(135deg, #0f766e, #14b8a6);
       color: white;
-      padding: 22px 18px;
       text-align: center;
+      padding: 25px 15px;
     }
 
     header h1 {
-      font-size: 24px;
-      margin-bottom: 5px;
+      margin: 0 0 6px;
+      font-size: 25px;
     }
 
     .container {
@@ -39,20 +38,20 @@
     .box {
       background: white;
       padding: 20px;
-      border-radius: 16px;
       margin-bottom: 16px;
+      border-radius: 16px;
       box-shadow: 0 3px 12px rgba(0,0,0,0.08);
     }
 
     h2 {
+      margin-top: 0;
       font-size: 20px;
-      margin-bottom: 15px;
     }
 
     label {
       display: block;
-      margin: 12px 0 6px;
       font-weight: bold;
+      margin: 12px 0 6px;
     }
 
     input,
@@ -72,27 +71,31 @@
 
     button {
       width: 100%;
-      border: none;
+      border: 0;
       border-radius: 10px;
       padding: 13px;
       margin-top: 12px;
       font-size: 16px;
       font-weight: bold;
-      cursor: pointer;
-      background: #0f766e;
       color: white;
+      background: #0f766e;
+      cursor: pointer;
     }
 
-    button.edit {
+    .edit {
       background: #2563eb;
     }
 
-    button.delete {
+    .delete {
       background: #dc2626;
     }
 
-    button.cancel {
+    .cancel {
       background: #777;
+    }
+
+    .logout {
+      background: #dc2626;
     }
 
     .hidden {
@@ -107,22 +110,28 @@
       color: #166534;
     }
 
+    .error {
+      background: #fef2f2;
+      color: #991b1b;
+    }
+
     .item {
       border: 1px solid #eee;
       border-radius: 12px;
       padding: 15px;
-      margin-top: 10px;
+      margin-top: 12px;
     }
 
     .item strong {
       display: block;
-      margin-bottom: 7px;
       font-size: 17px;
+      margin-bottom: 8px;
     }
 
     .small {
-      color: #666;
+      color: #555;
       line-height: 1.6;
+      white-space: pre-wrap;
     }
   </style>
 </head>
@@ -131,7 +140,7 @@
 
 <header>
   <h1>🔐 Admin Panel</h1>
-  <p>আমাদের জয়পুরহাট</p>
+  <div>আমাদের জয়পুরহাট</div>
 </header>
 
 <div class="container">
@@ -143,12 +152,24 @@
     <h2>Admin Login</h2>
 
     <label>Email</label>
-    <input type="email" id="email" placeholder="Admin Email">
+
+    <input
+      type="email"
+      id="email"
+      placeholder="Admin Email"
+    >
 
     <label>Password</label>
-    <input type="password" id="password" placeholder="Password">
 
-    <button id="loginBtn">Login</button>
+    <input
+      type="password"
+      id="password"
+      placeholder="Password"
+    >
+
+    <button id="loginBtn">
+      Login
+    </button>
 
     <div id="loginMessage"></div>
 
@@ -159,23 +180,34 @@
 
   <div id="adminPanel" class="hidden">
 
-    <!-- CATEGORY -->
+    <!-- ADD TOPIC -->
 
     <div class="box">
 
       <h2>➕ নতুন Topic যোগ করুন</h2>
 
       <label>Topic Name</label>
-      <input type="text" id="categoryName"
-             placeholder="যেমন: হাসপাতাল তথ্য">
+
+      <input
+        type="text"
+        id="categoryName"
+        placeholder="যেমন: হাসপাতাল তথ্য"
+      >
 
       <label>Icon</label>
-      <input type="text" id="categoryIcon"
-             placeholder="যেমন: 🏥">
+
+      <input
+        type="text"
+        id="categoryIcon"
+        placeholder="যেমন: 🏥"
+      >
 
       <label>Description</label>
-      <textarea id="categoryDescription"
-                placeholder="Topic সম্পর্কে সংক্ষিপ্ত তথ্য"></textarea>
+
+      <textarea
+        id="categoryDescription"
+        placeholder="Topic সম্পর্কে সংক্ষিপ্ত তথ্য"
+      ></textarea>
 
       <button id="addCategoryBtn">
         Topic যোগ করুন
@@ -186,44 +218,804 @@
     </div>
 
 
-    <!-- CONTENT ADD / EDIT -->
+    <!-- ADD / EDIT CONTENT -->
 
     <div class="box">
 
-      <h2 id="contentFormTitle">
+      <h2 id="formTitle">
         📚 নতুন Content যোগ করুন
       </h2>
 
-      <label>Category নির্বাচন</label>
+      <label>Category</label>
 
       <select id="categorySelect">
-        <option value="">Topic নির্বাচন করুন</option>
+        <option value="">
+          Topic নির্বাচন করুন
+        </option>
       </select>
-
 
       <label>Title</label>
 
-      <input type="text"
-             id="contentTitle"
-             placeholder="যেমন: জয়পুরহাট সদর উপজেলা">
+      <input
+        type="text"
+        id="contentTitle"
+        placeholder="যেমন: জয়পুরহাট সদর উপজেলা"
+      >
 
+      <label>বিস্তারিত তথ্য</label>
 
-      <label>Content</label>
-
-      <textarea id="contentText"
-                placeholder="এখানে বিস্তারিত তথ্য লিখুন"></textarea>
-
+      <textarea
+        id="contentText"
+        placeholder="এখানে বিস্তারিত তথ্য লিখুন"
+      ></textarea>
 
       <label>Image URL (Optional)</label>
 
-      <input type="text"
-             id="contentImage"
-             placeholder="ছবির URL">
-
+      <input
+        type="text"
+        id="contentImage"
+        placeholder="ছবির URL"
+      >
 
       <button id="saveContentBtn">
         Content যোগ করুন
       </button>
 
-      <button id="cancelEditBtn"
-              class="cancel hidden
+      <button
+        id="cancelEditBtn"
+        class="cancel hidden">
+        Edit বাতিল
+      </button>
+
+      <div id="contentMessage"></div>
+
+    </div>
+
+
+    <!-- CONTENT LIST -->
+
+    <div class="box">
+
+      <h2>📋 বর্তমান Content</h2>
+
+      <div id="contentList">
+        তথ্য লোড হচ্ছে...
+      </div>
+
+    </div>
+
+
+    <button
+      id="logoutBtn"
+      class="logout">
+      Logout
+    </button>
+
+  </div>
+
+</div>
+
+
+<script type="module">
+
+  import { initializeApp }
+    from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+
+  import {
+    getFirestore,
+    collection,
+    getDocs,
+    addDoc,
+    updateDoc,
+    deleteDoc,
+    doc
+  }
+    from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+
+  import {
+    getAuth,
+    signInWithEmailAndPassword,
+    onAuthStateChanged,
+    signOut
+  }
+    from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyAG05o2MjHH3UL8Gp7VNmrQGeqq-4YrDEk",
+    authDomain: "amader-joypurhat-7b3fb.firebaseapp.com",
+    projectId: "amader-joypurhat-7b3fb",
+    storageBucket: "amader-joypurhat-7b3fb.firebasestorage.app",
+    messagingSenderId: "542366008798",
+    appId: "1:542366008798:web:4f9a7c210b561406a5494f"
+  };
+
+
+  const app = initializeApp(firebaseConfig);
+
+  const db = getFirestore(app);
+
+  const auth = getAuth(app);
+
+
+  let editingId = null;
+
+
+  const loginBox =
+    document.getElementById("loginBox");
+
+  const adminPanel =
+    document.getElementById("adminPanel");
+
+  const loginMessage =
+    document.getElementById("loginMessage");
+
+
+  // LOGIN BUTTON
+
+  document
+    .getElementById("loginBtn")
+    .addEventListener("click", async function () {
+
+      loginMessage.innerHTML =
+        "<div class='message'>Login হচ্ছে...</div>";
+
+
+      const email =
+        document
+          .getElementById("email")
+          .value
+          .trim();
+
+
+      const password =
+        document
+          .getElementById("password")
+          .value;
+
+
+      if (!email || !password) {
+
+        loginMessage.innerHTML =
+          "<div class='message error'>Email ও Password দিন।</div>";
+
+        return;
+      }
+
+
+      try {
+
+        await signInWithEmailAndPassword(
+          auth,
+          email,
+          password
+        );
+
+
+        loginMessage.innerHTML =
+          "<div class='message'>Login সফল হয়েছে।</div>";
+
+
+      } catch (error) {
+
+        console.error(error);
+
+
+        loginMessage.innerHTML =
+          "<div class='message error'>Login ব্যর্থ হয়েছে। Email ও Password পরীক্ষা করুন।</div>";
+
+      }
+
+    });
+
+
+  // AUTH STATE
+
+  onAuthStateChanged(auth, function(user) {
+
+    if (user) {
+
+      loginBox.classList.add("hidden");
+
+      adminPanel.classList.remove("hidden");
+
+      loadCategories();
+
+      loadContents();
+
+    } else {
+
+      loginBox.classList.remove("hidden");
+
+      adminPanel.classList.add("hidden");
+
+    }
+
+  });
+
+
+  // LOGOUT
+
+  document
+    .getElementById("logoutBtn")
+    .addEventListener("click", function() {
+
+      signOut(auth);
+
+    });
+
+
+  // LOAD CATEGORIES
+
+  async function loadCategories() {
+
+    const select =
+      document.getElementById("categorySelect");
+
+
+    select.innerHTML =
+      "<option value=''>Topic নির্বাচন করুন</option>";
+
+
+    try {
+
+      const snapshot =
+        await getDocs(
+          collection(db, "categories")
+        );
+
+
+      snapshot.forEach(function(categoryDoc) {
+
+        const data =
+          categoryDoc.data();
+
+
+        const option =
+          document.createElement("option");
+
+
+        option.value =
+          categoryDoc.id;
+
+
+        option.textContent =
+          (data.icon || "📌") +
+          " " +
+          (data.name || "");
+
+
+        select.appendChild(option);
+
+      });
+
+
+    } catch (error) {
+
+      console.error(error);
+
+    }
+
+  }
+
+
+  // ADD CATEGORY
+
+  document
+    .getElementById("addCategoryBtn")
+    .addEventListener("click", async function() {
+
+      const name =
+        document
+          .getElementById("categoryName")
+          .value
+          .trim();
+
+
+      const icon =
+        document
+          .getElementById("categoryIcon")
+          .value
+          .trim();
+
+
+      const description =
+        document
+          .getElementById("categoryDescription")
+          .value
+          .trim();
+
+
+      if (!name) {
+
+        document
+          .getElementById("categoryMessage")
+          .innerHTML =
+          "<div class='message error'>Topic Name দিন।</div>";
+
+        return;
+
+      }
+
+
+      try {
+
+        await addDoc(
+          collection(db, "categories"),
+          {
+            name: name,
+            icon: icon,
+            description: description
+          }
+        );
+
+
+        document
+          .getElementById("categoryName")
+          .value = "";
+
+
+        document
+          .getElementById("categoryIcon")
+          .value = "";
+
+
+        document
+          .getElementById("categoryDescription")
+          .value = "";
+
+
+        document
+          .getElementById("categoryMessage")
+          .innerHTML =
+          "<div class='message'>Topic যোগ হয়েছে।</div>";
+
+
+        loadCategories();
+
+
+      } catch (error) {
+
+        console.error(error);
+
+
+        document
+          .getElementById("categoryMessage")
+          .innerHTML =
+          "<div class='message error'>Topic যোগ করা যায়নি।</div>";
+
+      }
+
+    });
+
+
+  // SAVE CONTENT
+
+  document
+    .getElementById("saveContentBtn")
+    .addEventListener("click", async function() {
+
+      const categoryId =
+        document
+          .getElementById("categorySelect")
+          .value;
+
+
+      const title =
+        document
+          .getElementById("contentTitle")
+          .value
+          .trim();
+
+
+      const content =
+        document
+          .getElementById("contentText")
+          .value
+          .trim();
+
+
+      const image =
+        document
+          .getElementById("contentImage")
+          .value
+          .trim();
+
+
+      if (!categoryId || !title || !content) {
+
+        document
+          .getElementById("contentMessage")
+          .innerHTML =
+          "<div class='message error'>Topic, Title এবং বিস্তারিত তথ্য দিন।</div>";
+
+        return;
+
+      }
+
+
+      try {
+
+        if (editingId) {
+
+          await updateDoc(
+            doc(
+              db,
+              "contents",
+              editingId
+            ),
+            {
+              categoryId: categoryId,
+              title: title,
+              content: content,
+              image: image
+            }
+          );
+
+
+          document
+            .getElementById("contentMessage")
+            .innerHTML =
+            "<div class='message'>Content Update হয়েছে।</div>";
+
+
+        } else {
+
+          await addDoc(
+            collection(db, "contents"),
+            {
+              categoryId: categoryId,
+              title: title,
+              content: content,
+              image: image
+            }
+          );
+
+
+          document
+            .getElementById("contentMessage")
+            .innerHTML =
+            "<div class='message'>Content যোগ হয়েছে।</div>";
+
+        }
+
+
+        clearForm();
+
+        loadContents();
+
+
+      } catch (error) {
+
+        console.error(error);
+
+
+        document
+          .getElementById("contentMessage")
+          .innerHTML =
+          "<div class='message error'>Content Save করা যায়নি।</div>";
+
+      }
+
+    });
+
+
+  // LOAD CONTENTS
+
+  async function loadContents() {
+
+    const list =
+      document.getElementById("contentList");
+
+
+    list.innerHTML =
+      "তথ্য লোড হচ্ছে...";
+
+
+    try {
+
+      const snapshot =
+        await getDocs(
+          collection(db, "contents")
+        );
+
+
+      list.innerHTML = "";
+
+
+      if (snapshot.empty) {
+
+        list.innerHTML =
+          "<div class='message'>কোনো Content নেই।</div>";
+
+        return;
+
+      }
+
+
+      snapshot.forEach(function(contentDoc) {
+
+        const data =
+          contentDoc.data();
+
+
+        const item =
+          document.createElement("div");
+
+
+        item.className = "item";
+
+
+        item.innerHTML = `
+
+          <strong>
+            ${data.title || ""}
+          </strong>
+
+          <div class="small">
+            ${data.content || ""}
+          </div>
+
+          <button
+            class="edit"
+            data-id="${contentDoc.id}">
+            ✏️ Edit
+          </button>
+
+          <button
+            class="delete"
+            data-id="${contentDoc.id}">
+            🗑️ Delete
+          </button>
+
+        `;
+
+
+        list.appendChild(item);
+
+      });
+
+
+      // EDIT BUTTON
+
+      document
+        .querySelectorAll(".edit")
+        .forEach(function(button) {
+
+          button.addEventListener(
+            "click",
+            function() {
+
+              editContent(
+                button.dataset.id
+              );
+
+            }
+          );
+
+        });
+
+
+      // DELETE BUTTON
+
+      document
+        .querySelectorAll(".delete")
+        .forEach(function(button) {
+
+          button.addEventListener(
+            "click",
+            async function() {
+
+              if (
+                confirm(
+                  "এই Content Delete করবেন?"
+                )
+              ) {
+
+                try {
+
+                  await deleteDoc(
+                    doc(
+                      db,
+                      "contents",
+                      button.dataset.id
+                    )
+                  );
+
+
+                  loadContents();
+
+
+                } catch (error) {
+
+                  console.error(error);
+
+                  alert(
+                    "Delete করা যায়নি।"
+                  );
+
+                }
+
+              }
+
+            }
+          );
+
+        });
+
+
+    } catch (error) {
+
+      console.error(error);
+
+
+      list.innerHTML =
+        "<div class='message error'>Content লোড করা যায়নি।</div>";
+
+    }
+
+  }
+
+
+  // EDIT CONTENT
+
+  async function editContent(id) {
+
+    try {
+
+      const snapshot =
+        await getDocs(
+          collection(db, "contents")
+        );
+
+
+      let data = null;
+
+
+      snapshot.forEach(function(contentDoc) {
+
+        if (contentDoc.id === id) {
+
+          data =
+            contentDoc.data();
+
+        }
+
+      });
+
+
+      if (!data) {
+
+        alert(
+          "Content পাওয়া যায়নি।"
+        );
+
+        return;
+
+      }
+
+
+      editingId = id;
+
+
+      document
+        .getElementById("categorySelect")
+        .value =
+        data.categoryId || "";
+
+
+      document
+        .getElementById("contentTitle")
+        .value =
+        data.title || "";
+
+
+      document
+        .getElementById("contentText")
+        .value =
+        data.content || "";
+
+
+      document
+        .getElementById("contentImage")
+        .value =
+        data.image || "";
+
+
+      document
+        .getElementById("formTitle")
+        .textContent =
+        "✏️ Content Edit করুন";
+
+
+      document
+        .getElementById("saveContentBtn")
+        .textContent =
+        "Update করুন";
+
+
+      document
+        .getElementById("cancelEditBtn")
+        .classList
+        .remove("hidden");
+
+
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+      });
+
+
+    } catch (error) {
+
+      console.error(error);
+
+    }
+
+  }
+
+
+  // CANCEL EDIT
+
+  document
+    .getElementById("cancelEditBtn")
+    .addEventListener(
+      "click",
+      function() {
+
+        clearForm();
+
+      }
+    );
+
+
+  // CLEAR FORM
+
+  function clearForm() {
+
+    editingId = null;
+
+
+    document
+      .getElementById("categorySelect")
+      .value = "";
+
+
+    document
+      .getElementById("contentTitle")
+      .value = "";
+
+
+    document
+      .getElementById("contentText")
+      .value = "";
+
+
+    document
+      .getElementById("contentImage")
+      .value = "";
+
+
+    document
+      .getElementById("formTitle")
+      .textContent =
+      "📚 নতুন Content যোগ করুন";
+
+
+    document
+      .getElementById("saveContentBtn")
+      .textContent =
+      "Content যোগ করুন";
+
+
+    document
+      .getElementById("cancelEditBtn")
+      .classList
+      .add("hidden");
+
+  }
+
+</script>
+
+</body>
+</html>
