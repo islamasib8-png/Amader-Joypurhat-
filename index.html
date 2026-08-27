@@ -19,10 +19,6 @@
       color: #222;
     }
 
-    /* =========================
-       HEADER
-       ========================= */
-
     header {
       background: linear-gradient(135deg, #0f766e, #14b8a6);
       color: white;
@@ -39,11 +35,6 @@
       font-size: 15px;
       opacity: 0.95;
     }
-
-
-    /* =========================
-       IMAGE CAROUSEL
-       ========================= */
 
     .hero {
       position: relative;
@@ -75,21 +66,14 @@
       object-fit: cover;
     }
 
-
-    /* =========================
-       INDICATOR DOTS
-       ========================= */
-
     .dots {
       position: absolute;
       bottom: 10px;
       left: 0;
       right: 0;
-
       display: flex;
       justify-content: center;
       align-items: center;
-
       gap: 7px;
     }
 
@@ -107,11 +91,6 @@
       background: white;
     }
 
-
-    /* =========================
-       CONTAINER
-       ========================= */
-
     .container {
       padding: 5px 10px 30px;
       max-width: 900px;
@@ -124,37 +103,23 @@
       font-weight: bold;
     }
 
-
-    /* =========================
-       FEATURE GRID - 4 COLUMNS
-       ========================= */
-
     #categories {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
       gap: 10px;
     }
 
-
-    /* =========================
-       FEATURE CARD
-       ========================= */
-
     .card {
       background: white;
       border-radius: 14px;
       padding: 13px 5px;
-
       box-shadow: 0 4px 14px rgba(0,0,0,0.08);
-
       cursor: pointer;
       transition: 0.2s;
-
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-
       min-height: 95px;
       text-align: center;
     }
@@ -163,20 +128,10 @@
       transform: scale(0.96);
     }
 
-
-    /* =========================
-       ICON
-       ========================= */
-
     .icon {
       font-size: 30px;
       margin-bottom: 7px;
     }
-
-
-    /* =========================
-       FEATURE NAME
-       ========================= */
 
     .card h3 {
       font-size: 13px;
@@ -185,23 +140,12 @@
       font-weight: bold;
     }
 
-
-    /* =========================
-       LOADING
-       ========================= */
-
     .loading {
       text-align: center;
       padding: 30px;
       color: #666;
-
       grid-column: 1 / -1;
     }
-
-
-    /* =========================
-       ERROR
-       ========================= */
 
     .error {
       background: white;
@@ -209,36 +153,24 @@
       border-radius: 15px;
       text-align: center;
       color: #b91c1c;
-
       grid-column: 1 / -1;
     }
-
-
-    /* =========================
-       FOOTER
-       ========================= */
 
     footer {
       margin-top: 30px;
       padding: 25px 15px;
-
       text-align: center;
-
       background: #f1f5f9;
       border-top: 1px solid #ddd;
-
       line-height: 1.7;
     }
 
     footer a {
       display: inline-block;
-
       margin: 5px;
       padding: 10px 16px;
-
       color: white;
       text-decoration: none;
-
       border-radius: 8px;
       font-weight: bold;
     }
@@ -250,11 +182,6 @@
     .facebook {
       background: #1877F2;
     }
-
-
-    /* =========================
-       DESKTOP
-       ========================= */
 
     @media (min-width: 600px) {
 
@@ -280,17 +207,10 @@
       }
 
     }
-
   </style>
 </head>
 
-
 <body>
-
-
-  <!-- =========================
-       HEADER
-       ========================= -->
 
   <header>
 
@@ -305,354 +225,207 @@
   </header>
 
 
-
-  <!-- =========================
-       JOYPURHAT IMAGE SLIDER
-       ========================= -->
-
   <div class="hero">
 
     <div class="slides" id="slides">
 
-
       <div class="slide">
-        <img
-          src="./joypurhat.jpg"
-          alt="Joypurhat">
+        <img src="./joypurhat.jpg" alt="Joypurhat">
       </div>
 
-
       <div class="slide">
-        <img
-          src="./picjoypurhat2.jpg"
-          alt="Joypurhat">
+        <img src="./picjoypurhat2.jpg" alt="Joypurhat">
       </div>
 
-
       <div class="slide">
-        <img
-          src="./picjoypurhat3.jpg"
-          alt="Joypurhat">
+        <img src="./picjoypurhat3.jpg" alt="Joypurhat">
       </div>
 
-
       <div class="slide">
-        <img
-          src="./picjoypurhat4.jpg"
-          alt="Joypurhat">
+        <img src="./picjoypurhat4.jpg" alt="Joypurhat">
       </div>
 
-
       <div class="slide">
-        <img
-          src="./picjoypurhat5.jpg"
-          alt="Joypurhat">
+        <img src="./picjoypurhat5.jpg" alt="Joypurhat">
       </div>
 
-
       <div class="slide">
-        <img
-          src="./picjoypurhat6.jpg"
-          alt="Joypurhat">
+        <img src="./picjoypurhat6.jpg" alt="Joypurhat">
       </div>
 
-
       <div class="slide">
-        <img
-          src="./picjoypurhat7.jpg"
-          alt="Joypurhat">
+        <img src="./picjoypurhat7.jpg" alt="Joypurhat">
       </div>
 
-
       <div class="slide">
-        <img
-          src="./picjoypurhat8.jpg"
-          alt="Joypurhat">
+        <img src="./picjoypurhat8.jpg" alt="Joypurhat">
       </div>
 
-
       <div class="slide">
-        <img
-          src="./picjoypurhat9.jpg"
-          alt="Joypurhat">
+        <img src="./picjoypurhat9.jpg" alt="Joypurhat">
       </div>
 
-
       <div class="slide">
-        <img
-          src="./picjoypurhat10.jpg"
-          alt="Joypurhat">
+        <img src="./picjoypurhat10.jpg" alt="Joypurhat">
       </div>
 
-
       <div class="slide">
-        <img
-          src="./picjoypurhat11.jpg"
-          alt="Joypurhat">
+        <img src="./picjoypurhat11.jpg" alt="Joypurhat">
       </div>
 
-
       <div class="slide">
-        <img
-          src="./picjoypurhat12.jpg"
-          alt="Joypurhat">
+        <img src="./picjoypurhat12.jpg" alt="Joypurhat">
       </div>
-
 
     </div>
 
-
-
-    <!-- =========================
-         INDICATOR DOTS
-         ========================= -->
 
     <div class="dots" id="dots">
 
       <span class="dot active"></span>
-
       <span class="dot"></span>
-
       <span class="dot"></span>
-
       <span class="dot"></span>
-
       <span class="dot"></span>
-
       <span class="dot"></span>
-
       <span class="dot"></span>
-
       <span class="dot"></span>
-
       <span class="dot"></span>
-
       <span class="dot"></span>
-
       <span class="dot"></span>
-
       <span class="dot"></span>
 
     </div>
 
   </div>
 
-
-
-  <!-- =========================
-       CATEGORIES
-       ========================= -->
 
   <div class="container">
 
-
     <div class="section-title">
-
       📚 বিভাগসমূহ
-
     </div>
-
 
     <div id="categories">
 
-
       <div class="loading">
-
         তথ্য লোড হচ্ছে...
-
       </div>
 
-
     </div>
-
 
   </div>
 
 
-
-  <!-- =========================
-       FOOTER
-       ========================= -->
-
   <footer>
 
-
-    <div
-      style="font-weight:bold; margin-bottom:10px;">
-
+    <div style="font-weight:bold; margin-bottom:10px;">
       © 2026 আমাদের জয়পুরহাট
-
     </div>
 
-
-
-    <div
-      style="font-size:14px; margin-bottom:12px;">
-
+    <div style="font-size:14px; margin-bottom:12px;">
       উপরোক্ত তথ্যে কোনো ভুল বা সংশোধনের প্রয়োজন হলে
       অনুগ্রহ করে যোগাযোগ করুন। যাচাই সাপেক্ষে প্রয়োজনীয়
       সংশোধন করা হবে।
-
     </div>
-
-
 
     <div style="font-weight:bold;">
-
       Md. Asib Islam
-
     </div>
-
-
 
     <div style="font-size:14px;">
-
       Uchna, Dharanji, Panchbibi, Joypurhat
-
     </div>
-
 
 
     <div style="margin-top:15px;">
 
-
       <a
         class="whatsapp"
         href="https://wa.me/8801319058313"
-        target="_blank">
+        onclick="openExternalLink(event, 'https://wa.me/8801319058313')">
 
         💬 WhatsApp
 
       </a>
 
 
-
       <a
         class="facebook"
         href="https://www.facebook.com/Asibislam01"
-        target="_blank">
+        onclick="openExternalLink(event, 'https://www.facebook.com/Asibislam01')">
 
         📘 Facebook
 
       </a>
 
-
     </div>
-
 
   </footer>
 
 
-
-  <!-- =========================
-       FIREBASE
-       ========================= -->
-
   <script type="module">
 
-
     import { initializeApp }
-
       from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
 
-
-
     import {
-
       getFirestore,
       collection,
       getDocs
-
     }
-
       from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
-
 
 
     const firebaseConfig = {
 
-
       apiKey:
-
         "AIzaSyAG05o2MjHH3UL8Gp7VNmrQGeqq-4YrDEk",
 
-
       authDomain:
-
         "amader-joypurhat-7b3fb.firebaseapp.com",
 
-
       projectId:
-
         "amader-joypurhat-7b3fb",
 
-
       storageBucket:
-
         "amader-joypurhat-7b3fb.firebasestorage.app",
 
-
       messagingSenderId:
-
         "542366008798",
 
-
       appId:
-
         "1:542366008798:web:4f9a7c210b561406a5494f"
-
 
     };
 
 
-
     const app =
-
       initializeApp(firebaseConfig);
 
-
-
     const db =
-
       getFirestore(app);
-
-
-
-    /* =========================
-       CATEGORY LOAD
-       ========================= */
 
 
     async function loadCategories() {
 
-
       const container =
-
         document.getElementById("categories");
-
 
       try {
 
-
         const snapshot =
-
           await getDocs(
-
             collection(db, "categories")
-
           );
-
 
         const categories = [];
 
 
         snapshot.forEach((doc) => {
 
-
           const data =
-
             doc.data();
-
 
           categories.push({
 
@@ -662,18 +435,10 @@
 
           });
 
-
         });
 
 
-
-        /* =========================
-           CATEGORY ORDER
-           ========================= */
-
-
         const orderMap = {
-
 
           "জয়পুরহাটের পরিচয়": 1,
 
@@ -684,33 +449,23 @@
         };
 
 
-
         categories.sort((a, b) => {
 
-
           const orderA =
-
             orderMap[a.name] ?? 999;
 
-
           const orderB =
-
             orderMap[b.name] ?? 999;
-
 
           return orderA - orderB;
 
-
         });
-
 
 
         container.innerHTML = "";
 
 
-
         if (categories.length === 0) {
-
 
           container.innerHTML = `
 
@@ -722,28 +477,17 @@
 
           `;
 
-
           return;
 
         }
 
 
-
         categories.forEach((category) => {
 
-
           const card =
-
             document.createElement("div");
 
-
           card.className = "card";
-
-
-
-          /*
-             শুধু Icon + Name
-          */
 
 
           card.innerHTML = `
@@ -754,7 +498,6 @@
 
             </div>
 
-
             <h3>
 
               ${category.name || ""}
@@ -764,115 +507,64 @@
           `;
 
 
-
-          /* =========================
-             CARD CLICK
-             ========================= */
-
-
           card.onclick = () => {
 
 
-
-            /* 🚌 বাসের সময়সূচি */
-
-
             if (
-
               category.name ===
-
               "বাসের সময়সূচি"
-
             ) {
 
-
               window.location.href =
-
                 "https://www.shohoz.com/bus-tickets";
 
-
               return;
 
             }
 
 
-
-            /* 🚆 ট্রেনের সময়সূচি */
-
-
             if (
-
               category.name ===
-
               "ট্রেনের সময়সূচি"
-
             ) {
 
-
               window.location.href =
-
                 "https://eticket.railway.gov.bd/";
 
-
               return;
 
             }
-
-
-
-            /* 📰 আজকের খবর */
 
 
             if (
-
               category.name ===
-
               "আজকের খবর"
-
             ) {
 
-
               window.location.href =
-
                 "https://www.jagonews24.com/bangladesh/rajshahi/jaipurhat";
-
 
               return;
 
             }
-
-
-
-            /* =========================
-               অন্যান্য Topic
-               ========================= */
 
 
             window.location.href =
-
               `topic.html?id=${category.id}`;
-
 
           };
 
 
-
           container.appendChild(card);
-
 
         });
 
 
-
       }
-
 
       catch (error) {
 
-
         console.error(error);
-
-
 
         container.innerHTML = `
 
@@ -884,137 +576,75 @@
 
         `;
 
-
       }
 
-
     }
-
 
 
     loadCategories();
 
 
-
-    /* =========================
-       IMAGE CAROUSEL
-       AUTO + SWIPE
-       ========================= */
-
-
     const slides =
-
       document.getElementById("slides");
 
-
     const dots =
-
       document.querySelectorAll(".dot");
 
-
     let currentSlide = 0;
-
 
     const totalSlides = 12;
 
 
-
     function showSlide(index) {
 
-
       if (index >= totalSlides) {
-
         index = 0;
-
       }
-
 
       if (index < 0) {
-
         index = totalSlides - 1;
-
       }
-
 
       currentSlide = index;
 
 
-
       slides.style.transform =
-
         `translateX(-${currentSlide * 100}%)`;
-
 
 
       dots.forEach((dot, i) => {
 
-
         dot.classList.toggle(
-
           "active",
-
           i === currentSlide
-
         );
 
-
       });
-
 
     }
 
 
-
-    /* =========================
-       AUTO SLIDE
-       প্রতি ৪ সেকেন্ডে ছবি পরিবর্তন
-       ========================= */
-
-
     setInterval(() => {
 
-
       showSlide(
-
         currentSlide + 1
-
       );
-
 
     }, 4000);
 
 
-
-    /* =========================
-       DOT CLICK
-       ========================= */
-
-
     dots.forEach((dot, index) => {
 
-
       dot.addEventListener(
-
         "click",
-
         () => {
-
 
           showSlide(index);
 
-
         }
-
       );
 
-
     });
-
-
-
-    /* =========================
-       SWIPE
-       ========================= */
 
 
     let startX = 0;
@@ -1022,84 +652,75 @@
     let endX = 0;
 
 
-
     slides.addEventListener(
-
       "touchstart",
-
       (e) => {
 
-
         startX =
-
           e.touches[0].clientX;
 
-
       }
-
     );
 
 
-
     slides.addEventListener(
-
       "touchend",
-
       (e) => {
 
-
         endX =
-
           e.changedTouches[0].clientX;
 
-
-
         const difference =
-
           startX - endX;
-
-
-
-        /* বাম দিকে Swipe */
 
 
         if (difference > 50) {
 
-
           showSlide(
-
             currentSlide + 1
-
           );
 
-
         }
-
-
-
-        /* ডান দিকে Swipe */
 
 
         if (difference < -50) {
 
-
           showSlide(
-
             currentSlide - 1
-
           );
-
 
         }
 
-
       }
-
     );
 
 
-  </script>
+    /* ==================================================
+       KODULAR - ONLY WHATSAPP / FACEBOOK EXTERNAL LINK
+       ================================================== */
 
+    function openExternalLink(event, url) {
+
+      event.preventDefault();
+
+      if (
+        window.AppInventor &&
+        window.AppInventor.setWebViewString
+      ) {
+
+        window.AppInventor.setWebViewString(
+          "EXTERNAL_LINK|" + url
+        );
+
+      } else {
+
+        window.open(url, "_blank");
+
+      }
+
+    }
+
+  </script>
 
 </body>
 </html>
