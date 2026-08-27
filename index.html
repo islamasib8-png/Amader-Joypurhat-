@@ -225,6 +225,11 @@
   </header>
 
 
+  <!-- =========================
+       JOYPURHAT IMAGE SLIDER
+       মোট ৮টি ছবি
+       ========================= -->
+
   <div class="hero">
 
     <div class="slides" id="slides">
@@ -261,32 +266,16 @@
         <img src="./picjoypurhat8.jpg" alt="Joypurhat">
       </div>
 
-      <div class="slide">
-        <img src="./picjoypurhat9.jpg" alt="Joypurhat">
-      </div>
-
-      <div class="slide">
-        <img src="./picjoypurhat10.jpg" alt="Joypurhat">
-      </div>
-
-      <div class="slide">
-        <img src="./picjoypurhat11.jpg" alt="Joypurhat">
-      </div>
-
-      <div class="slide">
-        <img src="./picjoypurhat12.jpg" alt="Joypurhat">
-      </div>
-
     </div>
 
+
+    <!-- =========================
+         ৮টি INDICATOR DOT
+         ========================= -->
 
     <div class="dots" id="dots">
 
       <span class="dot active"></span>
-      <span class="dot"></span>
-      <span class="dot"></span>
-      <span class="dot"></span>
-      <span class="dot"></span>
       <span class="dot"></span>
       <span class="dot"></span>
       <span class="dot"></span>
@@ -299,6 +288,10 @@
 
   </div>
 
+
+  <!-- =========================
+       CATEGORIES
+       ========================= -->
 
   <div class="container">
 
@@ -316,6 +309,10 @@
 
   </div>
 
+
+  <!-- =========================
+       FOOTER
+       ========================= -->
 
   <footer>
 
@@ -338,12 +335,15 @@
     </div>
 
 
+    <!-- =========================
+         WHATSAPP + FACEBOOK
+         ========================= -->
+
     <div style="margin-top:15px;">
 
       <a
         class="whatsapp"
-        href="https://wa.me/8801319058313"
-        onclick="openExternalLink(event, 'https://wa.me/8801319058313')">
+        href="intent://send?phone=8801319058313#Intent;scheme=whatsapp;package=com.whatsapp;end">
 
         💬 WhatsApp
 
@@ -352,8 +352,7 @@
 
       <a
         class="facebook"
-        href="https://www.facebook.com/Asibislam01"
-        onclick="openExternalLink(event, 'https://www.facebook.com/Asibislam01')">
+        href="intent://www.facebook.com/Asibislam01#Intent;scheme=https;package=com.facebook.katana;end">
 
         📘 Facebook
 
@@ -363,6 +362,10 @@
 
   </footer>
 
+
+  <!-- =========================
+       FIREBASE
+       ========================= -->
 
   <script type="module">
 
@@ -407,6 +410,10 @@
       getFirestore(app);
 
 
+    /* =========================
+       CATEGORY LOAD
+       ========================= */
+
     async function loadCategories() {
 
       const container =
@@ -437,6 +444,10 @@
 
         });
 
+
+        /* =========================
+           CATEGORY ORDER
+           ========================= */
 
         const orderMap = {
 
@@ -507,8 +518,14 @@
           `;
 
 
+          /* =========================
+             CARD CLICK
+             ========================= */
+
           card.onclick = () => {
 
+
+            /* 🚌 বাসের সময়সূচি */
 
             if (
               category.name ===
@@ -523,6 +540,8 @@
             }
 
 
+            /* 🚆 ট্রেনের সময়সূচি */
+
             if (
               category.name ===
               "ট্রেনের সময়সূচি"
@@ -536,6 +555,8 @@
             }
 
 
+            /* 📰 আজকের খবর */
+
             if (
               category.name ===
               "আজকের খবর"
@@ -548,6 +569,10 @@
 
             }
 
+
+            /* =========================
+               অন্যান্য Topic
+               ========================= */
 
             window.location.href =
               `topic.html?id=${category.id}`;
@@ -584,6 +609,10 @@
     loadCategories();
 
 
+    /* =========================
+       IMAGE CAROUSEL
+       ========================= */
+
     const slides =
       document.getElementById("slides");
 
@@ -592,18 +621,27 @@
 
     let currentSlide = 0;
 
-    const totalSlides = 12;
+
+    /* এখন মোট ৮টি ছবি */
+
+    const totalSlides = 8;
 
 
     function showSlide(index) {
 
       if (index >= totalSlides) {
+
         index = 0;
+
       }
 
+
       if (index < 0) {
+
         index = totalSlides - 1;
+
       }
+
 
       currentSlide = index;
 
@@ -624,6 +662,11 @@
     }
 
 
+    /* =========================
+       AUTO SLIDE
+       প্রতি ৪ সেকেন্ডে ছবি পরিবর্তন
+       ========================= */
+
     setInterval(() => {
 
       showSlide(
@@ -632,6 +675,10 @@
 
     }, 4000);
 
+
+    /* =========================
+       DOT CLICK
+       ========================= */
 
     dots.forEach((dot, index) => {
 
@@ -646,6 +693,10 @@
 
     });
 
+
+    /* =========================
+       SWIPE
+       ========================= */
 
     let startX = 0;
 
@@ -670,9 +721,12 @@
         endX =
           e.changedTouches[0].clientX;
 
+
         const difference =
           startX - endX;
 
+
+        /* বাম দিকে Swipe */
 
         if (difference > 50) {
 
@@ -682,6 +736,8 @@
 
         }
 
+
+        /* ডান দিকে Swipe */
 
         if (difference < -50) {
 
@@ -693,32 +749,6 @@
 
       }
     );
-
-
-    /* ==================================================
-       KODULAR - ONLY WHATSAPP / FACEBOOK EXTERNAL LINK
-       ================================================== */
-
-    function openExternalLink(event, url) {
-
-      event.preventDefault();
-
-      if (
-        window.AppInventor &&
-        window.AppInventor.setWebViewString
-      ) {
-
-        window.AppInventor.setWebViewString(
-          "EXTERNAL_LINK|" + url
-        );
-
-      } else {
-
-        window.open(url, "_blank");
-
-      }
-
-    }
 
   </script>
 
