@@ -11,7 +11,6 @@
 
   <title>আমাদের জয়পুরহাট</title>
 
-
   <style>
 
     * {
@@ -20,40 +19,28 @@
       padding: 0;
     }
 
-
     body {
       font-family: Arial, sans-serif;
       background: #f5f7fa;
       color: #222;
     }
 
-
     header {
-      background: linear-gradient(
-        135deg,
-        #0f766e,
-        #14b8a6
-      );
-
+      background: linear-gradient(135deg, #0f766e, #14b8a6);
       color: white;
-
       padding: 22px 18px;
-
       text-align: center;
     }
-
 
     header h1 {
       font-size: 23px;
     }
-
 
     .container {
       padding: 18px 15px 35px;
       max-width: 800px;
       margin: auto;
     }
-
 
     .back {
       display: inline-block;
@@ -63,238 +50,153 @@
       text-decoration: none;
     }
 
-
     .title,
     .card,
     .info-section {
-
       background: white;
-
       padding: 20px;
-
       border-radius: 16px;
-
       margin-bottom: 14px;
-
-      box-shadow:
-        0 3px 12px rgba(0,0,0,0.08);
-
+      box-shadow: 0 3px 12px rgba(0,0,0,0.08);
     }
-
 
     .title .icon,
     .card .icon {
-
       font-size: 38px;
-
       margin-bottom: 8px;
-
     }
-
 
     .title h2 {
-
       font-size: 23px;
-
       margin-bottom: 8px;
-
     }
-
 
     .title p {
-
       line-height: 1.8;
-
       color: #444;
-
       font-size: 16px;
-
     }
-
 
     .card {
-
       cursor: pointer;
-
       transition: 0.2s;
-
     }
-
 
     .card:active {
-
       transform: scale(0.98);
-
     }
-
 
     .card h3 {
-
       color: #0f766e;
-
       font-size: 19px;
-
       margin-bottom: 6px;
-
     }
-
 
     .card p {
-
       color: #666;
-
       line-height: 1.7;
-
       font-size: 15px;
-
     }
-
 
     .info-heading {
-
       color: #0f766e;
-
       font-size: 19px;
-
       font-weight: bold;
-
       margin-bottom: 10px;
-
     }
-
 
     .info-text {
-
       color: #444;
-
       font-size: 16px;
-
       line-height: 1.9;
-
       white-space: pre-wrap;
-
       word-break: break-word;
-
     }
 
+    /* =========================
+       PHONE CALL BUTTON
+       ========================= */
 
-    .phone-link {
+    .phone-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin: 7px 0;
+      flex-wrap: wrap;
+    }
 
+    .phone-number {
+      color: #333;
+      font-weight: 500;
+      flex: 1;
+    }
+
+    .call-button {
       display: inline-block;
-
-      color: #0f766e;
-
-      font-weight: bold;
-
+      background: #0f766e;
+      color: white;
       text-decoration: none;
-
-      background: #ecfdf5;
-
-      padding: 2px 6px;
-
-      border-radius: 6px;
-
+      padding: 7px 12px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: bold;
+      white-space: nowrap;
     }
 
-
-    .phone-link:active {
-
-      transform: scale(0.97);
-
+    .call-button:active {
+      transform: scale(0.95);
     }
-
 
     .section-title {
-
       font-size: 20px;
-
       font-weight: bold;
-
       margin: 20px 0 12px;
-
     }
-
 
     .loading {
-
       text-align: center;
-
       padding: 30px;
-
       color: #666;
-
     }
-
 
     .error {
-
       background: white;
-
       padding: 20px;
-
       border-radius: 15px;
-
       text-align: center;
-
       color: #b91c1c;
-
     }
-
 
     footer {
-
       margin-top: 30px;
-
       padding: 25px 15px;
-
       text-align: center;
-
       background: #f1f5f9;
-
       border-top: 1px solid #ddd;
-
       line-height: 1.7;
-
     }
-
 
     footer a {
-
       display: inline-block;
-
       margin: 5px;
-
       padding: 10px 16px;
-
       color: white;
-
       text-decoration: none;
-
       border-radius: 8px;
-
       font-weight: bold;
-
     }
-
 
     .call {
-
       background: #0f766e;
-
     }
-
 
     .whatsapp {
-
       background: #25D366;
-
     }
 
-
     .facebook {
-
       background: #1877F2;
-
     }
 
   </style>
@@ -316,7 +218,6 @@
 
 <div class="container">
 
-
   <a
     href="index.html"
     class="back">
@@ -332,12 +233,10 @@
 
   <div id="contents"></div>
 
-
 </div>
 
 
 <footer>
-
 
   <div
     style="font-weight:bold; margin-bottom:10px;">
@@ -381,7 +280,6 @@
 
   <div style="margin-top:15px;">
 
-
     <a
       class="call"
       href="tel:+8801319058313">
@@ -410,9 +308,7 @@
 
     </a>
 
-
   </div>
-
 
 </footer>
 
@@ -421,45 +317,37 @@
 
 
 import { initializeApp }
-
-from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+  from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
 
 
 import {
-
   getFirestore,
-
   collection,
-
   getDocs
-
 }
+  from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
-from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
+/* =========================
+   FIREBASE
+   ========================= */
 
 const firebaseConfig = {
-
 
   apiKey:
     "AIzaSyAG05o2MjHH3UL8Gp7VNmrQGeqq-4YrDEk",
 
-
   authDomain:
     "amader-joypurhat-7b3fb.firebaseapp.com",
-
 
   projectId:
     "amader-joypurhat-7b3fb",
 
-
   storageBucket:
     "amader-joypurhat-7b3fb.firebasestorage.app",
 
-
   messagingSenderId:
     "542366008798",
-
 
   appId:
     "1:542366008798:web:4f9a7c210b561406a5494f"
@@ -485,11 +373,13 @@ const categoryId =
   params.get("id");
 
 
+/* =========================
+   ৫টি উপজেলা
+   ========================= */
+
 const upazilas = [
 
-
   {
-
     name: "জয়পুরহাট সদর উপজেলা",
 
     ids: [
@@ -497,12 +387,9 @@ const upazilas = [
       "joypurhat_sadar",
       "joypurhat-sadar-upazila"
     ]
-
   },
 
-
   {
-
     name: "পাঁচবিবি উপজেলা",
 
     ids: [
@@ -510,12 +397,9 @@ const upazilas = [
       "panchbibi-upazila",
       "panchbibi_upazila"
     ]
-
   },
 
-
   {
-
     name: "আক্কেলপুর উপজেলা",
 
     ids: [
@@ -523,12 +407,9 @@ const upazilas = [
       "akkelpur-upazila",
       "akkelpur_upazila"
     ]
-
   },
 
-
   {
-
     name: "কালাই উপজেলা",
 
     ids: [
@@ -536,12 +417,9 @@ const upazilas = [
       "kalai-upazila",
       "kalai_upazila"
     ]
-
   },
 
-
   {
-
     name: "ক্ষেতলাল উপজেলা",
 
     ids: [
@@ -549,32 +427,29 @@ const upazilas = [
       "khetlal-upazila",
       "khetlal_upazila"
     ]
-
   }
-
 
 ];
 
 
-/* =====================================
-   বাংলা সংখ্যা → ইংরেজি সংখ্যা
-   ===================================== */
+/* =========================
+   বাংলা সংখ্যা → ইংরেজি
+   ========================= */
 
-function banglaToEnglishNumber(text) {
+function banglaToEnglish(text) {
 
-  const banglaNumbers =
+  const bn =
     "০১২৩৪৫৬৭৮৯";
 
-  const englishNumbers =
+  const en =
     "0123456789";
-
 
   return text.replace(
     /[০-৯]/g,
     function(char) {
 
-      return englishNumbers[
-        banglaNumbers.indexOf(char)
+      return en[
+        bn.indexOf(char)
       ];
 
     }
@@ -583,92 +458,209 @@ function banglaToEnglishNumber(text) {
 }
 
 
-/* =====================================
-   PHONE NUMBER → CALL LINK
-   ===================================== */
+/* =========================
+   PHONE NUMBER CLEAN
+   ========================= */
 
-function makePhoneLinks(text) {
+function makeTelNumber(number) {
 
+  let n =
+    banglaToEnglish(number);
 
-  let converted =
-    banglaToEnglishNumber(text);
-
-
-  /*
-   বাংলাদেশি ফোন নম্বর চিনবে।
-
-   যেমন:
-   01319058313
-   013-19058313
-   ০১৩-১৯০৫৮৩১৩
-   02589915574
-   +8801319058313
-  */
-
-
-  const phoneRegex =
-    /(\+?880[\s-]?[1-9][0-9]{9}|0[1-9][0-9]{8,9}(?:[\s-]*[0-9]{1,5})?)/g;
-
-
-  converted =
-    converted.replace(
-      phoneRegex,
-      function(match) {
-
-
-        let number =
-          match.replace(
-            /[\s-]/g,
-            ""
-          );
-
-
-        let telNumber =
-          number;
-
-
-        /*
-         013XXXXXXXX
-         →
-         +88013XXXXXXXX
-        */
-
-
-        if (
-          telNumber.startsWith("0")
-        ) {
-
-          telNumber =
-            "+880" +
-            telNumber.substring(1);
-
-        }
-
-
-        return `
-
-          <a
-            class="phone-link"
-            href="tel:${telNumber}">
-
-            📞 ${match}
-
-          </a>
-
-        `;
-
-      }
+  n =
+    n.replace(
+      /[\s\-()]/g,
+      ""
     );
 
+  if (
+    n.startsWith("+880")
+  ) {
 
-  return converted;
+    return n;
+
+  }
+
+  if (
+    n.startsWith("880")
+  ) {
+
+    return "+" + n;
+
+  }
+
+  if (
+    n.startsWith("0")
+  ) {
+
+    return "+880" + n.substring(1);
+
+  }
+
+  return n;
 
 }
 
 
-/* =====================================
+/* =========================
+   TEXT → HTML
+   ========================= */
+
+function formatText(text) {
+
+  if (!text) {
+    return "";
+  }
+
+
+  let converted =
+    banglaToEnglish(
+      String(text)
+    );
+
+
+  /*
+   লাইন আলাদা রাখা হবে
+  */
+
+  const lines =
+    converted
+      .split("\n")
+      .map(
+        line => line.trim()
+      )
+      .filter(
+        line => line.length > 0
+      );
+
+
+  let html = "";
+
+
+  lines.forEach(
+    line => {
+
+
+      /*
+       ফোন নম্বর খোঁজা
+      */
+
+      const phoneRegex =
+        /(\+?880[\s-]?[0-9]{10,11}|0[0-9]{9,10}(?:[\s-]?[0-9]{2,5})?)/g;
+
+
+      let lastIndex = 0;
+
+      let match;
+
+
+      phoneRegex.lastIndex = 0;
+
+
+      while (
+        (match =
+          phoneRegex.exec(line)) !== null
+      ) {
+
+
+        const before =
+          line.substring(
+            lastIndex,
+            match.index
+          );
+
+
+        html +=
+          escapeHTML(before);
+
+
+        const phone =
+          match[0];
+
+
+        const tel =
+          makeTelNumber(phone);
+
+
+        html += `
+
+          <span class="phone-row">
+
+            <span class="phone-number">
+              ${escapeHTML(phone)}
+            </span>
+
+            <a
+              class="call-button"
+              href="tel:${tel}">
+
+              📞 Call
+
+            </a>
+
+          </span>
+
+        `;
+
+
+        lastIndex =
+          match.index +
+          phone.length;
+
+      }
+
+
+      html +=
+        escapeHTML(
+          line.substring(lastIndex)
+        );
+
+
+      html += "<br>";
+
+    }
+  );
+
+
+  return html;
+
+}
+
+
+/* =========================
+   HTML SAFE
+   ========================= */
+
+function escapeHTML(text) {
+
+  return String(text)
+    .replace(
+      /&/g,
+      "&amp;"
+    )
+    .replace(
+      /</g,
+      "&lt;"
+    )
+    .replace(
+      />/g,
+      "&gt;"
+    )
+    .replace(
+      /"/g,
+      "&quot;"
+    )
+    .replace(
+      /'/g,
+      "&#039;"
+    );
+
+}
+
+
+/* =========================
    DATA LOAD
-   ===================================== */
+   ========================= */
 
 async function loadData() {
 
@@ -703,6 +695,10 @@ async function loadData() {
 
   try {
 
+
+    /* =========================
+       CATEGORY
+       ========================= */
 
     const categorySnapshot =
       await getDocs(
@@ -764,6 +760,10 @@ async function loadData() {
     `;
 
 
+    /* =========================
+       CONTENTS
+       ========================= */
+
     const contentSnapshot =
       await getDocs(
         collection(
@@ -795,6 +795,10 @@ async function loadData() {
     );
 
 
+    /* =========================
+       UPAZILA
+       ========================= */
+
     const isUpazila =
       categoryData.name &&
       (
@@ -809,16 +813,13 @@ async function loadData() {
 
     if (isUpazila) {
 
-
       showUpazilaList(
         upazilaList,
         contents,
         allContents
       );
 
-
     } else {
-
 
       showAllContents(
         contents,
@@ -831,7 +832,6 @@ async function loadData() {
   }
 
   catch (error) {
-
 
     console.error(error);
 
@@ -851,9 +851,9 @@ async function loadData() {
 }
 
 
-/* =====================================
+/* =========================
    UPAZILA LIST
-   ===================================== */
+   ========================= */
 
 function showUpazilaList(
   upazilaList,
@@ -865,7 +865,9 @@ function showUpazilaList(
   upazilaList.innerHTML = `
 
     <div class="section-title">
+
       🏘️ উপজেলা সমূহ
+
     </div>
 
   `;
@@ -933,9 +935,9 @@ function showUpazilaList(
 }
 
 
-/* =====================================
+/* =========================
    SHOW UPAZILA
-   ===================================== */
+   ========================= */
 
 function showUpazila(
   upazila,
@@ -965,11 +967,9 @@ function showUpazila(
 
   if (matched.length === 0) {
 
-
     matched =
       allContents.filter(
         (item) => {
-
 
           const title =
             String(
@@ -988,7 +988,6 @@ function showUpazila(
 
 
   if (matched.length === 0) {
-
 
     contents.innerHTML = `
 
@@ -1010,11 +1009,14 @@ function showUpazila(
 
     `;
 
-
     return;
 
   }
 
+
+  /*
+   উপজেলা নাম
+  */
 
   contents.innerHTML = `
 
@@ -1033,10 +1035,15 @@ function showUpazila(
   `;
 
 
+  /*
+   প্রতিটি Firebase document
+   = আলাদা কার্ড
+  */
+
   matched.forEach(
     (item) => {
 
-      createSections(
+      createCardsFromContent(
         contents,
         item.content || ""
       );
@@ -1058,18 +1065,28 @@ function showUpazila(
 }
 
 
-/* =====================================
-   CREATE SECTIONS
-   ===================================== */
+/* =========================
+   CREATE SEPARATE CARDS
+   ========================= */
 
-function createSections(
+function createCardsFromContent(
   container,
   text
 ) {
 
 
+  if (!text) {
+    return;
+  }
+
+
+  /*
+   দুইটি খালি লাইনের মাধ্যমে
+   আলাদা তথ্য শনাক্ত করা হবে
+  */
+
   const sections =
-    text
+    String(text)
       .replace(
         /\r\n/g,
         "\n"
@@ -1092,20 +1109,43 @@ function createSections(
 
 
       const lines =
-        section.split(
-          "\n"
-        );
+        section
+          .split("\n")
+          .map(
+            line =>
+              line.trim()
+          )
+          .filter(
+            line =>
+              line.length > 0
+          );
 
+
+      if (
+        lines.length === 0
+      ) {
+
+        return;
+
+      }
+
+
+      /*
+       প্রথম লাইন = Heading
+      */
 
       const heading =
-        lines[0].trim();
+        lines[0];
 
+
+      /*
+       বাকি লাইন = Body
+      */
 
       const body =
         lines
           .slice(1)
-          .join("\n")
-          .trim();
+          .join("\n");
 
 
       const card =
@@ -1118,28 +1158,22 @@ function createSections(
         "info-section";
 
 
-      /*
-       ফোন নম্বরকে Call link বানানো
-      */
-
-      const linkedBody =
-        makePhoneLinks(
-          body
-        );
+      const formattedBody =
+        formatText(body);
 
 
       card.innerHTML = `
 
         <div class="info-heading">
 
-          ${heading}
+          ${escapeHTML(heading)}
 
         </div>
 
         ${
           body
           ?
-          `<div class="info-text">${linkedBody}</div>`
+          `<div class="info-text">${formattedBody}</div>`
           :
           ""
         }
@@ -1157,9 +1191,9 @@ function createSections(
 }
 
 
-/* =====================================
+/* =========================
    OTHER CATEGORY
-   ===================================== */
+   ========================= */
 
 function showAllContents(
   contents,
@@ -1182,8 +1216,9 @@ function showAllContents(
     );
 
 
-  if (matched.length === 0) {
-
+  if (
+    matched.length === 0
+  ) {
 
     contents.innerHTML = `
 
@@ -1195,16 +1230,20 @@ function showAllContents(
 
     `;
 
-
     return;
 
   }
 
 
+  /*
+   অন্য Topic-এর ক্ষেত্রেও
+   প্রতিটি তথ্য আলাদা কার্ড
+  */
+
   matched.forEach(
     (item) => {
 
-      createSections(
+      createCardsFromContent(
         contents,
         item.content || ""
       );
@@ -1221,4 +1260,5 @@ loadData();
 
 
 </body>
+
 </html>
