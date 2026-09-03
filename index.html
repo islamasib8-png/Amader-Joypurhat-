@@ -1,32 +1,18 @@
-<!DOCTYPE html>
-<html lang="bn">
-
+<!DOCTYPE html><html lang="bn">
 <head>
-
   <meta charset="UTF-8">
-
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0">
-
-  <title>আমাদের জয়পুরহাট</title>
-
-
-  <style>
-
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">  <title>আমাদের জয়পুরহাট</title>  <style>
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
     }
 
-
     body {
       font-family: Arial, sans-serif;
       background: #f5f7fa;
       color: #222;
     }
-
 
     header {
       background: linear-gradient(135deg, #0f766e, #14b8a6);
@@ -35,18 +21,15 @@
       text-align: center;
     }
 
-
     header h1 {
       font-size: 28px;
       margin-bottom: 8px;
     }
 
-
     header p {
       font-size: 15px;
       opacity: 0.95;
     }
-
 
     .hero {
       position: relative;
@@ -58,7 +41,6 @@
       background: #ddd;
     }
 
-
     .slides {
       display: flex;
       width: 100%;
@@ -66,13 +48,11 @@
       transition: transform 0.5s ease;
     }
 
-
     .slide {
       min-width: 100%;
       height: 100%;
       flex-shrink: 0;
     }
-
 
     .slide img {
       width: 100%;
@@ -80,7 +60,6 @@
       display: block;
       object-fit: cover;
     }
-
 
     .dots {
       position: absolute;
@@ -93,7 +72,6 @@
       gap: 7px;
     }
 
-
     .dot {
       width: 8px;
       height: 8px;
@@ -102,13 +80,11 @@
       transition: 0.3s;
     }
 
-
     .dot.active {
       width: 10px;
       height: 10px;
       background: white;
     }
-
 
     .container {
       padding: 5px 10px 30px;
@@ -116,20 +92,17 @@
       margin: auto;
     }
 
-
     .section-title {
       font-size: 20px;
       margin: 18px 0 12px;
       font-weight: bold;
     }
 
-
     #categories {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
       gap: 10px;
     }
-
 
     .card {
       background: white;
@@ -146,17 +119,14 @@
       text-align: center;
     }
 
-
     .card:active {
       transform: scale(0.96);
     }
-
 
     .icon {
       font-size: 30px;
       margin-bottom: 7px;
     }
-
 
     .card h3 {
       font-size: 13px;
@@ -165,14 +135,12 @@
       font-weight: bold;
     }
 
-
     .loading {
       text-align: center;
       padding: 30px;
       color: #666;
       grid-column: 1 / -1;
     }
-
 
     .error {
       background: white;
@@ -183,7 +151,6 @@
       grid-column: 1 / -1;
     }
 
-
     footer {
       margin-top: 30px;
       padding: 25px 15px;
@@ -192,7 +159,6 @@
       border-top: 1px solid #ddd;
       line-height: 1.7;
     }
-
 
     footer a {
       display: inline-block;
@@ -204,16 +170,13 @@
       font-weight: bold;
     }
 
-
     .whatsapp {
       background: #25D366;
     }
 
-
     .facebook {
       background: #1877F2;
     }
-
 
     @media (min-width: 600px) {
 
@@ -222,196 +185,133 @@
         gap: 14px;
       }
 
-
       .card {
         min-height: 110px;
       }
-
 
       .icon {
         font-size: 34px;
       }
 
-
       .card h3 {
         font-size: 15px;
       }
-
 
       .hero {
         height: 280px;
       }
 
     }
+  </style></head><body>  <header>
+    <h1>আমাদের জয়পুরহাট</h1><p>
+  জয়পুরহাট জেলার তথ্যভান্ডার
+</p>
 
-  </style>
+  </header>  <div class="hero"><div class="slides" id="slides">
 
-</head>
-
-
-<body>
-
-
-  <header>
-
-    <h1>আমাদের জয়পুরহাট</h1>
-
-    <p>
-      জয়পুরহাট জেলার তথ্যভান্ডার
-    </p>
-
-  </header>
-
-
-  <div class="hero">
-
-    <div class="slides" id="slides">
-
-
-      <div class="slide">
-        <img src="./joypurhat.jpg" alt="Joypurhat">
-      </div>
-
-
-      <div class="slide">
-        <img src="./picjoypurhat2.jpg" alt="Joypurhat">
-      </div>
-
-
-      <div class="slide">
-        <img src="./picjoypurhat3.jpg" alt="Joypurhat">
-      </div>
-
-
-      <div class="slide">
-        <img src="./picjoypurhat4.jpg" alt="Joypurhat">
-      </div>
-
-
-      <div class="slide">
-        <img src="./picjoypurhat5.jpg" alt="Joypurhat">
-      </div>
-
-
-      <div class="slide">
-        <img src="./picjoypurhat6.jpg" alt="Joypurhat">
-      </div>
-
-
-      <div class="slide">
-        <img src="./picjoypurhat7.jpg" alt="Joypurhat">
-      </div>
-
-
-      <div class="slide">
-        <img src="./picjoypurhat8.jpg" alt="Joypurhat">
-      </div>
-
-
-    </div>
-
-
-    <div class="dots" id="dots">
-
-      <span class="dot active"></span>
-      <span class="dot"></span>
-      <span class="dot"></span>
-      <span class="dot"></span>
-      <span class="dot"></span>
-      <span class="dot"></span>
-      <span class="dot"></span>
-      <span class="dot"></span>
-
-    </div>
-
+  <div class="slide">
+    <img src="./joypurhat.jpg" alt="Joypurhat">
   </div>
 
-
-  <div class="container">
-
-
-    <div class="section-title">
-      📚 বিভাগসমূহ
-    </div>
-
-
-    <div id="categories">
-
-      <div class="loading">
-        তথ্য লোড হচ্ছে...
-      </div>
-
-    </div>
-
-
+  <div class="slide">
+    <img src="./picjoypurhat2.jpg" alt="Joypurhat">
   </div>
 
+  <div class="slide">
+    <img src="./picjoypurhat3.jpg" alt="Joypurhat">
+  </div>
 
-  <footer>
+  <div class="slide">
+    <img src="./picjoypurhat4.jpg" alt="Joypurhat">
+  </div>
 
+  <div class="slide">
+    <img src="./picjoypurhat5.jpg" alt="Joypurhat">
+  </div>
 
-    <div style="font-weight:bold; margin-bottom:10px;">
-      © 2026 আমাদের জয়পুরহাট
-    </div>
+  <div class="slide">
+    <img src="./picjoypurhat6.jpg" alt="Joypurhat">
+  </div>
 
+  <div class="slide">
+    <img src="./picjoypurhat7.jpg" alt="Joypurhat">
+  </div>
 
-    <div style="font-size:14px; margin-bottom:12px;">
+  <div class="slide">
+    <img src="./picjoypurhat8.jpg" alt="Joypurhat">
+  </div>
 
-      উপরোক্ত তথ্যে কোনো ভুল বা সংশোধনের প্রয়োজন হলে
-      অনুগ্রহ করে যোগাযোগ করুন। যাচাই সাপেক্ষে প্রয়োজনীয়
-      সংশোধন করা হবে।
-
-    </div>
-
-
-    <div style="font-weight:bold;">
-      Md. Asib Islam
-    </div>
-
-
-    <div style="font-size:14px;">
-      Uchan, Dharanji, Panchbibi, Joypurhat
-    </div>
-
-
-    <div style="font-size:14px; margin-top:4px;">
-      📞 013-19058313
-    </div>
+</div>
 
 
-    <div style="margin-top:15px;">
+<div class="dots" id="dots">
+
+  <span class="dot active"></span>
+  <span class="dot"></span>
+  <span class="dot"></span>
+  <span class="dot"></span>
+  <span class="dot"></span>
+  <span class="dot"></span>
+  <span class="dot"></span>
+  <span class="dot"></span>
+
+</div>
+
+  </div>  <div class="container"><div class="section-title">
+  📚 বিভাগসমূহ
+</div>
+
+<div id="categories">
+
+  <div class="loading">
+    তথ্য লোড হচ্ছে...
+  </div>
+
+</div>
+
+  </div>  <footer><div style="font-weight:bold; margin-bottom:10px;">
+  © 2026 আমাদের জয়পুরহাট
+</div>
+
+<div style="font-size:14px; margin-bottom:12px;">
+  উপরোক্ত তথ্যে কোনো ভুল বা সংশোধনের প্রয়োজন হলে
+  অনুগ্রহ করে যোগাযোগ করুন। যাচাই সাপেক্ষে প্রয়োজনীয়
+  সংশোধন করা হবে।
+</div>
+
+<div style="font-weight:bold;">
+  Md. Asib Islam
+</div>
+
+<div style="font-size:14px;">
+  Uchan, Dharanji, Panchbibi, Joypurhat
+</div>
+
+<div style="font-size:14px; margin-top:4px;">
+  📞 013-19058313
+</div>
 
 
-      <a
-        class="whatsapp"
-        href="https://wa.me/8801319058313">
+<div style="margin-top:15px;">
 
-        💬 WhatsApp
+  <a
+    class="whatsapp"
+    href="https://wa.me/8801319058313">
+    💬 WhatsApp
+  </a>
 
-      </a>
+  <a
+    class="facebook"
+    href="https://www.facebook.com/Asibislam01">
+    📘 Facebook
+  </a>
 
+</div>
 
-      <a
-        class="facebook"
-        href="https://www.facebook.com/Asibislam01">
-
-        📘 Facebook
-
-      </a>
-
-
-    </div>
-
-
-  </footer>
-
-
-  <script type="module">
-
+  </footer>  <script type="module">
 
     import { initializeApp }
       from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
-
 
     import {
       getFirestore,
@@ -447,25 +347,288 @@
     const app =
       initializeApp(firebaseConfig);
 
-
     const db =
       getFirestore(app);
 
 
     async function loadCategories() {
 
-
       const container =
         document.getElementById("categories");
 
-
       try {
-
 
         const snapshot =
           await getDocs(
             collection(db, "categories")
           );
 
+        const categories = [];
 
-       
+
+        snapshot.forEach((doc) => {
+
+          const data =
+            doc.data();
+
+          categories.push({
+
+            id: doc.id,
+
+            ...data
+
+          });
+
+        });
+
+
+        const orderMap = {
+
+          "জয়পুরহাটের পরিচয়": 1,
+
+          "উপজেলার পরিচয়": 2,
+
+          "দর্শনীয় স্থান": 3
+
+        };
+
+
+        categories.sort((a, b) => {
+
+          const orderA =
+            orderMap[a.name] ?? 999;
+
+          const orderB =
+            orderMap[b.name] ?? 999;
+
+          return orderA - orderB;
+
+        });
+
+
+        container.innerHTML = "";
+
+
+        if (categories.length === 0) {
+
+          container.innerHTML = `
+
+            <div class="loading">
+              কোনো বিভাগ পাওয়া যায়নি।
+            </div>
+
+          `;
+
+          return;
+
+        }
+
+
+        categories.forEach((category) => {
+
+          const card =
+            document.createElement("div");
+
+          card.className = "card";
+
+
+          card.innerHTML = `
+
+            <div class="icon">
+              ${category.icon || "📌"}
+            </div>
+
+            <h3>
+              ${category.name || ""}
+            </h3>
+
+          `;
+
+
+          card.onclick = () => {
+
+            if (
+              category.name ===
+              "বাসের সময়সূচি"
+            ) {
+
+              window.location.href =
+                "https://www.shohoz.com/bus-tickets";
+
+              return;
+
+            }
+
+
+            if (
+              category.name ===
+              "ট্রেনের সময়সূচি"
+            ) {
+
+              window.location.href =
+                "https://eticket.railway.gov.bd/";
+
+              return;
+
+            }
+
+
+            if (
+              category.name ===
+              "আজকের খবর"
+            ) {
+
+              window.location.href =
+                "https://www.jagonews24.com/bangladesh/rajshahi/jaipurhat";
+
+              return;
+
+            }
+
+
+            window.location.href =
+              `topic.html?id=${category.id}`;
+
+          };
+
+
+          container.appendChild(card);
+
+        });
+
+
+      }
+
+      catch (error) {
+
+        console.error(error);
+
+        container.innerHTML = `
+
+          <div class="error">
+            তথ্য লোড করা যাচ্ছে না।
+          </div>
+
+        `;
+
+      }
+
+    }
+
+
+    loadCategories();
+
+
+    const slides =
+      document.getElementById("slides");
+
+    const dots =
+      document.querySelectorAll(".dot");
+
+    let currentSlide = 0;
+
+    const totalSlides = 8;
+
+
+    function showSlide(index) {
+
+      if (index >= totalSlides) {
+        index = 0;
+      }
+
+      if (index < 0) {
+        index = totalSlides - 1;
+      }
+
+      currentSlide = index;
+
+
+      slides.style.transform =
+        `translateX(-${currentSlide * 100}%)`;
+
+
+      dots.forEach((dot, i) => {
+
+        dot.classList.toggle(
+          "active",
+          i === currentSlide
+        );
+
+      });
+
+    }
+
+
+    setInterval(() => {
+
+      showSlide(
+        currentSlide + 1
+      );
+
+    }, 4000);
+
+
+    dots.forEach((dot, index) => {
+
+      dot.addEventListener(
+        "click",
+        () => {
+
+          showSlide(index);
+
+        }
+      );
+
+    });
+
+
+    let startX = 0;
+
+    let endX = 0;
+
+
+    slides.addEventListener(
+      "touchstart",
+      (e) => {
+
+        startX =
+          e.touches[0].clientX;
+
+      }
+    );
+
+
+    slides.addEventListener(
+      "touchend",
+      (e) => {
+
+        endX =
+          e.changedTouches[0].clientX;
+
+
+        const difference =
+          startX - endX;
+
+
+        if (difference > 50) {
+
+          showSlide(
+            currentSlide + 1
+          );
+
+        }
+
+
+        if (difference < -50) {
+
+          showSlide(
+            currentSlide - 1
+          );
+
+        }
+
+      }
+    );
+
+  </script></body>
+    </html>
