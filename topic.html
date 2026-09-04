@@ -1,8 +1,17 @@
-<!DOCTYPE html><html lang="bn"><head>  <meta charset="UTF-8"><meta
-name="viewport"
-content="width=device-width, initial-scale=1.0">
+<!DOCTYPE html>
+<html lang="bn">
 
-  <title>আমাদের জয়পুরহাট</title>  <style>
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0">
+
+  <title>আমাদের জয়পুরহাট</title>
+
+  <style>
 
     * {
       box-sizing: border-box;
@@ -10,13 +19,11 @@ content="width=device-width, initial-scale=1.0">
       padding: 0;
     }
 
-
     body {
       font-family: Arial, sans-serif;
       background: #f5f7fa;
       color: #222;
     }
-
 
     header {
       background: linear-gradient(
@@ -26,24 +33,19 @@ content="width=device-width, initial-scale=1.0">
       );
 
       color: white;
-
       padding: 22px 18px;
-
       text-align: center;
     }
-
 
     header h1 {
       font-size: 23px;
     }
-
 
     .container {
       padding: 18px 15px 35px;
       max-width: 800px;
       margin: auto;
     }
-
 
     .back {
       display: inline-block;
@@ -53,250 +55,284 @@ content="width=device-width, initial-scale=1.0">
       text-decoration: none;
     }
 
-
     .title,
     .card,
-    .info-section {
+    .info-section,
+    .post-card {
 
       background: white;
-
       padding: 20px;
-
       border-radius: 16px;
-
       margin-bottom: 14px;
 
       box-shadow:
         0 3px 12px rgba(0,0,0,0.08);
-
     }
-
 
     .title .icon,
     .card .icon {
-
       font-size: 38px;
-
       margin-bottom: 8px;
-
     }
-
 
     .title h2 {
-
       font-size: 23px;
-
       margin-bottom: 8px;
-
     }
-
 
     .title p {
-
       line-height: 1.8;
-
       color: #444;
-
       font-size: 16px;
-
     }
-
 
     .card {
-
       cursor: pointer;
-
       transition: 0.2s;
-
     }
-
 
     .card:active {
-
       transform: scale(0.98);
-
     }
-
 
     .card h3 {
-
       color: #0f766e;
-
       font-size: 19px;
-
       margin-bottom: 6px;
-
     }
-
 
     .card p {
-
       color: #666;
-
       line-height: 1.7;
-
       font-size: 15px;
-
     }
-
 
     .info-heading {
-
       color: #0f766e;
-
       font-size: 19px;
-
       font-weight: bold;
-
       margin-bottom: 10px;
-
     }
-
 
     .info-text {
-
       color: #444;
-
       font-size: 16px;
-
       line-height: 1.9;
-
       white-space: pre-wrap;
-
       word-break: break-word;
-
     }
-
 
     .section-title {
-
       font-size: 20px;
-
       font-weight: bold;
-
       margin: 20px 0 12px;
-
     }
-
 
     .loading {
-
       text-align: center;
-
       padding: 30px;
-
       color: #666;
+    }
 
+    .error {
+      background: white;
+      padding: 20px;
+      border-radius: 15px;
+      text-align: center;
+      color: #b91c1c;
     }
 
 
-    .error {
+    /* ===============================
+       IMAGE POST
+       =============================== */
 
-      background: white;
+    .posts-section-title {
+      font-size: 20px;
+      font-weight: bold;
+      margin: 25px 0 12px;
+      color: #222;
+    }
 
-      padding: 20px;
+    .post-card {
+      overflow: hidden;
+      padding: 0;
+    }
 
-      border-radius: 15px;
+    .post-caption {
+      padding: 16px 18px 8px;
+      font-size: 16px;
+      line-height: 1.8;
+      color: #333;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
 
-      text-align: center;
+    .post-time {
+      padding: 0 18px 14px;
+      color: #888;
+      font-size: 13px;
+    }
 
-      color: #b91c1c;
+    .post-images {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
 
+    .post-images img {
+      width: 100%;
+      display: block;
+      max-height: 600px;
+      object-fit: cover;
+      background: #eee;
+    }
+
+    .post-images img:only-child {
+      max-height: 650px;
     }
 
 
     footer {
-
       margin-top: 30px;
-
       padding: 25px 15px;
-
       text-align: center;
-
       background: #f1f5f9;
-
       border-top: 1px solid #ddd;
-
       line-height: 1.7;
-
     }
-
 
     footer a {
-
       display: inline-block;
-
       margin: 5px;
-
       padding: 10px 16px;
-
       color: white;
-
       text-decoration: none;
-
       border-radius: 8px;
-
       font-weight: bold;
-
     }
-
 
     .whatsapp {
-
       background: #25D366;
-
     }
-
 
     .facebook {
-
       background: #1877F2;
-
     }
 
-  </style></head><body><header>  <h1>
+  </style>
+
+</head>
+
+
+<body>
+
+
+<header>
+
+  <h1>
     আমাদের জয়পুরহাট
-  </h1></header><div class="container"><a
-href="index.html"
-class="back">
+  </h1>
 
-← ফিরে যান
-
-  </a>  <div id="categoryBox"></div>  <div id="upazilaList"></div>  <div id="contents"></div></div><footer>  <div
-    style="font-weight:bold; margin-bottom:10px;">© 2026 আমাদের জয়পুরহাট
-
-  </div>  <div
-    style="font-size:14px; margin-bottom:12px;">উপরোক্ত তথ্যে কোনো ভুল বা সংশোধনের প্রয়োজন হলে
-অনুগ্রহ করে যোগাযোগ করুন। যাচাই সাপেক্ষে প্রয়োজনীয়
-সংশোধন করা হবে।
-
-  </div>  <div style="font-weight:bold;">Md. Asib Islam
-
-  </div>  <div style="font-size:14px;">Uchan, Dharanji, Panchbibi, Joypurhat
-
-  </div>  <div
-    style="font-size:14px; margin-top:4px;">📞 013-19058313
-
-  </div>  <div style="margin-top:15px;"><a
-  class="whatsapp"
-  href="https://wa.me/8801319058313"
-  target="_blank">
-
-  💬 WhatsApp
-
-</a>
+</header>
 
 
-<a
-  class="facebook"
-  href="https://www.facebook.com/Asibislam01"
-  target="_blank">
+<div class="container">
 
-  📘 Facebook
 
-</a>
+  <a
+    href="index.html"
+    class="back">
 
-  </div></footer><script type="module">
+    ← ফিরে যান
+
+  </a>
+
+
+  <div id="categoryBox"></div>
+
+  <div id="upazilaList"></div>
+
+  <div id="contents"></div>
+
+  <!-- IMAGE POSTS -->
+
+  <div id="imagePosts"></div>
+
+
+</div>
+
+
+<footer>
+
+  <div
+    style="font-weight:bold; margin-bottom:10px;">
+
+    © 2026 আমাদের জয়পুরহাট
+
+  </div>
+
+
+  <div
+    style="font-size:14px; margin-bottom:12px;">
+
+    উপরোক্ত তথ্যে কোনো ভুল বা সংশোধনের প্রয়োজন হলে
+    অনুগ্রহ করে যোগাযোগ করুন। যাচাই সাপেক্ষে প্রয়োজনীয়
+    সংশোধন করা হবে।
+
+  </div>
+
+
+  <div style="font-weight:bold;">
+
+    Md. Asib Islam
+
+  </div>
+
+
+  <div style="font-size:14px;">
+
+    Uchan, Dharanji, Panchbibi, Joypurhat
+
+  </div>
+
+
+  <div
+    style="font-size:14px; margin-top:4px;">
+
+    📞 013-19058313
+
+  </div>
+
+
+  <div style="margin-top:15px;">
+
+    <a
+      class="whatsapp"
+      href="https://wa.me/8801319058313"
+      target="_blank">
+
+      💬 WhatsApp
+
+    </a>
+
+
+    <a
+      class="facebook"
+      href="https://www.facebook.com/Asibislam01"
+      target="_blank">
+
+      📘 Facebook
+
+    </a>
+
+  </div>
+
+</footer>
+
+
+
+<script type="module">
 
 
 import { initializeApp }
@@ -307,9 +343,7 @@ from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
 import {
 
   getFirestore,
-
   collection,
-
   getDocs
 
 }
@@ -317,33 +351,29 @@ import {
 from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
 
-const firebaseConfig = {
 
+const firebaseConfig = {
 
   apiKey:
     "AIzaSyAG05o2MjHH3UL8Gp7VNmrQGeqq-4YrDEk",
 
-
   authDomain:
     "amader-joypurhat-7b3fb.firebaseapp.com",
-
 
   projectId:
     "amader-joypurhat-7b3fb",
 
-
   storageBucket:
     "amader-joypurhat-7b3fb.firebasestorage.app",
 
-
   messagingSenderId:
     "542366008798",
-
 
   appId:
     "1:542366008798:web:4f9a7c210b561406a5494f"
 
 };
+
 
 
 const app =
@@ -354,6 +384,7 @@ const db =
   getFirestore(app);
 
 
+
 const params =
   new URLSearchParams(
     window.location.search
@@ -362,6 +393,7 @@ const params =
 
 const categoryId =
   params.get("id");
+
 
 
 const upazilas = [
@@ -435,6 +467,7 @@ const upazilas = [
 ];
 
 
+
 /* =====================================
    বাংলা সংখ্যা → ইংরেজি সংখ্যা
    ===================================== */
@@ -462,21 +495,367 @@ function banglaToEnglishNumber(text) {
 }
 
 
+
 /* =====================================
    PHONE NUMBER → NORMAL TEXT
    ===================================== */
 
 function makePhoneLinks(text) {
 
-  /*
-   ফোন নম্বরকে আর Call link বানানো হবে না।
-
-   শুধু নম্বরটি সাধারণ লেখার মতো থাকবে।
-  */
-
   return text;
 
 }
+
+
+
+/* =====================================
+   IMAGE POST TIME
+   ===================================== */
+
+function formatPostTime(timestamp) {
+
+  if (!timestamp) {
+
+    return "";
+
+  }
+
+
+  try {
+
+    let date;
+
+
+    if (
+      timestamp &&
+      typeof timestamp.toDate === "function"
+    ) {
+
+      date =
+        timestamp.toDate();
+
+    }
+
+    else if (
+      timestamp.seconds
+    ) {
+
+      date =
+        new Date(
+          timestamp.seconds * 1000
+        );
+
+    }
+
+    else {
+
+      date =
+        new Date(timestamp);
+
+    }
+
+
+    if (
+      isNaN(date.getTime())
+    ) {
+
+      return "";
+
+    }
+
+
+    return date.toLocaleString(
+      "bn-BD",
+      {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+        hour: "numeric",
+        minute: "2-digit"
+      }
+    );
+
+  }
+
+  catch (error) {
+
+    return "";
+
+  }
+
+}
+
+
+
+/* =====================================
+   LOAD IMAGE POSTS
+   ===================================== */
+
+async function loadImagePosts() {
+
+
+  const imagePosts =
+    document.getElementById(
+      "imagePosts"
+    );
+
+
+  imagePosts.innerHTML =
+    "";
+
+
+  if (!categoryId) {
+
+    return;
+
+  }
+
+
+  try {
+
+
+    const postsSnapshot =
+      await getDocs(
+        collection(
+          db,
+          "posts"
+        )
+      );
+
+
+    const posts = [];
+
+
+    postsSnapshot.forEach(
+      (doc) => {
+
+
+        const data =
+          doc.data();
+
+
+        if (
+          String(
+            data.categoryId || ""
+          ).trim()
+          ===
+          String(categoryId).trim()
+        ) {
+
+
+          posts.push({
+
+            id: doc.id,
+
+            ...data
+
+          });
+
+        }
+
+      }
+    );
+
+
+    /* নতুন পোস্ট আগে */
+
+    posts.sort(
+      (a, b) => {
+
+
+        let dateA = 0;
+        let dateB = 0;
+
+
+        if (
+          a.createdAt &&
+          typeof a.createdAt.toMillis === "function"
+        ) {
+
+          dateA =
+            a.createdAt.toMillis();
+
+        }
+
+
+        if (
+          b.createdAt &&
+          typeof b.createdAt.toMillis === "function"
+        ) {
+
+          dateB =
+            b.createdAt.toMillis();
+
+        }
+
+
+        return dateB - dateA;
+
+      }
+    );
+
+
+    if (posts.length === 0) {
+
+      return;
+
+    }
+
+
+    imagePosts.innerHTML = `
+
+      <div class="posts-section-title">
+
+        🖼️ Image Posts
+
+      </div>
+
+    `;
+
+
+    posts.forEach(
+      (post) => {
+
+
+        const card =
+          document.createElement(
+            "div"
+          );
+
+
+        card.className =
+          "post-card";
+
+
+        let images =
+          post.images || [];
+
+
+        /*
+          যদি images Array না হয়,
+          তাহলে একটি ছবি হিসেবে ধরবে।
+        */
+
+        if (
+          !Array.isArray(images)
+        ) {
+
+          images =
+            [images];
+
+        }
+
+
+        const validImages =
+          images.filter(
+            (url) =>
+              typeof url === "string" &&
+              url.trim() !== ""
+          );
+
+
+        let imagesHTML =
+          "";
+
+
+        validImages.forEach(
+          (url) => {
+
+
+            imagesHTML += `
+
+              <img
+                src="${url}"
+                alt="আমাদের জয়পুরহাট"
+                loading="lazy"
+                onerror="this.style.display='none';">
+
+            `;
+
+          }
+        );
+
+
+        const caption =
+          post.caption || "";
+
+
+        const postTime =
+          formatPostTime(
+            post.createdAt
+          );
+
+
+        card.innerHTML = `
+
+          ${
+            imagesHTML
+            ?
+            `
+            <div class="post-images">
+
+              ${imagesHTML}
+
+            </div>
+            `
+            :
+            ""
+          }
+
+
+          ${
+            caption
+            ?
+            `
+            <div class="post-caption">
+
+              ${caption}
+
+            </div>
+            `
+            :
+            ""
+          }
+
+
+          ${
+            postTime
+            ?
+            `
+            <div class="post-time">
+
+              🕐 ${postTime}
+
+            </div>
+            `
+            :
+            ""
+          }
+
+        `;
+
+
+        imagePosts.appendChild(
+          card
+        );
+
+      }
+    );
+
+
+  }
+
+  catch (error) {
+
+    console.error(
+      "Image Posts Error:",
+      error
+    );
+
+  }
+
+}
+
 
 
 /* =====================================
@@ -533,6 +912,7 @@ async function loadData() {
     categorySnapshot.forEach(
       (doc) => {
 
+
         if (
           doc.id === categoryId
         ) {
@@ -561,15 +941,23 @@ async function loadData() {
       <div class="title">
 
         <div class="icon">
+
           ${categoryData.icon || "📌"}
+
         </div>
 
+
         <h2>
+
           ${categoryData.name || ""}
+
         </h2>
 
+
         <p>
+
           ${categoryData.description || ""}
+
         </p>
 
       </div>
@@ -591,6 +979,7 @@ async function loadData() {
 
     contentSnapshot.forEach(
       (doc) => {
+
 
         const data =
           doc.data();
@@ -630,7 +1019,9 @@ async function loadData() {
       );
 
 
-    } else {
+    }
+
+    else {
 
 
       showAllContents(
@@ -639,6 +1030,13 @@ async function loadData() {
       );
 
     }
+
+
+    /*
+      Image Posts-ও লোড হবে
+    */
+
+    await loadImagePosts();
 
 
   }
@@ -664,6 +1062,7 @@ async function loadData() {
 }
 
 
+
 /* =====================================
    UPAZILA LIST
    ===================================== */
@@ -678,7 +1077,9 @@ function showUpazilaList(
   upazilaList.innerHTML = `
 
     <div class="section-title">
+
       🏘️ উপজেলা সমূহ
+
     </div>
 
   `;
@@ -701,15 +1102,23 @@ function showUpazilaList(
       card.innerHTML = `
 
         <div class="icon">
+
           🏘️
+
         </div>
 
+
         <h3>
+
           ${upazila.name}
+
         </h3>
 
+
         <p>
+
           বিস্তারিত তথ্য দেখতে চাপ দিন
+
         </p>
 
       `;
@@ -717,10 +1126,12 @@ function showUpazilaList(
 
       card.onclick = () => {
 
+
         showUpazila(
           upazila,
           allContents
         );
+
 
       };
 
@@ -746,6 +1157,7 @@ function showUpazilaList(
 }
 
 
+
 /* =====================================
    SHOW UPAZILA
    ===================================== */
@@ -765,6 +1177,7 @@ function showUpazila(
   let matched =
     allContents.filter(
       (item) => {
+
 
         return upazila.ids.includes(
           String(
@@ -813,6 +1226,7 @@ function showUpazila(
 
         </div>
 
+
         <div class="info-text">
 
           এই উপজেলার তথ্য এখনো যোগ করা হয়নি।
@@ -834,11 +1248,16 @@ function showUpazila(
     <div class="title">
 
       <div class="icon">
+
         🏘️
+
       </div>
 
+
       <h2>
+
         ${upazila.name}
+
       </h2>
 
     </div>
@@ -848,6 +1267,7 @@ function showUpazila(
 
   matched.forEach(
     (item) => {
+
 
       createSections(
         contents,
@@ -869,6 +1289,7 @@ function showUpazila(
   });
 
 }
+
 
 
 /* =====================================
@@ -931,11 +1352,6 @@ function createSections(
         "info-section";
 
 
-      /*
-       ফোন নম্বরকে আর Call link করা হবে না।
-       নম্বর সাধারণ Text হিসেবেই থাকবে।
-      */
-
       const linkedBody =
         makePhoneLinks(
           body
@@ -949,6 +1365,7 @@ function createSections(
           ${heading}
 
         </div>
+
 
         ${
           body
@@ -971,6 +1388,7 @@ function createSections(
 }
 
 
+
 /* =====================================
    OTHER CATEGORY
    ===================================== */
@@ -988,6 +1406,7 @@ function showAllContents(
   const matched =
     allContents.filter(
       (item) => {
+
 
         return item.categoryId ===
           categoryId;
@@ -1018,6 +1437,7 @@ function showAllContents(
   matched.forEach(
     (item) => {
 
+
       createSections(
         contents,
         item.content || ""
@@ -1029,7 +1449,16 @@ function showAllContents(
 }
 
 
+
+/* =====================================
+   START
+   ===================================== */
+
 loadData();
 
-</script></body>
+</script>
+
+
+</body>
+
 </html>
