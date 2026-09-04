@@ -1,391 +1,645 @@
 <!DOCTYPE html>
 <html lang="bn">
+
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<meta charset="UTF-8">
+  <title>আমাদের জয়পুরহাট - Admin Panel</title>
 
-<meta
-  name="viewport"
-  content="width=device-width, initial-scale=1.0">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
-<title>Admin Panel - আমাদের জয়পুরহাট</title>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f6f8;
+      color: #222;
+    }
 
-<style>
+    .login-box {
+      max-width: 400px;
+      margin: 80px auto;
+      background: white;
+      padding: 25px;
+      border-radius: 15px;
+      box-shadow: 0 4px 20px rgba(0,0,0,.12);
+    }
 
-*{
-  box-sizing:border-box;
-}
+    .login-box h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
 
-body{
-  margin:0;
-  font-family:Arial,sans-serif;
-  background:#f5f7fa;
-  color:#222;
-}
+    input,
+    textarea,
+    select {
+      width: 100%;
+      padding: 12px;
+      margin: 7px 0;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-size: 15px;
+    }
 
-/* HEADER */
+    textarea {
+      min-height: 120px;
+      resize: vertical;
+    }
 
-header{
-  background:linear-gradient(135deg,#0f766e,#14b8a6);
-  color:white;
-  padding:18px 15px;
-  position:relative;
-}
+    button {
+      border: none;
+      border-radius: 8px;
+      padding: 11px 16px;
+      cursor: pointer;
+      font-size: 15px;
+    }
 
-.header-row{
-  max-width:850px;
-  margin:auto;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-}
+    .login-btn,
+    .save-btn {
+      width: 100%;
+      background: #198754;
+      color: white;
+      margin-top: 8px;
+    }
 
-header h1{
-  margin:0;
-  font-size:23px;
-}
+    .cancel-btn {
+      background: #6c757d;
+      color: white;
+      margin-top: 8px;
+    }
 
-.header-sub{
-  font-size:14px;
-  margin-top:4px;
-}
+    .edit {
+      background: #0d6efd;
+      color: white;
+    }
 
-/* THREE DOT */
+    .delete {
+      background: #dc3545;
+      color: white;
+    }
 
-.menu-wrap{
-  position:relative;
-}
+    .edit-post {
+      background: #0d6efd;
+      color: white;
+    }
 
-.menu-btn{
-  width:48px;
-  height:48px;
-  margin:0;
-  padding:0;
-  background:rgba(255,255,255,.15);
-  border-radius:50%;
-  font-size:28px;
-  line-height:48px;
-}
+    .delete-post {
+      background: #dc3545;
+      color: white;
+    }
 
-.menu{
-  position:absolute;
-  right:0;
-  top:56px;
-  width:190px;
-  background:white;
-  border-radius:14px;
-  box-shadow:0 5px 25px rgba(0,0,0,.2);
-  overflow:hidden;
-  display:none;
-  z-index:1000;
-}
+    .hidden {
+      display: none !important;
+    }
 
-.menu.show{
-  display:block;
-}
+    #adminPanel {
+      display: none;
+    }
 
-.menu button{
-  width:100%;
-  margin:0;
-  border-radius:0;
-  background:white;
-  color:#222;
-  text-align:left;
-  padding:15px;
-  font-size:15px;
-}
+    .header {
+      background: #198754;
+      color: white;
+      padding: 14px 18px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
 
-.menu button:hover{
-  background:#f0fdf4;
-}
+    .header h2 {
+      font-size: 20px;
+    }
 
-/* CONTAINER */
+    .menu-wrapper {
+      position: relative;
+    }
 
-.container{
-  max-width:850px;
-  margin:auto;
-  padding:20px 15px 40px;
-}
+    .menu-btn {
+      background: transparent;
+      color: white;
+      font-size: 30px;
+      padding: 0 8px;
+      line-height: 1;
+    }
 
-.box{
-  background:white;
-  padding:20px;
-  margin-bottom:16px;
-  border-radius:16px;
-  box-shadow:0 3px 12px rgba(0,0,0,.08);
-}
+    .menu {
+      position: absolute;
+      right: 0;
+      top: 45px;
+      width: 220px;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 5px 20px rgba(0,0,0,.2);
+      overflow: hidden;
+      display: none;
+    }
 
-h2{
-  margin-top:0;
-  font-size:20px;
-}
+    .menu button {
+      width: 100%;
+      background: white;
+      color: #222;
+      text-align: left;
+      padding: 15px;
+      border-radius: 0;
+      border-bottom: 1px solid #eee;
+      font-size: 15px;
+    }
 
-label{
-  display:block;
-  font-weight:bold;
-  margin:12px 0 6px;
-}
+    .menu button:hover {
+      background: #f1f1f1;
+    }
 
-input,
-textarea,
-select{
-  width:100%;
-  padding:12px;
-  border:1px solid #ddd;
-  border-radius:10px;
-  font-size:15px;
-}
+    .container {
+      max-width: 900px;
+      margin: auto;
+      padding: 18px;
+    }
 
-textarea{
-  min-height:130px;
-  resize:vertical;
-}
+    .section {
+      display: none;
+    }
 
-button{
-  width:100%;
-  border:0;
-  border-radius:10px;
-  padding:13px;
-  margin-top:12px;
-  font-size:16px;
-  font-weight:bold;
-  color:white;
-  background:#0f766e;
-  cursor:pointer;
-}
+    .section.active {
+      display: block;
+    }
 
-button:disabled{
-  opacity:.6;
-  cursor:not-allowed;
-}
+    .section-title {
+      background: white;
+      padding: 18px;
+      border-radius: 12px;
+      margin-bottom: 15px;
+      box-shadow: 0 2px 8px rgba(0,0,0,.06);
+    }
 
-.edit{
-  background:#2563eb;
-}
+    .section-title h3 {
+      margin-bottom: 5px;
+    }
 
-.delete{
-  background:#dc2626;
-}
+    .box {
+      background: white;
+      padding: 18px;
+      margin-bottom: 18px;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,.06);
+    }
 
-.cancel{
-  background:#777;
-}
+    .box h3 {
+      margin-bottom: 12px;
+    }
 
-.logout{
-  background:#dc2626;
-}
+    .item {
+      background: #f8f9fa;
+      border: 1px solid #e3e3e3;
+      padding: 15px;
+      margin-top: 10px;
+      border-radius: 10px;
+    }
 
-.hidden{
-  display:none!important;
-}
+    .item h4 {
+      margin-bottom: 6px;
+    }
 
-.message{
-  margin-top:12px;
-  padding:10px;
-  border-radius:8px;
-  background:#f0fdf4;
-  color:#166534;
-}
+    .item p {
+      white-space: pre-wrap;
+      line-height: 1.5;
+      margin: 5px 0;
+    }
 
-.error{
-  background:#fef2f2;
-  color:#991b1b;
-}
+    .actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 12px;
+      flex-wrap: wrap;
+    }
 
-/* ITEM */
+    .actions button {
+      flex: 0 0 auto;
+    }
 
-.item{
-  border:1px solid #eee;
-  border-radius:12px;
-  padding:15px;
-  margin-top:12px;
-}
+    .topic-icon {
+      font-size: 25px;
+      margin-right: 5px;
+    }
 
-.item strong{
-  display:block;
-  font-size:17px;
-  margin-bottom:8px;
-}
+    .image-preview {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+      gap: 8px;
+      margin-top: 10px;
+    }
 
-.small{
-  color:#555;
-  line-height:1.6;
-  white-space:pre-wrap;
-}
+    .image-preview img {
+      width: 100%;
+      height: 100px;
+      object-fit: cover;
+      border-radius: 8px;
+    }
 
-.topic-badge{
-  display:inline-block;
-  background:#ecfdf5;
-  color:#047857;
-  padding:5px 10px;
-  border-radius:20px;
-  font-size:13px;
-  margin-bottom:8px;
-}
+    .post-images {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+      gap: 8px;
+      margin-top: 10px;
+    }
 
-/* TOPIC CARD */
+    .post-images img {
+      width: 100%;
+      height: 120px;
+      object-fit: cover;
+      border-radius: 8px;
+    }
 
-.topic-card{
-  border:1px solid #e5e7eb;
-  border-radius:14px;
-  padding:16px;
-  margin-top:12px;
-}
+    .empty {
+      text-align: center;
+      padding: 20px;
+      color: #777;
+    }
 
-.topic-title{
-  font-size:18px;
-  font-weight:bold;
-  color:#0f766e;
-}
+    .logout-area {
+      margin-top: 20px;
+      text-align: center;
+    }
 
-.topic-description{
-  color:#666;
-  line-height:1.6;
-  margin-top:6px;
-}
+    .logout-btn {
+      background: #dc3545;
+      color: white;
+      padding: 12px 30px;
+    }
 
-/* IMAGE POST */
+    .loading {
+      text-align: center;
+      padding: 15px;
+      color: #777;
+    }
 
-.post-images{
-  display:grid;
-  grid-template-columns:repeat(2,1fr);
-  gap:8px;
-  margin-top:12px;
-}
+    .filter-box {
+      margin-bottom: 15px;
+    }
 
-.post-images img{
-  width:100%;
-  height:180px;
-  object-fit:cover;
-  border-radius:10px;
-  display:block;
-}
-
-.image-preview{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:8px;
-  margin-top:10px;
-}
-
-.image-preview img{
-  width:100%;
-  height:100px;
-  object-fit:cover;
-  border-radius:8px;
-}
-
-.post-time{
-  color:#777;
-  font-size:13px;
-  margin-top:8px;
-}
-
-.section-head{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:10px;
-  margin-bottom:10px;
-}
-
-.section-head h2{
-  margin:0;
-}
-
-.refresh-btn{
-  width:auto;
-  margin:0;
-  padding:9px 13px;
-  font-size:13px;
-}
-
-.empty{
-  text-align:center;
-  color:#777;
-  padding:25px 10px;
-}
-
-@media(max-width:500px){
-
-  .post-images{
-    grid-template-columns:1fr;
-  }
-
-  .post-images img{
-    height:220px;
-  }
-
-  .image-preview{
-    grid-template-columns:repeat(2,1fr);
-  }
-
-  header h1{
-    font-size:20px;
-  }
-
-}
-
-</style>
-
+    .small-text {
+      font-size: 13px;
+      color: #777;
+      margin-top: 5px;
+    }
+  </style>
 </head>
 
 <body>
 
+  <!-- LOGIN -->
+  <div id="loginBox" class="login-box">
 
-<!-- HEADER -->
+    <h2>🔐 Admin Login</h2>
 
-<header>
+    <input
+      type="email"
+      id="email"
+      placeholder="Email"
+    >
 
-  <div class="header-row">
+    <input
+      type="password"
+      id="password"
+      placeholder="Password"
+    >
 
-    <div>
+    <button
+      class="login-btn"
+      id="loginBtn"
+    >
+      Login
+    </button>
 
-      <h1>🔐 Admin Panel</h1>
+    <p
+      id="loginError"
+      style="color:red;text-align:center;margin-top:10px;"
+    ></p>
 
-      <div class="header-sub">
-        আমাদের জয়পুরহাট
+  </div>
+
+
+  <!-- ADMIN PANEL -->
+  <div id="adminPanel">
+
+    <!-- HEADER -->
+    <div class="header">
+
+      <h2>🛠️ Admin Panel</h2>
+
+      <div class="menu-wrapper">
+
+        <button
+          class="menu-btn"
+          id="menuBtn"
+        >
+          ⋮
+        </button>
+
+        <div
+          class="menu"
+          id="menu"
+        >
+
+          <button onclick="showSection('topicSection')">
+            ➕ নতুন Topic যোগ করুন
+          </button>
+
+          <button onclick="showSection('contentSection')">
+            📚 নতুন Content যোগ করুন
+          </button>
+
+          <button onclick="showSection('postSection')">
+            🖼️ নতুন Image Post যোগ করুন
+          </button>
+
+        </div>
+
       </div>
 
     </div>
 
 
-    <!-- 3 DOT -->
+    <div class="container">
 
-    <div class="menu-wrap">
 
-      <button
-        id="menuBtn"
-        class="menu-btn">
-
-        ⋮
-
-      </button>
-
+      <!-- ================= TOPIC SECTION ================= -->
 
       <div
-        id="mainMenu"
-        class="menu">
+        id="topicSection"
+        class="section active"
+      >
+
+        <div class="section-title">
+
+          <h3>📌 Topic Management</h3>
+
+          <p class="small-text">
+            নতুন Topic যোগ, Edit এবং Delete করতে পারবেন।
+          </p>
+
+        </div>
+
+
+        <!-- ADD / EDIT TOPIC -->
+
+        <div class="box">
+
+          <h3 id="topicFormTitle">
+            ➕ নতুন Topic যোগ করুন
+          </h3>
+
+          <input
+            type="text"
+            id="categoryName"
+            placeholder="Topic এর নাম"
+          >
+
+          <input
+            type="text"
+            id="categoryIcon"
+            placeholder="Icon যেমন 🏥"
+          >
+
+          <textarea
+            id="categoryDescription"
+            placeholder="Topic এর সংক্ষিপ্ত বর্ণনা"
+          ></textarea>
+
+          <button
+            class="save-btn"
+            id="addCategoryBtn"
+          >
+            Topic Save করুন
+          </button>
+
+          <button
+            class="cancel-btn hidden"
+            id="cancelCategoryBtn"
+          >
+            Cancel
+          </button>
+
+        </div>
+
+
+        <!-- CURRENT TOPICS -->
+
+        <div class="box">
+
+          <h3>📋 বর্তমান Topic</h3>
+
+          <div id="categoriesList">
+            <div class="loading">
+              Loading...
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- ================= CONTENT SECTION ================= -->
+
+      <div
+        id="contentSection"
+        class="section"
+      >
+
+        <div class="section-title">
+
+          <h3>📚 Content Management</h3>
+
+          <p class="small-text">
+            Topic অনুযায়ী Content যোগ, Edit এবং Delete করতে পারবেন।
+          </p>
+
+        </div>
+
+
+        <!-- ADD / EDIT CONTENT -->
+
+        <div class="box">
+
+          <h3 id="contentFormTitle">
+            ➕ নতুন Content যোগ করুন
+          </h3>
+
+          <select id="categorySelect">
+
+            <option value="">
+              Topic নির্বাচন করুন
+            </option>
+
+          </select>
+
+          <input
+            type="text"
+            id="contentTitle"
+            placeholder="Content এর Title"
+          >
+
+          <textarea
+            id="contentText"
+            placeholder="Content লিখুন"
+          ></textarea>
+
+          <input
+            type="text"
+            id="contentImage"
+            placeholder="Image URL (Optional)"
+          >
+
+          <button
+            class="save-btn"
+            id="saveContentBtn"
+          >
+            Content Save করুন
+          </button>
+
+          <button
+            class="cancel-btn hidden"
+            id="cancelContentBtn"
+          >
+            Cancel
+          </button>
+
+        </div>
+
+
+        <!-- CONTENT LIST -->
+
+        <div class="box">
+
+          <h3>📋 বর্তমান Content</h3>
+
+          <div class="filter-box">
+
+            <select id="contentFilter">
+
+              <option value="">
+                সব Topic-এর Content
+              </option>
+
+            </select>
+
+          </div>
+
+          <div id="contentsList">
+
+            <div class="loading">
+              Loading...
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- ================= IMAGE POST SECTION ================= -->
+
+      <div
+        id="postSection"
+        class="section"
+      >
+
+        <div class="section-title">
+
+          <h3>🖼️ Image Post Management</h3>
+
+          <p class="small-text">
+            একসাথে একাধিক ছবি দিয়ে Image Post তৈরি করতে পারবেন।
+          </p>
+
+        </div>
+
+
+        <!-- ADD / EDIT POST -->
+
+        <div class="box">
+
+          <h3 id="postFormTitle">
+            ➕ নতুন Image Post যোগ করুন
+          </h3>
+
+          <select id="postCategorySelect">
+
+            <option value="">
+              Topic নির্বাচন করুন
+            </option>
+
+          </select>
+
+          <textarea
+            id="postCaption"
+            placeholder="Image Post-এর Caption"
+          ></textarea>
+
+          <input
+            type="file"
+            id="postImages"
+            accept="image/*"
+            multiple
+          >
+
+          <div
+            id="imagePreview"
+            class="image-preview"
+          ></div>
+
+          <button
+            class="save-btn"
+            id="savePostBtn"
+          >
+            Image Post Save করুন
+          </button>
+
+          <button
+            class="cancel-btn hidden"
+            id="cancelPostBtn"
+          >
+            Cancel
+          </button>
+
+        </div>
+
+
+        <!-- POST LIST -->
+
+        <div class="box">
+
+          <h3>📸 বর্তমান Image Posts</h3>
+
+          <div id="postsList">
+
+            <div class="loading">
+              Loading...
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- LOGOUT -->
+
+      <div class="logout-area">
 
         <button
-          data-section="topicSection">
-
-          📌 Topic
-
-        </button>
-
-        <button
-          data-section="contentSection">
-
-          📚 Content
-
-        </button>
-
-        <button
-          data-section="imageSection">
-
-          🖼️ Image
-
+          class="logout-btn"
+          id="logoutBtn"
+        >
+          🔴 Logout
         </button>
 
       </div>
@@ -394,1302 +648,670 @@ button:disabled{
 
   </div>
 
-</header>
 
+  <!-- ================= FIREBASE ================= -->
 
-<div class="container">
+  <script type="module">
 
+    import {
+      initializeApp
+    } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
 
-<!-- LOGIN -->
 
-<div
-  id="loginBox"
-  class="box">
+    import {
+      getFirestore,
+      collection,
+      getDocs,
+      addDoc,
+      updateDoc,
+      deleteDoc,
+      doc,
+      serverTimestamp
+    } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
-  <h2>
-    Admin Login
-  </h2>
 
-  <label>
-    Email
-  </label>
+    import {
+      getAuth,
+      signInWithEmailAndPassword,
+      onAuthStateChanged,
+      signOut
+    } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
 
-  <input
-    type="email"
-    id="email"
-    placeholder="Admin Email">
 
+    /* ================= FIREBASE CONFIG ================= */
 
-  <label>
-    Password
-  </label>
+    const firebaseConfig = {
 
-  <input
-    type="password"
-    id="password"
-    placeholder="Password">
+      apiKey:
+        "AIzaSyAG05o2MjHH3UL8Gp7VNmrQGeqq-4YrDEk",
 
+      authDomain:
+        "amader-joypurhat-7b3fb.firebaseapp.com",
 
-  <button id="loginBtn">
-    Login
-  </button>
+      projectId:
+        "amader-joypurhat-7b3fb",
 
-  <div id="loginMessage"></div>
+      storageBucket:
+        "amader-joypurhat-7b3fb.firebasestorage.app",
 
-</div>
+      messagingSenderId:
+        "542366008798",
 
+      appId:
+        "1:542366008798:web:4f9a7c210b561406a5494f"
 
+    };
 
-<!-- ADMIN PANEL -->
 
-<div
-  id="adminPanel"
-  class="hidden">
+    const app = initializeApp(firebaseConfig);
 
+    const db = getFirestore(app);
 
-<!-- ==================================================
-     TOPIC SECTION
-================================================== -->
+    const auth = getAuth(app);
 
-<div
-  id="topicSection"
-  class="admin-section">
 
+    /* ================= CLOUDINARY ================= */
 
-  <!-- ADD / EDIT TOPIC -->
+    const CLOUDINARY_URL =
+      "https://api.cloudinary.com/v1_1/lkuowv7e/image/upload";
 
-  <div class="box">
+    const CLOUDINARY_PRESET =
+      "amader_joypurhat_images";
 
-    <h2 id="categoryFormTitle">
-      📌 নতুন Topic যোগ করুন
-    </h2>
 
+    /* ================= VARIABLES ================= */
 
-    <label>
-      Topic Name
-    </label>
+    let categories = [];
 
-    <input
-      type="text"
-      id="categoryName"
-      placeholder="যেমন: হাসপাতাল তথ্য">
+    let categoryCache = {};
 
+    let editingCategoryId = null;
 
-    <label>
-      Icon
-    </label>
+    let editingContentId = null;
 
-    <input
-      type="text"
-      id="categoryIcon"
-      placeholder="যেমন: 🏥">
+    let editingPostId = null;
 
+    let currentPostImages = [];
 
-    <label>
-      Description
-    </label>
 
-    <textarea
-      id="categoryDescription"
-      placeholder="Topic সম্পর্কে সংক্ষিপ্ত তথ্য"></textarea>
+    /* ================= LOGIN ================= */
 
+    document
+      .getElementById("loginBtn")
+      .addEventListener("click", async () => {
 
-    <button
-      id="addCategoryBtn">
+        const email =
+          document.getElementById("email").value.trim();
 
-      📌 Topic যোগ করুন
+        const password =
+          document.getElementById("password").value;
 
-    </button>
+        const error =
+          document.getElementById("loginError");
 
+        error.textContent = "";
 
-    <button
-      id="cancelCategoryEditBtn"
-      class="cancel hidden">
+        if (!email || !password) {
 
-      Edit বাতিল
+          error.textContent =
+            "Email এবং Password দিন।";
 
-    </button>
-
-
-    <div id="categoryMessage"></div>
-
-  </div>
-
-
-  <!-- CURRENT TOPICS -->
-
-  <div class="box">
-
-    <div class="section-head">
-
-      <h2>
-        📌 বর্তমান Topic
-      </h2>
-
-      <button
-        id="refreshTopicsBtn"
-        class="refresh-btn">
-
-        🔄 Refresh
-
-      </button>
-
-    </div>
-
-
-    <div id="categoryList">
-
-      Topic লোড হচ্ছে...
-
-    </div>
-
-  </div>
-
-
-  <button
-    id="logoutBtn"
-    class="logout">
-
-    🔴 Logout
-
-  </button>
-
-</div>
-
-
-
-<!-- ==================================================
-     CONTENT SECTION
-================================================== -->
-
-<div
-  id="contentSection"
-  class="admin-section hidden">
-
-
-  <div class="box">
-
-    <h2 id="formTitle">
-      📚 নতুন Content যোগ করুন
-    </h2>
-
-
-    <label>
-      Topic
-    </label>
-
-    <select id="categorySelect">
-
-      <option value="">
-        Topic নির্বাচন করুন
-      </option>
-
-    </select>
-
-
-    <label>
-      Title
-    </label>
-
-    <input
-      type="text"
-      id="contentTitle"
-      placeholder="যেমন: জয়পুরহাট সদর উপজেলা">
-
-
-    <label>
-      বিস্তারিত তথ্য
-    </label>
-
-    <textarea
-      id="contentText"
-      placeholder="এখানে বিস্তারিত তথ্য লিখুন"></textarea>
-
-
-    <label>
-      Image URL (Optional)
-    </label>
-
-    <input
-      type="text"
-      id="contentImage"
-      placeholder="ছবির URL">
-
-
-    <button
-      id="saveContentBtn">
-
-      📚 Content যোগ করুন
-
-    </button>
-
-
-    <button
-      id="cancelEditBtn"
-      class="cancel hidden">
-
-      Edit বাতিল
-
-    </button>
-
-
-    <div id="contentMessage"></div>
-
-  </div>
-
-
-  <!-- CONTENT LIST -->
-
-  <div class="box">
-
-    <h2>
-      📋 Topic অনুযায়ী Content
-    </h2>
-
-
-    <label>
-      কোন Topic-এর Content দেখতে চান?
-    </label>
-
-    <select id="contentFilter">
-
-      <option value="">
-        সব Topic
-      </option>
-
-    </select>
-
-
-    <div id="contentList">
-
-      Topic নির্বাচন করুন অথবা সব Content দেখুন।
-
-    </div>
-
-  </div>
-
-
-  <button
-    id="logoutBtn2"
-    class="logout">
-
-    🔴 Logout
-
-  </button>
-
-</div>
-
-
-
-<!-- ==================================================
-     IMAGE SECTION
-================================================== -->
-
-<div
-  id="imageSection"
-  class="admin-section hidden">
-
-
-  <div class="box">
-
-    <h2 id="postFormTitle">
-      🖼️ নতুন Image Post যোগ করুন
-    </h2>
-
-
-    <label>
-      Topic
-    </label>
-
-    <select id="postCategorySelect">
-
-      <option value="">
-        Topic নির্বাচন করুন
-      </option>
-
-    </select>
-
-
-    <label>
-      Caption
-    </label>
-
-    <textarea
-      id="postCaption"
-      placeholder="ছবির সাথে যা লিখতে চান..."></textarea>
-
-
-    <label>
-      একাধিক ছবি নির্বাচন করুন
-    </label>
-
-    <input
-      type="file"
-      id="postImages"
-      accept="image/*"
-      multiple>
-
-
-    <div
-      id="imagePreview"
-      class="image-preview">
-    </div>
-
-
-    <div id="postMessage"></div>
-
-
-    <button
-      id="savePostBtn">
-
-      🖼️ Post করুন
-
-    </button>
-
-
-    <button
-      id="cancelPostEditBtn"
-      class="cancel hidden">
-
-      Edit বাতিল
-
-    </button>
-
-  </div>
-
-
-
-  <!-- IMAGE LIST -->
-
-  <div class="box">
-
-    <h2>
-      📸 Topic অনুযায়ী Image Posts
-    </h2>
-
-
-    <label>
-      কোন Topic-এর Image দেখতে চান?
-    </label>
-
-    <select id="postFilter">
-
-      <option value="">
-        সব Topic
-      </option>
-
-    </select>
-
-
-    <div id="postList">
-
-      Topic নির্বাচন করুন অথবা সব Image Post দেখুন।
-
-    </div>
-
-  </div>
-
-
-  <button
-    id="logoutBtn3"
-    class="logout">
-
-    🔴 Logout
-
-  </button>
-
-</div>
-
-
-</div>
-
-</div>
-
-
-
-<script type="module">
-
-
-/* ==================================================
-   FIREBASE IMPORT
-================================================== */
-
-import {
-  initializeApp
-}
-from
-"https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
-
-
-import {
-
-  getFirestore,
-  collection,
-  getDocs,
-  addDoc,
-  updateDoc,
-  deleteDoc,
-  doc,
-  serverTimestamp
-
-}
-from
-"https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
-
-
-import {
-
-  getAuth,
-  signInWithEmailAndPassword,
-  onAuthStateChanged,
-  signOut
-
-}
-from
-"https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
-
-
-
-/* ==================================================
-   FIREBASE CONFIG
-================================================== */
-
-const firebaseConfig = {
-
-  apiKey:
-    "AIzaSyAG05o2MjHH3UL8Gp7VNmrQGeqq-4YrDEk",
-
-  authDomain:
-    "amader-joypurhat-7b3fb.firebaseapp.com",
-
-  projectId:
-    "amader-joypurhat-7b3fb",
-
-  storageBucket:
-    "amader-joypurhat-7b3fb.firebasestorage.app",
-
-  messagingSenderId:
-    "542366008798",
-
-  appId:
-    "1:542366008798:web:4f9a7c210b561406a5494f"
-
-};
-
-
-const app =
-  initializeApp(firebaseConfig);
-
-
-const db =
-  getFirestore(app);
-
-
-const auth =
-  getAuth(app);
-
-
-
-/* ==================================================
-   CLOUDINARY
-================================================== */
-
-const CLOUDINARY_CLOUD_NAME =
-  "lkuowv7e";
-
-
-const CLOUDINARY_UPLOAD_PRESET =
-  "amader_joypurhat_images";
-
-
-const CLOUDINARY_UPLOAD_URL =
-  `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload`;
-
-
-
-/* ==================================================
-   VARIABLES
-================================================== */
-
-let editingCategoryId = null;
-
-let editingId = null;
-
-let editingPostId = null;
-
-let editingPostImages = [];
-
-let selectedPostFiles = [];
-
-let categoryCache = {};
-
-
-
-/* ==================================================
-   ELEMENTS
-================================================== */
-
-const loginBox =
-  document.getElementById(
-    "loginBox"
-  );
-
-
-const adminPanel =
-  document.getElementById(
-    "adminPanel"
-  );
-
-
-const loginMessage =
-  document.getElementById(
-    "loginMessage"
-  );
-
-
-const mainMenu =
-  document.getElementById(
-    "mainMenu"
-  );
-
-
-const menuBtn =
-  document.getElementById(
-    "menuBtn"
-  );
-
-
-
-/* ==================================================
-   3 DOT MENU
-================================================== */
-
-menuBtn.addEventListener(
-  "click",
-  function(event){
-
-    event.stopPropagation();
-
-    mainMenu.classList.toggle(
-      "show"
-    );
-
-  }
-);
-
-
-document.addEventListener(
-  "click",
-  function(){
-
-    mainMenu.classList.remove(
-      "show"
-    );
-
-  }
-);
-
-
-mainMenu
-  .querySelectorAll(
-    "button"
-  )
-  .forEach(
-    function(button){
-
-      button.addEventListener(
-        "click",
-        function(event){
-
-          event.stopPropagation();
-
-          showSection(
-            button.dataset.section
-          );
-
-          mainMenu.classList.remove(
-            "show"
-          );
+          return;
 
         }
-      );
 
-    }
-  );
+        try {
+
+          await signInWithEmailAndPassword(
+            auth,
+            email,
+            password
+          );
+
+        } catch (e) {
+
+          error.textContent =
+            "Login failed: " + e.message;
+
+        }
+
+      });
 
 
+    /* ================= AUTH ================= */
 
-/* ==================================================
-   SHOW SECTION
-================================================== */
+    onAuthStateChanged(auth, async (user) => {
 
-function showSection(
-  sectionId
-){
+      if (user) {
 
-  document
-    .querySelectorAll(
-      ".admin-section"
-    )
-    .forEach(
-      function(section){
+        document.getElementById("loginBox")
+          .style.display = "none";
 
-        section.classList.add(
-          "hidden"
-        );
+        document.getElementById("adminPanel")
+          .style.display = "block";
+
+        await loadCategories();
+
+        await loadContents();
+
+        await loadPosts();
+
+      } else {
+
+        document.getElementById("loginBox")
+          .style.display = "block";
+
+        document.getElementById("adminPanel")
+          .style.display = "none";
 
       }
-    );
+
+    });
 
 
-  const section =
-    document.getElementById(
-      sectionId
-    );
+    /* ================= MENU ================= */
+
+    const menuBtn =
+      document.getElementById("menuBtn");
+
+    const menu =
+      document.getElementById("menu");
 
 
-  if(section){
+    menuBtn.addEventListener("click", (e) => {
 
-    section.classList.remove(
-      "hidden"
-    );
+      e.stopPropagation();
 
-  }
+      menu.style.display =
+        menu.style.display === "block"
+          ? "none"
+          : "block";
 
-}
-
-
-
-/* ==================================================
-   LOGIN
-================================================== */
-
-document
-  .getElementById(
-    "loginBtn"
-  )
-  .addEventListener(
-    "click",
-    async function(){
-
-      loginMessage.innerHTML =
-        "<div class='message'>Login হচ্ছে...</div>";
+    });
 
 
-      const email =
-        document
-          .getElementById(
-            "email"
+    document.addEventListener("click", () => {
+
+      menu.style.display = "none";
+
+    });
+
+
+    window.showSection = function(sectionId) {
+
+      document
+        .querySelectorAll(".section")
+        .forEach(section => {
+
+          section.classList.remove("active");
+
+        });
+
+
+      document
+        .getElementById(sectionId)
+        .classList.add("active");
+
+
+      menu.style.display = "none";
+
+    };
+
+
+    /* ================= LOAD CATEGORIES ================= */
+
+    async function loadCategories() {
+
+      const snapshot =
+        await getDocs(
+          collection(db, "categories")
+        );
+
+
+      categories = [];
+
+      categoryCache = {};
+
+
+      snapshot.forEach(item => {
+
+        const data = item.data();
+
+        const category = {
+
+          id: item.id,
+
+          ...data
+
+        };
+
+        categories.push(category);
+
+        categoryCache[item.id] = category;
+
+      });
+
+
+      categories.sort((a, b) =>
+        String(a.name || "")
+          .localeCompare(
+            String(b.name || ""),
+            "bn"
           )
-          .value
-          .trim();
+      );
 
 
-      const password =
-        document
-          .getElementById(
-            "password"
-          )
-          .value;
+      renderCategoryOptions();
+
+      renderCategoryList();
+
+    }
 
 
-      if(
-        !email ||
-        !password
-      ){
+    /* ================= CATEGORY OPTIONS ================= */
 
-        loginMessage.innerHTML =
-          "<div class='message error'>Email ও Password দিন।</div>";
+    function renderCategoryOptions() {
+
+      const categorySelect =
+        document.getElementById("categorySelect");
+
+      const postCategorySelect =
+        document.getElementById("postCategorySelect");
+
+      const contentFilter =
+        document.getElementById("contentFilter");
+
+
+      categorySelect.innerHTML =
+        `<option value="">Topic নির্বাচন করুন</option>`;
+
+
+      postCategorySelect.innerHTML =
+        `<option value="">Topic নির্বাচন করুন</option>`;
+
+
+      contentFilter.innerHTML =
+        `<option value="">সব Topic-এর Content</option>`;
+
+
+      categories.forEach(category => {
+
+        const icon =
+          category.icon || "📌";
+
+        const name =
+          category.name || "Unnamed";
+
+
+        categorySelect.innerHTML += `
+          <option value="${escapeAttribute(category.id)}">
+            ${escapeHTML(icon)} ${escapeHTML(name)}
+          </option>
+        `;
+
+
+        postCategorySelect.innerHTML += `
+          <option value="${escapeAttribute(category.id)}">
+            ${escapeHTML(icon)} ${escapeHTML(name)}
+          </option>
+        `;
+
+
+        contentFilter.innerHTML += `
+          <option value="${escapeAttribute(category.id)}">
+            ${escapeHTML(icon)} ${escapeHTML(name)}
+          </option>
+        `;
+
+      });
+
+    }
+
+
+    /* ================= CATEGORY LIST ================= */
+
+    function renderCategoryList() {
+
+      const list =
+        document.getElementById("categoriesList");
+
+
+      if (!categories.length) {
+
+        list.innerHTML =
+          `<div class="empty">কোনো Topic নেই।</div>`;
 
         return;
 
       }
 
 
-      try{
+      list.innerHTML = "";
 
-        await signInWithEmailAndPassword(
-          auth,
-          email,
-          password
-        );
 
+      categories.forEach(category => {
 
-        loginMessage.innerHTML =
-          "<div class='message'>Login সফল হয়েছে।</div>";
+        const div =
+          document.createElement("div");
 
+        div.className = "item";
 
-      }
-      catch(error){
 
-        console.error(error);
+        div.innerHTML = `
 
+          <h4>
+            <span class="topic-icon">
+              ${escapeHTML(category.icon || "📌")}
+            </span>
 
-        loginMessage.innerHTML =
-          "<div class='message error'>Login ব্যর্থ হয়েছে। Email ও Password পরীক্ষা করুন।</div>";
+            ${escapeHTML(category.name || "")}
+          </h4>
 
-      }
+          <p>
+            ${escapeHTML(category.description || "")}
+          </p>
 
-    }
-  );
+          <div class="actions">
 
+            <button
+              class="edit"
+              onclick="editCategory('${escapeAttribute(category.id)}')"
+            >
+              ✏️ Edit
+            </button>
 
-
-/* ==================================================
-   AUTH STATE
-================================================== */
-
-onAuthStateChanged(
-  auth,
-  async function(user){
-
-    if(user){
-
-      loginBox.classList.add(
-        "hidden"
-      );
-
-      adminPanel.classList.remove(
-        "hidden"
-      );
-
-
-      showSection(
-        "topicSection"
-      );
-
-
-      await loadCategories();
-
-      await loadContents();
-
-      await loadPosts();
-
-
-    }
-    else{
-
-      loginBox.classList.remove(
-        "hidden"
-      );
-
-      adminPanel.classList.add(
-        "hidden"
-      );
-
-    }
-
-  }
-);
-
-
-
-/* ==================================================
-   LOGOUT
-================================================== */
-
-async function logout(){
-
-  await signOut(auth);
-
-}
-
-
-document
-  .getElementById(
-    "logoutBtn"
-  )
-  .addEventListener(
-    "click",
-    logout
-  );
-
-
-document
-  .getElementById(
-    "logoutBtn2"
-  )
-  .addEventListener(
-    "click",
-    logout
-  );
-
-
-document
-  .getElementById(
-    "logoutBtn3"
-  )
-  .addEventListener(
-    "click",
-    logout
-  );
-
-
-
-/* ==================================================
-   LOAD CATEGORIES
-================================================== */
-
-async function loadCategories(){
-
-  const categorySelect =
-    document.getElementById(
-      "categorySelect"
-    );
-
-
-  const postCategorySelect =
-    document.getElementById(
-      "postCategorySelect"
-    );
-
-
-  const contentFilter =
-    document.getElementById(
-      "contentFilter"
-    );
-
-
-  const postFilter =
-    document.getElementById(
-      "postFilter"
-    );
-
-
-  categorySelect.innerHTML =
-    "<option value=''>Topic নির্বাচন করুন</option>";
-
-
-  postCategorySelect.innerHTML =
-    "<option value=''>Topic নির্বাচন করুন</option>";
-
-
-  contentFilter.innerHTML =
-    "<option value=''>সব Topic</option>";
-
-
-  postFilter.innerHTML =
-    "<option value=''>সব Topic</option>";
-
-
-  categoryCache = {};
-
-
-  try{
-
-    const snapshot =
-      await getDocs(
-        collection(
-          db,
-          "categories"
-        )
-      );
-
-
-    snapshot.forEach(
-      function(categoryDoc){
-
-        const data =
-          categoryDoc.data();
-
-
-        const name =
-          data.name ||
-          "অজানা Topic";
-
-
-        categoryCache[
-          categoryDoc.id
-        ] = name;
-
-
-        /* CONTENT ADD */
-
-        const option =
-          document.createElement(
-            "option"
-          );
-
-
-        option.value =
-          categoryDoc.id;
-
-
-        option.textContent =
-          (data.icon || "📌") +
-          " " +
-          name;
-
-
-        categorySelect.appendChild(
-          option
-        );
-
-
-        /* IMAGE ADD */
-
-        const postOption =
-          document.createElement(
-            "option"
-          );
-
-
-        postOption.value =
-          categoryDoc.id;
-
-
-        postOption.textContent =
-          (data.icon || "📌") +
-          " " +
-          name;
-
-
-        postCategorySelect.appendChild(
-          postOption
-        );
-
-
-        /* CONTENT FILTER */
-
-        const filterOption =
-          document.createElement(
-            "option"
-          );
-
-
-        filterOption.value =
-          categoryDoc.id;
-
-
-        filterOption.textContent =
-          (data.icon || "📌") +
-          " " +
-          name;
-
-
-        contentFilter.appendChild(
-          filterOption
-        );
-
-
-        /* IMAGE FILTER */
-
-        const postFilterOption =
-          document.createElement(
-            "option"
-          );
-
-
-        postFilterOption.value =
-          categoryDoc.id;
-
-
-        postFilterOption.textContent =
-          (data.icon || "📌") +
-          " " +
-          name;
-
-
-        postFilter.appendChild(
-          postFilterOption
-        );
-
-      }
-    );
-
-
-    await loadCategoryList();
-
-
-  }
-  catch(error){
-
-    console.error(error);
-
-    document
-      .getElementById(
-        "categoryMessage"
-      )
-      .innerHTML =
-      "<div class='message error'>Topic লোড করা যায়নি।</div>";
-
-  }
-
-}
-
-
-
-/* ==================================================
-   LOAD CATEGORY LIST
-================================================== */
-
-async function loadCategoryList(){
-
-  const list =
-    document.getElementById(
-      "categoryList"
-    );
-
-
-  list.innerHTML =
-    "Topic লোড হচ্ছে...";
-
-
-  try{
-
-    const snapshot =
-      await getDocs(
-        collection(
-          db,
-          "categories"
-        )
-      );
-
-
-    list.innerHTML = "";
-
-
-    if(snapshot.empty){
-
-      list.innerHTML =
-        "<div class='empty'>কোনো Topic নেই।</div>";
-
-      return;
-
-    }
-
-
-    snapshot.forEach(
-      function(categoryDoc){
-
-        const data =
-          categoryDoc.data();
-
-
-        const item =
-          document.createElement(
-            "div"
-          );
-
-
-        item.className =
-          "topic-card";
-
-
-        item.innerHTML = `
-
-          <div class="topic-title">
-
-            ${escapeHTML(
-              data.icon || "📌"
-            )}
-
-            ${escapeHTML(
-              data.name || ""
-            )}
+            <button
+              class="delete"
+              onclick="deleteCategory('${escapeAttribute(category.id)}')"
+            >
+              🗑️ Delete
+            </button>
 
           </div>
-
-
-          <div class="topic-description">
-
-            ${escapeHTML(
-              data.description || ""
-            )}
-
-          </div>
-
-
-          <button
-            class="edit"
-            data-id="${categoryDoc.id}">
-
-            ✏️ Edit Topic
-
-          </button>
-
-
-          <button
-            class="delete"
-            data-id="${categoryDoc.id}">
-
-            🗑️ Delete Topic
-
-          </button>
 
         `;
 
 
-        list.appendChild(
-          item
+        list.appendChild(div);
+
+      });
+
+    }
+
+
+    /* ================= ADD / UPDATE CATEGORY ================= */
+
+    document
+      .getElementById("addCategoryBtn")
+      .addEventListener("click", async () => {
+
+        const name =
+          document
+            .getElementById("categoryName")
+            .value
+            .trim();
+
+        const icon =
+          document
+            .getElementById("categoryIcon")
+            .value
+            .trim();
+
+        const description =
+          document
+            .getElementById("categoryDescription")
+            .value
+            .trim();
+
+
+        if (!name) {
+
+          alert("Topic এর নাম দিন।");
+
+          return;
+
+        }
+
+
+        const btn =
+          document.getElementById("addCategoryBtn");
+
+
+        btn.disabled = true;
+
+        btn.textContent = "Saving...";
+
+
+        try {
+
+          if (editingCategoryId) {
+
+            await updateDoc(
+              doc(
+                db,
+                "categories",
+                editingCategoryId
+              ),
+              {
+                name,
+                icon,
+                description
+              }
+            );
+
+
+            alert("Topic সফলভাবে Update হয়েছে।");
+
+          } else {
+
+            await addDoc(
+              collection(db, "categories"),
+              {
+                name,
+                icon,
+                description
+              }
+            );
+
+
+            alert("নতুন Topic যোগ হয়েছে।");
+
+          }
+
+
+          resetCategoryForm();
+
+          await loadCategories();
+
+        } catch (error) {
+
+          alert(
+            "Topic Save করতে সমস্যা হয়েছে:\n" +
+            error.message
+          );
+
+        }
+
+
+        btn.disabled = false;
+
+        btn.textContent = "Topic Save করুন";
+
+      });
+
+
+    /* ================= EDIT CATEGORY ================= */
+
+    window.editCategory = function(id) {
+
+      const category =
+        categoryCache[id];
+
+
+      if (!category) return;
+
+
+      editingCategoryId = id;
+
+
+      document
+        .getElementById("categoryName")
+        .value =
+        category.name || "";
+
+
+      document
+        .getElementById("categoryIcon")
+        .value =
+        category.icon || "";
+
+
+      document
+        .getElementById("categoryDescription")
+        .value =
+        category.description || "";
+
+
+      document
+        .getElementById("topicFormTitle")
+        .textContent =
+        "✏️ Topic Edit করুন";
+
+
+      document
+        .getElementById("addCategoryBtn")
+        .textContent =
+        "Update Topic";
+
+
+      document
+        .getElementById("cancelCategoryBtn")
+        .classList
+        .remove("hidden");
+
+
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+      });
+
+    };
+
+
+    /* ================= DELETE CATEGORY ================= */
+
+    window.deleteCategory = async function(id) {
+
+      const category =
+        categoryCache[id];
+
+
+      if (!category) return;
+
+
+      const topicName =
+        category.name || "এই Topic";
+
+
+      const confirmDelete =
+        confirm(
+          `⚠️ "${topicName}" Delete করতে চান?\n\n` +
+          `এই Topic-এর সাথে থাকা সব Content এবং Image Post-ও Delete হয়ে যাবে।\n\n` +
+          `এই কাজটি Undo করা যাবে না।`
         );
 
-      }
-    );
+
+      if (!confirmDelete) return;
 
 
-    /* EDIT */
+      try {
 
-    list
-      .querySelectorAll(
-        ".edit"
-      )
-      .forEach(
-        function(button){
+        /* Delete Category */
 
-          button.addEventListener(
-            "click",
-            function(){
-
-              editCategory(
-                button.dataset.id
-              );
-
-            }
-          );
-
-        }
-      );
-
-
-    /* DELETE */
-
-    list
-      .querySelectorAll(
-        ".delete"
-      )
-      .forEach(
-        function(button){
-
-          button.addEventListener(
-            "click",
-            function(){
-
-              deleteCategory(
-                button.dataset.id
-              );
-
-            }
-          );
-
-        }
-      );
-
-
-  }
-  catch(error){
-
-    console.error(error);
-
-
-    list.innerHTML =
-      "<div class='message error'>Topic লোড করা যায়নি।</div>";
-
-  }
-
-}
-
-
-
-/* ==================================================
-   ADD / UPDATE CATEGORY
-================================================== */
-
-document
-  .getElementById(
-    "addCategoryBtn"
-  )
-  .addEventListener(
-    "click",
-    async function(){
-
-      const name =
-        document
-          .getElementById(
-            "categoryName"
+        await deleteDoc(
+          doc(
+            db,
+            "categories",
+            id
           )
-          .value
-          .trim();
-
-
-      const icon =
-        document
-          .getElementById(
-            "categoryIcon"
-          )
-          .value
-          .trim();
-
-
-      const description =
-        document
-          .getElementById(
-            "categoryDescription"
-          )
-          .value
-          .trim();
-
-
-      const message =
-        document.getElementById(
-          "categoryMessage"
         );
 
 
-      if(!name){
+        /* Delete Related Contents */
 
-        message.innerHTML =
-          "<div class='message error'>Topic Name দিন।</div>";
-
-        return;
-
-      }
-
-
-      try{
-
-        if(editingCategoryId){
-
-          await updateDoc(
-            doc(
-              db,
-              "categories",
-              editingCategoryId
-            ),
-            {
-              name:name,
-              icon:icon,
-              description:description
-            }
+        const contentSnapshot =
+          await getDocs(
+            collection(db, "contents")
           );
 
 
-          message.innerHTML =
-            "<div class='message'>Topic Update হয়েছে।</div>";
+        const contentDeletes = [];
 
-        }
-        else{
 
-          await addDoc(
-            collection(
-              db,
-              "categories"
-            ),
-            {
-              name:name,
-              icon:icon,
-              description:description
-            }
+        contentSnapshot.forEach(item => {
+
+          const data = item.data();
+
+
+          if (data.categoryId === id) {
+
+            contentDeletes.push(
+              deleteDoc(
+                doc(
+                  db,
+                  "contents",
+                  item.id
+                )
+              )
+            );
+
+          }
+
+        });
+
+
+        await Promise.all(contentDeletes);
+
+
+        /* Delete Related Posts */
+
+        const postSnapshot =
+          await getDocs(
+            collection(db, "posts")
           );
 
 
-          message.innerHTML =
-            "<div class='message'>Topic যোগ হয়েছে।</div>";
-
-        }
+        const postDeletes = [];
 
 
-        clearCategoryForm();
+        postSnapshot.forEach(item => {
+
+          const data = item.data();
+
+
+          if (data.categoryId === id) {
+
+            postDeletes.push(
+              deleteDoc(
+                doc(
+                  db,
+                  "posts",
+                  item.id
+                )
+              )
+            );
+
+          }
+
+        });
+
+
+        await Promise.all(postDeletes);
+
+
+        alert(
+          "Topic এবং এর সাথে থাকা Content/Image Post Delete হয়েছে।"
+        );
 
 
         await loadCategories();
@@ -1699,2056 +1321,1242 @@ document
         await loadPosts();
 
 
-      }
-      catch(error){
+      } catch (error) {
 
-        console.error(error);
-
-
-        message.innerHTML =
-          "<div class='message error'>Topic Save করা যায়নি।</div>";
+        alert(
+          "Delete করতে সমস্যা হয়েছে:\n" +
+          error.message
+        );
 
       }
+
+    };
+
+
+    /* ================= CANCEL CATEGORY ================= */
+
+    document
+      .getElementById("cancelCategoryBtn")
+      .addEventListener("click", () => {
+
+        resetCategoryForm();
+
+      });
+
+
+    function resetCategoryForm() {
+
+      editingCategoryId = null;
+
+
+      document
+        .getElementById("categoryName")
+        .value = "";
+
+
+      document
+        .getElementById("categoryIcon")
+        .value = "";
+
+
+      document
+        .getElementById("categoryDescription")
+        .value = "";
+
+
+      document
+        .getElementById("topicFormTitle")
+        .textContent =
+        "➕ নতুন Topic যোগ করুন";
+
+
+      document
+        .getElementById("addCategoryBtn")
+        .textContent =
+        "Topic Save করুন";
+
+
+      document
+        .getElementById("cancelCategoryBtn")
+        .classList
+        .add("hidden");
 
     }
-  );
 
 
+    /* ================= SAVE CONTENT ================= */
 
-/* ==================================================
-   EDIT CATEGORY
-================================================== */
+    document
+      .getElementById("saveContentBtn")
+      .addEventListener("click", async () => {
 
-async function editCategory(id){
+        const categoryId =
+          document
+            .getElementById("categorySelect")
+            .value;
 
-  try{
+        const title =
+          document
+            .getElementById("contentTitle")
+            .value
+            .trim();
 
-    const snapshot =
-      await getDocs(
-        collection(
-          db,
-          "categories"
-        )
-      );
+        const text =
+          document
+            .getElementById("contentText")
+            .value
+            .trim();
+
+        const image =
+          document
+            .getElementById("contentImage")
+            .value
+            .trim();
 
 
-    let data = null;
+        if (!categoryId) {
 
+          alert("Topic নির্বাচন করুন।");
 
-    snapshot.forEach(
-      function(categoryDoc){
-
-        if(
-          categoryDoc.id === id
-        ){
-
-          data =
-            categoryDoc.data();
+          return;
 
         }
 
-      }
-    );
+
+        if (!title) {
+
+          alert("Content Title দিন।");
+
+          return;
+
+        }
 
 
-    if(!data){
+        if (!text) {
 
-      alert(
-        "Topic পাওয়া যায়নি।"
-      );
+          alert("Content লিখুন।");
 
-      return;
+          return;
 
-    }
+        }
 
 
-    editingCategoryId =
-      id;
+        const btn =
+          document.getElementById("saveContentBtn");
 
 
-    document
-      .getElementById(
-        "categoryName"
-      )
-      .value =
-      data.name || "";
+        btn.disabled = true;
+
+        btn.textContent = "Saving...";
 
 
-    document
-      .getElementById(
-        "categoryIcon"
-      )
-      .value =
-      data.icon || "";
+        try {
+
+          const data = {
+
+            categoryId,
+
+            title,
+
+            text,
+
+            image
+
+          };
 
 
-    document
-      .getElementById(
-        "categoryDescription"
-      )
-      .value =
-      data.description || "";
+          if (editingContentId) {
 
-
-    document
-      .getElementById(
-        "categoryFormTitle"
-      )
-      .textContent =
-      "✏️ Topic Edit করুন";
-
-
-    document
-      .getElementById(
-        "addCategoryBtn"
-      )
-      .textContent =
-      "Update Topic করুন";
-
-
-    document
-      .getElementById(
-        "cancelCategoryEditBtn"
-      )
-      .classList
-      .remove(
-        "hidden"
-      );
-
-
-    window.scrollTo({
-      top:0,
-      behavior:"smooth"
-    });
-
-  }
-  catch(error){
-
-    console.error(error);
-
-    alert(
-      "Topic Edit করা যায়নি।"
-    );
-
-  }
-
-}
-
-
-
-/* ==================================================
-   DELETE CATEGORY
-================================================== */
-
-async function deleteCategory(
-  categoryId
-){
-
-  const categoryName =
-    categoryCache[
-      categoryId
-    ] ||
-    "এই Topic";
-
-
-  const firstConfirm =
-    confirm(
-      `⚠️ ${categoryName} Delete করতে চান?`
-    );
-
-
-  if(!firstConfirm){
-
-    return;
-
-  }
-
-
-  const secondConfirm =
-    confirm(
-      "এই Topic-এর সাথে থাকা Content এবং Image Post-ও Delete করতে চান?\n\nOK চাপলে সবগুলো Delete হবে।"
-    );
-
-
-  try{
-
-    /* DELETE TOPIC */
-
-    await deleteDoc(
-      doc(
-        db,
-        "categories",
-        categoryId
-      )
-    );
-
-
-    /* DELETE CONTENTS */
-
-    const contentSnapshot =
-      await getDocs(
-        collection(
-          db,
-          "contents"
-        )
-      );
-
-
-    const contentDeletes = [];
-
-
-    contentSnapshot.forEach(
-      function(contentDoc){
-
-        const data =
-          contentDoc.data();
-
-
-        if(
-          String(
-            data.categoryId || ""
-          ) ===
-          String(categoryId)
-        ){
-
-          if(secondConfirm){
-
-            contentDeletes.push(
-              deleteDoc(
-                doc(
-                  db,
-                  "contents",
-                  contentDoc.id
-                )
-              )
+            await updateDoc(
+              doc(
+                db,
+                "contents",
+                editingContentId
+              ),
+              data
             );
+
+
+            alert("Content Update হয়েছে।");
+
+          } else {
+
+            await addDoc(
+              collection(db, "contents"),
+              {
+                ...data,
+                createdAt: serverTimestamp()
+              }
+            );
+
+
+            alert("নতুন Content যোগ হয়েছে।");
 
           }
 
+
+          resetContentForm();
+
+          await loadContents();
+
+        } catch (error) {
+
+          alert(
+            "Content Save করতে সমস্যা হয়েছে:\n" +
+            error.message
+          );
+
         }
+
+
+        btn.disabled = false;
+
+        btn.textContent =
+          "Content Save করুন";
+
+      });
+
+
+    /* ================= LOAD CONTENTS ================= */
+
+    async function loadContents() {
+
+      const list =
+        document.getElementById("contentsList");
+
+
+      list.innerHTML =
+        `<div class="loading">Loading...</div>`;
+
+
+      try {
+
+        const snapshot =
+          await getDocs(
+            collection(db, "contents")
+          );
+
+
+        const contents = [];
+
+
+        snapshot.forEach(item => {
+
+          contents.push({
+
+            id: item.id,
+
+            ...item.data()
+
+          });
+
+        });
+
+
+        contents.sort((a, b) => {
+
+          const ta =
+            a.createdAt?.seconds || 0;
+
+          const tb =
+            b.createdAt?.seconds || 0;
+
+          return tb - ta;
+
+        });
+
+
+        renderContents(contents);
+
+
+      } catch (error) {
+
+        list.innerHTML =
+          `<div class="empty">
+            Content load করতে সমস্যা হয়েছে।
+          </div>`;
 
       }
-    );
-
-
-    await Promise.all(
-      contentDeletes
-    );
-
-
-    /* DELETE IMAGE POSTS */
-
-    if(secondConfirm){
-
-      const postSnapshot =
-        await getDocs(
-          collection(
-            db,
-            "posts"
-          )
-        );
-
-
-      const postDeletes = [];
-
-
-      postSnapshot.forEach(
-        function(postDoc){
-
-          const data =
-            postDoc.data();
-
-
-          if(
-            String(
-              data.categoryId || ""
-            ) ===
-            String(categoryId)
-          ){
-
-            postDeletes.push(
-              deleteDoc(
-                doc(
-                  db,
-                  "posts",
-                  postDoc.id
-                )
-              )
-            );
-
-          }
-
-        }
-      );
-
-
-      await Promise.all(
-        postDeletes
-      );
 
     }
 
 
-    alert(
-      secondConfirm
-        ? "Topic এবং এর Content/Image Post Delete হয়েছে।"
-        : "Topic Delete হয়েছে।"
-    );
+    /* ================= RENDER CONTENTS ================= */
+
+    function renderContents(contents) {
+
+      const list =
+        document.getElementById("contentsList");
+
+      const filter =
+        document.getElementById("contentFilter").value;
 
 
-    await loadCategories();
-
-    await loadContents();
-
-    await loadPosts();
-
-  }
-  catch(error){
-
-    console.error(error);
+      const filtered =
+        filter
+          ? contents.filter(
+              item => item.categoryId === filter
+            )
+          : contents;
 
 
-    alert(
-      "Topic Delete করা যায়নি।"
-    );
+      if (!filtered.length) {
 
-  }
-
-}
-
-
-
-/* ==================================================
-   CANCEL CATEGORY EDIT
-================================================== */
-
-document
-  .getElementById(
-    "cancelCategoryEditBtn"
-  )
-  .addEventListener(
-    "click",
-    clearCategoryForm
-  );
-
-
-function clearCategoryForm(){
-
-  editingCategoryId =
-    null;
-
-
-  document
-    .getElementById(
-      "categoryName"
-    )
-    .value = "";
-
-
-  document
-    .getElementById(
-      "categoryIcon"
-    )
-    .value = "";
-
-
-  document
-    .getElementById(
-      "categoryDescription"
-    )
-    .value = "";
-
-
-  document
-    .getElementById(
-      "categoryFormTitle"
-    )
-    .textContent =
-    "📌 নতুন Topic যোগ করুন";
-
-
-  document
-    .getElementById(
-      "addCategoryBtn"
-    )
-    .textContent =
-    "📌 Topic যোগ করুন";
-
-
-  document
-    .getElementById(
-      "cancelCategoryEditBtn"
-    )
-    .classList
-    .add(
-      "hidden"
-    );
-
-}
-
-
-
-/* ==================================================
-   SAVE CONTENT
-================================================== */
-
-document
-  .getElementById(
-    "saveContentBtn"
-  )
-  .addEventListener(
-    "click",
-    async function(){
-
-      const categoryId =
-        document
-          .getElementById(
-            "categorySelect"
-          )
-          .value;
-
-
-      const title =
-        document
-          .getElementById(
-            "contentTitle"
-          )
-          .value
-          .trim();
-
-
-      const content =
-        document
-          .getElementById(
-            "contentText"
-          )
-          .value
-          .trim();
-
-
-      const image =
-        document
-          .getElementById(
-            "contentImage"
-          )
-          .value
-          .trim();
-
-
-      const message =
-        document.getElementById(
-          "contentMessage"
-        );
-
-
-      if(
-        !categoryId ||
-        !title ||
-        !content
-      ){
-
-        message.innerHTML =
-          "<div class='message error'>Topic, Title এবং বিস্তারিত তথ্য দিন।</div>";
+        list.innerHTML =
+          `<div class="empty">
+            কোনো Content পাওয়া যায়নি।
+          </div>`;
 
         return;
 
       }
 
 
-      try{
-
-        if(editingId){
-
-          await updateDoc(
-            doc(
-              db,
-              "contents",
-              editingId
-            ),
-            {
-              categoryId:categoryId,
-              title:title,
-              content:content,
-              image:image
-            }
-          );
+      list.innerHTML = "";
 
 
-          message.innerHTML =
-            "<div class='message'>Content Update হয়েছে।</div>";
+      filtered.forEach(item => {
 
-        }
-        else{
-
-          await addDoc(
-            collection(
-              db,
-              "contents"
-            ),
-            {
-              categoryId:categoryId,
-              title:title,
-              content:content,
-              image:image
-            }
-          );
+        const category =
+          categoryCache[item.categoryId];
 
 
-          message.innerHTML =
-            "<div class='message'>Content যোগ হয়েছে।</div>";
-
-        }
-
-
-        clearForm();
-
-        await loadContents();
-
-      }
-      catch(error){
-
-        console.error(error);
+        const categoryName =
+          category
+            ? `${category.icon || "📌"} ${category.name || ""}`
+            : "Unknown Topic";
 
 
-        message.innerHTML =
-          "<div class='message error'>Content Save করা যায়নি।</div>";
+        const div =
+          document.createElement("div");
 
-      }
-
-    }
-  );
+        div.className = "item";
 
 
+        div.innerHTML = `
 
-/* ==================================================
-   LOAD CONTENTS
-================================================== */
+          <h4>
+            ${escapeHTML(item.title || "")}
+          </h4>
 
-async function loadContents(){
+          <p>
+            <strong>Topic:</strong>
+            ${escapeHTML(categoryName)}
+          </p>
 
-  const list =
-    document.getElementById(
-      "contentList"
-    );
+          <p>
+            ${escapeHTML(item.text || "")}
+          </p>
 
+          ${
+            item.image
+              ? `
+                <img
+                  src="${escapeAttribute(item.image)}"
+                  style="
+                    width:100%;
+                    max-height:250px;
+                    object-fit:cover;
+                    border-radius:10px;
+                    margin-top:8px;
+                  "
+                >
+              `
+              : ""
+          }
 
-  const selectedCategory =
-    document.getElementById(
-      "contentFilter"
-    ).value;
+          <div class="actions">
 
+            <button
+              class="edit"
+              onclick="editContent('${escapeAttribute(item.id)}')"
+            >
+              ✏️ Edit
+            </button>
 
-  list.innerHTML =
-    "Content লোড হচ্ছে...";
-
-
-  try{
-
-    const snapshot =
-      await getDocs(
-        collection(
-          db,
-          "contents"
-        )
-      );
-
-
-    const contents = [];
-
-
-    snapshot.forEach(
-      function(contentDoc){
-
-        const data =
-          contentDoc.data();
-
-
-        if(
-          !selectedCategory ||
-          String(
-            data.categoryId || ""
-          ) ===
-          String(selectedCategory)
-        ){
-
-          contents.push({
-
-            id:
-              contentDoc.id,
-
-            ...data
-
-          });
-
-        }
-
-      }
-    );
-
-
-    list.innerHTML = "";
-
-
-    if(contents.length === 0){
-
-      list.innerHTML =
-        "<div class='empty'>এই Topic-এর কোনো Content নেই।</div>";
-
-      return;
-
-    }
-
-
-    contents.forEach(
-      function(data){
-
-        const item =
-          document.createElement(
-            "div"
-          );
-
-
-        item.className =
-          "item";
-
-
-        item.innerHTML = `
-
-          <div class="topic-badge">
-
-            📌 ${escapeHTML(
-              getCategoryName(
-                data.categoryId
-              )
-            )}
+            <button
+              class="delete"
+              onclick="deleteContent('${escapeAttribute(item.id)}')"
+            >
+              🗑️ Delete
+            </button>
 
           </div>
-
-
-          <strong>
-
-            ${escapeHTML(
-              data.title || ""
-            )}
-
-          </strong>
-
-
-          <div class="small">
-
-            ${escapeHTML(
-              data.content || ""
-            )}
-
-          </div>
-
-
-          <button
-            class="edit"
-            data-id="${data.id}">
-
-            ✏️ Edit
-
-          </button>
-
-
-          <button
-            class="delete"
-            data-id="${data.id}">
-
-            🗑️ Delete
-
-          </button>
 
         `;
 
 
-        list.appendChild(
-          item
+        list.appendChild(div);
+
+      });
+
+    }
+
+
+    /* ================= CONTENT FILTER ================= */
+
+    document
+      .getElementById("contentFilter")
+      .addEventListener("change", async () => {
+
+        await loadContents();
+
+      });
+
+
+    /* ================= EDIT CONTENT ================= */
+
+    window.editContent = async function(id) {
+
+      const snapshot =
+        await getDocs(
+          collection(db, "contents")
         );
 
-      }
-    );
+
+      let found = null;
 
 
-    list
-      .querySelectorAll(
-        ".edit"
-      )
-      .forEach(
-        function(button){
+      snapshot.forEach(item => {
 
-          button.addEventListener(
-            "click",
-            function(){
+        if (item.id === id) {
 
-              editContent(
-                button.dataset.id
-              );
+          found = {
 
-            }
-          );
+            id: item.id,
+
+            ...item.data()
+
+          };
 
         }
-      );
+
+      });
 
 
-    list
-      .querySelectorAll(
-        ".delete"
-      )
-      .forEach(
-        function(button){
-
-          button.addEventListener(
-            "click",
-            async function(){
-
-              if(
-                !confirm(
-                  "এই Content Delete করবেন?"
-                )
-              ){
-
-                return;
-
-              }
+      if (!found) return;
 
 
-              try{
-
-                await deleteDoc(
-                  doc(
-                    db,
-                    "contents",
-                    button.dataset.id
-                  )
-                );
+      editingContentId = id;
 
 
-                await loadContents();
+      document
+        .getElementById("categorySelect")
+        .value =
+        found.categoryId || "";
 
 
-              }
-              catch(error){
-
-                console.error(error);
-
-                alert(
-                  "Delete করা যায়নি।"
-                );
-
-              }
-
-            }
-          );
-
-        }
-      );
+      document
+        .getElementById("contentTitle")
+        .value =
+        found.title || "";
 
 
-  }
-  catch(error){
-
-    console.error(error);
-
-
-    list.innerHTML =
-      "<div class='message error'>Content লোড করা যায়নি।</div>";
-
-  }
-
-}
+      document
+        .getElementById("contentText")
+        .value =
+        found.text || "";
 
 
-
-/* ==================================================
-   CONTENT FILTER
-================================================== */
-
-document
-  .getElementById(
-    "contentFilter"
-  )
-  .addEventListener(
-    "change",
-    loadContents
-  );
+      document
+        .getElementById("contentImage")
+        .value =
+        found.image || "";
 
 
+      document
+        .getElementById("contentFormTitle")
+        .textContent =
+        "✏️ Content Edit করুন";
 
-/* ==================================================
-   EDIT CONTENT
-================================================== */
 
-async function editContent(id){
+      document
+        .getElementById("saveContentBtn")
+        .textContent =
+        "Update Content";
 
-  try{
 
-    const snapshot =
-      await getDocs(
-        collection(
-          db,
-          "contents"
+      document
+        .getElementById("cancelContentBtn")
+        .classList
+        .remove("hidden");
+
+
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+      });
+
+    };
+
+
+    /* ================= DELETE CONTENT ================= */
+
+    window.deleteContent = async function(id) {
+
+      if (
+        !confirm(
+          "এই Content Delete করতে চান?"
         )
-      );
+      ) return;
 
 
-    let data = null;
+      try {
 
-
-    snapshot.forEach(
-      function(contentDoc){
-
-        if(
-          contentDoc.id === id
-        ){
-
-          data =
-            contentDoc.data();
-
-        }
-
-      }
-    );
-
-
-    if(!data){
-
-      alert(
-        "Content পাওয়া যায়নি।"
-      );
-
-      return;
-
-    }
-
-
-    editingId =
-      id;
-
-
-    document
-      .getElementById(
-        "categorySelect"
-      )
-      .value =
-      data.categoryId || "";
-
-
-    document
-      .getElementById(
-        "contentTitle"
-      )
-      .value =
-      data.title || "";
-
-
-    document
-      .getElementById(
-        "contentText"
-      )
-      .value =
-      data.content || "";
-
-
-    document
-      .getElementById(
-        "contentImage"
-      )
-      .value =
-      data.image || "";
-
-
-    document
-      .getElementById(
-        "formTitle"
-      )
-      .textContent =
-      "✏️ Content Edit করুন";
-
-
-    document
-      .getElementById(
-        "saveContentBtn"
-      )
-      .textContent =
-      "Update Content করুন";
-
-
-    document
-      .getElementById(
-        "cancelEditBtn"
-      )
-      .classList
-      .remove(
-        "hidden"
-      );
-
-
-    window.scrollTo({
-      top:0,
-      behavior:"smooth"
-    });
-
-  }
-  catch(error){
-
-    console.error(error);
-
-  }
-
-}
-
-
-
-/* ==================================================
-   CLEAR CONTENT FORM
-================================================== */
-
-document
-  .getElementById(
-    "cancelEditBtn"
-  )
-  .addEventListener(
-    "click",
-    clearForm
-  );
-
-
-function clearForm(){
-
-  editingId =
-    null;
-
-
-  document
-    .getElementById(
-      "categorySelect"
-    )
-    .value = "";
-
-
-  document
-    .getElementById(
-      "contentTitle"
-    )
-    .value = "";
-
-
-  document
-    .getElementById(
-      "contentText"
-    )
-    .value = "";
-
-
-  document
-    .getElementById(
-      "contentImage"
-    )
-    .value = "";
-
-
-  document
-    .getElementById(
-      "formTitle"
-    )
-    .textContent =
-    "📚 নতুন Content যোগ করুন";
-
-
-  document
-    .getElementById(
-      "saveContentBtn"
-    )
-    .textContent =
-    "📚 Content যোগ করুন";
-
-
-  document
-    .getElementById(
-      "cancelEditBtn"
-    )
-    .classList
-    .add(
-      "hidden"
-    );
-
-}
-
-
-
-/* ==================================================
-   IMAGE SELECT
-================================================== */
-
-document
-  .getElementById(
-    "postImages"
-  )
-  .addEventListener(
-    "change",
-    function(event){
-
-      selectedPostFiles =
-        Array.from(
-          event.target.files || []
+        await deleteDoc(
+          doc(
+            db,
+            "contents",
+            id
+          )
         );
 
 
-      showImagePreview();
+        alert("Content Delete হয়েছে।");
+
+        await loadContents();
+
+      } catch (error) {
+
+        alert(
+          "Delete করতে সমস্যা হয়েছে:\n" +
+          error.message
+        );
+
+      }
+
+    };
+
+
+    /* ================= CANCEL CONTENT ================= */
+
+    document
+      .getElementById("cancelContentBtn")
+      .addEventListener("click", () => {
+
+        resetContentForm();
+
+      });
+
+
+    function resetContentForm() {
+
+      editingContentId = null;
+
+
+      document
+        .getElementById("categorySelect")
+        .value = "";
+
+
+      document
+        .getElementById("contentTitle")
+        .value = "";
+
+
+      document
+        .getElementById("contentText")
+        .value = "";
+
+
+      document
+        .getElementById("contentImage")
+        .value = "";
+
+
+      document
+        .getElementById("contentFormTitle")
+        .textContent =
+        "➕ নতুন Content যোগ করুন";
+
+
+      document
+        .getElementById("saveContentBtn")
+        .textContent =
+        "Content Save করুন";
+
+
+      document
+        .getElementById("cancelContentBtn")
+        .classList
+        .add("hidden");
 
     }
-  );
 
 
+    /* ================= IMAGE PREVIEW ================= */
 
-/* ==================================================
-   IMAGE PREVIEW
-================================================== */
+    document
+      .getElementById("postImages")
+      .addEventListener("change", function() {
 
-function showImagePreview(){
-
-  const preview =
-    document.getElementById(
-      "imagePreview"
-    );
+        const preview =
+          document.getElementById("imagePreview");
 
 
-  preview.innerHTML = "";
+        preview.innerHTML = "";
 
 
-  selectedPostFiles.forEach(
-    function(file){
-
-      const reader =
-        new FileReader();
+        const files =
+          Array.from(this.files);
 
 
-      reader.onload =
-        function(event){
+        files.forEach(file => {
 
-          const img =
-            document.createElement(
-              "img"
-            );
+          const reader =
+            new FileReader();
 
 
-          img.src =
-            event.target.result;
+          reader.onload = function(e) {
+
+            const img =
+              document.createElement("img");
+
+            img.src = e.target.result;
+
+            preview.appendChild(img);
+
+          };
 
 
-          preview.appendChild(
-            img
-          );
+          reader.readAsDataURL(file);
 
-        };
+        });
+
+      });
 
 
-      reader.readAsDataURL(
+    /* ================= CLOUDINARY UPLOAD ================= */
+
+    async function uploadToCloudinary(file) {
+
+      const formData =
+        new FormData();
+
+
+      formData.append(
+        "file",
         file
       );
 
+
+      formData.append(
+        "upload_preset",
+        CLOUDINARY_PRESET
+      );
+
+
+      const response =
+        await fetch(
+          CLOUDINARY_URL,
+          {
+            method: "POST",
+            body: formData
+          }
+        );
+
+
+      if (!response.ok) {
+
+        throw new Error(
+          "Image upload failed"
+        );
+
+      }
+
+
+      const data =
+        await response.json();
+
+
+      return data.secure_url;
+
     }
-  );
-
-}
 
 
+    /* ================= SAVE POST ================= */
 
-/* ==================================================
-   CLOUDINARY UPLOAD
-================================================== */
+    document
+      .getElementById("savePostBtn")
+      .addEventListener("click", async () => {
 
-async function uploadImageToCloudinary(
-  file
-){
+        const categoryId =
+          document
+            .getElementById("postCategorySelect")
+            .value;
 
-  const formData =
-    new FormData();
+        const caption =
+          document
+            .getElementById("postCaption")
+            .value
+            .trim();
 
-
-  formData.append(
-    "file",
-    file
-  );
-
-
-  formData.append(
-    "upload_preset",
-    CLOUDINARY_UPLOAD_PRESET
-  );
-
-
-  const response =
-    await fetch(
-      CLOUDINARY_UPLOAD_URL,
-      {
-        method:"POST",
-        body:formData
-      }
-    );
+        const files =
+          Array.from(
+            document
+              .getElementById("postImages")
+              .files
+          );
 
 
-  const result =
-    await response.json();
+        if (!categoryId) {
+
+          alert("Topic নির্বাচন করুন।");
+
+          return;
+
+        }
 
 
-  if(
-    !response.ok ||
-    !result.secure_url
-  ){
+        if (!editingPostId && !files.length) {
 
-    console.error(
-      "Cloudinary error:",
-      result
-    );
+          alert("কমপক্ষে ১টি ছবি নির্বাচন করুন।");
+
+          return;
+
+        }
 
 
-    throw new Error(
-      "ছবি Upload করা যায়নি।"
-    );
-
-  }
+        const btn =
+          document.getElementById("savePostBtn");
 
 
-  return result.secure_url;
+        btn.disabled = true;
 
-}
-
-
-
-/* ==================================================
-   SAVE IMAGE POST
-================================================== */
-
-document
-  .getElementById(
-    "savePostBtn"
-  )
-  .addEventListener(
-    "click",
-    async function(){
-
-      const button =
-        document.getElementById(
-          "savePostBtn"
-        );
+        btn.textContent =
+          "Image Upload হচ্ছে...";
 
 
-      const message =
-        document.getElementById(
-          "postMessage"
-        );
+        try {
+
+          let imageUrls =
+            currentPostImages || [];
 
 
-      const categoryId =
-        document
-          .getElementById(
-            "postCategorySelect"
-          )
-          .value;
+          if (files.length) {
+
+            imageUrls = [];
 
 
-      const caption =
-        document
-          .getElementById(
-            "postCaption"
-          )
-          .value
-          .trim();
+            for (const file of files) {
 
+              const url =
+                await uploadToCloudinary(file);
 
-      if(!categoryId){
+              imageUrls.push(url);
 
-        message.innerHTML =
-          "<div class='message error'>Topic নির্বাচন করুন।</div>";
-
-        return;
-
-      }
-
-
-      if(!caption){
-
-        message.innerHTML =
-          "<div class='message error'>Caption লিখুন।</div>";
-
-        return;
-
-      }
-
-
-      if(
-        !editingPostId &&
-        selectedPostFiles.length === 0
-      ){
-
-        message.innerHTML =
-          "<div class='message error'>কমপক্ষে ১টি ছবি নির্বাচন করুন।</div>";
-
-        return;
-
-      }
-
-
-      try{
-
-        button.disabled =
-          true;
-
-
-        if(editingPostId){
-
-          message.innerHTML =
-            "<div class='message'>Post Update হচ্ছে...</div>";
-
-
-          let finalImages =
-            editingPostImages.slice();
-
-
-          if(
-            selectedPostFiles.length > 0
-          ){
-
-            message.innerHTML =
-              "<div class='message'>নতুন ছবি Upload হচ্ছে...</div>";
-
-
-            finalImages =
-              await Promise.all(
-                selectedPostFiles.map(
-                  uploadImageToCloudinary
-                )
-              );
+            }
 
           }
 
 
-          await updateDoc(
-            doc(
-              db,
-              "posts",
-              editingPostId
-            ),
-            {
-              categoryId:
+          if (editingPostId) {
+
+            await updateDoc(
+              doc(
+                db,
+                "posts",
+                editingPostId
+              ),
+              {
                 categoryId,
-
-              caption:
                 caption,
-
-              images:
-                finalImages
-            }
-          );
-
-
-          message.innerHTML =
-            "<div class='message'>Image Post Update হয়েছে।</div>";
-
-        }
-        else{
-
-          message.innerHTML =
-            "<div class='message'>ছবি Upload হচ্ছে... একটু অপেক্ষা করুন।</div>";
-
-
-          const imageUrls =
-            await Promise.all(
-              selectedPostFiles.map(
-                uploadImageToCloudinary
-              )
+                images: imageUrls
+              }
             );
 
 
-          await addDoc(
-            collection(
-              db,
-              "posts"
-            ),
-            {
-              categoryId:
+            alert(
+              "Image Post Update হয়েছে।"
+            );
+
+          } else {
+
+            await addDoc(
+              collection(db, "posts"),
+              {
                 categoryId,
-
-              caption:
                 caption,
+                images: imageUrls,
+                createdAt: serverTimestamp()
+              }
+            );
 
-              images:
-                imageUrls,
 
-              createdAt:
-                serverTimestamp()
-            }
+            alert(
+              "নতুন Image Post যোগ হয়েছে।"
+            );
+
+          }
+
+
+          resetPostForm();
+
+          await loadPosts();
+
+
+        } catch (error) {
+
+          alert(
+            "Image Post Save করতে সমস্যা হয়েছে:\n" +
+            error.message
           );
-
-
-          message.innerHTML =
-            "<div class='message'>Image Post সফলভাবে যোগ হয়েছে।</div>";
 
         }
 
 
-        clearPostForm();
+        btn.disabled = false;
 
-        await loadPosts();
+        btn.textContent =
+          "Image Post Save করুন";
 
-
-      }
-      catch(error){
-
-        console.error(
-          error
-        );
+      });
 
 
-        message.innerHTML =
-          "<div class='message error'>" +
-          escapeHTML(
-            error.message ||
-            "Post Save করা যায়নি।"
-          ) +
-          "</div>";
+    /* ================= LOAD POSTS ================= */
 
-      }
-      finally{
+    async function loadPosts() {
 
-        button.disabled =
-          false;
-
-      }
-
-    }
-  );
+      const list =
+        document.getElementById("postsList");
 
 
-
-/* ==================================================
-   LOAD POSTS
-================================================== */
-
-async function loadPosts(){
-
-  const list =
-    document.getElementById(
-      "postList"
-    );
+      list.innerHTML =
+        `<div class="loading">Loading...</div>`;
 
 
-  const selectedCategory =
-    document.getElementById(
-      "postFilter"
-    ).value;
+      try {
+
+        const snapshot =
+          await getDocs(
+            collection(db, "posts")
+          );
 
 
-  list.innerHTML =
-    "Image Post লোড হচ্ছে...";
+        const posts = [];
 
 
-  try{
-
-    const snapshot =
-      await getDocs(
-        collection(
-          db,
-          "posts"
-        )
-      );
-
-
-    const posts = [];
-
-
-    snapshot.forEach(
-      function(postDoc){
-
-        const data =
-          postDoc.data();
-
-
-        if(
-          !selectedCategory ||
-          String(
-            data.categoryId || ""
-          ) ===
-          String(selectedCategory)
-        ){
+        snapshot.forEach(item => {
 
           posts.push({
 
-            id:
-              postDoc.id,
+            id: item.id,
 
-            ...data
+            ...item.data()
 
           });
 
-        }
+        });
+
+
+        posts.sort((a, b) => {
+
+          const ta =
+            a.createdAt?.seconds || 0;
+
+          const tb =
+            b.createdAt?.seconds || 0;
+
+          return tb - ta;
+
+        });
+
+
+        renderPosts(posts);
+
+
+      } catch (error) {
+
+        list.innerHTML =
+          `<div class="empty">
+            Image Post load করতে সমস্যা হয়েছে।
+          </div>`;
 
       }
-    );
-
-
-    posts.sort(
-      function(a,b){
-
-        const aTime =
-          a.createdAt &&
-          typeof a.createdAt.toMillis ===
-          "function"
-            ? a.createdAt.toMillis()
-            : 0;
-
-
-        const bTime =
-          b.createdAt &&
-          typeof b.createdAt.toMillis ===
-          "function"
-            ? b.createdAt.toMillis()
-            : 0;
-
-
-        return bTime-aTime;
-
-      }
-    );
-
-
-    list.innerHTML = "";
-
-
-    if(posts.length === 0){
-
-      list.innerHTML =
-        "<div class='empty'>এই Topic-এর কোনো Image Post নেই।</div>";
-
-      return;
 
     }
 
 
-    posts.forEach(
-      function(post){
+    /* ================= RENDER POSTS ================= */
 
-        const item =
-          document.createElement(
-            "div"
-          );
+    function renderPosts(posts) {
+
+      const list =
+        document.getElementById("postsList");
 
 
-        item.className =
-          "item";
+      if (!posts.length) {
+
+        list.innerHTML =
+          `<div class="empty">
+            কোনো Image Post নেই।
+          </div>`;
+
+        return;
+
+      }
+
+
+      list.innerHTML = "";
+
+
+      posts.forEach(post => {
+
+        const category =
+          categoryCache[post.categoryId];
+
+
+        const categoryName =
+          category
+            ? `${category.icon || "📌"} ${category.name || ""}`
+            : "Unknown Topic";
 
 
         const images =
-          Array.isArray(
-            post.images
-          )
+          Array.isArray(post.images)
             ? post.images
             : [];
 
 
-        const imageHTML =
-          images
-            .map(
-              function(url){
+        const div =
+          document.createElement("div");
 
-                return `
-
-                  <img
-                    src="${escapeAttribute(url)}"
-                    alt="Post Image"
-                    loading="lazy">
-
-                `;
-
-              }
-            )
-            .join("");
+        div.className = "item";
 
 
-        item.innerHTML = `
+        div.innerHTML = `
 
-          <div class="topic-badge">
+          <h4>
+            🖼️ ${escapeHTML(categoryName)}
+          </h4>
 
-            📌 ${escapeHTML(
-              getCategoryName(
-                post.categoryId
-              )
-            )}
+          <p>
+            ${escapeHTML(post.caption || "")}
+          </p>
+
+          <div class="post-images">
+
+            ${
+              images.map(url => `
+                <img
+                  src="${escapeAttribute(url)}"
+                  alt="Image"
+                >
+              `).join("")
+            }
 
           </div>
 
+          <p class="small-text">
+            ${formatPostTime(post.createdAt)}
+          </p>
 
-          <div class="small">
+          <div class="actions">
 
-            ${escapeHTML(
-              post.caption || ""
-            )}
+            <button
+              class="edit-post"
+              onclick="editPost('${escapeAttribute(post.id)}')"
+            >
+              ✏️ Edit
+            </button>
 
-          </div>
-
-
-          ${
-            imageHTML
-              ?
-              `
-              <div class="post-images">
-
-                ${imageHTML}
-
-              </div>
-              `
-              :
-              ""
-          }
-
-
-          <div class="post-time">
-
-            🕐 ${formatPostTime(
-              post.createdAt
-            )}
+            <button
+              class="delete-post"
+              onclick="deletePost('${escapeAttribute(post.id)}')"
+            >
+              🗑️ Delete
+            </button>
 
           </div>
-
-
-          <button
-            class="edit"
-            data-id="${post.id}">
-
-            ✏️ Edit Post
-
-          </button>
-
-
-          <button
-            class="delete"
-            data-id="${post.id}">
-
-            🗑️ Delete Post
-
-          </button>
 
         `;
 
 
-        list.appendChild(
-          item
+        list.appendChild(div);
+
+      });
+
+    }
+
+
+    /* ================= EDIT POST ================= */
+
+    window.editPost = async function(id) {
+
+      const snapshot =
+        await getDocs(
+          collection(db, "posts")
+        );
+
+
+      let found = null;
+
+
+      snapshot.forEach(item => {
+
+        if (item.id === id) {
+
+          found = {
+
+            id: item.id,
+
+            ...item.data()
+
+          };
+
+        }
+
+      });
+
+
+      if (!found) return;
+
+
+      editingPostId = id;
+
+
+      currentPostImages =
+        Array.isArray(found.images)
+          ? [...found.images]
+          : [];
+
+
+      document
+        .getElementById("postCategorySelect")
+        .value =
+        found.categoryId || "";
+
+
+      document
+        .getElementById("postCaption")
+        .value =
+        found.caption || "";
+
+
+      document
+        .getElementById("postFormTitle")
+        .textContent =
+        "✏️ Image Post Edit করুন";
+
+
+      document
+        .getElementById("savePostBtn")
+        .textContent =
+        "Update Image Post";
+
+
+      document
+        .getElementById("cancelPostBtn")
+        .classList
+        .remove("hidden");
+
+
+      const preview =
+        document.getElementById("imagePreview");
+
+
+      preview.innerHTML = "";
+
+
+      currentPostImages.forEach(url => {
+
+        const img =
+          document.createElement("img");
+
+        img.src = url;
+
+        preview.appendChild(img);
+
+      });
+
+
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+      });
+
+    };
+
+
+    /* ================= DELETE POST ================= */
+
+    window.deletePost = async function(id) {
+
+      if (
+        !confirm(
+          "এই Image Post Delete করতে চান?"
+        )
+      ) return;
+
+
+      try {
+
+        await deleteDoc(
+          doc(
+            db,
+            "posts",
+            id
+          )
+        );
+
+
+        alert(
+          "Image Post Delete হয়েছে।"
+        );
+
+
+        await loadPosts();
+
+
+      } catch (error) {
+
+        alert(
+          "Delete করতে সমস্যা হয়েছে:\n" +
+          error.message
         );
 
       }
-    );
+
+    };
 
 
-    /* EDIT */
+    /* ================= CANCEL POST ================= */
 
-    list
-      .querySelectorAll(
-        ".edit"
-      )
-      .forEach(
-        function(button){
+    document
+      .getElementById("cancelPostBtn")
+      .addEventListener("click", () => {
 
-          button.addEventListener(
-            "click",
-            function(){
+        resetPostForm();
 
-              editPost(
-                button.dataset.id
+      });
+
+
+    function resetPostForm() {
+
+      editingPostId = null;
+
+      currentPostImages = [];
+
+
+      document
+        .getElementById("postCategorySelect")
+        .value = "";
+
+
+      document
+        .getElementById("postCaption")
+        .value = "";
+
+
+      document
+        .getElementById("postImages")
+        .value = "";
+
+
+      document
+        .getElementById("imagePreview")
+        .innerHTML = "";
+
+
+      document
+        .getElementById("postFormTitle")
+        .textContent =
+        "➕ নতুন Image Post যোগ করুন";
+
+
+      document
+        .getElementById("savePostBtn")
+        .textContent =
+        "Image Post Save করুন";
+
+
+      document
+        .getElementById("cancelPostBtn")
+        .classList
+        .add("hidden");
+
+    }
+
+
+    /* ================= HELPERS ================= */
+
+    function getCategoryName(id) {
+
+      return categoryCache[id]?.name || "Unknown";
+
+    }
+
+
+    function formatPostTime(timestamp) {
+
+      if (!timestamp) return "";
+
+      try {
+
+        const date =
+          timestamp.toDate
+            ? timestamp.toDate()
+            : new Date(
+                timestamp.seconds * 1000
               );
 
-            }
-          );
 
-        }
-      );
+        return date.toLocaleString(
+          "bn-BD",
+          {
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+            hour: "numeric",
+            minute: "2-digit"
+          }
+        );
 
+      } catch {
 
-    /* DELETE */
-
-    list
-      .querySelectorAll(
-        ".delete"
-      )
-      .forEach(
-        function(button){
-
-          button.addEventListener(
-            "click",
-            async function(){
-
-              if(
-                !confirm(
-                  "এই Image Post Delete করবেন?"
-                )
-              ){
-
-                return;
-
-              }
-
-
-              try{
-
-                await deleteDoc(
-                  doc(
-                    db,
-                    "posts",
-                    button.dataset.id
-                  )
-                );
-
-
-                await loadPosts();
-
-
-              }
-              catch(error){
-
-                console.error(
-                  error
-                );
-
-
-                alert(
-                  "Post Delete করা যায়নি।"
-                );
-
-              }
-
-            }
-          );
-
-        }
-      );
-
-
-  }
-  catch(error){
-
-    console.error(error);
-
-
-    list.innerHTML =
-      "<div class='message error'>Image Post লোড করা যায়নি।</div>";
-
-  }
-
-}
-
-
-
-/* ==================================================
-   IMAGE FILTER
-================================================== */
-
-document
-  .getElementById(
-    "postFilter"
-  )
-  .addEventListener(
-    "change",
-    loadPosts
-  );
-
-
-
-/* ==================================================
-   EDIT POST
-================================================== */
-
-async function editPost(id){
-
-  try{
-
-    const snapshot =
-      await getDocs(
-        collection(
-          db,
-          "posts"
-        )
-      );
-
-
-    let data = null;
-
-
-    snapshot.forEach(
-      function(postDoc){
-
-        if(
-          postDoc.id === id
-        ){
-
-          data =
-            postDoc.data();
-
-        }
+        return "";
 
       }
-    );
-
-
-    if(!data){
-
-      alert(
-        "Post পাওয়া যায়নি।"
-      );
-
-      return;
 
     }
 
 
-    editingPostId =
-      id;
-
-
-    editingPostImages =
-      Array.isArray(
-        data.images
-      )
-        ? data.images.slice()
-        : [];
-
-
-    selectedPostFiles =
-      [];
-
-
-    document
-      .getElementById(
-        "postCategorySelect"
-      )
-      .value =
-      data.categoryId || "";
-
-
-    document
-      .getElementById(
-        "postCaption"
-      )
-      .value =
-      data.caption || "";
-
-
-    document
-      .getElementById(
-        "postImages"
-      )
-      .value =
-      "";
-
-
-    document
-      .getElementById(
-        "imagePreview"
-      )
-      .innerHTML =
-      editingPostImages
-        .map(
-          function(url){
-
-            return `
-
-              <img
-                src="${escapeAttribute(url)}"
-                alt="Current Image">
-
-            `;
-
-          }
-        )
-        .join("");
-
-
-    document
-      .getElementById(
-        "postFormTitle"
-      )
-      .textContent =
-      "✏️ Image Post Edit করুন";
-
-
-    document
-      .getElementById(
-        "savePostBtn"
-      )
-      .textContent =
-      "Update Post করুন";
-
-
-    document
-      .getElementById(
-        "cancelPostEditBtn"
-      )
-      .classList
-      .remove(
-        "hidden"
-      );
-
-
-    showSection(
-      "imageSection"
-    );
-
-
-    window.scrollTo({
-      top:0,
-      behavior:"smooth"
-    });
-
-  }
-  catch(error){
-
-    console.error(
-      error
-    );
-
-
-    alert(
-      "Post Edit করা যায়নি।"
-    );
-
-  }
-
-}
-
-
-
-/* ==================================================
-   CANCEL POST EDIT
-================================================== */
-
-document
-  .getElementById(
-    "cancelPostEditBtn"
-  )
-  .addEventListener(
-    "click",
-    clearPostForm
-  );
-
-
-function clearPostForm(){
-
-  editingPostId =
-    null;
-
-
-  editingPostImages =
-    [];
-
-
-  selectedPostFiles =
-    [];
-
-
-  document
-    .getElementById(
-      "postCategorySelect"
-    )
-    .value =
-    "";
-
-
-  document
-    .getElementById(
-      "postCaption"
-    )
-    .value =
-    "";
-
-
-  document
-    .getElementById(
-      "postImages"
-    )
-    .value =
-    "";
-
-
-  document
-    .getElementById(
-      "imagePreview"
-    )
-    .innerHTML =
-    "";
-
-
-  document
-    .getElementById(
-      "postFormTitle"
-    )
-    .textContent =
-    "🖼️ নতুন Image Post যোগ করুন";
-
-
-  document
-    .getElementById(
-      "savePostBtn"
-    )
-    .textContent =
-    "🖼️ Post করুন";
-
-
-  document
-    .getElementById(
-      "cancelPostEditBtn"
-    )
-    .classList
-    .add(
-      "hidden"
-    );
-
-}
-
-
-
-/* ==================================================
-   CATEGORY NAME
-================================================== */
-
-function getCategoryName(id){
-
-  return (
-    categoryCache[id] ||
-    "অজানা Topic"
-  );
-
-}
-
-
-
-/* ==================================================
-   TIME
-================================================== */
-
-function formatPostTime(
-  timestamp
-){
-
-  if(
-    !timestamp ||
-    typeof timestamp.toDate !==
-    "function"
-  ){
-
-    return "এইমাত্র";
-
-  }
-
-
-  try{
-
-    return timestamp
-      .toDate()
-      .toLocaleString(
-        "bn-BD",
-        {
-          year:"numeric",
-          month:"long",
-          day:"numeric",
-          hour:"numeric",
-          minute:"2-digit"
-        }
-      );
-
-  }
-  catch(error){
-
-    return "এইমাত্র";
-
-  }
-
-}
-
-
-
-/* ==================================================
-   SECURITY
-================================================== */
-
-function escapeHTML(
-  value
-){
-
-  return String(value)
-    .replace(
-      /&/g,
-      "&amp;"
-    )
-    .replace(
-      /</g,
-      "&lt;"
-    )
-    .replace(
-      />/g,
-      "&gt;"
-    )
-    .replace(
-      /"/g,
-      "&quot;"
-    )
-    .replace(
-      /'/g,
-      "&#039;"
-    );
-
-}
-
-
-function escapeAttribute(
-  value
-){
-
-  return String(value)
-    .replace(
-      /&/g,
-      "&amp;"
-    )
-    .replace(
-      /"/g,
-      "&quot;"
-    )
-    .replace(
-      /</g,
-      "&lt;"
-    )
-    .replace(
-      />/g,
-      "&gt;"
-    );
-
-}
-
-
-
-/* ==================================================
-   REFRESH TOPICS
-================================================== */
-
-document
-  .getElementById(
-    "refreshTopicsBtn"
-  )
-  .addEventListener(
-    "click",
-    async function(){
-
-      await loadCategories();
-
-      await loadContents();
-
-      await loadPosts();
+    function escapeHTML(value) {
+
+      return String(value ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
 
     }
-  );
 
-</script>
+
+    function escapeAttribute(value) {
+
+      return String(value ?? "")
+        .replace(/\\/g, "\\\\")
+        .replace(/'/g, "\\'")
+        .replace(/"/g, "&quot;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;");
+
+    }
+
+
+    /* ================= LOGOUT ================= */
+
+    document
+      .getElementById("logoutBtn")
+      .addEventListener("click", async () => {
+
+        await signOut(auth);
+
+      });
+
+  </script>
 
 </body>
+
 </html>
