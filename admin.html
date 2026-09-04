@@ -82,6 +82,11 @@
       cursor: pointer;
     }
 
+    button:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
     .edit {
       background: #2563eb;
     }
@@ -132,6 +137,67 @@
       color: #555;
       line-height: 1.6;
       white-space: pre-wrap;
+    }
+
+    /* IMAGE POST */
+
+    .post-images {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .post-images img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+      border-radius: 10px;
+      display: block;
+    }
+
+    .image-preview {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .image-preview img {
+      width: 100%;
+      height: 100px;
+      object-fit: cover;
+      border-radius: 8px;
+    }
+
+    .post-time {
+      color: #777;
+      font-size: 13px;
+      margin-top: 8px;
+    }
+
+    .post-category {
+      display: inline-block;
+      background: #ecfdf5;
+      color: #047857;
+      padding: 5px 9px;
+      border-radius: 20px;
+      font-size: 13px;
+      margin-bottom: 8px;
+    }
+
+    @media (max-width: 500px) {
+      .post-images {
+        grid-template-columns: 1fr;
+      }
+
+      .post-images img {
+        height: 220px;
+      }
+
+      .image-preview {
+        grid-template-columns: repeat(2, 1fr);
+      }
     }
   </style>
 </head>
@@ -285,6 +351,72 @@
     </div>
 
 
+    <!-- ========================= -->
+    <!-- IMAGE POST SYSTEM -->
+    <!-- ========================= -->
+
+    <div class="box">
+
+      <h2 id="postFormTitle">
+        🖼️ নতুন Image Post যোগ করুন
+      </h2>
+
+      <label>Topic</label>
+
+      <select id="postCategorySelect">
+        <option value="">
+          Topic নির্বাচন করুন
+        </option>
+      </select>
+
+      <label>Caption</label>
+
+      <textarea
+        id="postCaption"
+        placeholder="ছবির সাথে যা লিখতে চান..."
+      ></textarea>
+
+      <label>একাধিক ছবি নির্বাচন করুন</label>
+
+      <input
+        type="file"
+        id="postImages"
+        accept="image/*"
+        multiple
+      >
+
+      <div id="imagePreview" class="image-preview"></div>
+
+      <div
+        id="postMessage">
+      </div>
+
+      <button id="savePostBtn">
+        🖼️ Post করুন
+      </button>
+
+      <button
+        id="cancelPostEditBtn"
+        class="cancel hidden">
+        Edit বাতিল
+      </button>
+
+    </div>
+
+
+    <!-- IMAGE POST LIST -->
+
+    <div class="box">
+
+      <h2>📸 Image Posts</h2>
+
+      <div id="postList">
+        পোস্ট লোড হচ্ছে...
+      </div>
+
+    </div>
+
+
     <button
       id="logoutBtn"
       class="logout">
@@ -308,7 +440,8 @@
     addDoc,
     updateDoc,
     deleteDoc,
-    doc
+    doc,
+    serverTimestamp
   }
     from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
@@ -320,6 +453,10 @@
   }
     from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
 
+
+  /* =========================
+     FIREBASE
+  ========================= */
 
   const firebaseConfig = {
     apiKey: "AIzaSyAG05o2MjHH3UL8Gp7VNmrQGeqq-4YrDEk",
@@ -338,7 +475,30 @@
   const auth = getAuth(app);
 
 
+  /* =========================
+     CLOUDINARY
+  ========================= */
+
+  const CLOUDINARY_CLOUD_NAME = "lkuowv7e";
+
+  const CLOUDINARY_UPLOAD_PRESET =
+    "amader_joypurhat_images";
+
+  const CLOUDINARY_UPLOAD_URL =
+    `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload`;
+
+
+  /* =========================
+     VARIABLES
+  ========================= */
+
   let editingId = null;
+
+  let editingPostId = null;
+
+  let editingPostImages = [];
+
+  let selectedPostFiles = [];
 
 
   const loginBox =
@@ -351,7 +511,9 @@
     document.getElementById("loginMessage");
 
 
-  // LOGIN BUTTON
+  /* =========================
+     LOGIN BUTTON
+  ========================= */
 
   document
     .getElementById("loginBtn")
@@ -409,7 +571,9 @@
     });
 
 
-  // AUTH STATE
+  /* =========================
+     AUTH STATE
+  ========================= */
 
   onAuthStateChanged(auth, function(user) {
 
@@ -423,6 +587,8 @@
 
       loadContents();
 
+      loadPosts();
+
     } else {
 
       loginBox.classList.remove("hidden");
@@ -434,7 +600,9 @@
   });
 
 
-  // LOGOUT
+  /* =========================
+     LOGOUT
+  ========================= */
 
   document
     .getElementById("logoutBtn")
@@ -445,15 +613,23 @@
     });
 
 
-  // LOAD CATEGORIES
+  /* =========================
+     LOAD CATEGORIES
+  ========================= */
 
   async function loadCategories() {
 
     const select =
       document.getElementById("categorySelect");
 
+    const postSelect =
+      document.getElementById("postCategorySelect");
+
 
     select.innerHTML =
+      "<option value=''>Topic নির্বাচন করুন</option>";
+
+    postSelect.innerHTML =
       "<option value=''>Topic নির্বাচন করুন</option>";
 
 
@@ -487,6 +663,23 @@
 
         select.appendChild(option);
 
+
+        const postOption =
+          document.createElement("option");
+
+
+        postOption.value =
+          categoryDoc.id;
+
+
+        postOption.textContent =
+          (data.icon || "📌") +
+          " " +
+          (data.name || "");
+
+
+        postSelect.appendChild(postOption);
+
       });
 
 
@@ -499,7 +692,9 @@
   }
 
 
-  // ADD CATEGORY
+  /* =========================
+     ADD CATEGORY
+  ========================= */
 
   document
     .getElementById("addCategoryBtn")
@@ -589,7 +784,9 @@
     });
 
 
-  // SAVE CONTENT
+  /* =========================
+     SAVE CONTENT
+  ========================= */
 
   document
     .getElementById("saveContentBtn")
@@ -700,7 +897,9 @@
     });
 
 
-  // LOAD CONTENTS
+  /* =========================
+     LOAD CONTENTS
+  ========================= */
 
   async function loadContents() {
 
@@ -749,11 +948,11 @@
         item.innerHTML = `
 
           <strong>
-            ${data.title || ""}
+            ${escapeHTML(data.title || "")}
           </strong>
 
           <div class="small">
-            ${data.content || ""}
+            ${escapeHTML(data.content || "")}
           </div>
 
           <button
@@ -776,8 +975,6 @@
       });
 
 
-      // EDIT BUTTON
-
       document
         .querySelectorAll(".edit")
         .forEach(function(button) {
@@ -795,8 +992,6 @@
 
         });
 
-
-      // DELETE BUTTON
 
       document
         .querySelectorAll(".delete")
@@ -857,7 +1052,9 @@
   }
 
 
-  // EDIT CONTENT
+  /* =========================
+     EDIT CONTENT
+  ========================= */
 
   async function editContent(id) {
 
@@ -955,7 +1152,9 @@
   }
 
 
-  // CANCEL EDIT
+  /* =========================
+     CANCEL CONTENT EDIT
+  ========================= */
 
   document
     .getElementById("cancelEditBtn")
@@ -969,7 +1168,9 @@
     );
 
 
-  // CLEAR FORM
+  /* =========================
+     CLEAR CONTENT FORM
+  ========================= */
 
   function clearForm() {
 
@@ -1014,6 +1215,931 @@
       .add("hidden");
 
   }
+
+
+  /* =====================================================
+     IMAGE POST SYSTEM
+  ===================================================== */
+
+
+  /* =========================
+     SELECT IMAGES
+  ========================= */
+
+  document
+    .getElementById("postImages")
+    .addEventListener("change", function(event) {
+
+      selectedPostFiles =
+        Array.from(event.target.files || []);
+
+      showImagePreview();
+
+    });
+
+
+  /* =========================
+     IMAGE PREVIEW
+  ========================= */
+
+  function showImagePreview() {
+
+    const preview =
+      document.getElementById("imagePreview");
+
+
+    preview.innerHTML = "";
+
+
+    selectedPostFiles.forEach(function(file) {
+
+      const reader =
+        new FileReader();
+
+
+      reader.onload =
+        function(event) {
+
+          const img =
+            document.createElement("img");
+
+
+          img.src =
+            event.target.result;
+
+
+          preview.appendChild(img);
+
+        };
+
+
+      reader.readAsDataURL(file);
+
+    });
+
+  }
+
+
+  /* =========================
+     CLOUDINARY UPLOAD
+  ========================= */
+
+  async function uploadImageToCloudinary(file) {
+
+    const formData =
+      new FormData();
+
+
+    formData.append(
+      "file",
+      file
+    );
+
+
+    formData.append(
+      "upload_preset",
+      CLOUDINARY_UPLOAD_PRESET
+    );
+
+
+    const response =
+      await fetch(
+        CLOUDINARY_UPLOAD_URL,
+        {
+          method: "POST",
+          body: formData
+        }
+      );
+
+
+    const result =
+      await response.json();
+
+
+    if (!response.ok || !result.secure_url) {
+
+      console.error(
+        "Cloudinary error:",
+        result
+      );
+
+      throw new Error(
+        "ছবি Upload করা যায়নি।"
+      );
+
+    }
+
+
+    return result.secure_url;
+
+  }
+
+
+  /* =========================
+     SAVE IMAGE POST
+  ========================= */
+
+  document
+    .getElementById("savePostBtn")
+    .addEventListener(
+      "click",
+      async function() {
+
+        const button =
+          document.getElementById("savePostBtn");
+
+
+        const message =
+          document.getElementById("postMessage");
+
+
+        const categoryId =
+          document
+            .getElementById("postCategorySelect")
+            .value;
+
+
+        const caption =
+          document
+            .getElementById("postCaption")
+            .value
+            .trim();
+
+
+        if (!categoryId) {
+
+          message.innerHTML =
+            "<div class='message error'>Topic নির্বাচন করুন।</div>";
+
+          return;
+
+        }
+
+
+        if (!caption) {
+
+          message.innerHTML =
+            "<div class='message error'>Caption লিখুন।</div>";
+
+          return;
+
+        }
+
+
+        if (
+          !editingPostId &&
+          selectedPostFiles.length === 0
+        ) {
+
+          message.innerHTML =
+            "<div class='message error'>কমপক্ষে ১টি ছবি নির্বাচন করুন।</div>";
+
+          return;
+
+        }
+
+
+        try {
+
+          button.disabled = true;
+
+
+          if (editingPostId) {
+
+            message.innerHTML =
+              "<div class='message'>Post Update হচ্ছে...</div>";
+
+
+            let finalImages =
+              editingPostImages.slice();
+
+
+            if (selectedPostFiles.length > 0) {
+
+              message.innerHTML =
+                "<div class='message'>নতুন ছবি Upload হচ্ছে...</div>";
+
+
+              const newImages =
+                await Promise.all(
+                  selectedPostFiles.map(
+                    uploadImageToCloudinary
+                  )
+                );
+
+
+              finalImages =
+                newImages;
+
+            }
+
+
+            await updateDoc(
+              doc(
+                db,
+                "posts",
+                editingPostId
+              ),
+              {
+                categoryId: categoryId,
+                caption: caption,
+                images: finalImages
+              }
+            );
+
+
+            message.innerHTML =
+              "<div class='message'>Image Post Update হয়েছে।</div>";
+
+
+          } else {
+
+            message.innerHTML =
+              "<div class='message'>ছবি Upload হচ্ছে... একটু অপেক্ষা করুন।</div>";
+
+
+            const imageUrls =
+              await Promise.all(
+                selectedPostFiles.map(
+                  uploadImageToCloudinary
+                )
+              );
+
+
+            message.innerHTML =
+              "<div class='message'>Post তৈরি হচ্ছে...</div>";
+
+
+            await addDoc(
+              collection(db, "posts"),
+              {
+                categoryId: categoryId,
+                caption: caption,
+                images: imageUrls,
+                createdAt: serverTimestamp()
+              }
+            );
+
+
+            message.innerHTML =
+              "<div class='message'>Image Post সফলভাবে যোগ হয়েছে।</div>";
+
+          }
+
+
+          clearPostForm();
+
+          await loadPosts();
+
+
+        } catch (error) {
+
+          console.error(error);
+
+
+          message.innerHTML =
+            "<div class='message error'>" +
+            (error.message || "Post Save করা যায়নি।") +
+            "</div>";
+
+        } finally {
+
+          button.disabled = false;
+
+        }
+
+      }
+    );
+
+
+  /* =========================
+     LOAD POSTS
+  ========================= */
+
+  async function loadPosts() {
+
+    const list =
+      document.getElementById("postList");
+
+
+    list.innerHTML =
+      "পোস্ট লোড হচ্ছে...";
+
+
+    try {
+
+      const snapshot =
+        await getDocs(
+          collection(db, "posts")
+        );
+
+
+      const posts = [];
+
+
+      snapshot.forEach(function(postDoc) {
+
+        const data =
+          postDoc.data();
+
+
+        posts.push({
+          id: postDoc.id,
+          ...data
+        });
+
+      });
+
+
+      /* NEWEST FIRST */
+
+      posts.sort(function(a, b) {
+
+        const aTime =
+          a.createdAt &&
+          typeof a.createdAt.toMillis === "function"
+            ? a.createdAt.toMillis()
+            : 0;
+
+
+        const bTime =
+          b.createdAt &&
+          typeof b.createdAt.toMillis === "function"
+            ? b.createdAt.toMillis()
+            : 0;
+
+
+        return bTime - aTime;
+
+      });
+
+
+      list.innerHTML = "";
+
+
+      if (posts.length === 0) {
+
+        list.innerHTML =
+          "<div class='message'>কোনো Image Post নেই।</div>";
+
+        return;
+
+      }
+
+
+      posts.forEach(function(post) {
+
+        const item =
+          document.createElement("div");
+
+
+        item.className =
+          "item";
+
+
+        const categoryName =
+          getCategoryName(
+            post.categoryId
+          );
+
+
+        const images =
+          Array.isArray(post.images)
+            ? post.images
+            : [];
+
+
+        const imageHTML =
+          images
+            .map(function(url) {
+
+              return `
+                <img
+                  src="${escapeAttribute(url)}"
+                  alt="Post Image"
+                  loading="lazy">
+              `;
+
+            })
+            .join("");
+
+
+        const time =
+          formatPostTime(
+            post.createdAt
+          );
+
+
+        item.innerHTML = `
+
+          <div class="post-category">
+            📂 ${escapeHTML(categoryName)}
+          </div>
+
+          <div class="small">
+            ${escapeHTML(post.caption || "")}
+          </div>
+
+          ${
+            images.length > 0
+              ? `
+                <div class="post-images">
+                  ${imageHTML}
+                </div>
+              `
+              : ""
+          }
+
+          <div class="post-time">
+            🕐 ${time}
+          </div>
+
+          <button
+            class="edit-post"
+            data-id="${post.id}">
+            ✏️ Edit Post
+          </button>
+
+          <button
+            class="delete-post"
+            data-id="${post.id}">
+            🗑️ Delete Post
+          </button>
+
+        `;
+
+
+        list.appendChild(item);
+
+      });
+
+
+      /* EDIT */
+
+      document
+        .querySelectorAll(".edit-post")
+        .forEach(function(button) {
+
+          button.addEventListener(
+            "click",
+            function() {
+
+              editPost(
+                button.dataset.id
+              );
+
+            }
+          );
+
+        });
+
+
+      /* DELETE */
+
+      document
+        .querySelectorAll(".delete-post")
+        .forEach(function(button) {
+
+          button.addEventListener(
+            "click",
+            async function() {
+
+              if (
+                !confirm(
+                  "এই Image Post Delete করবেন?"
+                )
+              ) {
+
+                return;
+
+              }
+
+
+              try {
+
+                await deleteDoc(
+                  doc(
+                    db,
+                    "posts",
+                    button.dataset.id
+                  )
+                );
+
+
+                await loadPosts();
+
+
+              } catch (error) {
+
+                console.error(error);
+
+
+                alert(
+                  "Post Delete করা যায়নি।"
+                );
+
+              }
+
+            }
+          );
+
+        });
+
+
+    } catch (error) {
+
+      console.error(error);
+
+
+      list.innerHTML =
+        "<div class='message error'>Image Post লোড করা যায়নি।</div>";
+
+    }
+
+  }
+
+
+  /* =========================
+     GET CATEGORY NAME
+  ========================= */
+
+  async function getCategoryNameAsync(id) {
+
+    try {
+
+      const snapshot =
+        await getDocs(
+          collection(db, "categories")
+        );
+
+
+      let name =
+        "অজানা Topic";
+
+
+      snapshot.forEach(function(categoryDoc) {
+
+        if (categoryDoc.id === id) {
+
+          const data =
+            categoryDoc.data();
+
+
+          name =
+            data.name || "অজানা Topic";
+
+        }
+
+      });
+
+
+      return name;
+
+    } catch (error) {
+
+      console.error(error);
+
+      return "অজানা Topic";
+
+    }
+
+  }
+
+
+  /*
+    ছোট cache ব্যবহার করা হয়েছে যাতে
+    প্রতিটি post-এর জন্য আলাদা করে categories
+    আবার load না করতে হয়।
+  */
+
+  let categoryCache = {};
+
+
+  async function refreshCategoryCache() {
+
+    categoryCache = {};
+
+
+    try {
+
+      const snapshot =
+        await getDocs(
+          collection(db, "categories")
+        );
+
+
+      snapshot.forEach(function(categoryDoc) {
+
+        const data =
+          categoryDoc.data();
+
+
+        categoryCache[categoryDoc.id] =
+          data.name || "অজানা Topic";
+
+      });
+
+    } catch (error) {
+
+      console.error(error);
+
+    }
+
+  }
+
+
+  function getCategoryName(id) {
+
+    return categoryCache[id] ||
+      "অজানা Topic";
+
+  }
+
+
+  /* =========================
+     EDIT POST
+  ========================= */
+
+  async function editPost(id) {
+
+    try {
+
+      const snapshot =
+        await getDocs(
+          collection(db, "posts")
+        );
+
+
+      let data = null;
+
+
+      snapshot.forEach(function(postDoc) {
+
+        if (postDoc.id === id) {
+
+          data =
+            postDoc.data();
+
+        }
+
+      });
+
+
+      if (!data) {
+
+        alert(
+          "Post পাওয়া যায়নি।"
+        );
+
+        return;
+
+      }
+
+
+      editingPostId =
+        id;
+
+
+      editingPostImages =
+        Array.isArray(data.images)
+          ? data.images.slice()
+          : [];
+
+
+      selectedPostFiles =
+        [];
+
+
+      document
+        .getElementById("postCategorySelect")
+        .value =
+        data.categoryId || "";
+
+
+      document
+        .getElementById("postCaption")
+        .value =
+        data.caption || "";
+
+
+      document
+        .getElementById("postImages")
+        .value = "";
+
+
+      document
+        .getElementById("imagePreview")
+        .innerHTML =
+        editingPostImages
+          .map(function(url) {
+
+            return `
+              <img
+                src="${escapeAttribute(url)}"
+                alt="Current Image">
+            `;
+
+          })
+          .join("");
+
+
+      document
+        .getElementById("postFormTitle")
+        .textContent =
+        "✏️ Image Post Edit করুন";
+
+
+      document
+        .getElementById("savePostBtn")
+        .textContent =
+        "Update Post করুন";
+
+
+      document
+        .getElementById("cancelPostEditBtn")
+        .classList
+        .remove("hidden");
+
+
+      window.scrollTo({
+        top: document
+          .getElementById("postFormTitle")
+          .getBoundingClientRect()
+          .top +
+          window.scrollY -
+          20,
+        behavior: "smooth"
+      });
+
+
+    } catch (error) {
+
+      console.error(error);
+
+
+      alert(
+        "Post Edit করা যায়নি।"
+      );
+
+    }
+
+  }
+
+
+  /* =========================
+     CANCEL POST EDIT
+  ========================= */
+
+  document
+    .getElementById("cancelPostEditBtn")
+    .addEventListener(
+      "click",
+      function() {
+
+        clearPostForm();
+
+      }
+    );
+
+
+  /* =========================
+     CLEAR POST FORM
+  ========================= */
+
+  function clearPostForm() {
+
+    editingPostId =
+      null;
+
+
+    editingPostImages =
+      [];
+
+
+    selectedPostFiles =
+      [];
+
+
+    document
+      .getElementById("postCategorySelect")
+      .value = "";
+
+
+    document
+      .getElementById("postCaption")
+      .value = "";
+
+
+    document
+      .getElementById("postImages")
+      .value = "";
+
+
+    document
+      .getElementById("imagePreview")
+      .innerHTML = "";
+
+
+    document
+      .getElementById("postFormTitle")
+      .textContent =
+      "🖼️ নতুন Image Post যোগ করুন";
+
+
+    document
+      .getElementById("savePostBtn")
+      .textContent =
+      "🖼️ Post করুন";
+
+
+    document
+      .getElementById("cancelPostEditBtn")
+      .classList
+      .add("hidden");
+
+  }
+
+
+  /* =========================
+     TIME FORMAT
+  ========================= */
+
+  function formatPostTime(timestamp) {
+
+    if (
+      !timestamp ||
+      typeof timestamp.toDate !== "function"
+    ) {
+
+      return "এইমাত্র";
+
+    }
+
+
+    const date =
+      timestamp.toDate();
+
+
+    return date.toLocaleString(
+      "bn-BD",
+      {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+        hour: "numeric",
+        minute: "2-digit"
+      }
+    );
+
+  }
+
+
+  /* =========================
+     SECURITY HELPERS
+  ========================= */
+
+  function escapeHTML(value) {
+
+    return String(value)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
+
+  }
+
+
+  function escapeAttribute(value) {
+
+    return String(value)
+      .replace(/&/g, "&amp;")
+      .replace(/"/g, "&quot;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;");
+
+  }
+
+
+  /* =========================
+     INITIAL CATEGORY CACHE
+  ========================= */
+
+  async function initializeCategoryCache() {
+
+    await refreshCategoryCache();
+
+  }
+
+
+  /*
+    loadCategories-এর পর category cache
+    refresh করা হবে।
+  */
+
+  const originalLoadCategories =
+    loadCategories;
+
 
 </script>
 
