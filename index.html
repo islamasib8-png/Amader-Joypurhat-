@@ -201,8 +201,7 @@
         height: 280px;
       }
 
-    }
-  </style></head><body>  <header>
+    }  <header>
     <h1>আমাদের জয়পুরহাট</h1><p>
   জয়পুরহাট জেলার তথ্যভান্ডার
 </p>
@@ -309,8 +308,9 @@
 </div>
 
   </footer>  <script type="module">
+  </style></head><body>
 
-    import { initializeApp }
+        import { initializeApp }
       from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
 
     import {
@@ -558,77 +558,251 @@
 
     }
 
+            import { initializeApp }
+      from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
 
-    setInterval(() => {
-
-      showSlide(
-        currentSlide + 1
-      );
-
-    }, 4000);
-
-
-    dots.forEach((dot, index) => {
-
-      dot.addEventListener(
-        "click",
-        () => {
-
-          showSlide(index);
-
-        }
-      );
-
-    });
+    import {
+      getFirestore,
+      collection,
+      getDocs
+    }
+      from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
 
-    let startX = 0;
+    const firebaseConfig = {
 
-    let endX = 0;
+      apiKey:
+        "AIzaSyAG05o2MjHH3UL8Gp7VNmrQGeqq-4YrDEk",
 
+      authDomain:
+        "amader-joypurhat-7b3fb.firebaseapp.com",
 
-    slides.addEventListener(
-      "touchstart",
-      (e) => {
+      projectId:
+        "amader-joypurhat-7b3fb",
 
-        startX =
-          e.touches[0].clientX;
+      storageBucket:
+        "amader-joypurhat-7b3fb.firebasestorage.app",
 
-      }
-    );
+      messagingSenderId:
+        "542366008798",
 
+      appId:
+        "1:542366008798:web:4f9a7c210b561406a5494f"
 
-    slides.addEventListener(
-      "touchend",
-      (e) => {
-
-        endX =
-          e.changedTouches[0].clientX;
-
-
-        const difference =
-          startX - endX;
+    };
 
 
-        if (difference > 50) {
+    const app =
+      initializeApp(firebaseConfig);
 
-          showSlide(
-            currentSlide + 1
+    const db =
+      getFirestore(app);
+
+
+    async function loadCategories() {
+
+      const container =
+        document.getElementById("categories");
+
+      try {
+
+        const snapshot =
+          await getDocs(
+            collection(db, "categories")
           );
 
+        const categories = [];
+
+
+        snapshot.forEach((doc) => {
+
+          const data =
+            doc.data();
+
+          categories.push({
+
+            id: doc.id,
+
+            ...data
+
+          });
+
+        });
+
+
+        const orderMap = {
+
+          "জয়পুরহাটের পরিচয়": 1,
+
+          "উপজেলার পরিচয়": 2,
+
+          "দর্শনীয় স্থান": 3
+
+        };
+
+
+        categories.sort((a, b) => {
+
+          const orderA =
+            orderMap[a.name] ?? 999;
+
+          const orderB =
+            orderMap[b.name] ?? 999;
+
+          return orderA - orderB;
+
+        });
+
+
+        container.innerHTML = "";
+
+
+        if (categories.length === 0) {
+
+          container.innerHTML = `
+
+            <div class="loading">
+              কোনো বিভাগ পাওয়া যায়নি।
+            </div>
+
+          `;
+
+          return;
+
         }
 
 
-        if (difference < -50) {
+        categories.forEach((category) => {
 
-          showSlide(
-            currentSlide - 1
-          );
+          const card =
+            document.createElement("div");
 
-        }
+          card.className = "card";
+
+
+          card.innerHTML = `
+
+            <div class="icon">
+              ${category.icon || "📌"}
+            </div>
+
+            <h3>
+              ${category.name || ""}
+            </h3>
+
+          `;
+
+
+          card.onclick = () => {
+
+            if (
+              category.name ===
+              "বাসের সময়সূচি"
+            ) {
+
+              window.location.href =
+                "https://www.shohoz.com/bus-tickets";
+
+              return;
+
+            }
+
+
+            if (
+              category.name ===
+              "ট্রেনের সময়সূচি"
+            ) {
+
+              window.location.href =
+                "https://eticket.railway.gov.bd/";
+
+              return;
+
+            }
+
+
+            if (
+              category.name ===
+              "আজকের খবর"
+            ) {
+
+              window.location.href =
+                "https://www.jagonews24.com/bangladesh/rajshahi/jaipurhat";
+
+              return;
+
+            }
+
+
+            window.location.href =
+              `topic.html?id=${category.id}`;
+
+          };
+
+
+          container.appendChild(card);
+
+        });
+
 
       }
-    );
 
-  </script></body>
-</html>
+      catch (error) {
+
+        console.error(error);
+
+        container.innerHTML = `
+
+          <div class="error">
+            তথ্য লোড করা যাচ্ছে না।
+          </div>
+
+        `;
+
+      }
+
+    }
+
+
+    loadCategories();
+
+
+    const slides =
+      document.getElementById("slides");
+
+    const dots =
+      document.querySelectorAll(".dot");
+
+    let currentSlide = 0;
+
+    const totalSlides = 8;
+
+
+    function showSlide(index) {
+
+      if (index >= totalSlides) {
+        index = 0;
+      }
+
+      if (index < 0) {
+        index = totalSlides - 1;
+      }
+
+      currentSlide = index;
+
+
+      slides.style.transform =
+        `translateX(-${currentSlide * 100}%)`;
+
+
+      dots.forEach((dot, i) => {
+
+        dot.classList.toggle(
+          "active",
+          i === currentSlide
+        );
+
+      });
+
+    }
+    
