@@ -1,581 +1,712 @@
-<!DOCTYPE html><html lang="bn">  <head>  
-  <meta charset="UTF-8">  
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">  <title>আমাদের জয়পুরহাট</title>  <style>  
-    * {  
-      box-sizing: border-box;  
-      margin: 0;  
-      padding: 0;  
-    }  body {  
-  font-family: Arial, sans-serif;  
-  background: #f5f7fa;  
-  color: #222;  
-}  
-
-header {  
-  background: linear-gradient(135deg, #0f766e, #14b8a6);  
-  color: white;  
-  padding: 28px 20px;  
-  text-align: center;  
-}  
-
-header h1 {  
-  font-size: 28px;  
-  margin-bottom: 8px;  
-}  
-
-header p {  
-  font-size: 15px;  
-  opacity: 0.95;  
-}  
-
-.hero {  
-  position: relative;  
-  margin: 15px;  
-  height: 220px;  
-  border-radius: 18px;  
-  overflow: hidden;  
-  touch-action: pan-y;  
-  background: #ddd;  
-}  
-
-.slides {  
-  display: flex;  
-  width: 100%;  
-  height: 100%;  
-  transition: transform 0.5s ease;  
-}  
-
-.slide {  
-  min-width: 100%;  
-  height: 100%;  
-  flex-shrink: 0;  
-}  
-
-.slide img {  
-  width: 100%;  
-  height: 100%;  
-  display: block;  
-  object-fit: cover;  
-}  
-
-.dots {  
-  position: absolute;  
-  bottom: 10px;  
-  left: 0;  
-  right: 0;  
-  display: flex;  
-  justify-content: center;  
-  align-items: center;  
-  gap: 7px;  
-}  
-
-.dot {  
-  width: 8px;  
-  height: 8px;  
-  border-radius: 50%;  
-  background: rgba(255,255,255,0.65);  
-  transition: 0.3s;  
-}  
-
-.dot.active {  
-  width: 10px;  
-  height: 10px;  
-  background: white;  
-}  
-
-.container {  
-  padding: 5px 10px 30px;  
-  max-width: 900px;  
-  margin: auto;  
-}  
-
-.section-title {  
-  font-size: 20px;  
-  margin: 18px 0 12px;  
-  font-weight: bold;  
-}  
-
-#categories {  
-  display: grid;  
-  grid-template-columns: repeat(4, 1fr);  
-  gap: 10px;  
-}  
-
-.card {  
-  background: white;  
-  border-radius: 14px;  
-  padding: 13px 5px;  
-  box-shadow: 0 4px 14px rgba(0,0,0,0.08);  
-  cursor: pointer;  
-  transition: 0.2s;  
-  display: flex;  
-  flex-direction: column;  
-  align-items: center;  
-  justify-content: center;  
-  min-height: 95px;  
-  text-align: center;  
-}  
-
-.card:active {  
-  transform: scale(0.96);  
-}  
-
-.icon {  
-  font-size: 30px;  
-  margin-bottom: 7px;  
-}  
-
-.card h3 {  
-  font-size: 13px;  
-  line-height: 1.3;  
-  color: #0f766e;  
-  font-weight: bold;  
-}  
-
-.loading {  
-  text-align: center;  
-  padding: 30px;  
-  color: #666;  
-  grid-column: 1 / -1;  
-}  
-
-.error {  
-  background: white;  
-  padding: 20px;  
-  border-radius: 15px;  
-  text-align: center;  
-  color: #b91c1c;  
-  grid-column: 1 / -1;  
-}  
-
-footer {  
-  margin-top: 30px;  
-  padding: 25px 15px;  
-  text-align: center;  
-  background: #f1f5f9;  
-  border-top: 1px solid #ddd;  
-  line-height: 1.7;  
-}  
-
-footer a {  
-  display: inline-block;  
-  margin: 5px;  
-  padding: 10px 16px;  
-  color: white;  
-  text-decoration: none;  
-  border-radius: 8px;  
-  font-weight: bold;  
-}  
-
-.whatsapp {  
-  background: #25D366;  
-}  
-
-.facebook {  
-  background: #1877F2;  
-}  
-
-@media (min-width: 600px) {  
-
-  #categories {  
-    grid-template-columns: repeat(4, 1fr);  
-    gap: 14px;  
-  }  
-
-  .card {  
-    min-height: 110px;  
-  }  
-
-  .icon {  
-    font-size: 34px;  
-  }  
-
-  .card h3 {  
-    font-size: 15px;  
-  }  
-
-  .hero {  
-    height: 280px;  
-  }  
-
-}
-
-</style></head><body>  <header>
-<h1>আমাদের জয়পুরহাট</h1><p>
-জয়পুরহাট জেলার তথ্যভান্ডার
-
-</p>    </header>  <div class="hero"><div class="slides" id="slides">    <div class="slide">  
-    <img src="./joypurhat.jpg" alt="Joypurhat">  
-  </div>    <div class="slide">  
-    <img src="./picjoypurhat2.jpg" alt="Joypurhat">  
-  </div>    <div class="slide">  
-    <img src="./picjoypurhat3.jpg" alt="Joypurhat">  
-  </div>    <div class="slide">  
-    <img src="./picjoypurhat4.jpg" alt="Joypurhat">  
-  </div>    <div class="slide">  
-    <img src="./picjoypurhat5.jpg" alt="Joypurhat">  
-  </div>    <div class="slide">  
-    <img src="./picjoypurhat6.jpg" alt="Joypurhat">  
-  </div>    <div class="slide">  
-    <img src="./picjoypurhat7.jpg" alt="Joypurhat">  
-  </div>    <div class="slide">  
-    <img src="./picjoypurhat8.jpg" alt="Joypurhat">  
-  </div>  </div>  <div class="dots" id="dots">  <span class="dot active"></span>
-<span class="dot"></span>
-<span class="dot"></span>
-<span class="dot"></span>
-<span class="dot"></span>
-<span class="dot"></span>
-<span class="dot"></span>
-<span class="dot"></span>
-
-</div>    </div>  <div class="container"><div class="section-title">  
-  📚 বিভাগসমূহ  
-</div>  <div id="categories">    <div class="loading">  
-    তথ্য লোড হচ্ছে...  
-  </div>  </div>    </div>  <footer><div style="font-weight:bold; margin-bottom:10px;">  
-  © 2026 আমাদের জয়পুরহাট  
-</div>  <div style="font-size:14px; margin-bottom:12px;">  
-  উপরোক্ত তথ্যে কোনো ভুল বা সংশোধনের প্রয়োজন হলে  
-  অনুগ্রহ করে যোগাযোগ করুন। যাচাই সাপেক্ষে প্রয়োজনীয়  
-  সংশোধন করা হবে।  
-</div>  <div style="font-weight:bold;">  
-  Md. Asib Islam  
-</div>  <div style="font-size:14px;">  
-  Uchan, Dharanji, Panchbibi, Joypurhat  
-</div>  <div style="font-size:14px; margin-top:4px;">  
-  📞 013-19058313  
-</div>  <div style="margin-top:15px;">  <a  
-class="whatsapp"  
-href="https://wa.me/8801319058313">
-💬 WhatsApp
-</a>
-
-<a  
-class="facebook"  
-href="https://www.facebook.com/Asibislam01">
-📘 Facebook
-</a>
+<!DOCTYPE html>
+<html lang="bn">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>আমাদের জয়পুরহাট</title>
+
+  <style>
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f7fa;
+      color: #222;
+    }
+
+    header {
+      background: linear-gradient(135deg, #0f766e, #14b8a6);
+      color: white;
+      padding: 28px 20px;
+      text-align: center;
+    }
+
+    header h1 {
+      font-size: 28px;
+      margin-bottom: 8px;
+    }
+
+    header p {
+      font-size: 15px;
+      opacity: 0.95;
+    }
+
+    .hero {
+      position: relative;
+      margin: 15px;
+      height: 220px;
+      border-radius: 18px;
+      overflow: hidden;
+      touch-action: pan-y;
+      background: #ddd;
+    }
+
+    .slides {
+      display: flex;
+      width: 100%;
+      height: 100%;
+      transition: transform 0.5s ease;
+    }
+
+    .slide {
+      min-width: 100%;
+      height: 100%;
+      flex-shrink: 0;
+    }
+
+    .slide img {
+      width: 100%;
+      height: 100%;
+      display: block;
+      object-fit: cover;
+    }
+
+    .dots {
+      position: absolute;
+      bottom: 10px;
+      left: 0;
+      right: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 7px;
+    }
+
+    .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.65);
+      transition: 0.3s;
+    }
+
+    .dot.active {
+      width: 10px;
+      height: 10px;
+      background: white;
+    }
+
+    .container {
+      padding: 5px 10px 30px;
+      max-width: 900px;
+      margin: auto;
+    }
+
+    .section-title {
+      font-size: 20px;
+      margin: 18px 0 12px;
+      font-weight: bold;
+    }
+
+    #categories {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+    }
+
+    .card {
+      background: white;
+      border-radius: 14px;
+      padding: 13px 5px;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.08);
+      cursor: pointer;
+      transition: 0.2s;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 95px;
+      text-align: center;
+    }
+
+    .card:active {
+      transform: scale(0.96);
+    }
+
+    .icon {
+      font-size: 30px;
+      margin-bottom: 7px;
+    }
+
+    .card h3 {
+      font-size: 13px;
+      line-height: 1.3;
+      color: #0f766e;
+      font-weight: bold;
+    }
+
+    .loading {
+      text-align: center;
+      padding: 30px;
+      color: #666;
+      grid-column: 1 / -1;
+    }
+
+    .error {
+      background: white;
+      padding: 20px;
+      border-radius: 15px;
+      text-align: center;
+      color: #b91c1c;
+      grid-column: 1 / -1;
+    }
+
+    /* নতুন তথ্য যোগ করুন বাটন */
+
+    #addInfoBtn {
+      display: block;
+      width: 90%;
+      margin: 20px auto 5px;
+      padding: 13px;
+      border: none;
+      border-radius: 10px;
+      background: #1976d2;
+      color: white;
+      font-size: 17px;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.12);
+    }
+
+    #addInfoBtn:active {
+      transform: scale(0.97);
+    }
+
+    footer {
+      margin-top: 30px;
+      padding: 25px 15px;
+      text-align: center;
+      background: #f1f5f9;
+      border-top: 1px solid #ddd;
+      line-height: 1.7;
+    }
+
+    footer a {
+      display: inline-block;
+      margin: 5px;
+      padding: 10px 16px;
+      color: white;
+      text-decoration: none;
+      border-radius: 8px;
+      font-weight: bold;
+    }
+
+    .whatsapp {
+      background: #25D366;
+    }
+
+    .facebook {
+      background: #1877F2;
+    }
+
+    @media (min-width: 600px) {
+
+      #categories {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 14px;
+      }
+
+      .card {
+        min-height: 110px;
+      }
+
+      .icon {
+        font-size: 34px;
+      }
+
+      .card h3 {
+        font-size: 15px;
+      }
+
+      .hero {
+        height: 280px;
+      }
 
-</div>    </footer>  <script type="module">  import { initializeApp }  
-  from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";  
+    }
 
-import {  
-  getFirestore,  
-  collection,  
-  getDocs  
-}  
-  from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";  
+  </style>
 
+</head>
 
-const firebaseConfig = {  
+<body>
 
-  apiKey:  
-    "AIzaSyAG05o2MjHH3UL8Gp7VNmrQGeqq-4YrDEk",  
+  <header>
 
-  authDomain:  
-    "amader-joypurhat-7b3fb.firebaseapp.com",  
+    <h1>আমাদের জয়পুরহাট</h1>
 
-  projectId:  
-    "amader-joypurhat-7b3fb",  
+    <p>
+      জয়পুরহাট জেলার তথ্যভান্ডার
+    </p>
 
-  storageBucket:  
-    "amader-joypurhat-7b3fb.firebasestorage.app",  
+  </header>
 
-  messagingSenderId:  
-    "542366008798",  
 
-  appId:  
-    "1:542366008798:web:4f9a7c210b561406a5494f"  
+  <div class="hero">
 
-};  
+    <div class="slides" id="slides">
 
+      <div class="slide">
+        <img src="./joypurhat.jpg" alt="Joypurhat">
+      </div>
 
-const app =  
-  initializeApp(firebaseConfig);  
+      <div class="slide">
+        <img src="./picjoypurhat2.jpg" alt="Joypurhat">
+      </div>
 
-const db =  
-  getFirestore(app);  
+      <div class="slide">
+        <img src="./picjoypurhat3.jpg" alt="Joypurhat">
+      </div>
 
+      <div class="slide">
+        <img src="./picjoypurhat4.jpg" alt="Joypurhat">
+      </div>
 
-async function loadCategories() {  
+      <div class="slide">
+        <img src="./picjoypurhat5.jpg" alt="Joypurhat">
+      </div>
 
-  const container =  
-    document.getElementById("categories");  
+      <div class="slide">
+        <img src="./picjoypurhat6.jpg" alt="Joypurhat">
+      </div>
 
-  try {  
+      <div class="slide">
+        <img src="./picjoypurhat7.jpg" alt="Joypurhat">
+      </div>
 
-    const snapshot =  
-      await getDocs(  
-        collection(db, "categories")  
-      );  
+      <div class="slide">
+        <img src="./picjoypurhat8.jpg" alt="Joypurhat">
+      </div>
 
-    const categories = [];  
+    </div>
 
 
-    snapshot.forEach((doc) => {  
+    <div class="dots" id="dots">
 
-      const data =  
-        doc.data();  
+      <span class="dot active"></span>
+      <span class="dot"></span>
+      <span class="dot"></span>
+      <span class="dot"></span>
+      <span class="dot"></span>
+      <span class="dot"></span>
+      <span class="dot"></span>
+      <span class="dot"></span>
 
-      categories.push({  
+    </div>
 
-        id: doc.id,  
+  </div>
 
-        ...data  
 
-      });  
+  <div class="container">
 
-    });  
+    <div class="section-title">
+      📚 বিভাগসমূহ
+    </div>
 
 
-    const orderMap = {  
+    <div id="categories">
 
-      "জয়পুরহাটের পরিচয়": 1,  
+      <div class="loading">
+        তথ্য লোড হচ্ছে...
+      </div>
 
-      "উপজেলার পরিচয়": 2,  
+    </div>
 
-      "দর্শনীয় স্থান": 3  
 
-    };  
+    <!-- নতুন তথ্য যোগ করুন বাটন -->
 
+    <button id="addInfoBtn">
+      ➕ আপনার তথ্য যোগ করুন
+    </button>
 
-    categories.sort((a, b) => {  
+  </div>
 
-      const orderA =  
-        orderMap[a.name] ?? 999;  
 
-      const orderB =  
-        orderMap[b.name] ?? 999;  
+  <footer>
 
-      return orderA - orderB;  
+    <div style="font-weight:bold; margin-bottom:10px;">
+      © 2026 আমাদের জয়পুরহাট
+    </div>
 
-    });  
+    <div style="font-size:14px; margin-bottom:12px;">
+      উপরোক্ত তথ্যে কোনো ভুল বা সংশোধনের প্রয়োজন হলে
+      অনুগ্রহ করে যোগাযোগ করুন। যাচাই সাপেক্ষে প্রয়োজনীয়
+      সংশোধন করা হবে।
+    </div>
 
+    <div style="font-weight:bold;">
+      Md. Asib Islam
+    </div>
 
-    container.innerHTML = "";  
+    <div style="font-size:14px;">
+      Uchan, Dharanji, Panchbibi, Joypurhat
+    </div>
 
+    <div style="font-size:14px; margin-top:4px;">
+      📞 013-19058313
+    </div>
 
-    if (categories.length === 0) {  
+    <div style="margin-top:15px;">
 
-      container.innerHTML = `  
+      <a
+        class="whatsapp"
+        href="https://wa.me/8801319058313">
+        💬 WhatsApp
+      </a>
 
-        <div class="loading">  
-          কোনো বিভাগ পাওয়া যায়নি।  
-        </div>  
+      <a
+        class="facebook"
+        href="https://www.facebook.com/Asibislam01">
+        📘 Facebook
+      </a>
 
-      `;  
+    </div>
 
-      return;  
+  </footer>
 
-    }  
 
+  <script type="module">
 
-    categories.forEach((category) => {  
+    import { initializeApp }
+      from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
 
-      const card =  
-        document.createElement("div");  
 
-      card.className = "card";  
+    import {
+      getFirestore,
+      collection,
+      getDocs
+    }
+      from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
 
-      card.innerHTML = `  
+    const firebaseConfig = {
 
-        <div class="icon">  
-          ${category.icon || "📌"}  
-        </div>  
+      apiKey:
+        "AIzaSyAG05o2MjHH3UL8Gp7VNmrQGeqq-4YrDEk",
 
-        <h3>  
-          ${category.name || ""}  
-        </h3>  
+      authDomain:
+        "amader-joypurhat-7b3fb.firebaseapp.com",
 
-      `;  
+      projectId:
+        "amader-joypurhat-7b3fb",
 
+      storageBucket:
+        "amader-joypurhat-7b3fb.firebasestorage.app",
 
-      card.onclick = () => {  
+      messagingSenderId:
+        "542366008798",
 
-        if (  
-          category.name ===  
-          "বাসের সময়সূচি"  
-        ) {  
+      appId:
+        "1:542366008798:web:4f9a7c210b561406a5494f"
 
-          window.location.href =  
-            "https://www.shohoz.com/bus-tickets";  
+    };
 
-          return;  
 
-        }  
+    const app =
+      initializeApp(firebaseConfig);
 
 
-        if (  
-          category.name ===  
-          "ট্রেনের সময়সূচি"  
-        ) {  
+    const db =
+      getFirestore(app);
 
-          window.location.href =  
-            "https://eticket.railway.gov.bd/";  
 
-          return;  
+    async function loadCategories() {
 
-        }  
+      const container =
+        document.getElementById("categories");
 
+      try {
 
-        if (  
-          category.name ===  
-          "আজকের খবর"  
-        ) {  
+        const snapshot =
+          await getDocs(
+            collection(db, "categories")
+          );
 
-          window.location.href =  
-            "https://dailyjoypurbarta.com/?fbclid=IwVERDUAUOdX1wZG9mBWV4dG4DYWVtAjEwAHNydGMGYXBwX2lkDDM1MDY4NTUzMTcyOAABHojg2U1GjzaeUCuF8N3AihHmkcyxvRkkLylxamkk_XcNC-eZyTHMIqoYarV1_aem_8P_jUfQ1HvlvcGpXOLBsqQ";  
 
-          return;  
+        const categories = [];
 
-        }  
 
+        snapshot.forEach((doc) => {
 
-        window.location.href =  
-          `topic.html?id=${category.id}`;  
+          const data =
+            doc.data();
 
-      };  
 
+          categories.push({
 
-      container.appendChild(card);  
+            id: doc.id,
 
-    });  
+            ...data
 
+          });
 
-  }  
+        });
 
-  catch (error) {  
 
-    console.error(error);  
+        const orderMap = {
 
-    container.innerHTML = `  
+          "জয়পুরহাটের পরিচয়": 1,
 
-      <div class="error">  
-        তথ্য লোড করা যাচ্ছে না।  
-      </div>  
+          "উপজেলার পরিচয়": 2,
 
-    `;  
+          "দর্শনীয় স্থান": 3
 
-  }  
+        };
 
-}  
 
+        categories.sort((a, b) => {
 
-loadCategories();  
+          const orderA =
+            orderMap[a.name] ?? 999;
 
+          const orderB =
+            orderMap[b.name] ?? 999;
 
-const slides =  
-  document.getElementById("slides");  
+          return orderA - orderB;
 
-const dots =  
-  document.querySelectorAll(".dot");  
+        });
 
-let currentSlide = 0;  
 
-const totalSlides = 8;  
+        container.innerHTML = "";
 
 
-function showSlide(index) {  
+        if (categories.length === 0) {
 
-  if (index >= totalSlides) {  
-    index = 0;  
-  }  
+          container.innerHTML = `
 
-  if (index < 0) {  
-    index = totalSlides - 1;  
-  }  
+            <div class="loading">
+              কোনো বিভাগ পাওয়া যায়নি।
+            </div>
 
-  currentSlide = index;  
+          `;
 
+          return;
 
-  slides.style.transform =  
-    `translateX(-${currentSlide * 100}%)`;  
+        }
 
 
-  dots.forEach((dot, i) => {  
+        categories.forEach((category) => {
 
-    dot.classList.toggle(  
-      "active",  
-      i === currentSlide  
-    );  
+          const card =
+            document.createElement("div");
 
-  });  
 
-}  
+          card.className = "card";
 
 
-setInterval(() => {  
+          card.innerHTML = `
 
-  showSlide(  
-    currentSlide + 1  
-  );  
+            <div class="icon">
+              ${category.icon || "📌"}
+            </div>
 
-}, 4000);  
+            <h3>
+              ${category.name || ""}
+            </h3>
 
+          `;
 
-dots.forEach((dot, index) => {  
 
-  dot.addEventListener(  
-    "click",  
-    () => {  
+          card.onclick = () => {
 
-      showSlide(index);  
+            if (
+              category.name ===
+              "বাসের সময়সূচি"
+            ) {
 
-    }  
-  );  
+              window.location.href =
+                "https://www.shohoz.com/bus-tickets";
 
-});  
+              return;
 
+            }
 
-let startX = 0;  
 
-let endX = 0;  
+            if (
+              category.name ===
+              "ট্রেনের সময়সূচি"
+            ) {
 
+              window.location.href =
+                "https://eticket.railway.gov.bd/";
 
-slides.addEventListener(  
-  "touchstart",  
-  (e) => {  
+              return;
 
-    startX =  
-      e.touches[0].clientX;  
+            }
 
-  }  
-);  
 
+            if (
+              category.name ===
+              "আজকের খবর"
+            ) {
 
-slides.addEventListener(  
-  "touchend",  
-  (e) => {  
+              window.location.href =
+                "https://dailyjoypurbarta.com/?fbclid=IwVERDUAUOdX1wZG9mBWV4dG4DYWVtAjEwAHNydGMGYXBwX2lkDDM1MDY4NTUzMTcyOAABHojg2U1GjzaeUCuF8N3AihHmkcyxvRkkLylxamkk_XcNC-eZyTHMIqoYarV1_aem_8P_jUfQ1HvlvcGpXOLBsqQ";
 
-    endX =  
-      e.changedTouches[0].clientX;  
+              return;
 
+            }
 
-    const difference =  
-      startX - endX;  
 
+            window.location.href =
+              `topic.html?id=${category.id}`;
 
-    if (difference > 50) {  
+          };
 
-      showSlide(  
-        currentSlide + 1  
-      );  
 
-    }  
+          container.appendChild(card);
 
+        });
 
-    if (difference < -50) {  
+      }
 
-      showSlide(  
-        currentSlide - 1  
-      );  
+      catch (error) {
 
-    }  
+        console.error(error);
 
-  }  
-);
+        container.innerHTML = `
 
-</script></body>
+          <div class="error">
+            তথ্য লোড করা যাচ্ছে না।
+          </div>
+
+        `;
+
+      }
+
+    }
+
+
+    loadCategories();
+
+
+    /* Slider */
+
+    const slides =
+      document.getElementById("slides");
+
+
+    const dots =
+      document.querySelectorAll(".dot");
+
+
+    let currentSlide = 0;
+
+
+    const totalSlides = 8;
+
+
+    function showSlide(index) {
+
+      if (index >= totalSlides) {
+        index = 0;
+      }
+
+
+      if (index < 0) {
+        index = totalSlides - 1;
+      }
+
+
+      currentSlide = index;
+
+
+      slides.style.transform =
+        `translateX(-${currentSlide * 100}%)`;
+
+
+      dots.forEach((dot, i) => {
+
+        dot.classList.toggle(
+          "active",
+          i === currentSlide
+        );
+
+      });
+
+    }
+
+
+    setInterval(() => {
+
+      showSlide(
+        currentSlide + 1
+      );
+
+    }, 4000);
+
+
+    dots.forEach((dot, index) => {
+
+      dot.addEventListener(
+        "click",
+        () => {
+
+          showSlide(index);
+
+        }
+      );
+
+    });
+
+
+    let startX = 0;
+
+    let endX = 0;
+
+
+    slides.addEventListener(
+      "touchstart",
+      (e) => {
+
+        startX =
+          e.touches[0].clientX;
+
+      }
+    );
+
+
+    slides.addEventListener(
+      "touchend",
+      (e) => {
+
+        endX =
+          e.changedTouches[0].clientX;
+
+
+        const difference =
+          startX - endX;
+
+
+        if (difference > 50) {
+
+          showSlide(
+            currentSlide + 1
+          );
+
+        }
+
+
+        if (difference < -50) {
+
+          showSlide(
+            currentSlide - 1
+          );
+
+        }
+
+      }
+    );
+
+
+  </script>
+
+</body>
+
 </html>
