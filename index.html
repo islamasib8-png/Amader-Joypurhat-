@@ -20,7 +20,6 @@
       min-height: 100vh;
     }
 
-    /* Header */
     header {
       background: #1976d2;
       color: white;
@@ -38,7 +37,6 @@
       opacity: 0.95;
     }
 
-    /* Slider */
     .slider {
       width: 100%;
       height: 220px;
@@ -89,7 +87,6 @@
       background: #1976d2;
     }
 
-    /* Main */
     .container {
       width: 94%;
       max-width: 900px;
@@ -110,7 +107,6 @@
       color: red;
     }
 
-    /* Category Grid */
     .category-grid {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
@@ -153,7 +149,6 @@
       margin-top: 4px;
     }
 
-    /* Add information button */
     #addInfoBtn {
       display: block;
       width: 90%;
@@ -172,7 +167,6 @@
       transform: scale(0.98);
     }
 
-    /* Modal */
     .modal {
       display: none;
       position: fixed;
@@ -214,7 +208,6 @@
       cursor: pointer;
     }
 
-    /* Information options */
     .info-option {
       width: 100%;
       padding: 14px;
@@ -232,7 +225,6 @@
       background: #e3f2fd;
     }
 
-    /* Form */
     .form-group {
       margin-bottom: 14px;
     }
@@ -306,7 +298,6 @@
       cursor: pointer;
     }
 
-    /* Footer */
     footer {
       margin-top: 30px;
       background: #1976d2;
@@ -322,7 +313,6 @@
       text-decoration: none;
     }
 
-    /* Mobile */
     @media (max-width: 600px) {
 
       .category-grid {
@@ -371,1021 +361,1085 @@
 
 <body>
 
-  <!-- Header -->
-  <header>
-    <h1>আমাদের জয়পুরহাট</h1>
-    <p>জয়পুরহাট জেলার তথ্যভান্ডার</p>
-  </header>
+<header>
+  <h1>আমাদের জয়পুরহাট</h1>
+  <p>জয়পুরহাট জেলার তথ্যভান্ডার</p>
+</header>
 
+<div class="slider">
 
-  <!-- Slider -->
-  <div class="slider">
+  <div class="slides" id="slides">
 
-    <div class="slides" id="slides">
-
-      <div class="slide">
-        <img src="joypurhat.jpg" alt="জয়পুরহাট">
-      </div>
-
-      <div class="slide">
-        <img src="picjoypurhat2.jpg" alt="জয়পুরহাট">
-      </div>
-
-      <div class="slide">
-        <img src="picjoypurhat3.jpg" alt="জয়পুরহাট">
-      </div>
-
-      <div class="slide">
-        <img src="picjoypurhat4.jpg" alt="জয়পুরহাট">
-      </div>
-
-      <div class="slide">
-        <img src="picjoypurhat5.jpg" alt="জয়পুরহাট">
-      </div>
-
-      <div class="slide">
-        <img src="picjoypurhat6.jpg" alt="জয়পুরহাট">
-      </div>
-
-      <div class="slide">
-        <img src="picjoypurhat7.jpg" alt="জয়পুরহাট">
-      </div>
-
-      <div class="slide">
-        <img src="picjoypurhat8.jpg" alt="জয়পুরহাট">
-      </div>
-
+    <div class="slide">
+      <img src="joypurhat.jpg" alt="জয়পুরহাট">
     </div>
 
-    <div class="dots" id="dots"></div>
+    <div class="slide">
+      <img src="picjoypurhat2.jpg" alt="জয়পুরহাট">
+    </div>
+
+    <div class="slide">
+      <img src="picjoypurhat3.jpg" alt="জয়পুরহাট">
+    </div>
+
+    <div class="slide">
+      <img src="picjoypurhat4.jpg" alt="জয়পুরহাট">
+    </div>
+
+    <div class="slide">
+      <img src="picjoypurhat5.jpg" alt="জয়পুরহাট">
+    </div>
+
+    <div class="slide">
+      <img src="picjoypurhat6.jpg" alt="জয়পুরহাট">
+    </div>
+
+    <div class="slide">
+      <img src="picjoypurhat7.jpg" alt="জয়পুরহাট">
+    </div>
+
+    <div class="slide">
+      <img src="picjoypurhat8.jpg" alt="জয়পুরহাট">
+    </div>
 
   </div>
 
+  <div class="dots" id="dots"></div>
 
-  <!-- Main -->
-  <div class="container">
+</div>
 
-    <div id="loading">
-      তথ্য লোড হচ্ছে...
-    </div>
+<div class="container">
 
-    <div id="error">
-      তথ্য লোড করতে সমস্যা হয়েছে।
-      <br>
-      ইন্টারনেট সংযোগ পরীক্ষা করুন।
-    </div>
+  <div id="loading">
+    তথ্য লোড হচ্ছে...
+  </div>
 
-    <div class="category-grid" id="categoryGrid"></div>
+  <div id="error">
+    তথ্য লোড করতে সমস্যা হয়েছে।
+    <br>
+    ইন্টারনেট সংযোগ পরীক্ষা করুন।
+  </div>
+
+  <div class="category-grid" id="categoryGrid"></div>
+
+  <button id="addInfoBtn">
+    ➕ আপনার তথ্য যোগ করুন
+  </button>
+
+</div>
 
 
-    <!-- Add Information Button -->
-    <button id="addInfoBtn">
-      ➕ আপনার তথ্য যোগ করুন
+<!-- Information Modal -->
+
+<div class="modal" id="infoModal">
+
+  <div class="modal-box">
+
+    <button class="close-btn" id="closeInfoModal">
+      ×
+    </button>
+
+    <h2>আপনার তথ্য যোগ করুন</h2>
+
+    <button class="info-option" data-type="blood">
+      🩸 রক্তদাতা
+    </button>
+
+    <button class="info-option" data-type="hospital">
+      🏥 হাসপাতাল/ক্লিনিক
+    </button>
+
+    <button class="info-option" data-type="restaurant">
+      🍽️ রেস্টুরেন্ট
+    </button>
+
+    <button class="info-option" data-type="courier">
+      🚚 কুরিয়ার
+    </button>
+
+    <button class="info-option" data-type="lawyer">
+      ⚖️ আইনজীবী
+    </button>
+
+    <button class="info-option" data-type="business">
+      🏪 প্রতিষ্ঠান
     </button>
 
   </div>
 
+</div>
 
-  <!-- Information Selection Modal -->
-  <div class="modal" id="infoModal">
 
-    <div class="modal-box">
+<!-- Blood Donor Modal -->
 
-      <button class="close-btn" id="closeInfoModal">
-        ×
-      </button>
+<div class="modal" id="bloodModal">
 
-      <h2>আপনার তথ্য যোগ করুন</h2>
+  <div class="modal-box">
 
-      <button class="info-option" data-type="blood">
-        🩸 রক্তদাতা
-      </button>
+    <button class="close-btn" id="closeBloodModal">
+      ×
+    </button>
 
-      <button class="info-option" data-type="hospital">
-        🏥 হাসপাতাল/ক্লিনিক
-      </button>
+    <h2>🩸 রক্তদাতার তথ্য</h2>
 
-      <button class="info-option" data-type="restaurant">
-        🍽️ রেস্টুরেন্ট
-      </button>
+    <div class="form-group">
 
-      <button class="info-option" data-type="courier">
-        🚚 কুরিয়ার
-      </button>
+      <label for="bloodGroup">
+        রক্তের গ্রুপ *
+      </label>
 
-      <button class="info-option" data-type="lawyer">
-        ⚖️ আইনজীবী
-      </button>
+      <select id="bloodGroup">
 
-      <button class="info-option" data-type="business">
-        🏪 প্রতিষ্ঠান
-      </button>
+        <option value="">
+          রক্তের গ্রুপ নির্বাচন করুন
+        </option>
+
+        <option value="A+">A+</option>
+        <option value="A-">A-</option>
+        <option value="B+">B+</option>
+        <option value="B-">B-</option>
+        <option value="AB+">AB+</option>
+        <option value="AB-">AB-</option>
+        <option value="O+">O+</option>
+        <option value="O-">O-</option>
+
+      </select>
 
     </div>
+
+
+    <div class="form-group">
+
+      <label for="bloodName">
+        নাম *
+      </label>
+
+      <input
+        type="text"
+        id="bloodName"
+        placeholder="আপনার নাম লিখুন"
+      >
+
+    </div>
+
+
+    <div class="form-group">
+
+      <label for="bloodAddress">
+        ঠিকানা *
+      </label>
+
+      <textarea
+        id="bloodAddress"
+        rows="3"
+        placeholder="আপনার ঠিকানা লিখুন"
+      ></textarea>
+
+    </div>
+
+
+    <div class="form-group">
+
+      <label for="bloodMobile">
+        মোবাইল নং *
+      </label>
+
+      <input
+        type="tel"
+        id="bloodMobile"
+        placeholder="01XXXXXXXXX"
+        inputmode="numeric"
+      >
+
+    </div>
+
+
+    <div class="consent-box">
+
+      <input
+        type="checkbox"
+        id="bloodConsent"
+      >
+
+      <label for="bloodConsent">
+        আমি নিশ্চিত করছি যে উপরের তথ্য সঠিক এবং
+        প্রয়োজনীয় যাচাইয়ের পর আমার তথ্য রক্তদাতা
+        তালিকায় প্রকাশ করতে সম্মত আছি।
+      </label>
+
+    </div>
+
+
+    <button
+      class="submit-btn"
+      id="bloodSubmitBtn"
+    >
+      জমা দিন
+    </button>
+
+
+    <button
+      class="back-btn"
+      id="bloodBackBtn"
+    >
+      ← পিছনে যান
+    </button>
 
   </div>
 
-
-  <!-- Blood Donor Form Modal -->
-  <div class="modal" id="bloodModal">
-
-    <div class="modal-box">
-
-      <button class="close-btn" id="closeBloodModal">
-        ×
-      </button>
-
-      <h2>🩸 রক্তদাতার তথ্য</h2>
+</div>
 
 
-      <!-- Blood Group -->
-      <div class="form-group">
+<footer>
 
-        <label for="bloodGroup">
-          রক্তের গ্রুপ *
-        </label>
+  <div>
+    © 2026 আমাদের জয়পুরহাট
+  </div>
 
-        <select id="bloodGroup">
+  <div>
+    উপরোক্ত তথ্যে কোনো ভুল বা সংশোধনের প্রয়োজন হলে
+    অনুগ্রহ করে যোগাযোগ করুন। যাচাই সাপেক্ষে প্রয়োজনীয়
+    সংশোধন করা হবে।
+  </div>
 
-          <option value="">
-            রক্তের গ্রুপ নির্বাচন করুন
-          </option>
+  <div>
+    Md. Asib Islam
+  </div>
 
-          <option value="A+">A+</option>
-          <option value="A-">A-</option>
+  <div>
+    Uchan, Dharanji, Panchbibi, Joypurhat
+  </div>
 
-          <option value="B+">B+</option>
-          <option value="B-">B-</option>
+  <div>
+    📞 013-19058313
+  </div>
 
-          <option value="AB+">AB+</option>
-          <option value="AB-">AB-</option>
+  <div>
 
-          <option value="O+">O+</option>
-          <option value="O-">O-</option>
+    <a
+      href="https://wa.me/8801319058313"
+      target="_blank"
+    >
+      WhatsApp
+    </a>
 
-        </select>
+    &nbsp; | &nbsp;
 
-      </div>
-
-
-      <!-- Name -->
-      <div class="form-group">
-
-        <label for="bloodName">
-          নাম *
-        </label>
-
-        <input
-          type="text"
-          id="bloodName"
-          placeholder="আপনার নাম লিখুন"
-        >
-
-      </div>
-
-
-      <!-- Address -->
-      <div class="form-group">
-
-        <label for="bloodAddress">
-          ঠিকানা *
-        </label>
-
-        <textarea
-          id="bloodAddress"
-          rows="3"
-          placeholder="আপনার ঠিকানা লিখুন"
-        ></textarea>
-
-      </div>
-
-
-      <!-- Mobile -->
-      <div class="form-group">
-
-        <label for="bloodMobile">
-          মোবাইল নং *
-        </label>
-
-        <input
-          type="tel"
-          id="bloodMobile"
-          placeholder="01XXXXXXXXX"
-          inputmode="numeric"
-        >
-
-      </div>
-
-
-      <!-- Consent -->
-      <div class="consent-box">
-
-        <input
-          type="checkbox"
-          id="bloodConsent"
-        >
-
-        <label for="bloodConsent">
-          আমি নিশ্চিত করছি যে উপরের তথ্য সঠিক এবং
-          প্রয়োজনীয় যাচাইয়ের পর আমার তথ্য রক্তদাতা
-          তালিকায় প্রকাশ করতে সম্মত আছি।
-        </label>
-
-      </div>
-
-
-      <!-- Submit -->
-      <button
-        class="submit-btn"
-        id="bloodSubmitBtn"
-      >
-        জমা দিন
-      </button>
-
-
-      <!-- Back -->
-      <button
-        class="back-btn"
-        id="bloodBackBtn"
-      >
-        ← পিছনে যান
-      </button>
-
-    </div>
+    <a
+      href="https://www.facebook.com/Asibislam01"
+      target="_blank"
+    >
+      Facebook
+    </a>
 
   </div>
 
+</footer>
 
-  <!-- Footer -->
-  <footer>
 
-    <div>
-      © 2026 আমাদের জয়পুরহাট
-    </div>
+<script type="module">
 
-    <div>
-      উপরোক্ত তথ্যে কোনো ভুল বা সংশোধনের প্রয়োজন হলে
-      অনুগ্রহ করে যোগাযোগ করুন। যাচাই সাপেক্ষে প্রয়োজনীয়
-      সংশোধন করা হবে।
-    </div>
+import {
+  initializeApp
+} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
 
-    <div>
-      Md. Asib Islam
-    </div>
 
-    <div>
-      Uchan, Dharanji, Panchbibi, Joypurhat
-    </div>
+import {
+  getFirestore,
+  collection,
+  getDocs,
+  addDoc,
+  serverTimestamp
+} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
-    <div>
-      📞 013-19058313
-    </div>
 
-    <div>
-      <a
-        href="https://wa.me/8801319058313"
-        target="_blank"
-      >
-        WhatsApp
-      </a>
-      &nbsp; | &nbsp;
-      <a
-        href="https://www.facebook.com/Asibislam01"
-        target="_blank"
-      >
-        Facebook
-      </a>
-    </div>
+/* Firebase */
 
-  </footer>
+const firebaseConfig = {
 
+  apiKey:
+    "AIzaSyAG05o2MjHH3UL8Gp7VNmrQGeqq-4YrDEk",
 
-  <!-- Firebase -->
-  <script type="module">
+  authDomain:
+    "amader-joypurhat-7b3fb.firebaseapp.com",
 
-    import {
-      initializeApp
-    } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+  projectId:
+    "amader-joypurhat-7b3fb",
 
-    import {
-      getFirestore,
-      collection,
-      getDocs,
-      addDoc,
-      serverTimestamp
-    } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+  storageBucket:
+    "amader-joypurhat-7b3fb.firebasestorage.app",
 
+  messagingSenderId:
+    "542366008798",
 
-    /* Firebase Config */
+  appId:
+    "1:542366008798:web:4f9a7c210b561406a5494f"
 
-    const firebaseConfig = {
+};
 
-      apiKey: "AIzaSyAG05o2MjHH3UL8Gp7VNmrQGeqq-4YrDEk",
 
-      authDomain:
-        "amader-joypurhat-7b3fb.firebaseapp.com",
+const app =
+  initializeApp(firebaseConfig);
 
-      projectId:
-        "amader-joypurhat-7b3fb",
 
-      storageBucket:
-        "amader-joypurhat-7b3fb.firebasestorage.app",
+const db =
+  getFirestore(app);
 
-      messagingSenderId:
-        "542366008798",
 
-      appId:
-        "1:542366008798:web:4f9a7c210b561406a5494f"
+/* =========================
+   CATEGORY
+========================= */
 
-    };
+const categoryGrid =
+  document.getElementById("categoryGrid");
 
 
-    const app = initializeApp(firebaseConfig);
+const loading =
+  document.getElementById("loading");
 
-    const db = getFirestore(app);
 
+const errorBox =
+  document.getElementById("error");
 
-    /* =========================
-       CATEGORY LOAD
-    ========================= */
 
-    const categoryGrid =
-      document.getElementById("categoryGrid");
+const specialLinks = {
 
-    const loading =
-      document.getElementById("loading");
+  "বাসের সময়সূচি":
+    "https://www.shohoz.com/bus-tickets",
 
-    const errorBox =
-      document.getElementById("error");
+  "ট্রেনের সময়সূচি":
+    "https://eticket.railway.gov.bd/",
 
+  "আজকের খবর":
+    "https://dailyjoypurbarta.com/"
 
-    const specialLinks = {
+};
 
-      "বাসের সময়সূচি":
-        "https://www.shohoz.com/bus-tickets",
 
-      "ট্রেনের সময়সূচি":
-        "https://eticket.railway.gov.bd/",
+const categoryOrder = {
 
-      "আজকের খবর":
-        "https://dailyjoypurbarta.com/"
+  "জয়পুরহাটের পরিচয়": 1,
 
-    };
+  "উপজেলার পরিচয়": 2,
 
+  "দর্শনীয় স্থান": 3
 
-    const categoryOrder = {
+};
 
-      "জয়পুরহাটের পরিচয়": 1,
 
-      "উপজেলার পরিচয়": 2,
+async function loadCategories() {
 
-      "দর্শনীয় স্থান": 3
+  try {
 
-    };
+    const snapshot =
+      await getDocs(
+        collection(
+          db,
+          "categories"
+        )
+      );
 
 
-    async function loadCategories() {
+    let categories = [];
 
-      try {
 
-        const snapshot =
-          await getDocs(
-            collection(db, "categories")
-          );
+    snapshot.forEach(doc => {
 
+      categories.push({
 
-        let categories = [];
+        id: doc.id,
 
+        ...doc.data()
 
-        snapshot.forEach(doc => {
+      });
 
-          categories.push({
+    });
 
-            id: doc.id,
 
-            ...doc.data()
+    categories.sort((a, b) => {
 
-          });
+      const orderA =
+        categoryOrder[a.name] || 999;
 
-        });
+      const orderB =
+        categoryOrder[b.name] || 999;
 
+      return orderA - orderB;
 
-        categories.sort((a, b) => {
+    });
 
-          const orderA =
-            categoryOrder[a.name] || 999;
 
-          const orderB =
-            categoryOrder[b.name] || 999;
+    categoryGrid.innerHTML = "";
 
-          return orderA - orderB;
 
-        });
+    categories.forEach(category => {
 
+      const card =
+        document.createElement("div");
 
-        categoryGrid.innerHTML = "";
 
+      card.className =
+        "category-card";
 
-        categories.forEach(category => {
 
-          const card =
-            document.createElement("div");
+      card.innerHTML = `
 
-          card.className =
-            "category-card";
+        <div class="category-icon">
+          ${category.icon || "📌"}
+        </div>
 
+        <div class="category-name">
+          ${category.name || ""}
+        </div>
 
-          card.innerHTML = `
+        ${
+          category.description
+            ? `
+              <div class="category-description">
+                ${category.description}
+              </div>
+            `
+            : ""
+        }
 
-            <div class="category-icon">
-              ${category.icon || "📌"}
-            </div>
+      `;
 
-            <div class="category-name">
-              ${category.name || ""}
-            </div>
 
-            ${
-              category.description
-                ? `
-                  <div class="category-description">
-                    ${category.description}
-                  </div>
-                `
-                : ""
-            }
-
-          `;
-
-
-          card.addEventListener("click", () => {
-
-            const categoryName =
-              category.name || "";
-
-
-            /* Special links */
-
-            if (
-              specialLinks[categoryName]
-            ) {
-
-              window.open(
-                specialLinks[categoryName],
-                "_blank"
-              );
-
-              return;
-
-            }
-
-
-            /* Other categories */
-
-            window.location.href =
-              `topic.html?id=${category.id}`;
-
-          });
-
-
-          categoryGrid.appendChild(card);
-
-        });
-
-
-        loading.style.display = "none";
-
-
-      } catch (error) {
-
-        console.error(
-          "Category loading error:",
-          error
-        );
-
-        loading.style.display = "none";
-
-        errorBox.style.display = "block";
-
-      }
-
-    }
-
-
-    loadCategories();
-
-
-    /* =========================
-       SLIDER
-    ========================= */
-
-    const slides =
-      document.getElementById("slides");
-
-    const dotsContainer =
-      document.getElementById("dots");
-
-
-    const totalSlides = 8;
-
-    let currentSlide = 0;
-
-
-    for (
-      let i = 0;
-      i < totalSlides;
-      i++
-    ) {
-
-      const dot =
-        document.createElement("span");
-
-      dot.className = "dot";
-
-
-      if (i === 0) {
-
-        dot.classList.add("active");
-
-      }
-
-
-      dot.addEventListener(
+      card.addEventListener(
         "click",
         () => {
 
-          currentSlide = i;
+          const categoryName =
+            category.name || "";
 
-          updateSlider();
+
+          if (
+            specialLinks[categoryName]
+          ) {
+
+            window.open(
+              specialLinks[categoryName],
+              "_blank"
+            );
+
+            return;
+
+          }
+
+
+          window.location.href =
+            `topic.html?id=${category.id}`;
 
         }
       );
 
 
-      dotsContainer.appendChild(dot);
+      categoryGrid.appendChild(card);
+
+    });
+
+
+    loading.style.display =
+      "none";
+
+
+  } catch (error) {
+
+    console.error(
+      "Category loading error:",
+      error
+    );
+
+
+    loading.style.display =
+      "none";
+
+
+    errorBox.style.display =
+      "block";
+
+  }
+
+}
+
+
+loadCategories();
+
+
+/* =========================
+   SLIDER
+========================= */
+
+const slides =
+  document.getElementById("slides");
+
+
+const dotsContainer =
+  document.getElementById("dots");
+
+
+const totalSlides = 8;
+
+let currentSlide = 0;
+
+
+for (
+  let i = 0;
+  i < totalSlides;
+  i++
+) {
+
+  const dot =
+    document.createElement("span");
+
+
+  dot.className =
+    "dot";
+
+
+  if (i === 0) {
+
+    dot.classList.add(
+      "active"
+    );
+
+  }
+
+
+  dot.addEventListener(
+    "click",
+    () => {
+
+      currentSlide = i;
+
+      updateSlider();
+
+    }
+  );
+
+
+  dotsContainer.appendChild(
+    dot
+  );
+
+}
+
+
+function updateSlider() {
+
+  slides.style.transform =
+    `translateX(-${currentSlide * 12.5}%)`;
+
+
+  const dots =
+    document.querySelectorAll(
+      ".dot"
+    );
+
+
+  dots.forEach(
+    (dot, index) => {
+
+      dot.classList.toggle(
+        "active",
+        index === currentSlide
+      );
+
+    }
+  );
+
+}
+
+
+setInterval(
+  () => {
+
+    currentSlide++;
+
+
+    if (
+      currentSlide >=
+      totalSlides
+    ) {
+
+      currentSlide = 0;
 
     }
 
 
-    function updateSlider() {
+    updateSlider();
 
-      slides.style.transform =
-        `translateX(-${currentSlide * 12.5}%)`;
-
-
-      const dots =
-        document.querySelectorAll(".dot");
+  },
+  4000
+);
 
 
-      dots.forEach((dot, index) => {
+/* =========================
+   INFORMATION MODAL
+========================= */
 
-        dot.classList.toggle(
-          "active",
-          index === currentSlide
-        );
+const addInfoBtn =
+  document.getElementById(
+    "addInfoBtn"
+  );
 
-      });
+
+const infoModal =
+  document.getElementById(
+    "infoModal"
+  );
+
+
+const closeInfoModal =
+  document.getElementById(
+    "closeInfoModal"
+  );
+
+
+addInfoBtn.addEventListener(
+  "click",
+  () => {
+
+    infoModal.style.display =
+      "block";
+
+  }
+);
+
+
+closeInfoModal.addEventListener(
+  "click",
+  () => {
+
+    infoModal.style.display =
+      "none";
+
+  }
+);
+
+
+/* =========================
+   BLOOD MODAL
+========================= */
+
+const bloodModal =
+  document.getElementById(
+    "bloodModal"
+  );
+
+
+const closeBloodModal =
+  document.getElementById(
+    "closeBloodModal"
+  );
+
+
+const bloodBackBtn =
+  document.getElementById(
+    "bloodBackBtn"
+  );
+
+
+const bloodSubmitBtn =
+  document.getElementById(
+    "bloodSubmitBtn"
+  );
+
+
+document
+  .querySelectorAll(
+    ".info-option"
+  )
+  .forEach(button => {
+
+    button.addEventListener(
+      "click",
+      () => {
+
+        const type =
+          button.dataset.type;
+
+
+        if (
+          type === "blood"
+        ) {
+
+          infoModal.style.display =
+            "none";
+
+
+          bloodModal.style.display =
+            "block";
+
+
+        } else {
+
+          alert(
+            "এই তথ্যের ফর্ম পরবর্তী ধাপে যোগ করা হবে।"
+          );
+
+        }
+
+      }
+    );
+
+  });
+
+
+closeBloodModal.addEventListener(
+  "click",
+  () => {
+
+    bloodModal.style.display =
+      "none";
+
+  }
+);
+
+
+bloodBackBtn.addEventListener(
+  "click",
+  () => {
+
+    bloodModal.style.display =
+      "none";
+
+
+    infoModal.style.display =
+      "block";
+
+  }
+);
+
+
+/* =========================
+   BLOOD DONOR
+   FIREBASE SUBMISSION
+========================= */
+
+bloodSubmitBtn.addEventListener(
+  "click",
+  async () => {
+
+
+    const bloodGroup =
+      document
+        .getElementById(
+          "bloodGroup"
+        )
+        .value;
+
+
+    const bloodName =
+      document
+        .getElementById(
+          "bloodName"
+        )
+        .value
+        .trim();
+
+
+    const bloodAddress =
+      document
+        .getElementById(
+          "bloodAddress"
+        )
+        .value
+        .trim();
+
+
+    const bloodMobile =
+      document
+        .getElementById(
+          "bloodMobile"
+        )
+        .value
+        .trim();
+
+
+    const bloodConsent =
+      document
+        .getElementById(
+          "bloodConsent"
+        )
+        .checked;
+
+
+    /* Validation */
+
+    if (!bloodGroup) {
+
+      alert(
+        "দয়া করে রক্তের গ্রুপ নির্বাচন করুন।"
+      );
+
+      return;
 
     }
 
 
-    setInterval(() => {
+    if (!bloodName) {
+
+      alert(
+        "দয়া করে নাম লিখুন।"
+      );
+
+      return;
+
+    }
+
+
+    if (!bloodAddress) {
+
+      alert(
+        "দয়া করে ঠিকানা লিখুন।"
+      );
+
+      return;
+
+    }
+
+
+    if (!bloodMobile) {
+
+      alert(
+        "দয়া করে মোবাইল নম্বর লিখুন।"
+      );
+
+      return;
+
+    }
+
+
+    if (!bloodConsent) {
+
+      alert(
+        "তথ্য প্রকাশের সম্মতিতে টিক চিহ্ন দিন।"
+      );
+
+      return;
+
+    }
+
+
+    try {
+
+      bloodSubmitBtn.disabled =
+        true;
+
+
+      bloodSubmitBtn.textContent =
+        "জমা হচ্ছে...";
+
+
+      /* IMPORTANT:
+         No automatic publication.
+         Status = pending
+      */
+
+      await addDoc(
+        collection(
+          db,
+          "submissions"
+        ),
+        {
+
+          type: "blood",
+
+          name: bloodName,
+
+          address: bloodAddress,
+
+          mobile: bloodMobile,
+
+          bloodGroup: bloodGroup,
+
+          status: "pending",
+
+          createdAt:
+            serverTimestamp()
+
+        }
+      );
+
+
+      alert(
+        "আপনার তথ্য সফলভাবে জমা হয়েছে।\n\n" +
+        "অ্যাডমিন যাচাই করার পর অনুমোদন করলে " +
+        "তথ্যটি রক্তদাতা টপিকে প্রকাশ হবে।"
+      );
+
+
+      /* Clear */
+
+      document.getElementById(
+        "bloodGroup"
+      ).value = "";
+
+
+      document.getElementById(
+        "bloodName"
+      ).value = "";
+
+
+      document.getElementById(
+        "bloodAddress"
+      ).value = "";
+
+
+      document.getElementById(
+        "bloodMobile"
+      ).value = "";
+
+
+      document.getElementById(
+        "bloodConsent"
+      ).checked = false;
+
+
+      bloodModal.style.display =
+        "none";
+
+
+    } catch (error) {
+
+      console.error(
+        "Firebase submission error:",
+        error
+      );
+
+
+      alert(
+        "তথ্য Firebase-এ জমা দেওয়া যায়নি।\n\n" +
+        "আবার চেষ্টা করুন।"
+      );
+
+
+    } finally {
+
+      bloodSubmitBtn.disabled =
+        false;
+
+
+      bloodSubmitBtn.textContent =
+        "জমা দিন";
+
+    }
+
+  }
+);
+
+
+/* =========================
+   MODAL CLOSE
+========================= */
+
+window.addEventListener(
+  "click",
+  event => {
+
+    if (
+      event.target === infoModal
+    ) {
+
+      infoModal.style.display =
+        "none";
+
+    }
+
+
+    if (
+      event.target === bloodModal
+    ) {
+
+      bloodModal.style.display =
+        "none";
+
+    }
+
+  }
+);
+
+
+/* =========================
+   SLIDER SWIPE
+========================= */
+
+let touchStartX = 0;
+
+let touchEndX = 0;
+
+
+slides.addEventListener(
+  "touchstart",
+  event => {
+
+    touchStartX =
+      event.changedTouches[0]
+        .screenX;
+
+  }
+);
+
+
+slides.addEventListener(
+  "touchend",
+  event => {
+
+    touchEndX =
+      event.changedTouches[0]
+        .screenX;
+
+
+    if (
+      touchEndX <
+      touchStartX - 50
+    ) {
 
       currentSlide++;
 
+
       if (
-        currentSlide >= totalSlides
+        currentSlide >=
+        totalSlides
       ) {
 
         currentSlide = 0;
 
       }
 
+
       updateSlider();
 
-    }, 4000);
+    }
 
 
-    /* =========================
-       INFORMATION MODAL
-    ========================= */
+    if (
+      touchEndX >
+      touchStartX + 50
+    ) {
 
-    const addInfoBtn =
-      document.getElementById("addInfoBtn");
-
-    const infoModal =
-      document.getElementById("infoModal");
-
-    const closeInfoModal =
-      document.getElementById("closeInfoModal");
+      currentSlide--;
 
 
-    addInfoBtn.addEventListener(
-      "click",
-      () => {
+      if (
+        currentSlide < 0
+      ) {
 
-        infoModal.style.display =
-          "block";
+        currentSlide =
+          totalSlides - 1;
 
       }
-    );
 
 
-    closeInfoModal.addEventListener(
-      "click",
-      () => {
+      updateSlider();
 
-        infoModal.style.display =
-          "none";
+    }
 
-      }
-    );
+  }
+);
 
-
-    /* =========================
-       BLOOD MODAL
-    ========================= */
-
-    const bloodModal =
-      document.getElementById("bloodModal");
-
-    const closeBloodModal =
-      document.getElementById("closeBloodModal");
-
-    const bloodBackBtn =
-      document.getElementById("bloodBackBtn");
-
-    const bloodSubmitBtn =
-      document.getElementById("bloodSubmitBtn");
-
-
-    document
-      .querySelectorAll(".info-option")
-      .forEach(button => {
-
-        button.addEventListener(
-          "click",
-          () => {
-
-            const type =
-              button.dataset.type;
-
-
-            if (type === "blood") {
-
-              infoModal.style.display =
-                "none";
-
-              bloodModal.style.display =
-                "block";
-
-            } else {
-
-              alert(
-                "এই তথ্যের ফর্ম পরবর্তী ধাপে যোগ করা হবে।"
-              );
-
-            }
-
-          }
-        );
-
-      });
-
-
-    closeBloodModal.addEventListener(
-      "click",
-      () => {
-
-        bloodModal.style.display =
-          "none";
-
-      }
-    );
-
-
-    bloodBackBtn.addEventListener(
-      "click",
-      () => {
-
-        bloodModal.style.display =
-          "none";
-
-        infoModal.style.display =
-          "block";
-
-      }
-    );
-
-
-    /* =========================
-       BLOOD DONOR SUBMISSION
-    ========================= */
-
-    bloodSubmitBtn.addEventListener(
-      "click",
-      async () => {
-
-
-        const bloodGroup =
-          document
-            .getElementById("bloodGroup")
-            .value;
-
-
-        const bloodName =
-          document
-            .getElementById("bloodName")
-            .value
-            .trim();
-
-
-        const bloodAddress =
-          document
-            .getElementById("bloodAddress")
-            .value
-            .trim();
-
-
-        const bloodMobile =
-          document
-            .getElementById("bloodMobile")
-            .value
-            .trim();
-
-
-        const bloodConsent =
-          document
-            .getElementById("bloodConsent")
-            .checked;
-
-
-        /* Validation */
-
-        if (!bloodGroup) {
-
-          alert(
-            "দয়া করে রক্তের গ্রুপ নির্বাচন করুন।"
-          );
-
-          return;
-
-        }
-
-
-        if (!bloodName) {
-
-          alert(
-            "দয়া করে নাম লিখুন।"
-          );
-
-          return;
-
-        }
-
-
-        if (!bloodAddress) {
-
-          alert(
-            "দয়া করে ঠিকানা লিখুন।"
-          );
-
-          return;
-
-        }
-
-
-        if (!bloodMobile) {
-
-          alert(
-            "দয়া করে মোবাইল নম্বর লিখুন।"
-          );
-
-          return;
-
-        }
-
-
-        if (!bloodConsent) {
-
-          alert(
-            "তথ্য প্রকাশের সম্মতিতে টিক চিহ্ন দিন।"
-          );
-
-          return;
-
-        }
-
-
-        try {
-
-          /* Button loading */
-
-          bloodSubmitBtn.disabled = true;
-
-          bloodSubmitBtn.textContent =
-            "জমা হচ্ছে...";
-
-
-          /* Firebase submission */
-
-          await addDoc(
-            collection(
-              db,
-              "submissions"
-            ),
-            {
-
-              type: "blood",
-
-              name: bloodName,
-
-              address: bloodAddress,
-
-              mobile: bloodMobile,
-
-              bloodGroup: bloodGroup,
-
-              status: "pending",
-
-              createdAt:
-                serverTimestamp()
-
-            }
-          );
-
-
-          /* Success */
-
-          alert(
-            "আপনার তথ্য সফলভাবে জমা হয়েছে।\n\n" +
-            "অ্যাডমিন যাচাই করার পর অনুমোদন করলে " +
-            "তথ্যটি রক্তদাতা টপিকে প্রকাশ হবে।"
-          );
-
-
-          /* Reset form */
-
-          document
-            .getElementById("bloodGroup")
-            .value = "";
-
-
-          document
-            .getElementById("bloodName")
-            .value = "";
-
-
-          document
-            .getElementById("bloodAddress")
-            .value = "";
-
-
-          document
-            .getElementById("bloodMobile")
-            .value = "";
-
-
-          document
-            .getElementById("bloodConsent")
-            .checked = false;
-
-
-          /* Close modal */
-
-          bloodModal.style.display =
-            "none";
-
-
-        } catch (error) {
-
-          console.error(
-            "Blood donor submission error:",
-            error
-          );
-
-
-          alert(
-            "তথ্য জমা দেওয়া যায়নি।\n\n" +
-            "ইন্টারনেট সংযোগ পরীক্ষা করে আবার চেষ্টা করুন।"
-          );
-
-
-        } finally {
-
-          bloodSubmitBtn.disabled =
-            false;
-
-          bloodSubmitBtn.textContent =
-            "জমা দিন";
-
-        }
-
-      }
-    );
-
-
-    /* =========================
-       MODAL OUTSIDE CLICK
-    ========================= */
-
-    window.addEventListener(
-      "click",
-      (event) => {
-
-        if (
-          event.target === infoModal
-        ) {
-
-          infoModal.style.display =
-            "none";
-
-        }
-
-
-        if (
-          event.target === bloodModal
-        ) {
-
-          bloodModal.style.display =
-            "none";
-
-        }
-
-      }
-    );
-
-
-    /* =========================
-       SLIDER SWIPE
-    ========================= */
-
-    let touchStartX = 0;
-
-    let touchEndX = 0;
-
-
-    slides.addEventListener(
-      "touchstart",
-      event => {
-
-        touchStartX =
-          event.changedTouches[0].screenX;
-
-      }
-    );
-
-
-    slides.addEventListener(
-      "touchend",
-      event => {
-
-        touchEndX =
-          event.changedTouches[0].screenX;
-
-
-        if (
-          touchEndX < touchStartX - 50
-        ) {
-
-          currentSlide++;
-
-          if (
-            currentSlide >= totalSlides
-          ) {
-
-            currentSlide = 0;
-
-          }
-
-          updateSlider();
-
-        }
-
-
-        if (
-          touchEndX > touchStartX + 50
-        ) {
-
-          currentSlide--;
-
-          if (
-            currentSlide < 0
-          ) {
-
-            currentSlide =
-              totalSlides - 1;
-
-          }
-
-          updateSlider();
-
-        }
-
-      }
-    );
-
-  </script>
+</script>
 
 </body>
 </html>
