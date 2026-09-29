@@ -3,236 +3,285 @@
 
 <head>
 
-  <meta charset="UTF-8">
+<meta charset="UTF-8">
 
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0">
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1.0">
 
-  <title>আমাদের জয়পুরহাট</title>
+<title>আমাদের জয়পুরহাট</title>
 
-  <style>
+<style>
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+*{
+box-sizing:border-box;
+margin:0;
+padding:0;
+}
 
-    body {
-      font-family: Arial, sans-serif;
-      background: #f5f7fa;
-      color: #222;
-    }
+body{
+font-family:Arial,sans-serif;
+background:#f5f7fa;
+color:#222;
+}
 
-    header {
-      background: linear-gradient(
-        135deg,
-        #0f766e,
-        #14b8a6
-      );
+header{
+background:linear-gradient(
+135deg,
+#0f766e,
+#14b8a6
+);
+color:white;
+padding:22px 18px;
+text-align:center;
+}
 
-      color: white;
-      padding: 22px 18px;
-      text-align: center;
-    }
+header h1{
+font-size:23px;
+}
 
-    header h1 {
-      font-size: 23px;
-    }
+.container{
+padding:18px 15px 35px;
+max-width:800px;
+margin:auto;
+}
 
-    .container {
-      padding: 18px 15px 35px;
-      max-width: 800px;
-      margin: auto;
-    }
+.back{
+display:inline-block;
+margin-bottom:15px;
+color:#0f766e;
+font-weight:bold;
+text-decoration:none;
+}
 
-    .back {
-      display: inline-block;
-      margin-bottom: 15px;
-      color: #0f766e;
-      font-weight: bold;
-      text-decoration: none;
-    }
+.title,
+.card,
+.info-section,
+.post-card{
 
-    .title,
-    .card,
-    .info-section,
-    .post-card {
+background:white;
+padding:20px;
+border-radius:16px;
+margin-bottom:14px;
 
-      background: white;
-      padding: 20px;
-      border-radius: 16px;
-      margin-bottom: 14px;
+box-shadow:
+0 3px 12px rgba(0,0,0,0.08);
+}
 
-      box-shadow:
-        0 3px 12px rgba(0,0,0,0.08);
-    }
+.title .icon,
+.card .icon{
+font-size:38px;
+margin-bottom:8px;
+}
 
-    .title .icon,
-    .card .icon {
-      font-size: 38px;
-      margin-bottom: 8px;
-    }
+.title h2{
+font-size:23px;
+margin-bottom:8px;
+}
 
-    .title h2 {
-      font-size: 23px;
-      margin-bottom: 8px;
-    }
+.title p{
+line-height:1.8;
+color:#444;
+font-size:16px;
+}
 
-    .title p {
-      line-height: 1.8;
-      color: #444;
-      font-size: 16px;
-    }
+.card{
+cursor:pointer;
+transition:0.2s;
+}
 
-    .card {
-      cursor: pointer;
-      transition: 0.2s;
-    }
+.card:active{
+transform:scale(0.98);
+}
 
-    .card:active {
-      transform: scale(0.98);
-    }
+.card h3{
+color:#0f766e;
+font-size:19px;
+margin-bottom:6px;
+}
 
-    .card h3 {
-      color: #0f766e;
-      font-size: 19px;
-      margin-bottom: 6px;
-    }
+.card p{
+color:#666;
+line-height:1.7;
+font-size:15px;
+}
 
-    .card p {
-      color: #666;
-      line-height: 1.7;
-      font-size: 15px;
-    }
+.info-heading{
+color:#0f766e;
+font-size:19px;
+font-weight:bold;
+margin-bottom:10px;
+}
 
-    .info-heading {
-      color: #0f766e;
-      font-size: 19px;
-      font-weight: bold;
-      margin-bottom: 10px;
-    }
+.info-text{
+color:#444;
+font-size:16px;
+line-height:1.9;
+white-space:pre-wrap;
+word-break:break-word;
+}
 
-    .info-text {
-      color: #444;
-      font-size: 16px;
-      line-height: 1.9;
-      white-space: pre-wrap;
-      word-break: break-word;
-    }
+.section-title{
+font-size:20px;
+font-weight:bold;
+margin:20px 0 12px;
+}
 
-    .section-title {
-      font-size: 20px;
-      font-weight: bold;
-      margin: 20px 0 12px;
-    }
+.loading{
+text-align:center;
+padding:30px;
+color:#666;
+}
 
-    .loading {
-      text-align: center;
-      padding: 30px;
-      color: #666;
-    }
-
-    .error {
-      background: white;
-      padding: 20px;
-      border-radius: 15px;
-      text-align: center;
-      color: #b91c1c;
-    }
-
-
-    /* ===============================
-       IMAGE POST
-       =============================== */
-
-    .posts-section-title {
-      font-size: 20px;
-      font-weight: bold;
-      margin: 25px 0 12px;
-      color: #222;
-    }
-
-    .post-card {
-      overflow: hidden;
-      padding: 0;
-    }
-
-    .post-caption {
-      padding: 16px 18px 8px;
-      font-size: 16px;
-      line-height: 1.8;
-      color: #333;
-      white-space: pre-wrap;
-      word-break: break-word;
-    }
-
-    .post-time {
-      padding: 0 18px 14px;
-      color: #888;
-      font-size: 13px;
-    }
-
-    .post-images {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-
-    .post-images img {
-      width: 100%;
-      display: block;
-      max-height: 600px;
-      object-fit: cover;
-      background: #eee;
-    }
-
-    .post-images img:only-child {
-      max-height: 650px;
-    }
+.error{
+background:white;
+padding:20px;
+border-radius:15px;
+text-align:center;
+color:#b91c1c;
+}
 
 
-    footer {
-      margin-top: 30px;
-      padding: 25px 15px;
-      text-align: center;
-      background: #f1f5f9;
-      border-top: 1px solid #ddd;
-      line-height: 1.7;
-    }
+/* =========================
+   BLOOD DONOR
+========================= */
 
-    footer a {
-      display: inline-block;
-      margin: 5px;
-      padding: 10px 16px;
-      color: white;
-      text-decoration: none;
-      border-radius: 8px;
-      font-weight: bold;
-    }
+.blood-section-title{
+font-size:20px;
+font-weight:bold;
+margin:25px 0 12px;
+color:#222;
+}
 
-    .whatsapp {
-      background: #25D366;
-    }
+.blood-card{
+background:white;
+border-radius:15px;
+padding:17px;
+margin-bottom:12px;
+box-shadow:
+0 3px 12px rgba(0,0,0,0.08);
+border-left:5px solid #dc3545;
+}
 
-    .facebook {
-      background: #1877F2;
-    }
+.blood-group{
+display:inline-block;
+background:#ffe5e5;
+color:#c1121f;
+font-size:20px;
+font-weight:bold;
+padding:7px 12px;
+border-radius:8px;
+margin-bottom:10px;
+}
 
-  </style>
+.blood-name{
+font-size:19px;
+font-weight:bold;
+color:#222;
+margin-bottom:8px;
+}
+
+.blood-info{
+font-size:15px;
+line-height:1.8;
+color:#444;
+}
+
+.blood-mobile{
+font-size:15px;
+color:#444;
+margin-top:5px;
+}
+
+
+/* ===============================
+IMAGE POST
+=============================== */
+
+.posts-section-title{
+font-size:20px;
+font-weight:bold;
+margin:25px 0 12px;
+color:#222;
+}
+
+.post-card{
+overflow:hidden;
+padding:0;
+}
+
+.post-caption{
+padding:16px 18px 8px;
+font-size:16px;
+line-height:1.8;
+color:#333;
+white-space:pre-wrap;
+word-break:break-word;
+}
+
+.post-time{
+padding:0 18px 14px;
+color:#888;
+font-size:13px;
+}
+
+.post-images{
+display:flex;
+flex-direction:column;
+gap:8px;
+}
+
+.post-images img{
+width:100%;
+display:block;
+max-height:600px;
+object-fit:cover;
+background:#eee;
+}
+
+.post-images img:only-child{
+max-height:650px;
+}
+
+footer{
+margin-top:30px;
+padding:25px 15px;
+text-align:center;
+background:#f1f5f9;
+border-top:1px solid #ddd;
+line-height:1.7;
+}
+
+footer a{
+display:inline-block;
+margin:5px;
+padding:10px 16px;
+color:white;
+text-decoration:none;
+border-radius:8px;
+font-weight:bold;
+}
+
+.whatsapp{
+background:#25D366;
+}
+
+.facebook{
+background:#1877F2;
+}
+
+</style>
 
 </head>
-
 
 <body>
 
 
 <header>
 
-  <h1>
-    আমাদের জয়পুরহাট
-  </h1>
+<h1>
+আমাদের জয়পুরহাট
+</h1>
 
 </header>
 
@@ -240,24 +289,24 @@
 <div class="container">
 
 
-  <a
-    href="index.html"
-    class="back">
+<a
+href="index.html"
+class="back">
 
-    ← ফিরে যান
+← ফিরে যান
 
-  </a>
+</a>
 
 
-  <div id="categoryBox"></div>
+<div id="categoryBox"></div>
 
-  <div id="upazilaList"></div>
+<div id="upazilaList"></div>
 
-  <div id="contents"></div>
+<div id="contents"></div>
 
-  <!-- IMAGE POSTS -->
+<div id="bloodDonors"></div>
 
-  <div id="imagePosts"></div>
+<div id="imagePosts"></div>
 
 
 </div>
@@ -265,1199 +314,1376 @@
 
 <footer>
 
-  <div
-    style="font-weight:bold; margin-bottom:10px;">
+<div
+style="font-weight:bold;margin-bottom:10px;">
 
-    © 2026 আমাদের জয়পুরহাট
+© 2026 আমাদের জয়পুরহাট
 
-  </div>
+</div>
 
+<div
+style="font-size:14px;margin-bottom:12px;">
 
-  <div
-    style="font-size:14px; margin-bottom:12px;">
+উপরোক্ত তথ্যে কোনো ভুল বা সংশোধনের প্রয়োজন হলে
+অনুগ্রহ করে যোগাযোগ করুন। যাচাই সাপেক্ষে প্রয়োজনীয়
+সংশোধন করা হবে।
 
-    উপরোক্ত তথ্যে কোনো ভুল বা সংশোধনের প্রয়োজন হলে
-    অনুগ্রহ করে যোগাযোগ করুন। যাচাই সাপেক্ষে প্রয়োজনীয়
-    সংশোধন করা হবে।
+</div>
 
-  </div>
+<div style="font-weight:bold;">
+Md. Asib Islam
+</div>
 
+<div style="font-size:14px;">
+Uchan, Dharanji, Panchbibi, Joypurhat
+</div>
 
-  <div style="font-weight:bold;">
+<div
+style="font-size:14px;margin-top:4px;">
 
-    Md. Asib Islam
+📞 013-19058313
 
-  </div>
+</div>
 
+<div style="margin-top:15px;">
 
-  <div style="font-size:14px;">
+<a
+class="whatsapp"
+href="https://wa.me/8801319058313"
+target="_blank">
 
-    Uchan, Dharanji, Panchbibi, Joypurhat
+💬 WhatsApp
 
-  </div>
+</a>
 
+<a
+class="facebook"
+href="https://www.facebook.com/Asibislam01"
+target="_blank">
 
-  <div
-    style="font-size:14px; margin-top:4px;">
+📘 Facebook
 
-    📞 013-19058313
+</a>
 
-  </div>
-
-
-  <div style="margin-top:15px;">
-
-    <a
-      class="whatsapp"
-      href="https://wa.me/8801319058313"
-      target="_blank">
-
-      💬 WhatsApp
-
-    </a>
-
-
-    <a
-      class="facebook"
-      href="https://www.facebook.com/Asibislam01"
-      target="_blank">
-
-      📘 Facebook
-
-    </a>
-
-  </div>
+</div>
 
 </footer>
 
 
-
 <script type="module">
 
-
-import { initializeApp }
-
-from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+import {
+initializeApp
+}
+from
+"https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
 
 
 import {
-
-  getFirestore,
-  collection,
-  getDocs
-
+getFirestore,
+collection,
+getDocs
 }
-
-from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
-
+from
+"https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
 
 const firebaseConfig = {
 
-  apiKey:
-    "AIzaSyAG05o2MjHH3UL8Gp7VNmrQGeqq-4YrDEk",
+apiKey:
+"AIzaSyAG05o2MjHH3UL8Gp7VNmrQGeqq-4YrDEk",
 
-  authDomain:
-    "amader-joypurhat-7b3fb.firebaseapp.com",
+authDomain:
+"amader-joypurhat-7b3fb.firebaseapp.com",
 
-  projectId:
-    "amader-joypurhat-7b3fb",
+projectId:
+"amader-joypurhat-7b3fb",
 
-  storageBucket:
-    "amader-joypurhat-7b3fb.firebasestorage.app",
+storageBucket:
+"amader-joypurhat-7b3fb.firebasestorage.app",
 
-  messagingSenderId:
-    "542366008798",
+messagingSenderId:
+"542366008798",
 
-  appId:
-    "1:542366008798:web:4f9a7c210b561406a5494f"
+appId:
+"1:542366008798:web:4f9a7c210b561406a5494f"
 
 };
 
 
-
 const app =
-  initializeApp(firebaseConfig);
-
+initializeApp(
+firebaseConfig
+);
 
 const db =
-  getFirestore(app);
-
+getFirestore(app);
 
 
 const params =
-  new URLSearchParams(
-    window.location.search
-  );
-
+new URLSearchParams(
+window.location.search
+);
 
 const categoryId =
-  params.get("id");
-
+params.get("id");
 
 
 const upazilas = [
 
+{
+name:"জয়পুরহাট সদর উপজেলা",
+ids:[
+"joypurhat-sadar",
+"joypurhat_sadar",
+"joypurhat-sadar-upazila"
+]
+},
 
-  {
+{
+name:"পাঁচবিবি উপজেলা",
+ids:[
+"panchbibi",
+"panchbibi-upazila",
+"panchbibi_upazila"
+]
+},
 
-    name: "জয়পুরহাট সদর উপজেলা",
+{
+name:"আক্কেলপুর উপজেলা",
+ids:[
+"akkelpur",
+"akkelpur-upazila",
+"akkelpur_upazila"
+]
+},
 
-    ids: [
-      "joypurhat-sadar",
-      "joypurhat_sadar",
-      "joypurhat-sadar-upazila"
-    ]
+{
+name:"কালাই উপজেলা",
+ids:[
+"kalai",
+"kalai-upazila",
+"kalai_upazila"
+]
+},
 
-  },
-
-
-  {
-
-    name: "পাঁচবিবি উপজেলা",
-
-    ids: [
-      "panchbibi",
-      "panchbibi-upazila",
-      "panchbibi_upazila"
-    ]
-
-  },
-
-
-  {
-
-    name: "আক্কেলপুর উপজেলা",
-
-    ids: [
-      "akkelpur",
-      "akkelpur-upazila",
-      "akkelpur_upazila"
-    ]
-
-  },
-
-
-  {
-
-    name: "কালাই উপজেলা",
-
-    ids: [
-      "kalai",
-      "kalai-upazila",
-      "kalai_upazila"
-    ]
-
-  },
-
-
-  {
-
-    name: "ক্ষেতলাল উপজেলা",
-
-    ids: [
-      "khetlal",
-      "khetlal-upazila",
-      "khetlal_upazila"
-    ]
-
-  }
-
+{
+name:"ক্ষেতলাল উপজেলা",
+ids:[
+"khetlal",
+"khetlal-upazila",
+"khetlal_upazila"
+]
+}
 
 ];
 
 
+/* =========================
+   PHONE
+========================= */
 
-/* =====================================
-   বাংলা সংখ্যা → ইংরেজি সংখ্যা
-   ===================================== */
+function makePhoneLinks(text){
 
-function banglaToEnglishNumber(text) {
-
-  const banglaNumbers =
-    "০১২৩৪৫৬৭৮৯";
-
-  const englishNumbers =
-    "0123456789";
-
-
-  return text.replace(
-    /[০-৯]/g,
-    function(char) {
-
-      return englishNumbers[
-        banglaNumbers.indexOf(char)
-      ];
-
-    }
-  );
+return text;
 
 }
 
 
+/* =========================
+   TIME
+========================= */
 
-/* =====================================
-   PHONE NUMBER → NORMAL TEXT
-   ===================================== */
+function formatPostTime(timestamp){
 
-function makePhoneLinks(text) {
+if(!timestamp){
+return "";
+}
 
-  return text;
+try{
+
+let date;
+
+if(
+timestamp &&
+typeof timestamp.toDate ===
+"function"
+){
+
+date =
+timestamp.toDate();
+
+}
+
+else if(
+timestamp.seconds
+){
+
+date =
+new Date(
+timestamp.seconds * 1000
+);
+
+}
+
+else{
+
+date =
+new Date(timestamp);
+
+}
+
+if(
+isNaN(
+date.getTime()
+)
+){
+
+return "";
+
+}
+
+return date.toLocaleString(
+"bn-BD",
+{
+year:"numeric",
+month:"long",
+day:"numeric",
+hour:"numeric",
+minute:"2-digit"
+}
+);
+
+}
+catch(error){
+
+return "";
+
+}
 
 }
 
 
+/* =====================================================
+   BLOOD DONORS
+===================================================== */
 
-/* =====================================
-   IMAGE POST TIME
-   ===================================== */
+async function loadBloodDonors(){
 
-function formatPostTime(timestamp) {
-
-  if (!timestamp) {
-
-    return "";
-
-  }
+const bloodDonors =
+document.getElementById(
+"bloodDonors"
+);
 
 
-  try {
-
-    let date;
-
-
-    if (
-      timestamp &&
-      typeof timestamp.toDate === "function"
-    ) {
-
-      date =
-        timestamp.toDate();
-
-    }
-
-    else if (
-      timestamp.seconds
-    ) {
-
-      date =
-        new Date(
-          timestamp.seconds * 1000
-        );
-
-    }
-
-    else {
-
-      date =
-        new Date(timestamp);
-
-    }
+bloodDonors.innerHTML =
+"";
 
 
-    if (
-      isNaN(date.getTime())
-    ) {
+try{
 
-      return "";
+const snapshot =
+await getDocs(
+collection(
+db,
+"submissions"
+)
+);
 
-    }
+
+const donors = [];
 
 
-    return date.toLocaleString(
-      "bn-BD",
-      {
-        year: "numeric",
-        month: "long",
-        day: "numeric",
-        hour: "numeric",
-        minute: "2-digit"
-      }
-    );
+snapshot.forEach(
+function(donorDoc){
 
-  }
+const data =
+donorDoc.data();
 
-  catch (error) {
 
-    return "";
+/*
+শুধু blood + approved
+*/
 
-  }
+if(
+data.type === "blood" &&
+data.status === "approved"
+){
+
+donors.push({
+
+id:
+donorDoc.id,
+
+...data
+
+});
+
+}
+
+});
+
+
+/*
+নতুন approved donor আগে
+*/
+
+donors.sort(
+function(a,b){
+
+const aTime =
+a.createdAt &&
+typeof a.createdAt.toMillis ===
+"function"
+?
+a.createdAt.toMillis()
+:
+0;
+
+const bTime =
+b.createdAt &&
+typeof b.createdAt.toMillis ===
+"function"
+?
+b.createdAt.toMillis()
+:
+0;
+
+return bTime-aTime;
+
+}
+);
+
+
+if(
+donors.length === 0
+){
+
+bloodDonors.innerHTML = `
+
+<div class="blood-section-title">
+
+🩸 রক্তদাতা
+
+</div>
+
+<div class="loading">
+
+বর্তমানে কোনো অনুমোদিত রক্তদাতার তথ্য নেই।
+
+</div>
+
+`;
+
+return;
 
 }
 
 
+bloodDonors.innerHTML = `
 
-/* =====================================
-   LOAD IMAGE POSTS
-   ===================================== */
+<div class="blood-section-title">
 
-async function loadImagePosts() {
+🩸 রক্তদাতা তালিকা
 
+</div>
 
-  const imagePosts =
-    document.getElementById(
-      "imagePosts"
-    );
+`;
 
 
-  imagePosts.innerHTML =
-    "";
+donors.forEach(
+function(donor){
 
+const card =
+document.createElement(
+"div"
+);
 
-  if (!categoryId) {
+card.className =
+"blood-card";
 
-    return;
 
-  }
+card.innerHTML = `
 
+<div class="blood-group">
 
-  try {
+🩸 ${escapeHTML(
+donor.bloodGroup ||
+""
+)}
 
+</div>
 
-    const postsSnapshot =
-      await getDocs(
-        collection(
-          db,
-          "posts"
-        )
-      );
+<div class="blood-name">
 
+${escapeHTML(
+donor.name ||
+""
+)}
 
-    const posts = [];
+</div>
 
+<div class="blood-info">
 
-    postsSnapshot.forEach(
-      (doc) => {
+📍 <b>ঠিকানা:</b>
+${escapeHTML(
+donor.address ||
+""
+)}
 
+</div>
 
-        const data =
-          doc.data();
+<div class="blood-mobile">
 
+📱 <b>মোবাইল:</b>
+${escapeHTML(
+donor.mobile ||
+""
+)}
 
-        if (
-          String(
-            data.categoryId || ""
-          ).trim()
-          ===
-          String(categoryId).trim()
-        ) {
+</div>
 
+`;
 
-          posts.push({
+bloodDonors.appendChild(
+card
+);
 
-            id: doc.id,
+});
 
-            ...data
 
-          });
+}
+catch(error){
 
-        }
+console.error(
+"Blood Donor Error:",
+error
+);
 
-      }
-    );
+bloodDonors.innerHTML = "";
 
-
-    /* নতুন পোস্ট আগে */
-
-    posts.sort(
-      (a, b) => {
-
-
-        let dateA = 0;
-        let dateB = 0;
-
-
-        if (
-          a.createdAt &&
-          typeof a.createdAt.toMillis === "function"
-        ) {
-
-          dateA =
-            a.createdAt.toMillis();
-
-        }
-
-
-        if (
-          b.createdAt &&
-          typeof b.createdAt.toMillis === "function"
-        ) {
-
-          dateB =
-            b.createdAt.toMillis();
-
-        }
-
-
-        return dateB - dateA;
-
-      }
-    );
-
-
-    if (posts.length === 0) {
-
-      return;
-
-    }
-
-
-    imagePosts.innerHTML = `
-
-      <div class="posts-section-title">
-
-        🖼️ Image Posts
-
-      </div>
-
-    `;
-
-
-    posts.forEach(
-      (post) => {
-
-
-        const card =
-          document.createElement(
-            "div"
-          );
-
-
-        card.className =
-          "post-card";
-
-
-        let images =
-          post.images || [];
-
-
-        /*
-          যদি images Array না হয়,
-          তাহলে একটি ছবি হিসেবে ধরবে।
-        */
-
-        if (
-          !Array.isArray(images)
-        ) {
-
-          images =
-            [images];
-
-        }
-
-
-        const validImages =
-          images.filter(
-            (url) =>
-              typeof url === "string" &&
-              url.trim() !== ""
-          );
-
-
-        let imagesHTML =
-          "";
-
-
-        validImages.forEach(
-          (url) => {
-
-
-            imagesHTML += `
-
-              <img
-                src="${url}"
-                alt="আমাদের জয়পুরহাট"
-                loading="lazy"
-                onerror="this.style.display='none';">
-
-            `;
-
-          }
-        );
-
-
-        const caption =
-          post.caption || "";
-
-
-        const postTime =
-          formatPostTime(
-            post.createdAt
-          );
-
-
-        card.innerHTML = `
-
-          ${
-            imagesHTML
-            ?
-            `
-            <div class="post-images">
-
-              ${imagesHTML}
-
-            </div>
-            `
-            :
-            ""
-          }
-
-
-          ${
-            caption
-            ?
-            `
-            <div class="post-caption">
-
-              ${caption}
-
-            </div>
-            `
-            :
-            ""
-          }
-
-
-          ${
-            postTime
-            ?
-            `
-            <div class="post-time">
-
-              🕐 ${postTime}
-
-            </div>
-            `
-            :
-            ""
-          }
-
-        `;
-
-
-        imagePosts.appendChild(
-          card
-        );
-
-      }
-    );
-
-
-  }
-
-  catch (error) {
-
-    console.error(
-      "Image Posts Error:",
-      error
-    );
-
-  }
+}
 
 }
 
 
+/* =====================================================
+   IMAGE POSTS
+===================================================== */
 
-/* =====================================
+async function loadImagePosts(){
+
+const imagePosts =
+document.getElementById(
+"imagePosts"
+);
+
+imagePosts.innerHTML =
+"";
+
+
+if(!categoryId){
+return;
+}
+
+
+try{
+
+const postsSnapshot =
+await getDocs(
+collection(
+db,
+"posts"
+)
+);
+
+
+const posts = [];
+
+
+postsSnapshot.forEach(
+function(postDoc){
+
+const data =
+postDoc.data();
+
+
+if(
+String(
+data.categoryId || ""
+).trim()
+===
+String(
+categoryId
+).trim()
+){
+
+posts.push({
+
+id:
+postDoc.id,
+
+...data
+
+});
+
+}
+
+});
+
+
+posts.sort(
+function(a,b){
+
+let dateA = 0;
+let dateB = 0;
+
+
+if(
+a.createdAt &&
+typeof a.createdAt.toMillis ===
+"function"
+){
+
+dateA =
+a.createdAt.toMillis();
+
+}
+
+
+if(
+b.createdAt &&
+typeof b.createdAt.toMillis ===
+"function"
+){
+
+dateB =
+b.createdAt.toMillis();
+
+}
+
+
+return dateB-dateA;
+
+}
+);
+
+
+if(
+posts.length === 0
+){
+
+return;
+
+}
+
+
+imagePosts.innerHTML = `
+
+<div class="posts-section-title">
+
+🖼️ Image Posts
+
+</div>
+
+`;
+
+
+posts.forEach(
+function(post){
+
+const card =
+document.createElement(
+"div"
+);
+
+card.className =
+"post-card";
+
+
+let images =
+post.images || [];
+
+
+if(
+!Array.isArray(images)
+){
+
+images =
+[images];
+
+}
+
+
+const validImages =
+images.filter(
+function(url){
+
+return (
+typeof url === "string" &&
+url.trim() !== ""
+);
+
+}
+);
+
+
+let imagesHTML = "";
+
+
+validImages.forEach(
+function(url){
+
+imagesHTML += `
+
+<img
+src="${escapeAttribute(url)}"
+alt="আমাদের জয়পুরহাট"
+loading="lazy"
+onerror="this.style.display='none';">
+
+`;
+
+});
+
+
+const caption =
+post.caption || "";
+
+
+const postTime =
+formatPostTime(
+post.createdAt
+);
+
+
+card.innerHTML = `
+
+${
+imagesHTML
+?
+`
+<div class="post-images">
+
+${imagesHTML}
+
+</div>
+`
+:
+""
+}
+
+${
+caption
+?
+`
+<div class="post-caption">
+
+${escapeHTML(caption)}
+
+</div>
+`
+:
+""
+}
+
+${
+postTime
+?
+`
+<div class="post-time">
+
+🕐 ${postTime}
+
+</div>
+`
+:
+""
+}
+
+`;
+
+
+imagePosts.appendChild(
+card
+);
+
+});
+
+}
+catch(error){
+
+console.error(
+"Image Posts Error:",
+error
+);
+
+}
+
+}
+
+
+/* =====================================================
    DATA LOAD
-   ===================================== */
+===================================================== */
 
-async function loadData() {
+async function loadData(){
 
+const categoryBox =
+document.getElementById(
+"categoryBox"
+);
 
-  const categoryBox =
-    document.getElementById(
-      "categoryBox"
-    );
+const upazilaList =
+document.getElementById(
+"upazilaList"
+);
 
+const contents =
+document.getElementById(
+"contents"
+);
 
-  const upazilaList =
-    document.getElementById(
-      "upazilaList"
-    );
 
+if(!categoryId){
 
-  const contents =
-    document.getElementById(
-      "contents"
-    );
+categoryBox.innerHTML =
+"<div class='error'>Topic পাওয়া যায়নি।</div>";
 
-
-  if (!categoryId) {
-
-    categoryBox.innerHTML =
-      "<div class='error'>Topic পাওয়া যায়নি।</div>";
-
-    return;
-
-  }
-
-
-  try {
-
-
-    const categorySnapshot =
-      await getDocs(
-        collection(
-          db,
-          "categories"
-        )
-      );
-
-
-    let categoryData =
-      null;
-
-
-    categorySnapshot.forEach(
-      (doc) => {
-
-
-        if (
-          doc.id === categoryId
-        ) {
-
-          categoryData =
-            doc.data();
-
-        }
-
-      }
-    );
-
-
-    if (!categoryData) {
-
-      categoryBox.innerHTML =
-        "<div class='error'>Topic পাওয়া যায়নি।</div>";
-
-      return;
-
-    }
-
-
-    categoryBox.innerHTML = `
-
-      <div class="title">
-
-        <div class="icon">
-
-          ${categoryData.icon || "📌"}
-
-        </div>
-
-
-        <h2>
-
-          ${categoryData.name || ""}
-
-        </h2>
-
-
-        <p>
-
-          ${categoryData.description || ""}
-
-        </p>
-
-      </div>
-
-    `;
-
-
-    const contentSnapshot =
-      await getDocs(
-        collection(
-          db,
-          "contents"
-        )
-      );
-
-
-    const allContents = [];
-
-
-    contentSnapshot.forEach(
-      (doc) => {
-
-
-        const data =
-          doc.data();
-
-
-        allContents.push({
-
-          id: doc.id,
-
-          ...data
-
-        });
-
-      }
-    );
-
-
-    const isUpazila =
-      categoryData.name &&
-      (
-        categoryData.name.includes(
-          "উপজেলা"
-        ) ||
-        categoryData.name.includes(
-          "উপজেলার"
-        )
-      );
-
-
-    if (isUpazila) {
-
-
-      showUpazilaList(
-        upazilaList,
-        contents,
-        allContents
-      );
-
-
-    }
-
-    else {
-
-
-      showAllContents(
-        contents,
-        allContents
-      );
-
-    }
-
-
-    /*
-      Image Posts-ও লোড হবে
-    */
-
-    await loadImagePosts();
-
-
-  }
-
-  catch (error) {
-
-
-    console.error(error);
-
-
-    categoryBox.innerHTML = `
-
-      <div class="error">
-
-        তথ্য লোড করা যাচ্ছে না।
-
-      </div>
-
-    `;
-
-  }
+return;
 
 }
 
 
+try{
 
-/* =====================================
-   UPAZILA LIST
-   ===================================== */
+const categorySnapshot =
+await getDocs(
+collection(
+db,
+"categories"
+)
+);
+
+
+let categoryData =
+null;
+
+
+categorySnapshot.forEach(
+function(categoryDoc){
+
+if(
+categoryDoc.id ===
+categoryId
+){
+
+categoryData =
+categoryDoc.data();
+
+}
+
+});
+
+
+if(!categoryData){
+
+categoryBox.innerHTML =
+"<div class='error'>Topic পাওয়া যায়নি।</div>";
+
+return;
+
+}
+
+
+categoryBox.innerHTML = `
+
+<div class="title">
+
+<div class="icon">
+
+${escapeHTML(
+categoryData.icon ||
+"📌"
+)}
+
+</div>
+
+<h2>
+
+${escapeHTML(
+categoryData.name ||
+""
+)}
+
+</h2>
+
+<p>
+
+${escapeHTML(
+categoryData.description ||
+""
+)}
+
+</p>
+
+</div>
+
+`;
+
+
+/*
+রক্তদাতা Topic হলে
+approved donor দেখাবে
+*/
+
+if(
+String(
+categoryData.name ||
+""
+).trim() ===
+"রক্তদাতা"
+){
+
+await loadBloodDonors();
+
+}
+
+
+/* =================
+   CONTENT
+================= */
+
+const contentSnapshot =
+await getDocs(
+collection(
+db,
+"contents"
+)
+);
+
+
+const allContents = [];
+
+
+contentSnapshot.forEach(
+function(contentDoc){
+
+const data =
+contentDoc.data();
+
+
+allContents.push({
+
+id:
+contentDoc.id,
+
+...data
+
+});
+
+});
+
+
+const isUpazila =
+categoryData.name &&
+(
+categoryData.name.includes(
+"উপজেলা"
+) ||
+categoryData.name.includes(
+"উপজেলার"
+)
+);
+
+
+if(isUpazila){
+
+showUpazilaList(
+upazilaList,
+contents,
+allContents
+);
+
+}
+else{
+
+showAllContents(
+contents,
+allContents
+);
+
+}
+
+
+/*
+Image Post
+*/
+
+await loadImagePosts();
+
+
+}
+catch(error){
+
+console.error(
+error
+);
+
+
+categoryBox.innerHTML = `
+
+<div class="error">
+
+তথ্য লোড করা যাচ্ছে না।
+
+</div>
+
+`;
+
+}
+
+}
+
+
+/* =====================================================
+   UPAZILA
+===================================================== */
 
 function showUpazilaList(
-  upazilaList,
-  contents,
-  allContents
-) {
+upazilaList,
+contents,
+allContents
+){
+
+upazilaList.innerHTML = `
+
+<div class="section-title">
+
+🏘️ উপজেলা সমূহ
+
+</div>
+
+`;
 
 
-  upazilaList.innerHTML = `
+upazilas.forEach(
+function(upazila){
 
-    <div class="section-title">
+const card =
+document.createElement(
+"div"
+);
 
-      🏘️ উপজেলা সমূহ
-
-    </div>
-
-  `;
-
-
-  upazilas.forEach(
-    (upazila) => {
+card.className =
+"card";
 
 
-      const card =
-        document.createElement(
-          "div"
-        );
+card.innerHTML = `
+
+<div class="icon">
+🏘️
+</div>
+
+<h3>
+${escapeHTML(
+upazila.name
+)}
+</h3>
+
+<p>
+বিস্তারিত তথ্য দেখতে চাপ দিন
+</p>
+
+`;
 
 
-      card.className =
-        "card";
+card.onclick =
+function(){
+
+showUpazila(
+upazila,
+allContents
+);
+
+};
 
 
-      card.innerHTML = `
+upazilaList.appendChild(
+card
+);
 
-        <div class="icon">
-
-          🏘️
-
-        </div>
+});
 
 
-        <h3>
+contents.innerHTML = `
 
-          ${upazila.name}
+<div class="loading">
 
-        </h3>
+উপরের তালিকা থেকে একটি উপজেলা নির্বাচন করুন।
 
+</div>
 
-        <p>
-
-          বিস্তারিত তথ্য দেখতে চাপ দিন
-
-        </p>
-
-      `;
-
-
-      card.onclick = () => {
-
-
-        showUpazila(
-          upazila,
-          allContents
-        );
-
-
-      };
-
-
-      upazilaList.appendChild(
-        card
-      );
-
-    }
-  );
-
-
-  contents.innerHTML = `
-
-    <div class="loading">
-
-      উপরের তালিকা থেকে একটি উপজেলা নির্বাচন করুন।
-
-    </div>
-
-  `;
+`;
 
 }
 
 
-
-/* =====================================
+/* =====================================================
    SHOW UPAZILA
-   ===================================== */
+===================================================== */
 
 function showUpazila(
-  upazila,
-  allContents
-) {
+upazila,
+allContents
+){
+
+const contents =
+document.getElementById(
+"contents"
+);
 
 
-  const contents =
-    document.getElementById(
-      "contents"
-    );
+let matched =
+allContents.filter(
+function(item){
+
+return upazila.ids.includes(
+String(
+item.categoryId ||
+""
+).trim()
+);
+
+}
+);
 
 
-  let matched =
-    allContents.filter(
-      (item) => {
+if(
+matched.length === 0
+){
+
+matched =
+allContents.filter(
+function(item){
+
+const title =
+String(
+item.title ||
+""
+).trim();
 
 
-        return upazila.ids.includes(
-          String(
-            item.categoryId || ""
-          ).trim()
-        );
+return title.includes(
+upazila.name
+);
 
-      }
-    );
-
-
-  if (matched.length === 0) {
-
-
-    matched =
-      allContents.filter(
-        (item) => {
-
-
-          const title =
-            String(
-              item.title || ""
-            ).trim();
-
-
-          return title.includes(
-            upazila.name
-          );
-
-        }
-      );
-
-  }
-
-
-  if (matched.length === 0) {
-
-
-    contents.innerHTML = `
-
-      <div class="info-section">
-
-        <div class="info-heading">
-
-          🏘️ ${upazila.name}
-
-        </div>
-
-
-        <div class="info-text">
-
-          এই উপজেলার তথ্য এখনো যোগ করা হয়নি।
-
-        </div>
-
-      </div>
-
-    `;
-
-
-    return;
-
-  }
-
-
-  contents.innerHTML = `
-
-    <div class="title">
-
-      <div class="icon">
-
-        🏘️
-
-      </div>
-
-
-      <h2>
-
-        ${upazila.name}
-
-      </h2>
-
-    </div>
-
-  `;
-
-
-  matched.forEach(
-    (item) => {
-
-
-      createSections(
-        contents,
-        item.content || ""
-      );
-
-    }
-  );
-
-
-  window.scrollTo({
-
-    top:
-      contents.offsetTop - 15,
-
-    behavior:
-      "smooth"
-
-  });
+}
+);
 
 }
 
 
+if(
+matched.length === 0
+){
 
-/* =====================================
+contents.innerHTML = `
+
+<div class="info-section">
+
+<div class="info-heading">
+
+🏘️ ${escapeHTML(
+upazila.name
+)}
+
+</div>
+
+<div class="info-text">
+
+এই উপজেলার তথ্য এখনো যোগ করা হয়নি।
+
+</div>
+
+</div>
+
+`;
+
+return;
+
+}
+
+
+contents.innerHTML = `
+
+<div class="title">
+
+<div class="icon">
+🏘️
+</div>
+
+<h2>
+
+${escapeHTML(
+upazila.name
+)}
+
+</h2>
+
+</div>
+
+`;
+
+
+matched.forEach(
+function(item){
+
+createSections(
+contents,
+item.content || ""
+);
+
+});
+
+
+window.scrollTo({
+
+top:
+contents.offsetTop - 15,
+
+behavior:
+"smooth"
+
+});
+
+}
+
+
+/* =====================================================
    CREATE SECTIONS
-   ===================================== */
+===================================================== */
 
 function createSections(
-  container,
-  text
-) {
+container,
+text
+){
+
+const sections =
+text
+.replace(
+/\r\n/g,
+"\n"
+)
+.split(
+/\n\s*\n/
+)
+.map(
+function(section){
+
+return section.trim();
+
+}
+)
+.filter(
+function(section){
+
+return section.length > 0;
+
+}
+);
 
 
-  const sections =
-    text
-      .replace(
-        /\r\n/g,
-        "\n"
-      )
-      .split(
-        /\n\s*\n/
-      )
-      .map(
-        section =>
-          section.trim()
-      )
-      .filter(
-        section =>
-          section.length > 0
-      );
+sections.forEach(
+function(section){
+
+const lines =
+section.split(
+"\n"
+);
 
 
-  sections.forEach(
-    (section) => {
+const heading =
+lines[0].trim();
 
 
-      const lines =
-        section.split(
-          "\n"
-        );
+const body =
+lines
+.slice(1)
+.join("\n")
+.trim();
 
 
-      const heading =
-        lines[0].trim();
+const card =
+document.createElement(
+"div"
+);
+
+card.className =
+"info-section";
 
 
-      const body =
-        lines
-          .slice(1)
-          .join("\n")
-          .trim();
+const linkedBody =
+makePhoneLinks(
+body
+);
 
 
-      const card =
-        document.createElement(
-          "div"
-        );
+card.innerHTML = `
+
+<div class="info-heading">
+
+${escapeHTML(
+heading
+)}
+
+</div>
+
+${
+body
+?
+`
+<div class="info-text">
+
+${escapeHTML(
+linkedBody
+)}
+
+</div>
+`
+:
+""
+}
+
+`;
 
 
-      card.className =
-        "info-section";
+container.appendChild(
+card
+);
 
-
-      const linkedBody =
-        makePhoneLinks(
-          body
-        );
-
-
-      card.innerHTML = `
-
-        <div class="info-heading">
-
-          ${heading}
-
-        </div>
-
-
-        ${
-          body
-          ?
-          `<div class="info-text">${linkedBody}</div>`
-          :
-          ""
-        }
-
-      `;
-
-
-      container.appendChild(
-        card
-      );
-
-    }
-  );
+});
 
 }
 
 
-
-/* =====================================
+/* =====================================================
    OTHER CATEGORY
-   ===================================== */
+===================================================== */
 
 function showAllContents(
-  contents,
-  allContents
-) {
+contents,
+allContents
+){
+
+contents.innerHTML =
+"";
 
 
-  contents.innerHTML =
-    "";
+const matched =
+allContents.filter(
+function(item){
+
+return item.categoryId ===
+categoryId;
+
+}
+);
 
 
-  const matched =
-    allContents.filter(
-      (item) => {
+if(
+matched.length === 0
+){
 
+contents.innerHTML = `
 
-        return item.categoryId ===
-          categoryId;
+<div class="loading">
 
-      }
-    );
+এই Topic-এর তথ্য এখনো যোগ করা হয়নি।
 
+</div>
 
-  if (matched.length === 0) {
+`;
 
-
-    contents.innerHTML = `
-
-      <div class="loading">
-
-        এই Topic-এর তথ্য এখনো যোগ করা হয়নি।
-
-      </div>
-
-    `;
-
-
-    return;
-
-  }
-
-
-  matched.forEach(
-    (item) => {
-
-
-      createSections(
-        contents,
-        item.content || ""
-      );
-
-    }
-  );
+return;
 
 }
 
 
+matched.forEach(
+function(item){
 
-/* =====================================
+createSections(
+contents,
+item.content || ""
+);
+
+});
+
+}
+
+
+/* =====================================================
+   ESCAPE
+===================================================== */
+
+function escapeHTML(value){
+
+return String(value || "")
+.replace(
+/&/g,
+"&amp;"
+)
+.replace(
+/</g,
+"&lt;"
+)
+.replace(
+/>/g,
+"&gt;"
+)
+.replace(
+/"/g,
+"&quot;"
+)
+.replace(
+/'/g,
+"&#039;"
+);
+
+}
+
+
+function escapeAttribute(value){
+
+return String(value || "")
+.replace(
+/&/g,
+"&amp;"
+)
+.replace(
+/"/g,
+"&quot;"
+)
+.replace(
+/</g,
+"&lt;"
+)
+.replace(
+/>/g,
+"&gt;"
+);
+
+}
+
+
+/* =================
    START
-   ===================================== */
+================= */
 
 loadData();
 
 </script>
-
 
 </body>
 
