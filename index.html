@@ -158,7 +158,7 @@
       grid-column: 1 / -1;
     }
 
-    /* নতুন তথ্য যোগ করুন বাটন */
+    /* তথ্য যোগ করুন বাটন */
 
     #addInfoBtn {
       display: block;
@@ -178,6 +178,86 @@
     #addInfoBtn:active {
       transform: scale(0.97);
     }
+
+
+    /* তথ্য যোগ করার পপআপ */
+
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 9999;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.55);
+      padding: 20px;
+      overflow-y: auto;
+    }
+
+    .modal-box {
+      background: white;
+      width: 100%;
+      max-width: 500px;
+      margin: 30px auto;
+      border-radius: 18px;
+      padding: 20px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+    }
+
+    .modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 18px;
+    }
+
+    .modal-header h2 {
+      font-size: 21px;
+      color: #0f766e;
+    }
+
+    .close-btn {
+      border: none;
+      background: #f1f5f9;
+      width: 35px;
+      height: 35px;
+      border-radius: 50%;
+      font-size: 22px;
+      cursor: pointer;
+      color: #333;
+    }
+
+    .info-options {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+
+    .info-option {
+      border: none;
+      background: #f8fafc;
+      border-radius: 14px;
+      padding: 18px 8px;
+      min-height: 105px;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: bold;
+      color: #0f766e;
+    }
+
+    .info-option .option-icon {
+      display: block;
+      font-size: 34px;
+      margin-bottom: 8px;
+    }
+
+    .info-option:active {
+      transform: scale(0.96);
+      background: #e6fffb;
+    }
+
 
     footer {
       margin-top: 30px;
@@ -236,6 +316,7 @@
 </head>
 
 <body>
+
 
   <header>
 
@@ -319,13 +400,110 @@
     </div>
 
 
-    <!-- নতুন তথ্য যোগ করুন বাটন -->
+    <!-- তথ্য যোগ করুন -->
 
     <button id="addInfoBtn">
       ➕ আপনার তথ্য যোগ করুন
     </button>
 
   </div>
+
+
+
+  <!-- তথ্য যোগ করার পপআপ -->
+
+  <div class="modal" id="infoModal">
+
+    <div class="modal-box">
+
+      <div class="modal-header">
+
+        <h2>📋 তথ্যের ধরন নির্বাচন করুন</h2>
+
+        <button
+          class="close-btn"
+          id="closeInfoModal">
+          ×
+        </button>
+
+      </div>
+
+
+      <div class="info-options">
+
+
+        <button
+          class="info-option"
+          data-type="blood">
+
+          <span class="option-icon">🩸</span>
+
+          রক্তদাতা
+
+        </button>
+
+
+        <button
+          class="info-option"
+          data-type="hospital">
+
+          <span class="option-icon">🏥</span>
+
+          হাসপাতাল/ক্লিনিক
+
+        </button>
+
+
+        <button
+          class="info-option"
+          data-type="restaurant">
+
+          <span class="option-icon">🍽️</span>
+
+          রেস্টুরেন্ট
+
+        </button>
+
+
+        <button
+          class="info-option"
+          data-type="courier">
+
+          <span class="option-icon">🚚</span>
+
+          কুরিয়ার
+
+        </button>
+
+
+        <button
+          class="info-option"
+          data-type="lawyer">
+
+          <span class="option-icon">⚖️</span>
+
+          আইনজীবী
+
+        </button>
+
+
+        <button
+          class="info-option"
+          data-type="business">
+
+          <span class="option-icon">🏪</span>
+
+          প্রতিষ্ঠান
+
+        </button>
+
+
+      </div>
+
+    </div>
+
+  </div>
+
 
 
   <footer>
@@ -371,7 +549,9 @@
   </footer>
 
 
+
   <script type="module">
+
 
     import { initializeApp }
       from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
@@ -415,6 +595,11 @@
     const db =
       getFirestore(app);
 
+
+
+    /* =========================
+       CATEGORY LOAD
+    ========================= */
 
     async function loadCategories() {
 
@@ -515,6 +700,7 @@
 
           card.onclick = () => {
 
+
             if (
               category.name ===
               "বাসের সময়সূচি"
@@ -586,7 +772,10 @@
     loadCategories();
 
 
-    /* Slider */
+
+    /* =========================
+       SLIDER
+    ========================= */
 
     const slides =
       document.getElementById("slides");
@@ -605,12 +794,16 @@
     function showSlide(index) {
 
       if (index >= totalSlides) {
+
         index = 0;
+
       }
 
 
       if (index < 0) {
+
         index = totalSlides - 1;
+
       }
 
 
@@ -703,6 +896,133 @@
 
       }
     );
+
+
+
+    /* =========================
+       তথ্য যোগ করুন POPUP
+    ========================= */
+
+    const addInfoBtn =
+      document.getElementById("addInfoBtn");
+
+
+    const infoModal =
+      document.getElementById("infoModal");
+
+
+    const closeInfoModal =
+      document.getElementById("closeInfoModal");
+
+
+    /* বাটনে চাপলে পপআপ খুলবে */
+
+    addInfoBtn.addEventListener(
+      "click",
+      () => {
+
+        infoModal.style.display = "block";
+
+      }
+    );
+
+
+    /* X বাটনে চাপলে পপআপ বন্ধ হবে */
+
+    closeInfoModal.addEventListener(
+      "click",
+      () => {
+
+        infoModal.style.display = "none";
+
+      }
+    );
+
+
+    /* পপআপের বাইরে চাপলে বন্ধ হবে */
+
+    infoModal.addEventListener(
+      "click",
+      (event) => {
+
+        if (event.target === infoModal) {
+
+          infoModal.style.display = "none";
+
+        }
+
+      }
+    );
+
+
+    /* ৬টি অপশনে চাপলে আপাতত শুধু বার্তা দেখাবে */
+
+    const infoOptions =
+      document.querySelectorAll(".info-option");
+
+
+    infoOptions.forEach((option) => {
+
+      option.addEventListener(
+        "click",
+        () => {
+
+          const type =
+            option.getAttribute("data-type");
+
+
+          let message = "";
+
+
+          if (type === "blood") {
+
+            message =
+              "🩸 রক্তদাতার তথ্য যোগ করার ফর্ম পরবর্তী ধাপে আসবে।";
+
+          }
+
+          else if (type === "hospital") {
+
+            message =
+              "🏥 হাসপাতাল/ক্লিনিকের তথ্য যোগ করার ফর্ম পরবর্তী ধাপে আসবে।";
+
+          }
+
+          else if (type === "restaurant") {
+
+            message =
+              "🍽️ রেস্টুরেন্টের তথ্য যোগ করার ফর্ম পরবর্তী ধাপে আসবে।";
+
+          }
+
+          else if (type === "courier") {
+
+            message =
+              "🚚 কুরিয়ারের তথ্য যোগ করার ফর্ম পরবর্তী ধাপে আসবে।";
+
+          }
+
+          else if (type === "lawyer") {
+
+            message =
+              "⚖️ আইনজীবীর তথ্য যোগ করার ফর্ম পরবর্তী ধাপে আসবে।";
+
+          }
+
+          else if (type === "business") {
+
+            message =
+              "🏪 প্রতিষ্ঠানের তথ্য যোগ করার ফর্ম পরবর্তী ধাপে আসবে।";
+
+          }
+
+
+          alert(message);
+
+        }
+      );
+
+    });
 
 
   </script>
