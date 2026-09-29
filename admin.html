@@ -77,7 +77,7 @@ header{
   right:0;
   top:50px;
   background:white;
-  width:190px;
+  width:210px;
   border-radius:12px;
   box-shadow:0 5px 20px rgba(0,0,0,.2);
   overflow:hidden;
@@ -370,6 +370,67 @@ hr{
   margin-bottom:15px;
 }
 
+
+/* ================= SUBMISSION ================= */
+
+.submission-card{
+  background:#fff;
+  border:1px solid #dfe3e8;
+  border-radius:14px;
+  padding:16px;
+  margin-bottom:14px;
+  box-shadow:0 2px 7px rgba(0,0,0,.05);
+}
+
+.submission-header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:8px;
+  margin-bottom:12px;
+}
+
+.submission-title{
+  font-size:18px;
+  font-weight:bold;
+  color:#0d6efd;
+}
+
+.pending-badge{
+  background:#fff3cd;
+  color:#856404;
+  padding:5px 9px;
+  border-radius:20px;
+  font-size:12px;
+  font-weight:bold;
+}
+
+.submission-info{
+  line-height:1.8;
+  background:#f8f9fa;
+  padding:12px;
+  border-radius:10px;
+}
+
+.submission-info div{
+  margin-bottom:4px;
+}
+
+.approve-btn{
+  background:#198754;
+  color:white;
+}
+
+.reject-btn{
+  background:#dc3545;
+  color:white;
+}
+
+.refresh-submission{
+  width:100%;
+  margin-bottom:15px;
+}
+
 </style>
 
 </head>
@@ -411,6 +472,10 @@ hr{
 
         <button data-section="notificationSection">
           🔔 Notification
+        </button>
+
+        <button data-section="submissionSection">
+          📥 জমা দেওয়া তথ্য
         </button>
 
       </div>
@@ -756,8 +821,7 @@ hr{
       placeholder="যেমন: ঈদ মোবারক! আমাদের জয়পুরহাট অ্যাপের পক্ষ থেকে সবাইকে ঈদের আন্তরিক শুভেচ্ছা। ❤️"></textarea>
 
 
-    <div
-      class="small">
+    <div class="small">
       সর্বোচ্চ ৫০০ অক্ষর।
     </div>
 
@@ -796,6 +860,51 @@ hr{
 
 
 
+<!-- ================= SUBMISSIONS ================= -->
+
+<div id="submissionSection" class="admin-section">
+
+  <div class="box">
+
+    <h2>📥 জমা দেওয়া তথ্য</h2>
+
+    <div class="small">
+      ব্যবহারকারীদের পাঠানো তথ্য এখানে যাচাই করে অনুমোদন বা বাতিল করতে পারবেন।
+    </div>
+
+    <button
+      id="refreshSubmissionsBtn"
+      class="secondary refresh-submission"
+      style="margin-top:15px;">
+      🔄 তথ্য Refresh করুন
+    </button>
+
+    <div id="submissionMessage"></div>
+
+  </div>
+
+
+  <div class="box">
+
+    <h2>🩸 Pending রক্তদাতা</h2>
+
+    <div id="submissionList">
+      তথ্য লোড হচ্ছে...
+    </div>
+
+  </div>
+
+
+  <button
+    id="logoutBtn5"
+    class="logout">
+    🔴 Logout
+  </button>
+
+</div>
+
+
+
 </div>
 
 </div>
@@ -822,6 +931,7 @@ import {
   updateDoc,
   deleteDoc,
   doc,
+  setDoc,
   serverTimestamp
 }
 from
@@ -949,9 +1059,17 @@ mainMenu.querySelectorAll("button").forEach(function(button){
 
     mainMenu.classList.remove("show");
 
+
     if(sectionId === "notificationSection"){
 
       loadNotifications();
+
+    }
+
+
+    if(sectionId === "submissionSection"){
+
+      loadSubmissions();
 
     }
 
@@ -1067,6 +1185,8 @@ onAuthStateChanged(auth,function(user){
 
     loadNotifications();
 
+    loadSubmissions();
+
   }else{
 
     loginBox.classList.remove("hidden");
@@ -1113,6 +1233,11 @@ document
 
 document
 .getElementById("logoutBtn4")
+.addEventListener("click",logout);
+
+
+document
+.getElementById("logoutBtn5")
 .addEventListener("click",logout);
 
 
@@ -2914,457 +3039,4 @@ function resetPostForm(){
 
 
   document
-  .getElementById(
-    "imagePreview"
-  )
-  .innerHTML = "";
-
-
-  document
-  .getElementById(
-    "savePostBtn"
-  )
-  .textContent =
-  "🖼️ Upload & Save";
-
-
-  document
-  .getElementById(
-    "cancelPostEditBtn"
-  )
-  .classList
-  .add("hidden");
-
-}
-
-
-document
-.getElementById(
-  "cancelPostEditBtn"
-)
-.addEventListener(
-  "click",
-  resetPostForm
-);
-
-
-
-/* ================= DELETE POST ================= */
-
-async function deletePost(id){
-
-  if(
-    !confirm(
-      "এই Image Post Delete করতে চান?"
-    )
-  ) return;
-
-
-  try{
-
-    await deleteDoc(
-      doc(
-        db,
-        "posts",
-        id
-      )
-    );
-
-
-    alert("✅ Image Post Delete হয়েছে।");
-
-
-    await loadPosts();
-
-  }catch(error){
-
-    console.error(error);
-
-    alert(
-      "❌ Image Post Delete করা যায়নি।"
-    );
-
-  }
-
-}
-
-
-
-/* ================= NOTIFICATION ================= */
-
-const notificationMessageInput =
-document.getElementById(
-  "notificationMessage"
-);
-
-
-const sendNotificationBtn =
-document.getElementById(
-  "sendNotificationBtn"
-);
-
-
-const notificationMessageBox =
-document.getElementById(
-  "notificationMessageBox"
-);
-
-
-
-sendNotificationBtn
-.addEventListener(
-  "click",
-  async function(){
-
-    const message =
-    notificationMessageInput
-    .value
-    .trim();
-
-
-    if(!message){
-
-      notificationMessageBox.innerHTML =
-      "<div class='message error'>Message লিখুন।</div>";
-
-      return;
-
-    }
-
-
-    if(message.length > 500){
-
-      notificationMessageBox.innerHTML =
-      "<div class='message error'>Message সর্বোচ্চ 500 অক্ষরের হতে পারবে।</div>";
-
-      return;
-
-    }
-
-
-    const confirmSend =
-    confirm(
-      "এই Notification সবাইকে পাঠাতে চান?"
-    );
-
-
-    if(!confirmSend) return;
-
-
-    try{
-
-      sendNotificationBtn.disabled =
-      true;
-
-
-      sendNotificationBtn.textContent =
-      "📤 Sending...";
-
-
-      await addDoc(
-        collection(
-          db,
-          "notifications"
-        ),
-        {
-          message:message,
-          createdAt:serverTimestamp()
-        }
-      );
-
-
-      notificationMessageInput.value =
-      "";
-
-
-      notificationMessageBox.innerHTML =
-      "<div class='message'>✅ Notification সফলভাবে Save হয়েছে।</div>";
-
-
-      await loadNotifications();
-
-
-    }catch(error){
-
-      console.error(
-        "Notification Error:",
-        error
-      );
-
-
-      notificationMessageBox.innerHTML =
-      "<div class='message error'>❌ Notification পাঠানো যায়নি।</div>";
-
-    }finally{
-
-      sendNotificationBtn.disabled =
-      false;
-
-
-      sendNotificationBtn.textContent =
-      "📤 Send Notification";
-
-    }
-
-  }
-);
-
-
-
-/* ================= LOAD NOTIFICATIONS ================= */
-
-async function loadNotifications(){
-
-  const list =
-  document.getElementById(
-    "notificationList"
-  );
-
-
-  list.innerHTML =
-  "Notification লোড হচ্ছে...";
-
-
-  try{
-
-    const snapshot =
-    await getDocs(
-      collection(
-        db,
-        "notifications"
-      )
-    );
-
-
-    const notifications = [];
-
-
-    snapshot.forEach(
-      function(notificationDoc){
-
-        notifications.push({
-
-          id:notificationDoc.id,
-
-          ...notificationDoc.data()
-
-        });
-
-      }
-    );
-
-
-    notifications.sort(
-      function(a,b){
-
-        const aTime =
-        a.createdAt &&
-        typeof a.createdAt.toMillis === "function"
-        ?
-        a.createdAt.toMillis()
-        :
-        0;
-
-
-        const bTime =
-        b.createdAt &&
-        typeof b.createdAt.toMillis === "function"
-        ?
-        b.createdAt.toMillis()
-        :
-        0;
-
-
-        return bTime-aTime;
-
-      }
-    );
-
-
-    list.innerHTML = "";
-
-
-    if(
-      notifications.length === 0
-    ){
-
-      list.innerHTML =
-      "<div class='empty'>এখনো কোনো Notification পাঠানো হয়নি।</div>";
-
-      return;
-
-    }
-
-
-    notifications.forEach(
-      function(notification){
-
-        const item =
-        document.createElement("div");
-
-
-        item.className =
-        "item";
-
-
-        item.innerHTML = `
-
-          <div class="topic-badge">
-            🔔 Notification
-          </div>
-
-          <div class="small">
-            ${escapeHTML(
-              notification.message || ""
-            )}
-          </div>
-
-          <div class="post-time">
-            🕐 ${formatPostTime(
-              notification.createdAt
-            )}
-          </div>
-
-          <button
-            class="delete"
-            data-id="${notification.id}">
-            🗑️ Delete
-          </button>
-
-        `;
-
-
-        list.appendChild(item);
-
-      }
-    );
-
-
-    list
-    .querySelectorAll(".delete")
-    .forEach(
-      function(button){
-
-        button.addEventListener(
-          "click",
-          async function(){
-
-            if(
-              !confirm(
-                "এই Notification Delete করবেন?"
-              )
-            ) return;
-
-
-            try{
-
-              await deleteDoc(
-                doc(
-                  db,
-                  "notifications",
-                  button.dataset.id
-                )
-              );
-
-
-              await loadNotifications();
-
-
-            }catch(error){
-
-              console.error(error);
-
-              alert(
-                "Notification Delete করা যায়নি।"
-              );
-
-            }
-
-          }
-        );
-
-      }
-    );
-
-
-  }catch(error){
-
-    console.error(error);
-
-    list.innerHTML =
-    "<div class='message error'>Notification লোড করা যায়নি।</div>";
-
-  }
-
-}
-
-
-
-/* ================= HELPERS ================= */
-
-function getCategoryName(id){
-
-  return categoryCache[id] || "Unknown Topic";
-
-}
-
-
-
-function formatPostTime(timestamp){
-
-  if(
-    !timestamp ||
-    typeof timestamp.toDate !== "function"
-  ){
-
-    return "সময় পাওয়া যায়নি";
-
-  }
-
-
-  const date =
-  timestamp.toDate();
-
-
-  return date.toLocaleString(
-    "bn-BD",
-    {
-      dateStyle:"medium",
-      timeStyle:"short"
-    }
-  );
-
-}
-
-
-
-function escapeHTML(value){
-
-  return String(value || "")
-  .replace(/&/g,"&amp;")
-  .replace(/</g,"&lt;")
-  .replace(/>/g,"&gt;")
-  .replace(/"/g,"&quot;")
-  .replace(/'/g,"&#039;");
-
-}
-
-
-
-function escapeAttribute(value){
-
-  return String(value || "")
-  .replace(/&/g,"&amp;")
-  .replace(/"/g,"&quot;")
-  .replace(/</g,"&lt;")
-  .replace(/>/g,"&gt;");
-
-}
-
-
-</script>
-
-
-</body>
-
-</html>
+  .
