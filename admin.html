@@ -77,7 +77,7 @@ header{
   right:0;
   top:50px;
   background:white;
-  width:210px;
+  width:220px;
   border-radius:12px;
   box-shadow:0 5px 20px rgba(0,0,0,.2);
   overflow:hidden;
@@ -370,7 +370,7 @@ hr{
   margin-bottom:15px;
 }
 
-/* SUBMISSION */
+/* ================= SUBMISSION ================= */
 
 .submission-card{
   background:#fff;
@@ -1285,6 +1285,13 @@ async function(){
 
     }
 
+    else if(error.code === "auth/unauthorized-domain"){
+
+      errorText =
+      "এই Website Firebase Authentication-এর Authorized Domain-এ নেই।";
+
+    }
+
 
     message.innerHTML =
     `<div class='message error'>
@@ -1310,6 +1317,21 @@ async function(){
 /* ================= ENTER KEY LOGIN ================= */
 
 document
+.getElementById("email")
+.addEventListener(
+"keydown",
+function(event){
+
+  if(event.key === "Enter"){
+
+    loginBtn.click();
+
+  }
+
+});
+
+
+document
 .getElementById("password")
 .addEventListener(
 "keydown",
@@ -1328,7 +1350,7 @@ function(event){
 
 onAuthStateChanged(
 auth,
-function(user){
+async function(user){
 
   if(user){
 
@@ -1339,15 +1361,45 @@ function(user){
     showSection("topicSection");
 
 
-    loadCategories();
+    /*
+      প্রত্যেকটি Load আলাদা try/catch-এর মধ্যে।
+      কোনো একটি collection-এ সমস্যা হলেও
+      Login/Admin Panel বন্ধ হবে না।
+    */
 
-    loadContents();
+    try{
+      await loadCategories();
+    }catch(error){
+      console.error("Category Load Error:",error);
+    }
 
-    loadPosts();
 
-    loadNotifications();
+    try{
+      await loadContents();
+    }catch(error){
+      console.error("Content Load Error:",error);
+    }
 
-    loadSubmissions();
+
+    try{
+      await loadPosts();
+    }catch(error){
+      console.error("Post Load Error:",error);
+    }
+
+
+    try{
+      await loadNotifications();
+    }catch(error){
+      console.error("Notification Load Error:",error);
+    }
+
+
+    try{
+      await loadSubmissions();
+    }catch(error){
+      console.error("Submission Load Error:",error);
+    }
 
 
   }else{
@@ -1775,7 +1827,10 @@ async function(){
     console.error(error);
 
     message.innerHTML =
-    "<div class='message error'>❌ Topic Save করা যায়নি।</div>";
+    `<div class='message error'>
+      ❌ Topic Save করা যায়নি।<br>
+      <small>${escapeHTML(error.code || error.message || "")}</small>
+    </div>`;
 
   }finally{
 
@@ -2196,7 +2251,10 @@ async function(){
     console.error(error);
 
     message.innerHTML =
-    "<div class='message error'>❌ Content Save করা যায়নি।</div>";
+    `<div class='message error'>
+      ❌ Content Save করা যায়নি।<br>
+      <small>${escapeHTML(error.code || error.message || "")}</small>
+    </div>`;
 
   }finally{
 
@@ -2390,7 +2448,10 @@ async function loadContents(){
     console.error(error);
 
     list.innerHTML =
-    "<div class='message error'>Content লোড করা যায়নি।</div>";
+    `<div class='message error'>
+      Content লোড করা যায়নি।<br>
+      <small>${escapeHTML(error.code || error.message || "")}</small>
+    </div>`;
 
   }
 
@@ -2839,7 +2900,10 @@ async function(){
     console.error(error);
 
     message.innerHTML =
-    "<div class='message error'>❌ Image Upload/Save করা যায়নি।</div>";
+    `<div class='message error'>
+      ❌ Image Upload/Save করা যায়নি।<br>
+      <small>${escapeHTML(error.code || error.message || "")}</small>
+    </div>`;
 
   }finally{
 
@@ -3090,7 +3154,10 @@ async function loadPosts(){
     console.error(error);
 
     list.innerHTML =
-    "<div class='message error'>Image Post লোড করা যায়নি।</div>";
+    `<div class='message error'>
+      Image Post লোড করা যায়নি।<br>
+      <small>${escapeHTML(error.code || error.message || "")}</small>
+    </div>`;
 
   }
 
@@ -3450,7 +3517,10 @@ async function(){
 
 
     notificationMessageBox.innerHTML =
-    "<div class='message error'>❌ Notification পাঠানো যায়নি।</div>";
+    `<div class='message error'>
+      ❌ Notification পাঠানো যায়নি।<br>
+      <small>${escapeHTML(error.code || error.message || "")}</small>
+    </div>`;
 
   }finally{
 
@@ -3650,7 +3720,10 @@ async function loadNotifications(){
     console.error(error);
 
     list.innerHTML =
-    "<div class='message error'>Notification লোড করা যায়নি।</div>";
+    `<div class='message error'>
+      Notification লোড করা যায়নি।<br>
+      <small>${escapeHTML(error.code || error.message || "")}</small>
+    </div>`;
 
   }
 
@@ -3998,8 +4071,14 @@ async function loadSubmissions(){
       }
 
 
+      /* ================= ACTION BUTTONS ================= */
+
       let actionHTML = "";
 
+
+      /*
+        Pending হলে Approve + Reject
+      */
 
       if(status === "pending"){
 
@@ -4017,6 +4096,33 @@ async function loadSubmissions(){
               class="danger reject-btn"
               data-id="${submission.id}">
               ❌ Reject
+            </button>
+
+          </div>
+
+        `;
+
+      }
+
+
+      /*
+        Approved অথবা Rejected হলেও
+        Delete করা যাবে।
+      */
+
+      else if(
+        status === "approved" ||
+        status === "rejected"
+      ){
+
+        actionHTML = `
+
+          <div class="submission-actions">
+
+            <button
+              class="danger submission-delete-btn"
+              data-id="${submission.id}">
+              🗑️ Delete
             </button>
 
           </div>
@@ -4048,6 +4154,8 @@ async function loadSubmissions(){
     });
 
 
+    /* ================= APPROVE BUTTON ================= */
+
     list
     .querySelectorAll(
       ".approve-btn"
@@ -4068,6 +4176,8 @@ async function loadSubmissions(){
 
     });
 
+
+    /* ================= REJECT BUTTON ================= */
 
     list
     .querySelectorAll(
@@ -4090,6 +4200,29 @@ async function loadSubmissions(){
     });
 
 
+    /* ================= DELETE BUTTON ================= */
+
+    list
+    .querySelectorAll(
+      ".submission-delete-btn"
+    )
+    .forEach(
+    function(button){
+
+      button.addEventListener(
+        "click",
+        function(){
+
+          deleteSubmission(
+            button.dataset.id
+          );
+
+        }
+      );
+
+    });
+
+
   }catch(error){
 
     console.error(
@@ -4102,10 +4235,15 @@ async function loadSubmissions(){
     `<div class='message error'>
       ❌ Submission লোড করা যায়নি।<br><br>
       <small>
+        Error Code:
         ${escapeHTML(
           error.code ||
+          "unknown"
+        )}
+        <br><br>
+        ${escapeHTML(
           error.message ||
-          "Unknown error"
+          ""
         )}
       </small>
     </div>`;
@@ -4160,7 +4298,8 @@ async function approveSubmission(id){
 
 
     alert(
-      "❌ Submission Approve করা যায়নি।"
+      "❌ Submission Approve করা যায়নি.\n\n" +
+      (error.code || error.message || "")
     );
 
   }
@@ -4213,7 +4352,67 @@ async function rejectSubmission(id){
 
 
     alert(
-      "❌ Submission Reject করা যায়নি।"
+      "❌ Submission Reject করা যায়নি.\n\n" +
+      (error.code || error.message || "")
+    );
+
+  }
+
+}
+
+
+/* ================= DELETE SUBMISSION ================= */
+
+async function deleteSubmission(id){
+
+  const firstConfirm =
+  confirm(
+    "এই Submission স্থায়ীভাবে Delete করতে চান?"
+  );
+
+
+  if(!firstConfirm) return;
+
+
+  const secondConfirm =
+  confirm(
+    "⚠️ এই তথ্য Delete করলে আর ফিরে পাওয়া যাবে না।\n\nআপনি কি নিশ্চিত?"
+  );
+
+
+  if(!secondConfirm) return;
+
+
+  try{
+
+    await deleteDoc(
+      doc(
+        db,
+        "submissions",
+        id
+      )
+    );
+
+
+    alert(
+      "✅ Submission Delete হয়েছে।"
+    );
+
+
+    await loadSubmissions();
+
+
+  }catch(error){
+
+    console.error(
+      "Submission Delete Error:",
+      error
+    );
+
+
+    alert(
+      "❌ Submission Delete করা যায়নি।\n\n" +
+      (error.code || error.message || "")
     );
 
   }
