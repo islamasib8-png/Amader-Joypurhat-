@@ -307,6 +307,26 @@ grid-column:1/-1;
 }
 
 
+/* ================= IMAGE ================= */
+
+.image-preview{
+width:100%;
+max-height:230px;
+object-fit:cover;
+border-radius:10px;
+margin-top:8px;
+display:none;
+border:1px solid #ddd;
+background:#f1f1f1;
+}
+
+.image-help{
+font-size:12px;
+color:#777;
+margin-top:5px;
+}
+
+
 /* ================= FOOTER ================= */
 
 footer{
@@ -549,6 +569,7 @@ onclick="closeAllModals()">
 
 
 <button
+type="button"
 class="submit-btn back-btn"
 onclick="backToOptions()">
 
@@ -558,8 +579,6 @@ onclick="backToOptions()">
 
 
 <form id="submissionForm">
-
-<!-- নির্বাচিত Topic এখানে দেখা যাবে -->
 
 <div
 id="selectedTopicBox"
@@ -588,7 +607,8 @@ id="consent">
 
 <button
 type="submit"
-class="submit-btn">
+class="submit-btn"
+id="submitButton">
 
 📤 তথ্য জমা দিন
 
@@ -709,6 +729,26 @@ initializeApp(firebaseConfig);
 
 const db =
 getFirestore(app);
+
+
+/* ================================================= */
+/* ============== CLOUDINARY ======================= */
+/* ================================================= */
+
+/*
+   দর্শনীয় স্থানের ছবির জন্য
+   Cloudinary unsigned upload ব্যবহার করা হচ্ছে।
+*/
+
+const CLOUDINARY_CLOUD_NAME =
+"lkuowv7e";
+
+const CLOUDINARY_UPLOAD_PRESET =
+"amader_joypurhat_images";
+
+
+const CLOUDINARY_UPLOAD_URL =
+`https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload`;
 
 
 /* ================= SLIDER ================= */
@@ -976,18 +1016,11 @@ let selectedType = "";
 window.openSubmitOptions =
 function(){
 
-/*
-   নতুন submission শুরু হলে
-   আগের Topic/Type selection মুছে যাবে।
-*/
-
 selectedCategoryId = "";
 selectedCategoryName = "";
 selectedType = "";
 
-
 loadSubmissionCategories();
-
 
 document
 .getElementById("optionModal")
@@ -1096,10 +1129,9 @@ div.onclick =
 function(){
 
 /*
-   সবচেয়ে গুরুত্বপূর্ণ:
-   User যে Topic select করেছে,
-   তার আসল Firestore document ID
-   এখানে save হচ্ছে।
+   User যে Topic নির্বাচন করেছে,
+   সেই Topic-এর আসল Firestore Document ID
+   সরাসরি selectedCategoryId-তে রাখা হচ্ছে।
 */
 
 selectedCategoryId =
@@ -1120,6 +1152,17 @@ return;
 }
 
 
+if(!selectedCategoryName){
+
+alert(
+"এই Topic-এর নাম পাওয়া যায়নি। অন্য Topic নির্বাচন করুন।"
+);
+
+return;
+
+}
+
+
 loadSubmissionOptions();
 
 };
@@ -1132,7 +1175,10 @@ grid.appendChild(div);
 }
 catch(error){
 
-console.error(error);
+console.error(
+"Topic Loading Error:",
+error
+);
 
 grid.innerHTML =
 '<div class="loading">Topic লোড করা যায়নি।</div>';
@@ -1330,8 +1376,7 @@ ${label} ${req}
 <textarea
 name="${name}"
 ${required ? "required":""}
-placeholder="${placeholder}">
-</textarea>
+placeholder="${escapeAttribute(placeholder)}"></textarea>
 
 </div>
 
@@ -1424,7 +1469,7 @@ ${label} ${req}
 type="${type}"
 name="${name}"
 ${required ? "required":""}
-placeholder="${placeholder}">
+placeholder="${escapeAttribute(placeholder)}">
 
 </div>
 
@@ -1460,7 +1505,11 @@ switch(type){
 
 case "blood":
 
-html += field("bloodGroup","রক্তের গ্রুপ","selectBlood");
+html += field(
+"bloodGroup",
+"রক্তের গ্রুপ",
+"selectBlood"
+);
 
 html += field(
 "name",
@@ -1491,32 +1540,99 @@ break;
 
 case "clinic":
 
-html += field("name","ক্লিনিক/ডায়াগনস্টিকের নাম");
-html += field("address","ঠিকানা");
-html += field("upazila","উপজেলা","text",false);
-html += field("mobile","মোবাইল/ফোন","tel");
-html += field("description","অতিরিক্ত তথ্য","textarea",false);
+html += field(
+"name",
+"ক্লিনিক/ডায়াগনস্টিকের নাম"
+);
+
+html += field(
+"address",
+"ঠিকানা"
+);
+
+html += field(
+"upazila",
+"উপজেলা",
+"text",
+false
+);
+
+html += field(
+"mobile",
+"মোবাইল/ফোন",
+"tel"
+);
+
+html += field(
+"description",
+"অতিরিক্ত তথ্য",
+"textarea",
+false
+);
 
 break;
 
 
 case "hospital":
 
-html += field("name","হাসপাতালের নাম");
-html += field("address","ঠিকানা");
-html += field("upazila","উপজেলা","text",false);
-html += field("mobile","মোবাইল/ফোন","tel");
-html += field("description","অতিরিক্ত তথ্য","textarea",false);
+html += field(
+"name",
+"হাসপাতালের নাম"
+);
+
+html += field(
+"address",
+"ঠিকানা"
+);
+
+html += field(
+"upazila",
+"উপজেলা",
+"text",
+false
+);
+
+html += field(
+"mobile",
+"মোবাইল/ফোন",
+"tel"
+);
+
+html += field(
+"description",
+"অতিরিক্ত তথ্য",
+"textarea",
+false
+);
 
 break;
 
 
 case "restaurant":
 
-html += field("name","রেস্টুরেন্টের নাম");
-html += field("address","ঠিকানা");
-html += field("upazila","উপজেলা","text",false);
-html += field("mobile","মোবাইল/ফোন","tel");
+html += field(
+"name",
+"রেস্টুরেন্টের নাম"
+);
+
+html += field(
+"address",
+"ঠিকানা"
+);
+
+html += field(
+"upazila",
+"উপজেলা",
+"text",
+false
+);
+
+html += field(
+"mobile",
+"মোবাইল/ফোন",
+"tel"
+);
+
 html += field(
 "description",
 "অনলাইন অর্ডার/অন্যান্য তথ্য",
@@ -1529,7 +1645,11 @@ break;
 
 case "lawyer":
 
-html += field("name","আইনজীবীর নাম");
+html += field(
+"name",
+"আইনজীবীর নাম"
+);
+
 html += field(
 "specialty",
 "আইনের ধরন/বিশেষত্ব",
@@ -1537,9 +1657,21 @@ html += field(
 false
 );
 
-html += field("chamber","চেম্বারের নাম/স্থান");
-html += field("address","ঠিকানা");
-html += field("mobile","মোবাইল নং","tel");
+html += field(
+"chamber",
+"চেম্বারের নাম/স্থান"
+);
+
+html += field(
+"address",
+"ঠিকানা"
+);
+
+html += field(
+"mobile",
+"মোবাইল নং",
+"tel"
+);
 
 break;
 
@@ -1578,8 +1710,6 @@ false
 
 break;
 
-
-/* ================= INSTITUTION ================= */
 
 case "institution":
 
@@ -1803,31 +1933,69 @@ false
 break;
 
 
+/* ================================================= */
+/* ============== দর্শনীয় স্থান ==================== */
+/* ================================================= */
+
 case "place":
 
 html += field(
 "name",
+"দর্শনীয় স্থানের নাম",
+"text",
+true,
 "দর্শনীয় স্থানের নাম"
 );
 
-html += field(
-"upazila",
-"উপজেলা",
-"text",
-false
-);
+
+/* IMAGE */
+
+html += `
+
+<div class="form-group">
+
+<label>
+ছবি
+<span style="color:#777;font-weight:normal;">
+(ঐচ্ছিক)
+</span>
+</label>
+
+<input
+type="file"
+id="placeImage"
+name="placeImage"
+accept="image/*">
+
+<img
+id="placeImagePreview"
+class="image-preview"
+alt="ছবির Preview">
+
+<div class="image-help">
+ছবি দিলে Admin অনুমোদনের পর দর্শনীয় স্থানের Topic-এ ছবিসহ প্রকাশ হবে।
+</div>
+
+</div>
+
+`;
+
 
 html += field(
 "address",
 "ঠিকানা",
 "text",
-false
+true,
+"দর্শনীয় স্থানের ঠিকানা"
 );
+
 
 html += field(
 "description",
-"দর্শনীয় স্থানের বিবরণ",
-"textarea"
+"দর্শনীয় স্থানের বিস্তারিত",
+"textarea",
+true,
+"দর্শনীয় স্থান সম্পর্কে বিস্তারিত লিখুন"
 );
 
 break;
@@ -1961,6 +2129,105 @@ html;
 
 
 /* ================================================= */
+/* =============== IMAGE PREVIEW =================== */
+/* ================================================= */
+
+function setupPlaceImagePreview(){
+
+const input =
+document.getElementById("placeImage");
+
+const preview =
+document.getElementById("placeImagePreview");
+
+
+if(!input || !preview){
+return;
+}
+
+
+input.addEventListener(
+"change",
+function(){
+
+const file =
+this.files &&
+this.files[0];
+
+
+if(!file){
+
+preview.src = "";
+preview.style.display =
+"none";
+
+return;
+
+}
+
+
+/* IMAGE CHECK */
+
+if(!file.type.startsWith("image/")){
+
+alert(
+"শুধু ছবি নির্বাচন করুন।"
+);
+
+this.value = "";
+
+preview.src = "";
+preview.style.display =
+"none";
+
+return;
+
+}
+
+
+/* SIZE CHECK */
+
+if(file.size > 10 * 1024 * 1024){
+
+alert(
+"ছবির আকার ১০ MB-এর বেশি হতে পারবে না।"
+);
+
+this.value = "";
+
+preview.src = "";
+preview.style.display =
+"none";
+
+return;
+
+}
+
+
+const reader =
+new FileReader();
+
+
+reader.onload =
+function(e){
+
+preview.src =
+e.target.result;
+
+preview.style.display =
+"block";
+
+};
+
+
+reader.readAsDataURL(file);
+
+});
+
+}
+
+
+/* ================================================= */
 /* ================= OPEN FORM ===================== */
 /* ================================================= */
 
@@ -1989,7 +2256,8 @@ return;
 }
 
 
-selectedType = type;
+selectedType =
+type;
 
 
 const item =
@@ -2030,7 +2298,81 @@ document
 
 buildForm(type);
 
+
+/*
+   দর্শনীয় স্থান হলে
+   ছবির Preview চালু করা হবে।
+*/
+
+if(type === "place"){
+
+setupPlaceImagePreview();
+
+}
+
 };
+
+
+/* ================================================= */
+/* ============ CLOUDINARY UPLOAD ================== */
+/* ================================================= */
+
+async function uploadPlaceImage(file){
+
+if(!file){
+return "";
+}
+
+
+const formData =
+new FormData();
+
+formData.append(
+"file",
+file
+);
+
+formData.append(
+"upload_preset",
+CLOUDINARY_UPLOAD_PRESET
+);
+
+
+const response =
+await fetch(
+CLOUDINARY_UPLOAD_URL,
+{
+method:"POST",
+body:formData
+}
+);
+
+
+if(!response.ok){
+
+throw new Error(
+"Cloudinary image upload failed."
+);
+
+}
+
+
+const result =
+await response.json();
+
+
+if(!result.secure_url){
+
+throw new Error(
+"Cloudinary image URL পাওয়া যায়নি।"
+);
+
+}
+
+
+return result.secure_url;
+
+}
 
 
 /* ================================================= */
@@ -2048,6 +2390,10 @@ e.preventDefault();
 
 const message =
 document.getElementById("formMessage");
+
+const submitButton =
+document.getElementById("submitButton");
+
 
 message.style.display =
 "none";
@@ -2145,13 +2491,33 @@ new FormData(this);
 
 const data = {};
 
+let placeImageFile = null;
+
 
 formData.forEach(
 function(value,key){
 
 /*
-   categoryId/categoryName যদি কোনো
-   form field থেকেও আসে, তা নেওয়া হবে না।
+   placeImage file আলাদা করে রাখা হবে।
+*/
+
+if(key === "placeImage"){
+
+if(value instanceof File &&
+value.size > 0){
+
+placeImageFile = value;
+
+}
+
+return;
+
+}
+
+
+/*
+   categoryId/categoryName form থেকে
+   কখনো নেওয়া হবে না।
 */
 
 if(
@@ -2167,16 +2533,63 @@ String(value).trim();
 });
 
 
-/* ================= SAVE ================= */
+/* ================================================= */
+/* ============== IMAGE UPLOAD ===================== */
+/* ================================================= */
 
 try{
+
+submitButton.disabled =
+true;
+
+submitButton.textContent =
+"⏳ তথ্য জমা হচ্ছে...";
+
+
+/*
+   শুধু দর্শনীয় স্থান হলে
+   ছবি Cloudinary-তে upload হবে।
+*/
+
+if(
+selectedType === "place" &&
+placeImageFile
+){
+
+submitButton.textContent =
+"⏳ ছবি আপলোড হচ্ছে...";
+
+
+const imageUrl =
+await uploadPlaceImage(
+placeImageFile
+);
+
+
+/*
+   Firestore-এ শুধু URL যাবে।
+*/
+
+data.imageUrl =
+imageUrl;
+
+}
+
+
+/* ================================================= */
+/* ============== FIRESTORE SAVE =================== */
+/* ================================================= */
+
+submitButton.textContent =
+"⏳ তথ্য সংরক্ষণ হচ্ছে...";
+
 
 await addDoc(
 collection(db,"submissions"),
 {
 
 /*
-   তথ্যের ধরন
+   Submission type
 */
 type:
 selectedType,
@@ -2184,28 +2597,23 @@ selectedType,
 
 /*
    User যে Topic নির্বাচন করেছে
-   তার আসল Firestore Document ID
 */
 categoryId:
 finalCategoryId,
 
-
-/*
-   Topic-এর নামও সংরক্ষণ
-*/
 categoryName:
 finalCategoryName,
 
 
 /*
-   অন্যান্য form তথ্য
+   Form data
 */
 ...data,
 
 
 /*
-   আবার শেষে নিশ্চিত করা হচ্ছে
-   categoryId/categoryName সঠিক আছে।
+   শেষে আবার নিশ্চিত করা হলো
+   Topic ID/name ঠিক আছে।
 */
 categoryId:
 finalCategoryId,
@@ -2215,7 +2623,7 @@ finalCategoryName,
 
 
 /*
-   Admin approval
+   Approval system
 */
 consent:
 true,
@@ -2242,14 +2650,36 @@ message.style.display =
 "block";
 
 
+/*
+   Form clear করা হবে,
+   কিন্তু selected Topic রাখা হবে।
+*/
+
 this.reset();
 
 
-/*
-   Submit হয়ে যাওয়ার পর
-   Topic selection reset করা হবে না।
-   কারণ success message দেখানো দরকার।
-*/
+const preview =
+document.getElementById(
+"placeImagePreview"
+);
+
+
+if(preview){
+
+preview.src = "";
+
+preview.style.display =
+"none";
+
+}
+
+
+submitButton.disabled =
+false;
+
+submitButton.textContent =
+"📤 তথ্য জমা দিন";
+
 
 }
 catch(error){
@@ -2259,14 +2689,38 @@ console.error(
 error
 );
 
+
 message.className =
 "message error";
+
+
+if(
+error &&
+error.message &&
+error.message.includes("Cloudinary")
+){
+
+message.textContent =
+"❌ ছবি আপলোড করা যায়নি। ছবিটি আবার চেষ্টা করুন।";
+
+}
+else{
 
 message.textContent =
 "❌ তথ্য জমা দেওয়া যায়নি। আবার চেষ্টা করুন।";
 
+}
+
+
 message.style.display =
 "block";
+
+
+submitButton.disabled =
+false;
+
+submitButton.textContent =
+"📤 তথ্য জমা দিন";
 
 }
 
@@ -2462,7 +2916,10 @@ grid.appendChild(div);
 }
 catch(error){
 
-console.error(error);
+console.error(
+"Category Loading Error:",
+error
+);
 
 grid.innerHTML = `
 
@@ -2490,6 +2947,13 @@ return String(value || "")
 .replace(/>/g,"&gt;")
 .replace(/"/g,"&quot;")
 .replace(/'/g,"&#039;");
+
+}
+
+
+function escapeAttribute(value){
+
+return escapeHTML(value);
 
 }
 
@@ -2531,6 +2995,10 @@ closeTicketModal();
 
 });
 
+
+/* ================================================= */
+/* ================= START ========================= */
+/* ================================================= */
 
 loadCategories();
 
