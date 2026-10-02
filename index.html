@@ -649,7 +649,7 @@ from
 const firebaseConfig = {
 
 apiKey:
-"AIzaSyAG05o2MjHH3UL8Gp7VNmrQGeqq-4YrDEk",
+"AIzaSyAG05o2MjHH3UL8GpAvQqqGeqq-4YrDEk",
 
 authDomain:
 "amader-joypurhat-7b3fb.firebaseapp.com",
@@ -780,11 +780,9 @@ n.includes("আজকের সংবাদ")
 }
 
 
-/* ================= SUBCATEGORY SYSTEM ================= */
+/* ================= SPECIAL SUBCATEGORIES ================= */
 
 const specialSubCategories = {
-
-"জয়পুরহাটের পরিচয়":null,
 
 "কোচিং ও প্রাইভেট সেন্টার":[
 
@@ -808,13 +806,11 @@ icon:"👩‍⚕️"
 
 {
 id:"class6-12",
-name:"৬ষ্ঠ-১২শ কোচিং",
+name:"৬ষ্ঠ-১২ কোচিং",
 icon:"📚"
 }
 
 ],
-
-" ডাক্তার":null,
 
 "ডাক্তার":[
 
@@ -1094,6 +1090,140 @@ title:"🏛️ জয়পুরহাটের পরিচয়ের তথ্য
 ];
 
 
+/* ================= CATEGORY → TYPE ================= */
+
+const submissionCategoryAliases = {
+
+blood:[
+"রক্তদাতা"
+],
+
+clinic:[
+"ক্লিনিক ও ডায়াগনস্টিক",
+"ক্লিনিক ও ডায়াগনস্টিক সেন্টার"
+],
+
+hospital:[
+"হাসপাতাল"
+],
+
+restaurant:[
+"রেস্টুরেন্ট"
+],
+
+lawyer:[
+"আইনজীবী"
+],
+
+courier:[
+"কুরিয়ার সার্ভিস"
+],
+
+institution:[
+"বিভিন্ন প্রতিষ্ঠান"
+],
+
+ambulance:[
+"অ্যাম্বুলেন্স"
+],
+
+fire:[
+"ফায়ার সার্ভিস"
+],
+
+police:[
+"থানা পুলিশ"
+],
+
+electricity:[
+"বিদ্যুৎ অফিস"
+],
+
+bus:[
+"বাসের সময়সূচি"
+],
+
+train:[
+"ট্রেনের সময়সূচি"
+],
+
+place:[
+"দর্শনীয় স্থান"
+],
+
+person:[
+"কৃতী ব্যক্তিত্ব"
+],
+
+news:[
+"আজকের খবর",
+"আজকের নিউজ",
+"খবর",
+"আজকের সংবাদ"
+],
+
+islamic:[
+"ইসলামিক কর্নার"
+],
+
+emergency:[
+"জরুরি সেবা"
+],
+
+coaching:[
+"কোচিং ও প্রাইভেট সেন্টার",
+"কোচিং/প্রাইভেট সেন্টার"
+],
+
+doctor:[
+"ডাক্তার"
+],
+
+joypurhat:[
+"জয়পুরহাটের পরিচয়"
+]
+
+};
+
+
+/* ================= FIND TYPE ================= */
+
+function getSubmissionTypeByCategoryName(name){
+
+const normalized =
+String(name || "")
+.trim()
+.replace(/\s+/g," ");
+
+for(
+const item of submissionTypes
+){
+
+const aliases =
+submissionCategoryAliases[item.type] || [];
+
+if(
+aliases.some(
+alias =>
+String(alias)
+.trim()
+.replace(/\s+/g," ")
+===
+normalized
+)
+){
+
+return item.type;
+
+}
+
+}
+
+return "";
+
+}
+
+
 /* ================= OPEN SUBMISSION ================= */
 
 window.openSubmitOptions =
@@ -1255,9 +1385,6 @@ grid.innerHTML =
 
 function loadSubmissionOptions(){
 
-const grid =
-document.getElementById("optionGrid");
-
 const title =
 document.getElementById("optionTitle");
 
@@ -1265,7 +1392,7 @@ const subCategories =
 specialSubCategories[selectedCategoryName];
 
 
-/* JOYPURHAT INTRO */
+/* JOYPURHAT */
 
 if(
 selectedCategoryName === "জয়পুরহাটের পরিচয়"
@@ -1281,7 +1408,7 @@ return;
 }
 
 
-/* SPECIAL SUBCATEGORY */
+/* SPECIAL */
 
 if(
 Array.isArray(subCategories)
@@ -1294,41 +1421,55 @@ return;
 }
 
 
-/* NORMAL TOPIC */
+/* NORMAL CATEGORY → DIRECT FORM */
 
-title.textContent =
-"এই Topic-এ কী তথ্য যোগ করবেন?";
+const type =
+getSubmissionTypeByCategoryName(
+selectedCategoryName
+);
 
-grid.innerHTML = "";
-
-addTopicHeader(grid);
-
-addBackButton(grid);
-
-submissionTypes.forEach(function(item){
-
-const div =
-document.createElement("div");
-
-div.className =
-"option";
-
-div.textContent =
-item.label;
-
-div.onclick =
-function(){
+if(type){
 
 selectedSubCategory = "";
 selectedSubCategoryName = "";
 
-openSubmissionForm(item.type);
+openSubmissionForm(type);
 
-};
+return;
 
-grid.appendChild(div);
+}
 
-});
+
+/* NO FORM */
+
+title.textContent =
+"তথ্য যোগ করুন";
+
+const grid =
+document.getElementById("optionGrid");
+
+grid.innerHTML = `
+
+<div
+class="loading"
+style="grid-column:1/-1;">
+
+এই Topic-এর জন্য সরাসরি তথ্য যোগ করার ফর্ম এখনো তৈরি করা হয়নি।
+
+<br><br>
+
+<button
+type="button"
+class="submit-btn"
+onclick="loadSubmissionCategories()">
+
+← অন্য Topic নির্বাচন করুন
+
+</button>
+
+</div>
+
+`;
 
 }
 
@@ -1550,7 +1691,9 @@ document
 
 
 if(
+Array.isArray(
 specialSubCategories[selectedCategoryName]
+)
 ){
 
 showSubCategories();
@@ -1558,7 +1701,7 @@ showSubCategories();
 }
 else{
 
-loadSubmissionOptions();
+loadSubmissionCategories();
 
 }
 
@@ -1711,7 +1854,7 @@ return `
 ছবি
 
 <span style="color:#777;font-weight:normal;">
-(ঐচ্ছিক)
+(অপশনাল)
 </span>
 
 </label>
@@ -1772,7 +1915,7 @@ ${escapeHTML(selectedSubCategoryName)}
 
 switch(type){
 
-/* ================= BLOOD ================= */
+/* BLOOD */
 
 case "blood":
 
@@ -1809,14 +1952,16 @@ true,
 break;
 
 
-/* ================= CLINIC ================= */
+/* CLINIC */
 
 case "clinic":
 
 html += field(
 "name",
-"ক্লিনিক/ডায়াগনস্টিকের নাম"
+"ক্লিনিক ও ডায়াগনস্টিক সেন্টারের নাম"
 );
+
+html += imageField();
 
 html += field(
 "address",
@@ -1824,29 +1969,15 @@ html += field(
 );
 
 html += field(
-"upazila",
-"উপজেলা",
-"text",
-false
-);
-
-html += field(
-"mobile",
-"মোবাইল/ফোন",
-"tel"
-);
-
-html += field(
-"description",
-"অতিরিক্ত তথ্য",
-"textarea",
-false
+"serialInfo",
+"তথ্য সিরিয়াল",
+"textarea"
 );
 
 break;
 
 
-/* ================= HOSPITAL ================= */
+/* HOSPITAL */
 
 case "hospital":
 
@@ -1883,7 +2014,7 @@ false
 break;
 
 
-/* ================= RESTAURANT ================= */
+/* RESTAURANT */
 
 case "restaurant":
 
@@ -1892,35 +2023,29 @@ html += field(
 "রেস্টুরেন্টের নাম"
 );
 
+html += imageField();
+
 html += field(
 "address",
 "ঠিকানা"
 );
 
 html += field(
-"upazila",
-"উপজেলা",
-"text",
-false
-);
-
-html += field(
 "mobile",
-"মোবাইল/ফোন",
+"মোবাইল নম্বর",
 "tel"
 );
 
 html += field(
 "description",
-"অনলাইন অর্ডার/অন্যান্য তথ্য",
-"textarea",
-false
+"বিস্তারিত তথ্য",
+"textarea"
 );
 
 break;
 
 
-/* ================= LAWYER ================= */
+/* LAWYER */
 
 case "lawyer":
 
@@ -1955,7 +2080,7 @@ html += field(
 break;
 
 
-/* ================= COURIER ================= */
+/* COURIER */
 
 case "courier":
 
@@ -1992,7 +2117,7 @@ false
 break;
 
 
-/* ================= INSTITUTION ================= */
+/* INSTITUTION */
 
 case "institution":
 
@@ -2029,7 +2154,7 @@ html += field(
 break;
 
 
-/* ================= AMBULANCE ================= */
+/* AMBULANCE */
 
 case "ambulance":
 
@@ -2074,7 +2199,7 @@ false
 break;
 
 
-/* ================= FIRE ================= */
+/* FIRE */
 
 case "fire":
 
@@ -2104,7 +2229,7 @@ html += field(
 break;
 
 
-/* ================= POLICE ================= */
+/* POLICE */
 
 case "police":
 
@@ -2134,7 +2259,7 @@ html += field(
 break;
 
 
-/* ================= ELECTRICITY ================= */
+/* ELECTRICITY */
 
 case "electricity":
 
@@ -2171,7 +2296,7 @@ false
 break;
 
 
-/* ================= BUS ================= */
+/* BUS */
 
 case "bus":
 
@@ -2203,7 +2328,7 @@ html += field(
 break;
 
 
-/* ================= TRAIN ================= */
+/* TRAIN */
 
 case "train":
 
@@ -2228,7 +2353,7 @@ false
 break;
 
 
-/* ================= PLACE ================= */
+/* PLACE */
 
 case "place":
 
@@ -2261,7 +2386,7 @@ true,
 break;
 
 
-/* ================= PERSON ================= */
+/* PERSON */
 
 case "person":
 
@@ -2291,7 +2416,7 @@ html += field(
 break;
 
 
-/* ================= NEWS ================= */
+/* NEWS */
 
 case "news":
 
@@ -2323,7 +2448,7 @@ false
 break;
 
 
-/* ================= ISLAMIC OLD ================= */
+/* ISLAMIC */
 
 case "islamic":
 
@@ -2345,18 +2470,12 @@ html += field(
 false
 );
 
-if(
-selectedCategoryName === "ইসলামিক কর্নার"
-){
-
 html += imageField();
-
-}
 
 break;
 
 
-/* ================= EMERGENCY ================= */
+/* EMERGENCY */
 
 case "emergency":
 
@@ -2394,7 +2513,7 @@ html += field(
 break;
 
 
-/* ================= COACHING ================= */
+/* COACHING */
 
 case "coaching":
 
@@ -2431,7 +2550,7 @@ html += field(
 break;
 
 
-/* ================= DOCTOR ================= */
+/* DOCTOR */
 
 case "doctor":
 
@@ -2442,16 +2561,46 @@ html += field(
 
 html += imageField();
 
-html += field(
-"degree",
-"ডিগ্রি/যোগ্যতা",
-"text",
-false
-);
+if(selectedSubCategoryName){
+
+html += `
+
+<div class="form-group">
+
+<label>
+বিশেষত্ব
+</label>
+
+<input
+type="text"
+value="${escapeAttribute(selectedSubCategoryName)}"
+readonly
+style="background:#f3f7fb;">
+
+<input
+type="hidden"
+name="specialty"
+value="${escapeAttribute(selectedSubCategoryName)}">
+
+</div>
+
+`;
+
+}
+else{
 
 html += field(
 "specialty",
 "বিশেষত্ব",
+"text",
+false
+);
+
+}
+
+html += field(
+"degree",
+"ডিগ্রি/যোগ্যতা",
 "text",
 false
 );
@@ -2488,7 +2637,7 @@ false
 break;
 
 
-/* ================= JOYPURHAT ================= */
+/* JOYPURHAT */
 
 case "joypurhat":
 
@@ -2807,8 +2956,6 @@ return;
 }
 
 
-/* ================= FORM DATA ================= */
-
 const formData =
 new FormData(this);
 
@@ -2859,8 +3006,6 @@ submitButton.textContent =
 "⏳ তথ্য জমা হচ্ছে...";
 
 
-/* IMAGE */
-
 if(imageFile){
 
 submitButton.textContent =
@@ -2874,8 +3019,6 @@ imageUrl;
 
 }
 
-
-/* FIRESTORE */
 
 submitButton.textContent =
 "⏳ তথ্য সংরক্ষণ হচ্ছে...";
@@ -2901,18 +3044,6 @@ finalSubCategoryName,
 
 ...data,
 
-categoryId:
-finalCategoryId,
-
-categoryName:
-finalCategoryName,
-
-subCategory:
-finalSubCategory,
-
-subCategoryName:
-finalSubCategoryName,
-
 consent:
 true,
 
@@ -2925,8 +3056,6 @@ serverTimestamp()
 }
 );
 
-
-/* SUCCESS */
 
 message.className =
 "message success";
@@ -3067,8 +3196,6 @@ const transport =
 getTransportType(categoryName);
 
 
-/* BUS */
-
 if(
 transport === "bus"
 ){
@@ -3081,8 +3208,6 @@ return;
 }
 
 
-/* TRAIN */
-
 if(
 transport === "train"
 ){
@@ -3094,8 +3219,6 @@ return;
 
 }
 
-
-/* BOTH */
 
 if(
 transport === "both"
@@ -3111,8 +3234,6 @@ return;
 }
 
 
-/* NEWS */
-
 if(
 isNewsCategory(categoryName)
 ){
@@ -3124,8 +3245,6 @@ return;
 
 }
 
-
-/* TOPIC */
 
 window.location.href =
 "topic.html?id=" +
