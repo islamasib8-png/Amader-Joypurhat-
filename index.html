@@ -25,7 +25,11 @@ color:#222;
 }
 
 header{
-background:linear-gradient(135deg,#0066cc,#008fba);
+background:linear-gradient(
+135deg,
+#0066cc,
+#008fba
+);
 color:white;
 text-align:center;
 padding:18px 10px;
@@ -256,6 +260,11 @@ padding:13px;
 font-size:16px;
 font-weight:bold;
 cursor:pointer;
+}
+
+.submit-btn:disabled{
+opacity:.65;
+cursor:not-allowed;
 }
 
 .back-btn{
@@ -649,7 +658,7 @@ from
 const firebaseConfig = {
 
 apiKey:
-"AIzaSyAG05o2MjHH3UL8GpAvQqqGeqq-4YrDEk",
+"AIzaSyAG05o2MjHH3UL8GpAvQQGeqq-4YrDEk",
 
 authDomain:
 "amader-joypurhat-7b3fb.firebaseapp.com",
@@ -1970,8 +1979,8 @@ html += field(
 
 html += field(
 "serialInfo",
-"তথ্য সিরিয়াল",
-"textarea"
+"তথ্য সিরিয়ালের জন্য মোবাইল নম্বর",
+"tel"
 );
 
 break;
@@ -2039,7 +2048,8 @@ html += field(
 html += field(
 "description",
 "বিস্তারিত তথ্য",
-"textarea"
+"textarea",
+false
 );
 
 break;
@@ -2054,16 +2064,13 @@ html += field(
 "আইনজীবীর নাম"
 );
 
-html += field(
-"specialty",
-"আইনের ধরন/বিশেষত্ব",
-"text",
-false
-);
+html += imageField();
 
 html += field(
 "chamber",
-"চেম্বারের নাম/স্থান"
+"চেম্বারের নাম/স্থান",
+"text",
+false
 );
 
 html += field(
@@ -2392,24 +2399,14 @@ case "person":
 
 html += field(
 "name",
-"ব্যক্তির নাম"
+"নাম"
 );
 
-html += field(
-"identity",
-"পরিচয়/ক্ষেত্র"
-);
-
-html += field(
-"upazila",
-"উপজেলা",
-"text",
-false
-);
+html += imageField();
 
 html += field(
 "bio",
-"জীবনী/পরিচিতি",
+"বিস্তারিত তথ্য",
 "textarea"
 );
 
