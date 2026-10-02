@@ -5,8 +5,7 @@
 
 <meta charset="UTF-8">
 
-<meta
-name="viewport"
+<meta name="viewport"
 content="width=device-width, initial-scale=1.0">
 
 <title>আমাদের জয়পুরহাট</title>
@@ -64,7 +63,6 @@ background:white;
 padding:20px;
 border-radius:16px;
 margin-bottom:14px;
-
 box-shadow:
 0 3px 12px rgba(0,0,0,0.08);
 }
@@ -150,9 +148,7 @@ color:#b91c1c;
 }
 
 
-/* =========================
-   APPROVED SUBMISSION
-========================= */
+/* ================= APPROVED ================= */
 
 .submission-section-title{
 font-size:20px;
@@ -191,9 +187,7 @@ word-break:break-word;
 }
 
 
-/* =========================
-   BLOOD DONOR
-========================= */
+/* ================= BLOOD ================= */
 
 .blood-section-title{
 font-size:20px;
@@ -243,9 +237,7 @@ margin-top:5px;
 }
 
 
-/* ===============================
-IMAGE POST
-=============================== */
+/* ================= IMAGE POST ================= */
 
 .posts-section-title{
 font-size:20px;
@@ -292,6 +284,9 @@ background:#eee;
 max-height:650px;
 }
 
+
+/* ================= FOOTER ================= */
+
 footer{
 margin-top:30px;
 padding:25px 15px;
@@ -323,6 +318,7 @@ background:#1877F2;
 
 </head>
 
+
 <body>
 
 
@@ -336,7 +332,6 @@ background:#1877F2;
 
 
 <div class="container">
-
 
 <a
 href="index.html"
@@ -358,7 +353,6 @@ class="back">
 <div id="approvedSubmissions"></div>
 
 <div id="imagePosts"></div>
-
 
 </div>
 
@@ -463,9 +457,7 @@ appId:
 
 
 const app =
-initializeApp(
-firebaseConfig
-);
+initializeApp(firebaseConfig);
 
 const db =
 getFirestore(app);
@@ -479,6 +471,8 @@ window.location.search
 const categoryId =
 params.get("id");
 
+
+/* ================= UPAZILA ================= */
 
 const upazilas = [
 
@@ -530,42 +524,25 @@ ids:[
 ];
 
 
-/* =========================
-   WEBSITE LINK
-========================= */
+/* ================= WEBSITE LINKS ================= */
 
 function makePhoneLinks(text){
 
 let safeText =
-escapeHTML(
-text || ""
-);
+escapeHTML(text || "");
 
-
-/*
-http:// অথবা https://
-দিয়ে শুরু হওয়া website
-clickable করা
-*/
 
 safeText =
 safeText.replace(
 /(https?:\/\/[^\s<]+)/g,
 function(url){
 
-/*
-শেষের punctuation URL-এর
-বাইরে রাখা
-*/
-
 let cleanUrl = url;
 let ending = "";
 
 while(
 cleanUrl.length > 0 &&
-/[.,!?;:)\]}]$/.test(
-cleanUrl
-)
+/[.,!?;:)\]}]$/.test(cleanUrl)
 ){
 
 ending =
@@ -583,9 +560,10 @@ return `
 <a
 href="${cleanUrl}"
 target="_blank"
-rel="noopener noreferrer"
->
+rel="noopener noreferrer">
+
 ${cleanUrl}
+
 </a>${ending}
 `;
 
@@ -598,9 +576,7 @@ return safeText;
 }
 
 
-/* =========================
-   TIME
-========================= */
+/* ================= TIME ================= */
 
 function formatPostTime(timestamp){
 
@@ -622,7 +598,6 @@ date =
 timestamp.toDate();
 
 }
-
 else if(
 timestamp.seconds
 ){
@@ -633,7 +608,6 @@ timestamp.seconds * 1000
 );
 
 }
-
 else{
 
 date =
@@ -642,9 +616,7 @@ new Date(timestamp);
 }
 
 if(
-isNaN(
-date.getTime()
-)
+isNaN(date.getTime())
 ){
 
 return "";
@@ -672,9 +644,9 @@ return "";
 }
 
 
-/* =====================================================
-   BLOOD DONORS
-===================================================== */
+/* ================================================= */
+/* ================= BLOOD DONORS ================== */
+/* ================================================= */
 
 async function loadBloodDonors(){
 
@@ -683,9 +655,12 @@ document.getElementById(
 "bloodDonors"
 );
 
+bloodDonors.innerHTML = "";
 
-bloodDonors.innerHTML =
-"";
+
+if(!categoryId){
+return;
+}
 
 
 try{
@@ -709,15 +684,25 @@ const data =
 donorDoc.data();
 
 
+const sameCategory =
+String(
+data.categoryId || ""
+).trim()
+===
+String(
+categoryId || ""
+).trim();
+
+
 if(
 data.type === "blood" &&
-data.status === "approved"
+data.status === "approved" &&
+sameCategory
 ){
 
 donors.push({
 
-id:
-donorDoc.id,
+id:donorDoc.id,
 
 ...data
 
@@ -808,8 +793,7 @@ card.innerHTML = `
 <div class="blood-group">
 
 🩸 ${escapeHTML(
-donor.bloodGroup ||
-""
+donor.bloodGroup || ""
 )}
 
 </div>
@@ -817,8 +801,7 @@ donor.bloodGroup ||
 <div class="blood-name">
 
 ${escapeHTML(
-donor.name ||
-""
+donor.name || ""
 )}
 
 </div>
@@ -827,8 +810,7 @@ donor.name ||
 
 📍 <b>ঠিকানা:</b>
 ${escapeHTML(
-donor.address ||
-""
+donor.address || ""
 )}
 
 </div>
@@ -837,17 +819,14 @@ donor.address ||
 
 📱 <b>মোবাইল:</b>
 ${escapeHTML(
-donor.mobile ||
-""
+donor.mobile || ""
 )}
 
 </div>
 
 `;
 
-bloodDonors.appendChild(
-card
-);
+bloodDonors.appendChild(card);
 
 });
 
@@ -867,9 +846,9 @@ bloodDonors.innerHTML = "";
 }
 
 
-/* =====================================================
-   APPROVED SUBMISSIONS
-===================================================== */
+/* ================================================= */
+/* ============== APPROVED SUBMISSIONS ============= */
+/* ================================================= */
 
 async function loadApprovedSubmissions(){
 
@@ -913,28 +892,19 @@ data.categoryId || ""
 ).trim()
 ===
 String(
-categoryId
+categoryId || ""
 ).trim();
 
 
 if(
 data.status === "approved" &&
-sameCategory
+sameCategory &&
+data.type !== "blood"
 ){
-
-if(
-data.type === "blood"
-){
-
-return;
-
-}
-
 
 submissions.push({
 
-id:
-submissionDoc.id,
+id:submissionDoc.id,
 
 ...data
 
@@ -1010,6 +980,8 @@ item.name ||
 item.businessName ||
 item.institutionName ||
 item.restaurantName ||
+item.serviceName ||
+item.route ||
 "তথ্য";
 
 
@@ -1018,6 +990,8 @@ item.details ||
 item.description ||
 item.content ||
 item.info ||
+item.bio ||
+item.schedule ||
 "";
 
 
@@ -1043,6 +1017,70 @@ html += `
 
 👤 <b>নাম:</b>
 ${escapeHTML(item.name)}
+
+</div>
+
+`;
+
+}
+
+
+if(item.identity){
+
+html += `
+
+<div class="submission-row">
+
+📌 <b>পরিচয়:</b>
+${escapeHTML(item.identity)}
+
+</div>
+
+`;
+
+}
+
+
+if(item.specialty){
+
+html += `
+
+<div class="submission-row">
+
+⚖️ <b>বিশেষত্ব:</b>
+${escapeHTML(item.specialty)}
+
+</div>
+
+`;
+
+}
+
+
+if(item.chamber){
+
+html += `
+
+<div class="submission-row">
+
+🏢 <b>চেম্বার:</b>
+${escapeHTML(item.chamber)}
+
+</div>
+
+`;
+
+}
+
+
+if(item.counter){
+
+html += `
+
+<div class="submission-row">
+
+📍 <b>কাউন্টার:</b>
+${escapeHTML(item.counter)}
 
 </div>
 
@@ -1150,6 +1188,38 @@ ${escapeHTML(item.upazila)}
 }
 
 
+if(item.available24h){
+
+html += `
+
+<div class="submission-row">
+
+⏰ <b>২৪ ঘণ্টা সেবা:</b>
+${escapeHTML(item.available24h)}
+
+</div>
+
+`;
+
+}
+
+
+if(item.source){
+
+html += `
+
+<div class="submission-row">
+
+🔗 <b>তথ্যসূত্র:</b>
+${makePhoneLinks(item.source)}
+
+</div>
+
+`;
+
+}
+
+
 if(details){
 
 html += `
@@ -1175,7 +1245,8 @@ if(time){
 
 html += `
 
-<div class="post-time"
+<div
+class="post-time"
 style="padding:12px 0 0;">
 
 🕐 ${time}
@@ -1190,9 +1261,7 @@ style="padding:12px 0 0;">
 card.innerHTML =
 html;
 
-box.appendChild(
-card
-);
+box.appendChild(card);
 
 });
 
@@ -1212,9 +1281,9 @@ box.innerHTML = "";
 }
 
 
-/* =====================================================
-   IMAGE POSTS
-===================================================== */
+/* ================================================= */
+/* ================= IMAGE POSTS =================== */
+/* ================================================= */
 
 async function loadImagePosts(){
 
@@ -1223,8 +1292,7 @@ document.getElementById(
 "imagePosts"
 );
 
-imagePosts.innerHTML =
-"";
+imagePosts.innerHTML = "";
 
 
 if(!categoryId){
@@ -1259,14 +1327,13 @@ data.categoryId || ""
 ).trim()
 ===
 String(
-categoryId
+categoryId || ""
 ).trim()
 ){
 
 posts.push({
 
-id:
-postDoc.id,
+id:postDoc.id,
 
 ...data
 
@@ -1448,10 +1515,7 @@ postTime
 
 `;
 
-
-imagePosts.appendChild(
-card
-);
+imagePosts.appendChild(card);
 
 });
 
@@ -1468,9 +1532,9 @@ error
 }
 
 
-/* =====================================================
-   DATA LOAD
-===================================================== */
+/* ================================================= */
+/* ================= LOAD DATA ===================== */
+/* ================================================= */
 
 async function loadData(){
 
@@ -1504,23 +1568,18 @@ try{
 
 const categorySnapshot =
 await getDocs(
-collection(
-db,
-"categories"
-)
+collection(db,"categories")
 );
 
 
-let categoryData =
-null;
+let categoryData = null;
 
 
 categorySnapshot.forEach(
 function(categoryDoc){
 
 if(
-categoryDoc.id ===
-categoryId
+categoryDoc.id === categoryId
 ){
 
 categoryData =
@@ -1548,8 +1607,7 @@ categoryBox.innerHTML = `
 <div class="icon">
 
 ${escapeHTML(
-categoryData.icon ||
-"📌"
+categoryData.icon || "📌"
 )}
 
 </div>
@@ -1557,8 +1615,7 @@ categoryData.icon ||
 <h2>
 
 ${escapeHTML(
-categoryData.name ||
-""
+categoryData.name || ""
 )}
 
 </h2>
@@ -1566,8 +1623,7 @@ categoryData.name ||
 <p>
 
 ${escapeHTML(
-categoryData.description ||
-""
+categoryData.description || ""
 )}
 
 </p>
@@ -1577,16 +1633,13 @@ categoryData.description ||
 `;
 
 
-/*
-রক্তদাতা Topic হলে
-approved donor দেখাবে
-*/
+/* ================= BLOOD ================= */
 
 if(
 String(
-categoryData.name ||
-""
-).trim() ===
+categoryData.name || ""
+).trim()
+===
 "রক্তদাতা"
 ){
 
@@ -1595,9 +1648,7 @@ await loadBloodDonors();
 }
 
 
-/* =================
-   CONTENT
-================= */
+/* ================= CONTENT ================= */
 
 const contentSnapshot =
 await getDocs(
@@ -1620,8 +1671,7 @@ contentDoc.data();
 
 allContents.push({
 
-id:
-contentDoc.id,
+id:contentDoc.id,
 
 ...data
 
@@ -1633,12 +1683,8 @@ contentDoc.id,
 const isUpazila =
 categoryData.name &&
 (
-categoryData.name.includes(
-"উপজেলা"
-) ||
-categoryData.name.includes(
-"উপজেলার"
-)
+categoryData.name.includes("উপজেলা") ||
+categoryData.name.includes("উপজেলার")
 );
 
 
@@ -1661,27 +1707,19 @@ allContents
 }
 
 
-/*
-Approved Submission
-*/
+/* APPROVED USER SUBMISSIONS */
 
 await loadApprovedSubmissions();
 
 
-/*
-Image Post
-*/
+/* IMAGE POSTS */
 
 await loadImagePosts();
-
 
 }
 catch(error){
 
-console.error(
-error
-);
-
+console.error(error);
 
 categoryBox.innerHTML = `
 
@@ -1698,9 +1736,9 @@ categoryBox.innerHTML = `
 }
 
 
-/* =====================================================
-   UPAZILA
-===================================================== */
+/* ================================================= */
+/* ================= UPAZILA LIST ================== */
+/* ================================================= */
 
 function showUpazilaList(
 upazilaList,
@@ -1761,9 +1799,7 @@ allContents
 };
 
 
-upazilaList.appendChild(
-card
-);
+upazilaList.appendChild(card);
 
 });
 
@@ -1781,9 +1817,9 @@ contents.innerHTML = `
 }
 
 
-/* =====================================================
-   SHOW UPAZILA
-===================================================== */
+/* ================================================= */
+/* ================= SHOW UPAZILA ================== */
+/* ================================================= */
 
 function showUpazila(
 upazila,
@@ -1802,8 +1838,7 @@ function(item){
 
 return upazila.ids.includes(
 String(
-item.categoryId ||
-""
+item.categoryId || ""
 ).trim()
 );
 
@@ -1821,8 +1856,7 @@ function(item){
 
 const title =
 String(
-item.title ||
-""
+item.title || ""
 ).trim();
 
 
@@ -1904,17 +1938,16 @@ window.scrollTo({
 top:
 contents.offsetTop - 15,
 
-behavior:
-"smooth"
+behavior:"smooth"
 
 });
 
 }
 
 
-/* =====================================================
-   CREATE SECTIONS
-===================================================== */
+/* ================================================= */
+/* ================= CREATE SECTIONS =============== */
+/* ================================================= */
 
 function createSections(
 container,
@@ -1950,9 +1983,7 @@ sections.forEach(
 function(section){
 
 const lines =
-section.split(
-"\n"
-);
+section.split("\n");
 
 
 const heading =
@@ -1979,9 +2010,7 @@ card.innerHTML = `
 
 <div class="info-heading">
 
-${escapeHTML(
-heading
-)}
+${escapeHTML(heading)}
 
 </div>
 
@@ -2002,26 +2031,23 @@ ${makePhoneLinks(body)}
 `;
 
 
-container.appendChild(
-card
-);
+container.appendChild(card);
 
 });
 
 }
 
 
-/* =====================================================
-   OTHER CATEGORY
-===================================================== */
+/* ================================================= */
+/* ================= OTHER CONTENT ================= */
+/* ================================================= */
 
 function showAllContents(
 contents,
 allContents
 ){
 
-contents.innerHTML =
-"";
+contents.innerHTML = "";
 
 
 const matched =
@@ -2029,12 +2055,11 @@ allContents.filter(
 function(item){
 
 return String(
-item.categoryId ||
-""
+item.categoryId || ""
 ).trim()
 ===
 String(
-categoryId
+categoryId || ""
 ).trim();
 
 }
@@ -2073,33 +2098,18 @@ item.content || ""
 }
 
 
-/* =====================================================
-   ESCAPE
-===================================================== */
+/* ================================================= */
+/* ================= ESCAPE ======================== */
+/* ================================================= */
 
 function escapeHTML(value){
 
 return String(value || "")
-.replace(
-/&/g,
-"&amp;"
-)
-.replace(
-/</g,
-"&lt;"
-)
-.replace(
-/>/g,
-"&gt;"
-)
-.replace(
-/"/g,
-"&quot;"
-)
-.replace(
-/'/g,
-"&#039;"
-);
+.replace(/&/g,"&amp;")
+.replace(/</g,"&lt;")
+.replace(/>/g,"&gt;")
+.replace(/"/g,"&quot;")
+.replace(/'/g,"&#039;");
 
 }
 
@@ -2107,29 +2117,15 @@ return String(value || "")
 function escapeAttribute(value){
 
 return String(value || "")
-.replace(
-/&/g,
-"&amp;"
-)
-.replace(
-/"/g,
-"&quot;"
-)
-.replace(
-/</g,
-"&lt;"
-)
-.replace(
-/>/g,
-"&gt;"
-);
+.replace(/&/g,"&amp;")
+.replace(/"/g,"&quot;")
+.replace(/</g,"&lt;")
+.replace(/>/g,"&gt;");
 
 }
 
 
-/* =================
-   START
-================= */
+/* ================= START ================= */
 
 loadData();
 
