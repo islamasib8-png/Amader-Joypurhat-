@@ -235,6 +235,13 @@ margin-top:5px;
 word-break:break-word;
 }
 
+.submission-row a{
+color:#0f766e;
+font-weight:bold;
+text-decoration:underline;
+word-break:break-all;
+}
+
 .submission-details{
 margin-top:12px;
 padding-top:12px;
@@ -243,6 +250,13 @@ font-size:16px;
 line-height:1.9;
 white-space:pre-wrap;
 word-break:break-word;
+}
+
+.submission-details a{
+color:#0f766e;
+font-weight:bold;
+text-decoration:underline;
+word-break:break-all;
 }
 
 
@@ -797,16 +811,6 @@ return;
 
 }
 
-
-/*
-   কোনো content,
-   approved submission,
-   blood donor,
-   image post
-   কোনোটিই না থাকলে শুধু তখন
-   এই message দেখাবে।
-*/
-
 box.innerHTML = `
 
 <div class="empty-message">
@@ -951,7 +955,7 @@ document.getElementById(
 bloodDonors.innerHTML = "";
 
 if(!categoryId){
-return;
+return 0;
 }
 
 try{
@@ -1045,7 +1049,7 @@ if(
 donors.length === 0
 ){
 
-return;
+return 0;
 
 }
 
@@ -1117,6 +1121,8 @@ bloodDonors.appendChild(card);
 
 });
 
+return donors.length;
+
 }
 catch(error){
 
@@ -1126,6 +1132,8 @@ error
 );
 
 bloodDonors.innerHTML = "";
+
+return 0;
 
 }
 
@@ -1146,7 +1154,7 @@ document.getElementById(
 box.innerHTML = "";
 
 if(!categoryId){
-return;
+return 0;
 }
 
 try{
@@ -1182,12 +1190,6 @@ data.status === "approved" &&
 sameCategory &&
 data.type !== "blood"
 ){
-
-/*
-   SPECIAL SUBCATEGORY:
-   selected থাকলে exact match ছাড়া
-   কোনো data দেখাবে না।
-*/
 
 if(
 selectedSubCategory
@@ -1255,14 +1257,7 @@ if(
 submissions.length === 0
 ){
 
-/*
-   Parent special category-তে
-   কোনো subcategory select না করলে
-   এখানে "no data" message দেখানো হবে না।
-   কারণ নিচে subcategory selection আছে।
-*/
-
-return;
+return 0;
 
 }
 
@@ -1465,7 +1460,7 @@ html += `
 
 <div class="submission-row">
 
-🏢 <b>চেম্বার:</b>
+🏢 <b>চেম্বারের নাম/স্থান:</b>
 ${escapeHTML(item.chamber)}
 
 </div>
@@ -1664,12 +1659,9 @@ if(item.serialInfo){
 
 html += `
 
-<div class="submission-details">
+<div class="submission-row">
 
-📋 <b>তথ্য সিরিয়াল:</b>
-
-<br>
-
+📋 <b>তথ্য সিরিয়ালের জন্য মোবাইল নম্বর:</b>
 ${makePhoneLinks(item.serialInfo)}
 
 </div>
@@ -1744,6 +1736,8 @@ box.appendChild(card);
 
 });
 
+return submissions.length;
+
 }
 catch(error){
 
@@ -1753,6 +1747,8 @@ error
 );
 
 box.innerHTML = "";
+
+return 0;
 
 }
 
@@ -1863,11 +1859,6 @@ x.classList.remove("active");
 card.classList.add("active");
 
 
-/*
-   Subcategory select করলে
-   পুরোনো empty message clear হবে।
-*/
-
 document
 .getElementById("emptyMessage")
 .innerHTML = "";
@@ -1922,7 +1913,7 @@ document.getElementById(
 imagePosts.innerHTML = "";
 
 if(!categoryId){
-return;
+return 0;
 }
 
 try{
@@ -2026,7 +2017,7 @@ if(
 posts.length === 0
 ){
 
-return;
+return 0;
 
 }
 
@@ -2157,6 +2148,8 @@ imagePosts.appendChild(card);
 
 });
 
+return posts.length;
+
 }
 catch(error){
 
@@ -2164,6 +2157,8 @@ console.error(
 "Image Posts Error:",
 error
 );
+
+return 0;
 
 }
 
@@ -2290,6 +2285,18 @@ categoryName
 );
 
 
+/*
+   Special parent category-তে
+   শুরুতেই সব mixed submission
+   দেখানো হবে না।
+*/
+
+const isSpecialParent =
+Array.isArray(
+specialSubCategories[categoryName]
+);
+
+
 /* BLOOD */
 
 if(
@@ -2356,20 +2363,53 @@ allContents
 
 /* APPROVED */
 
+if(!isSpecialParent){
+
 await loadApprovedSubmissions();
+
+}
 
 
 /* IMAGE POSTS */
 
+if(!isSpecialParent){
+
 await loadImagePosts();
 
+}
+else{
 
-/*
-   সব data section load হওয়ার পরে
-   একবার final check হবে।
-*/
+document
+.getElementById("approvedSubmissions")
+.innerHTML = "";
+
+document
+.getElementById("imagePosts")
+.innerHTML = "";
+
+}
+
+
+if(isSpecialParent){
+
+document
+.getElementById("emptyMessage")
+.innerHTML = `
+
+<div class="empty-message">
+
+উপরের বিভাগ থেকে একটি নির্বাচন করুন।
+
+</div>
+
+`;
+
+}
+else{
 
 updateEmptyState();
+
+}
 
 }
 catch(error){
@@ -2551,11 +2591,6 @@ return;
 }
 
 
-/*
-   উপজেলা data পাওয়া গেছে।
-   তাই global empty message আর দেখাবে না।
-*/
-
 hasContent = true;
 
 updateEmptyState();
@@ -2723,17 +2758,6 @@ categoryId || ""
 if(
 matched.length === 0
 ){
-
-/*
-   এখানে আর
-   "এই Topic-এর তথ্য এখনো যোগ করা হয়নি"
-   দেখানো হবে না।
-
-   কারণ approved submission অথবা
-   image post থাকতে পারে।
-   সব load হওয়ার পরে updateEmptyState()
-   final decision নেবে।
-*/
 
 return;
 
