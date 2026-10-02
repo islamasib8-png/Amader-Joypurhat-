@@ -62,7 +62,8 @@ margin:auto;
 padding:12px;
 }
 
-/* CATEGORY */
+
+/* ================= CATEGORY ================= */
 
 .category-grid{
 display:grid;
@@ -98,7 +99,8 @@ font-size:13px;
 line-height:1.3;
 }
 
-/* ADD INFO BUTTON */
+
+/* ================= ADD INFO ================= */
 
 .add-info-area{
 margin-top:18px;
@@ -118,7 +120,8 @@ cursor:pointer;
 box-shadow:0 3px 8px rgba(0,0,0,.12);
 }
 
-/* MODAL */
+
+/* ================= MODAL ================= */
 
 .modal{
 display:none;
@@ -160,6 +163,9 @@ color:#777;
 cursor:pointer;
 }
 
+
+/* ================= OPTION ================= */
+
 .option-grid{
 display:grid;
 grid-template-columns:repeat(2,1fr);
@@ -180,6 +186,32 @@ cursor:pointer;
 .option:active{
 transform:scale(.97);
 }
+
+
+/* ================= TICKET OPTION ================= */
+
+.ticket-option{
+background:#f3f7fb;
+border:1px solid #dce5ee;
+border-radius:12px;
+padding:20px 10px;
+text-align:center;
+font-size:16px;
+font-weight:bold;
+cursor:pointer;
+}
+
+.ticket-option:active{
+transform:scale(.97);
+}
+
+.ticket-icon{
+font-size:34px;
+margin-bottom:7px;
+}
+
+
+/* ================= FORM ================= */
 
 .form-group{
 margin-bottom:13px;
@@ -257,29 +289,8 @@ background:#ffe8e8;
 color:#b00020;
 }
 
-/* TICKET MODAL */
 
-.ticket-option{
-background:#f3f7fb;
-border:1px solid #dce5ee;
-border-radius:12px;
-padding:18px 10px;
-text-align:center;
-font-size:16px;
-font-weight:bold;
-cursor:pointer;
-}
-
-.ticket-option:active{
-transform:scale(.97);
-}
-
-.ticket-icon{
-font-size:32px;
-margin-bottom:7px;
-}
-
-/* FOOTER */
+/* ================= FOOTER ================= */
 
 footer{
 background:#123;
@@ -303,7 +314,8 @@ color:#666;
 grid-column:1/-1;
 }
 
-/* MOBILE */
+
+/* ================= MOBILE ================= */
 
 @media(max-width:600px){
 
@@ -338,7 +350,7 @@ height:175px;
 <body>
 
 
-<!-- HEADER -->
+<!-- ================= HEADER ================= -->
 
 <header>
 
@@ -349,7 +361,7 @@ height:175px;
 </header>
 
 
-<!-- SLIDER -->
+<!-- ================= SLIDER ================= -->
 
 <div class="slider">
 
@@ -383,7 +395,7 @@ height:175px;
 <div class="container">
 
 
-<!-- ALL CATEGORIES -->
+<!-- ================= CATEGORY ================= -->
 
 <div
 id="categoryGrid"
@@ -396,7 +408,7 @@ class="category-grid">
 </div>
 
 
-<!-- আপনার তথ্য যোগ করুন -->
+<!-- ================= ADD INFO ================= -->
 
 <div class="add-info-area">
 
@@ -414,7 +426,9 @@ onclick="openSubmitOptions()">
 </div>
 
 
-<!-- ================= OPTION MODAL ================= -->
+<!-- ================================================= -->
+<!-- ================= SUBMISSION OPTION MODAL ======= -->
+<!-- ================================================= -->
 
 <div
 id="optionModal"
@@ -452,7 +466,9 @@ class="option-grid">
 </div>
 
 
-<!-- ================= TICKET MODAL ================= -->
+<!-- ================================================= -->
+<!-- ================= TICKET MODAL ================== -->
+<!-- ================================================= -->
 
 <div
 id="ticketModal"
@@ -518,7 +534,9 @@ onclick="openTrainWebsite()">
 </div>
 
 
-<!-- ================= FORM MODAL ================= -->
+<!-- ================================================= -->
+<!-- ================= FORM MODAL ==================== -->
+<!-- ================================================= -->
 
 <div
 id="formModal"
@@ -597,7 +615,7 @@ class="message">
 </div>
 
 
-<!-- FOOTER -->
+<!-- ================= FOOTER ================= -->
 
 <footer>
 
@@ -653,7 +671,9 @@ Facebook
 <script type="module">
 
 
-/* ================= FIREBASE ================= */
+/* ================================================= */
+/* ================= FIREBASE ====================== */
+/* ================================================= */
 
 import {
 initializeApp
@@ -703,7 +723,9 @@ const db =
 getFirestore(app);
 
 
-/* ================= SLIDER ================= */
+/* ================================================= */
+/* ================= SLIDER ========================= */
+/* ================================================= */
 
 const slides =
 document.querySelectorAll(".slider img");
@@ -712,6 +734,10 @@ let slideIndex = 0;
 
 
 setInterval(function(){
+
+if(slides.length === 0){
+return;
+}
 
 slides[slideIndex]
 .classList.remove("active");
@@ -733,7 +759,9 @@ slides[slideIndex]
 },4000);
 
 
-/* ================= CATEGORY ORDER ================= */
+/* ================================================= */
+/* ================= CATEGORY ORDER ================ */
+/* ================================================= */
 
 const categoryOrder = {
 
@@ -746,41 +774,68 @@ const categoryOrder = {
 };
 
 
-/* ================= SPECIAL WEBSITE ================= */
+/* ================================================= */
+/* ================= SPECIAL CATEGORY ============== */
+/* ================================================= */
+
 
 /*
-বাস ট্রেনের সময়সূচি
-→ Ticket selection modal
+এই function category-এর নাম দেখে
+বাস/ট্রেন category শনাক্ত করবে।
 */
 
-function isBusTrainCategory(name){
+function getTransportType(name){
 
 const n =
 String(name || "")
 .trim()
 .replace(/\s+/g," ");
 
-return (
 
-n === "বাস ট্রেনের সময়সূচি" ||
+/* আলাদা বাস Category */
 
-n === "বাস ও ট্রেনের সময়সূচি" ||
+if(
+n.includes("বাস") &&
+!n.includes("ট্রেন")
+){
 
-n === "বাস-ট্রেনের সময়সূচি" ||
-
-n === "বাস ট্রেন" ||
-
-n === "বাস ও ট্রেন"
-
-);
+return "bus";
 
 }
 
 
-/*
-আজকের খবর
-→ Joypurhat News 24
-*/
+/* আলাদা ট্রেন Category */
+
+if(
+n.includes("ট্রেন") &&
+!n.includes("বাস")
+){
+
+return "train";
+
+}
+
+
+/* একই Category-তে বাস + ট্রেন */
+
+if(
+n.includes("বাস") &&
+n.includes("ট্রেন")
+){
+
+return "both";
+
+}
+
+
+return "";
+
+}
+
+
+/* ================================================= */
+/* ================= NEWS CATEGORY ================== */
+/* ================================================= */
 
 function isNewsCategory(name){
 
@@ -789,20 +844,25 @@ String(name || "")
 .trim()
 .replace(/\s+/g," ");
 
+
 return (
 
-n === "আজকের খবর" ||
+n.includes("আজকের খবর") ||
 
-n === "আজকের সংবাদ" ||
+n.includes("আজকের নিউজ") ||
 
-n === "খবর"
+n === "খবর" ||
+
+n.includes("আজকের সংবাদ")
 
 );
 
 }
 
 
-/* ================= TICKET WEBSITE ================= */
+/* ================================================= */
+/* ================= BUS WEBSITE ==================== */
+/* ================================================= */
 
 window.openBusWebsite =
 function(){
@@ -813,6 +873,10 @@ window.location.href =
 };
 
 
+/* ================================================= */
+/* ================= TRAIN WEBSITE ================== */
+/* ================================================= */
+
 window.openTrainWebsite =
 function(){
 
@@ -822,17 +886,24 @@ window.location.href =
 };
 
 
+/* ================================================= */
+/* ================= CLOSE TICKET =================== */
+/* ================================================= */
+
 window.closeTicketModal =
 function(){
 
 document
 .getElementById("ticketModal")
-.style.display = "none";
+.style.display =
+"none";
 
 };
 
 
-/* ================= SUBMISSION TYPES ================= */
+/* ================================================= */
+/* ================= SUBMISSION TYPES =============== */
+/* ================================================= */
 
 const submissionTypes = [
 
@@ -941,7 +1012,9 @@ title:"🚨 জরুরি সেবার তথ্য"
 ];
 
 
-/* ================= OPTION LIST ================= */
+/* ================================================= */
+/* ================= OPTION LIST ==================== */
+/* ================================================= */
 
 function loadSubmissionOptions(){
 
@@ -956,10 +1029,12 @@ submissionTypes.forEach(function(item){
 const div =
 document.createElement("div");
 
-div.className = "option";
+div.className =
+"option";
 
 div.textContent =
 item.label;
+
 
 div.onclick =
 function(){
@@ -979,14 +1054,17 @@ grid.appendChild(div);
 loadSubmissionOptions();
 
 
-/* ================= MODAL ================= */
+/* ================================================= */
+/* ================= MODAL ========================== */
+/* ================================================= */
 
 window.openSubmitOptions =
 function(){
 
 document
 .getElementById("optionModal")
-.style.display = "block";
+.style.display =
+"block";
 
 };
 
@@ -996,22 +1074,26 @@ function(){
 
 document
 .getElementById("optionModal")
-.style.display = "none";
+.style.display =
+"none";
 
 
 document
 .getElementById("formModal")
-.style.display = "none";
+.style.display =
+"none";
 
 
 document
 .getElementById("ticketModal")
-.style.display = "none";
+.style.display =
+"none";
 
 
 document
 .getElementById("formMessage")
-.style.display = "none";
+.style.display =
+"none";
 
 };
 
@@ -1021,17 +1103,21 @@ function(){
 
 document
 .getElementById("formModal")
-.style.display = "none";
+.style.display =
+"none";
 
 
 document
 .getElementById("optionModal")
-.style.display = "block";
+.style.display =
+"block";
 
 };
 
 
-/* ================= FIELD ================= */
+/* ================================================= */
+/* ================= FIELD ========================== */
+/* ================================================= */
 
 function field(
 name,
@@ -1168,7 +1254,9 @@ placeholder="${placeholder}">
 }
 
 
-/* ================= BUILD FORM ================= */
+/* ================================================= */
+/* ================= BUILD FORM ==================== */
+/* ================================================= */
 
 function buildForm(type){
 
@@ -1724,17 +1812,22 @@ break;
 
 document
 .getElementById("dynamicFields")
-.innerHTML = html;
+.innerHTML =
+html;
 
 }
 
 
+/* ================================================= */
 /* ================= SELECTED TYPE ================= */
+/* ================================================= */
 
 let selectedType = "";
 
 
-/* ================= OPEN FORM ================= */
+/* ================================================= */
+/* ================= OPEN FORM ====================== */
+/* ================================================= */
 
 window.openSubmissionForm =
 function(type){
@@ -1748,27 +1841,33 @@ x => x.type === type
 );
 
 
-if(!item) return;
+if(!item){
+return;
+}
 
 
 document
 .getElementById("optionModal")
-.style.display = "none";
+.style.display =
+"none";
 
 
 document
 .getElementById("formModal")
-.style.display = "block";
+.style.display =
+"block";
 
 
 document
 .getElementById("formTitle")
-.textContent = item.title;
+.textContent =
+item.title;
 
 
 document
 .getElementById("formMessage")
-.style.display = "none";
+.style.display =
+"none";
 
 
 document
@@ -1781,7 +1880,9 @@ buildForm(type);
 };
 
 
-/* ================= SUBMIT ================= */
+/* ================================================= */
+/* ================= SUBMIT ======================== */
+/* ================================================= */
 
 document
 .getElementById("submissionForm")
@@ -1796,7 +1897,8 @@ const message =
 document.getElementById("formMessage");
 
 
-message.style.display = "none";
+message.style.display =
+"none";
 
 
 if(
@@ -1870,7 +1972,6 @@ message.style.display =
 
 this.reset();
 
-
 }
 
 catch(error){
@@ -1894,7 +1995,9 @@ message.style.display =
 });
 
 
-/* ================= LOAD CATEGORIES ================= */
+/* ================================================= */
+/* ================= LOAD CATEGORIES =============== */
+/* ================================================= */
 
 async function loadCategories(){
 
@@ -1978,7 +2081,9 @@ div.className =
 "category-card";
 
 
-/* ================= CATEGORY CLICK ================= */
+/* ================================================= */
+/* ============== CATEGORY CLICK =================== */
+/* ================================================= */
 
 div.onclick =
 function(){
@@ -1989,26 +2094,55 @@ String(cat.name || "")
 .replace(/\s+/g," ");
 
 
-/*
-বাস ট্রেনের সময়সূচি
-*/
+const transport =
+getTransportType(categoryName);
+
+
+/* ================= BUS ================= */
 
 if(
-isBusTrainCategory(categoryName)
+transport === "bus"
 ){
 
-document
-.getElementById("ticketModal")
-.style.display = "block";
+window.location.href =
+"https://www.shohoz.com/bus-tickets/";
 
 return;
 
 }
 
 
-/*
-আজকের খবর
-*/
+/* ================= TRAIN ================= */
+
+if(
+transport === "train"
+){
+
+window.location.href =
+"https://eticket.railway.gov.bd/";
+
+return;
+
+}
+
+
+/* ================= BOTH ================= */
+
+if(
+transport === "both"
+){
+
+document
+.getElementById("ticketModal")
+.style.display =
+"block";
+
+return;
+
+}
+
+
+/* ================= NEWS ================= */
 
 if(
 isNewsCategory(categoryName)
@@ -2022,11 +2156,9 @@ return;
 }
 
 
-/*
-অন্য সব Category
-*/
+/* ================= OTHER ================= */
 
-location.href =
+window.location.href =
 "topic.html?id=" +
 encodeURIComponent(
 cat.id
@@ -2044,7 +2176,6 @@ cat.icon || "📌"
 )}
 
 </div>
-
 
 <div class="category-name">
 
@@ -2083,7 +2214,9 @@ grid.innerHTML = `
 }
 
 
-/* ================= ESCAPE ================= */
+/* ================================================= */
+/* ================= ESCAPE ======================== */
+/* ================================================= */
 
 function escapeHTML(value){
 
@@ -2105,7 +2238,9 @@ return String(value || "")
 loadCategories();
 
 
-/* ================= MODAL CLICK ================= */
+/* ================================================= */
+/* ================= MODAL CLICK =================== */
+/* ================================================= */
 
 window.addEventListener(
 "click",
