@@ -257,6 +257,28 @@ background:#ffe8e8;
 color:#b00020;
 }
 
+/* TICKET MODAL */
+
+.ticket-option{
+background:#f3f7fb;
+border:1px solid #dce5ee;
+border-radius:12px;
+padding:18px 10px;
+text-align:center;
+font-size:16px;
+font-weight:bold;
+cursor:pointer;
+}
+
+.ticket-option:active{
+transform:scale(.97);
+}
+
+.ticket-icon{
+font-size:32px;
+margin-bottom:7px;
+}
+
 /* FOOTER */
 
 footer{
@@ -375,7 +397,6 @@ class="category-grid">
 
 
 <!-- আপনার তথ্য যোগ করুন -->
-<!-- সব Category-এর নিচে -->
 
 <div class="add-info-area">
 
@@ -425,6 +446,72 @@ class="option-grid">
 
 </div>
 
+
+</div>
+
+</div>
+
+
+<!-- ================= TICKET MODAL ================= -->
+
+<div
+id="ticketModal"
+class="modal">
+
+<div class="modal-box">
+
+
+<div class="modal-header">
+
+<h2>
+🚌🚆 টিকিট নির্বাচন করুন
+</h2>
+
+<span
+class="close"
+onclick="closeTicketModal()">
+
+×
+
+</span>
+
+</div>
+
+
+<div class="option-grid">
+
+
+<div
+class="ticket-option"
+onclick="openBusWebsite()">
+
+<div class="ticket-icon">
+🚌
+</div>
+
+<div>
+বাসের টিকিট
+</div>
+
+</div>
+
+
+<div
+class="ticket-option"
+onclick="openTrainWebsite()">
+
+<div class="ticket-icon">
+🚆
+</div>
+
+<div>
+ট্রেনের টিকিট
+</div>
+
+</div>
+
+
+</div>
 
 </div>
 
@@ -659,6 +746,92 @@ const categoryOrder = {
 };
 
 
+/* ================= SPECIAL WEBSITE ================= */
+
+/*
+বাস ট্রেনের সময়সূচি
+→ Ticket selection modal
+*/
+
+function isBusTrainCategory(name){
+
+const n =
+String(name || "")
+.trim()
+.replace(/\s+/g," ");
+
+return (
+
+n === "বাস ট্রেনের সময়সূচি" ||
+
+n === "বাস ও ট্রেনের সময়সূচি" ||
+
+n === "বাস-ট্রেনের সময়সূচি" ||
+
+n === "বাস ট্রেন" ||
+
+n === "বাস ও ট্রেন"
+
+);
+
+}
+
+
+/*
+আজকের খবর
+→ Joypurhat News 24
+*/
+
+function isNewsCategory(name){
+
+const n =
+String(name || "")
+.trim()
+.replace(/\s+/g," ");
+
+return (
+
+n === "আজকের খবর" ||
+
+n === "আজকের সংবাদ" ||
+
+n === "খবর"
+
+);
+
+}
+
+
+/* ================= TICKET WEBSITE ================= */
+
+window.openBusWebsite =
+function(){
+
+window.location.href =
+"https://www.shohoz.com/bus-tickets/";
+
+};
+
+
+window.openTrainWebsite =
+function(){
+
+window.location.href =
+"https://eticket.railway.gov.bd/";
+
+};
+
+
+window.closeTicketModal =
+function(){
+
+document
+.getElementById("ticketModal")
+.style.display = "none";
+
+};
+
+
 /* ================= SUBMISSION TYPES ================= */
 
 const submissionTypes = [
@@ -828,6 +1001,11 @@ document
 
 document
 .getElementById("formModal")
+.style.display = "none";
+
+
+document
+.getElementById("ticketModal")
 .style.display = "none";
 
 
@@ -1800,8 +1978,53 @@ div.className =
 "category-card";
 
 
+/* ================= CATEGORY CLICK ================= */
+
 div.onclick =
 function(){
+
+const categoryName =
+String(cat.name || "")
+.trim()
+.replace(/\s+/g," ");
+
+
+/*
+বাস ট্রেনের সময়সূচি
+*/
+
+if(
+isBusTrainCategory(categoryName)
+){
+
+document
+.getElementById("ticketModal")
+.style.display = "block";
+
+return;
+
+}
+
+
+/*
+আজকের খবর
+*/
+
+if(
+isNewsCategory(categoryName)
+){
+
+window.location.href =
+"https://joypurhatnews24.com/";
+
+return;
+
+}
+
+
+/*
+অন্য সব Category
+*/
 
 location.href =
 "topic.html?id=" +
@@ -1911,8 +2134,19 @@ closeAllModals();
 
 }
 
-});
 
+if(
+e.target ===
+document.getElementById(
+"ticketModal"
+)
+){
+
+closeTicketModal();
+
+}
+
+});
 
 </script>
 
