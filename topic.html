@@ -139,6 +139,16 @@ padding:30px;
 color:#666;
 }
 
+.empty-message{
+background:white;
+padding:20px;
+border-radius:15px;
+text-align:center;
+color:#666;
+margin-top:15px;
+box-shadow:0 3px 12px rgba(0,0,0,.06);
+}
+
 .error{
 background:white;
 padding:20px;
@@ -252,19 +262,6 @@ background:#eee;
 overflow:hidden;
 border-radius:16px 16px 0 0;
 margin-bottom:15px;
-}
-
-
-/* ================= PLACE IMAGE ================= */
-
-.place-submission-image{
-width:100%;
-max-height:430px;
-object-fit:cover;
-display:block;
-margin:-20px -20px 16px;
-width:calc(100% + 40px);
-background:#eee;
 }
 
 
@@ -404,7 +401,6 @@ background:#1877F2;
 grid-template-columns:repeat(2,1fr);
 }
 
-.place-submission-image,
 .submission-image{
 max-height:300px;
 }
@@ -448,6 +444,8 @@ class="back">
 <div id="approvedSubmissions"></div>
 
 <div id="imagePosts"></div>
+
+<div id="emptyMessage"></div>
 
 </div>
 
@@ -530,7 +528,7 @@ from
 const firebaseConfig = {
 
 apiKey:
-"AIzaSyAG05o2MjHH3UL8Gp7VNmrQGeqq-4YrDEk",
+"AIzaSyAG05o2MjHH3UL8GpAvQQGeqq-4YrDEk",
 
 authDomain:
 "amader-joypurhat-7b3fb.firebaseapp.com",
@@ -598,7 +596,7 @@ icon:"👩‍⚕️"
 
 {
 id:"class6-12",
-name:"৬ষ্ঠ-১২শ কোচিং",
+name:"৬ষ্ঠ-১২ কোচিং",
 icon:"📚"
 }
 
@@ -755,6 +753,71 @@ ids:[
 }
 
 ];
+
+
+/* ================= EMPTY STATE ================= */
+
+let hasContent = false;
+let hasApprovedSubmission = false;
+let hasBloodDonor = false;
+let hasImagePost = false;
+
+
+function resetEmptyState(){
+
+hasContent = false;
+hasApprovedSubmission = false;
+hasBloodDonor = false;
+hasImagePost = false;
+
+document
+.getElementById("emptyMessage")
+.innerHTML = "";
+
+}
+
+
+function updateEmptyState(){
+
+const box =
+document.getElementById(
+"emptyMessage"
+);
+
+if(
+hasContent ||
+hasApprovedSubmission ||
+hasBloodDonor ||
+hasImagePost
+){
+
+box.innerHTML = "";
+
+return;
+
+}
+
+
+/*
+   কোনো content,
+   approved submission,
+   blood donor,
+   image post
+   কোনোটিই না থাকলে শুধু তখন
+   এই message দেখাবে।
+*/
+
+box.innerHTML = `
+
+<div class="empty-message">
+
+এই Topic-এর তথ্য এখনো যোগ করা হয়নি।
+
+</div>
+
+`;
+
+}
 
 
 /* ================= LINKS ================= */
@@ -982,25 +1045,12 @@ if(
 donors.length === 0
 ){
 
-bloodDonors.innerHTML = `
-
-<div class="blood-section-title">
-
-🩸 রক্তদাতা
-
-</div>
-
-<div class="loading">
-
-বর্তমানে কোনো অনুমোদিত রক্তদাতার তথ্য নেই।
-
-</div>
-
-`;
-
 return;
 
 }
+
+
+hasBloodDonor = true;
 
 
 bloodDonors.innerHTML = `
@@ -1012,6 +1062,7 @@ bloodDonors.innerHTML = `
 </div>
 
 `;
+
 
 donors.forEach(
 function(donor){
@@ -1126,12 +1177,6 @@ categoryId || ""
 ).trim();
 
 
-/*
-   শুধু approved এবং
-   বর্তমান Topic-এর categoryId
-   একই হলে দেখাবে।
-*/
-
 if(
 data.status === "approved" &&
 sameCategory &&
@@ -1139,7 +1184,9 @@ data.type !== "blood"
 ){
 
 /*
-   SUBCATEGORY FILTER
+   SPECIAL SUBCATEGORY:
+   selected থাকলে exact match ছাড়া
+   কোনো data দেখাবে না।
 */
 
 if(
@@ -1208,25 +1255,19 @@ if(
 submissions.length === 0
 ){
 
-box.innerHTML = `
-
-<div class="loading">
-
-${
-selectedSubCategory
-?
-"এই উপ-বিভাগের কোনো অনুমোদিত তথ্য এখনো যোগ হয়নি।"
-:
-"এই Topic-এর কোনো অনুমোদিত তথ্য এখনো যোগ হয়নি।"
-}
-
-</div>
-
-`;
+/*
+   Parent special category-তে
+   কোনো subcategory select না করলে
+   এখানে "no data" message দেখানো হবে না।
+   কারণ নিচে subcategory selection আছে।
+*/
 
 return;
 
 }
+
+
+hasApprovedSubmission = true;
 
 
 box.innerHTML = `
@@ -1284,7 +1325,7 @@ item.schedule ||
 let html = "";
 
 
-/* ================= IMAGE ================= */
+/* IMAGE */
 
 if(
 item.imageUrl
@@ -1308,7 +1349,7 @@ onerror="this.parentElement.style.display='none';">
 }
 
 
-/* ================= TITLE ================= */
+/* TITLE */
 
 html += `
 
@@ -1321,7 +1362,7 @@ ${escapeHTML(title)}
 `;
 
 
-/* ================= SUBCATEGORY ================= */
+/* SUBCATEGORY */
 
 if(
 item.subCategoryName
@@ -1341,7 +1382,7 @@ ${escapeHTML(item.subCategoryName)}
 }
 
 
-/* ================= NAME ================= */
+/* NAME */
 
 if(
 item.name &&
@@ -1362,7 +1403,7 @@ ${escapeHTML(item.name)}
 }
 
 
-/* ================= DEGREE ================= */
+/* DEGREE */
 
 if(item.degree){
 
@@ -1380,7 +1421,7 @@ ${escapeHTML(item.degree)}
 }
 
 
-/* ================= IDENTITY ================= */
+/* IDENTITY */
 
 if(item.identity){
 
@@ -1398,7 +1439,7 @@ ${escapeHTML(item.identity)}
 }
 
 
-/* ================= SPECIALTY ================= */
+/* SPECIALTY */
 
 if(item.specialty){
 
@@ -1416,7 +1457,7 @@ ${escapeHTML(item.specialty)}
 }
 
 
-/* ================= CHAMBER ================= */
+/* CHAMBER */
 
 if(item.chamber){
 
@@ -1434,7 +1475,7 @@ ${escapeHTML(item.chamber)}
 }
 
 
-/* ================= COUNTER ================= */
+/* COUNTER */
 
 if(item.counter){
 
@@ -1452,7 +1493,7 @@ ${escapeHTML(item.counter)}
 }
 
 
-/* ================= ADDRESS ================= */
+/* ADDRESS */
 
 if(item.address){
 
@@ -1470,7 +1511,7 @@ ${escapeHTML(item.address)}
 }
 
 
-/* ================= MOBILE ================= */
+/* MOBILE */
 
 if(item.mobile){
 
@@ -1488,7 +1529,7 @@ ${escapeHTML(item.mobile)}
 }
 
 
-/* ================= PHONE ================= */
+/* PHONE */
 
 if(
 item.phone &&
@@ -1509,7 +1550,7 @@ ${escapeHTML(item.phone)}
 }
 
 
-/* ================= EMAIL ================= */
+/* EMAIL */
 
 if(item.email){
 
@@ -1527,7 +1568,7 @@ ${escapeHTML(item.email)}
 }
 
 
-/* ================= BLOOD ================= */
+/* BLOOD */
 
 if(item.bloodGroup){
 
@@ -1545,7 +1586,7 @@ ${escapeHTML(item.bloodGroup)}
 }
 
 
-/* ================= UPAZILA ================= */
+/* UPAZILA */
 
 if(item.upazila){
 
@@ -1563,7 +1604,7 @@ ${escapeHTML(item.upazila)}
 }
 
 
-/* ================= ROUTE ================= */
+/* ROUTE */
 
 if(item.route){
 
@@ -1581,7 +1622,7 @@ ${escapeHTML(item.route)}
 }
 
 
-/* ================= SERVICE ================= */
+/* SERVICE */
 
 if(item.serviceName){
 
@@ -1599,7 +1640,7 @@ ${escapeHTML(item.serviceName)}
 }
 
 
-/* ================= 24 HOURS ================= */
+/* 24 HOURS */
 
 if(item.available24h){
 
@@ -1617,7 +1658,28 @@ ${escapeHTML(item.available24h)}
 }
 
 
-/* ================= SOURCE ================= */
+/* SERIAL INFO */
+
+if(item.serialInfo){
+
+html += `
+
+<div class="submission-details">
+
+📋 <b>তথ্য সিরিয়াল:</b>
+
+<br>
+
+${makePhoneLinks(item.serialInfo)}
+
+</div>
+
+`;
+
+}
+
+
+/* SOURCE */
 
 if(item.source){
 
@@ -1635,7 +1697,7 @@ ${makePhoneLinks(item.source)}
 }
 
 
-/* ================= DETAILS ================= */
+/* DETAILS */
 
 if(details){
 
@@ -1652,7 +1714,7 @@ ${makePhoneLinks(details)}
 }
 
 
-/* ================= TIME ================= */
+/* TIME */
 
 const time =
 formatPostTime(
@@ -1786,8 +1848,6 @@ selectedSubCategoryName =
 item.name;
 
 
-/* active */
-
 document
 .querySelectorAll(
 ".subcategory-card"
@@ -1804,19 +1864,19 @@ card.classList.add("active");
 
 
 /*
-   শুধু এই subcategory-এর
-   approved submission দেখাবে।
+   Subcategory select করলে
+   পুরোনো empty message clear হবে।
 */
+
+document
+.getElementById("emptyMessage")
+.innerHTML = "";
+
 
 loadApprovedSubmissions();
 
+loadImagePosts();
 
-/*
-   নিচে থাকা পুরোনো contents
-   লুকিয়ে রাখা হবে না,
-   কিন্তু selected subcategory
-   submission আলাদা করে দেখাবে।
-*/
 
 const approved =
 document.getElementById(
@@ -1894,11 +1954,6 @@ categoryId || ""
 
 if(sameCategory){
 
-/*
-   যদি post-এ subCategory থাকে,
-   selected subcategory-এর সাথে মিলাবে।
-*/
-
 if(
 selectedSubCategory
 ){
@@ -1974,6 +2029,9 @@ posts.length === 0
 return;
 
 }
+
+
+hasImagePost = true;
 
 
 imagePosts.innerHTML = `
@@ -2139,6 +2197,9 @@ document.getElementById(
 );
 
 
+resetEmptyState();
+
+
 if(!categoryId){
 
 categoryBox.innerHTML =
@@ -2222,14 +2283,14 @@ categoryData.description || ""
 `;
 
 
-/* ================= SUBCATEGORY ================= */
+/* SUBCATEGORY */
 
 showSubcategorySelector(
 categoryName
 );
 
 
-/* ================= BLOOD ================= */
+/* BLOOD */
 
 if(
 categoryName === "রক্তদাতা"
@@ -2240,7 +2301,7 @@ await loadBloodDonors();
 }
 
 
-/* ================= CONTENT ================= */
+/* CONTENT */
 
 const contentSnapshot =
 await getDocs(
@@ -2293,14 +2354,22 @@ allContents
 }
 
 
-/* ================= APPROVED ================= */
+/* APPROVED */
 
 await loadApprovedSubmissions();
 
 
-/* ================= IMAGE POSTS ================= */
+/* IMAGE POSTS */
 
 await loadImagePosts();
+
+
+/*
+   সব data section load হওয়ার পরে
+   একবার final check হবে।
+*/
+
+updateEmptyState();
 
 }
 catch(error){
@@ -2482,6 +2551,16 @@ return;
 }
 
 
+/*
+   উপজেলা data পাওয়া গেছে।
+   তাই global empty message আর দেখাবে না।
+*/
+
+hasContent = true;
+
+updateEmptyState();
+
+
 contents.innerHTML = `
 
 <div class="title">
@@ -2645,19 +2724,23 @@ if(
 matched.length === 0
 ){
 
-contents.innerHTML = `
+/*
+   এখানে আর
+   "এই Topic-এর তথ্য এখনো যোগ করা হয়নি"
+   দেখানো হবে না।
 
-<div class="loading">
-
-এই Topic-এর তথ্য এখনো যোগ করা হয়নি।
-
-</div>
-
-`;
+   কারণ approved submission অথবা
+   image post থাকতে পারে।
+   সব load হওয়ার পরে updateEmptyState()
+   final decision নেবে।
+*/
 
 return;
 
 }
+
+
+hasContent = true;
 
 
 matched.forEach(
