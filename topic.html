@@ -19,7 +19,7 @@ padding:0;
 }
 
 body{
-font-family:Arial,sans-serif;
+font-family:Arial,"Noto Sans Bengali",sans-serif;
 background:#f5f7fa;
 color:#222;
 }
@@ -148,6 +148,54 @@ color:#b91c1c;
 }
 
 
+/* ================= SUBCATEGORY ================= */
+
+.subcategory-title{
+font-size:20px;
+font-weight:bold;
+margin:20px 0 12px;
+color:#222;
+}
+
+.subcategory-grid{
+display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:10px;
+margin-bottom:20px;
+}
+
+.subcategory-card{
+background:white;
+border:1px solid #dce5ee;
+border-radius:14px;
+padding:17px 8px;
+text-align:center;
+box-shadow:0 2px 8px rgba(0,0,0,.07);
+cursor:pointer;
+}
+
+.subcategory-card:active{
+transform:scale(.97);
+}
+
+.subcategory-icon{
+font-size:30px;
+margin-bottom:7px;
+}
+
+.subcategory-name{
+font-size:14px;
+font-weight:bold;
+line-height:1.4;
+color:#0f766e;
+}
+
+.subcategory-card.active{
+border:2px solid #0f766e;
+background:#e8f7f2;
+}
+
+
 /* ================= APPROVED ================= */
 
 .submission-section-title{
@@ -188,6 +236,25 @@ word-break:break-word;
 }
 
 
+/* ================= SUBMISSION IMAGE ================= */
+
+.submission-image{
+width:100%;
+max-height:430px;
+object-fit:cover;
+display:block;
+margin:-20px -20px 16px;
+width:calc(100% + 40px);
+background:#eee;
+}
+
+.submission-image-box{
+overflow:hidden;
+border-radius:16px 16px 0 0;
+margin-bottom:15px;
+}
+
+
 /* ================= PLACE IMAGE ================= */
 
 .place-submission-image{
@@ -198,12 +265,6 @@ display:block;
 margin:-20px -20px 16px;
 width:calc(100% + 40px);
 background:#eee;
-}
-
-.place-image-box{
-overflow:hidden;
-border-radius:16px 16px 0 0;
-margin-bottom:15px;
 }
 
 
@@ -339,7 +400,12 @@ background:#1877F2;
 
 @media(max-width:600px){
 
-.place-submission-image{
+.subcategory-grid{
+grid-template-columns:repeat(2,1fr);
+}
+
+.place-submission-image,
+.submission-image{
 max-height:300px;
 }
 
@@ -349,9 +415,7 @@ max-height:300px;
 
 </head>
 
-
 <body>
-
 
 <header>
 
@@ -360,7 +424,6 @@ max-height:300px;
 </h1>
 
 </header>
-
 
 <div class="container">
 
@@ -372,8 +435,9 @@ class="back">
 
 </a>
 
-
 <div id="categoryBox"></div>
+
+<div id="subcategoryBox"></div>
 
 <div id="upazilaList"></div>
 
@@ -454,7 +518,6 @@ initializeApp
 from
 "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
 
-
 import {
 getFirestore,
 collection,
@@ -501,6 +564,145 @@ window.location.search
 
 const categoryId =
 params.get("id");
+
+
+/* ================= SELECTED SUBCATEGORY ================= */
+
+let selectedSubCategory = "";
+let selectedSubCategoryName = "";
+
+
+/* ================= SPECIAL SUBCATEGORIES ================= */
+
+const specialSubCategories = {
+
+"কোচিং ও প্রাইভেট সেন্টার":[
+
+{
+id:"university",
+name:"বিশ্ববিদ্যালয় কোচিং",
+icon:"🎓"
+},
+
+{
+id:"medical",
+name:"মেডিকেল কোচিং",
+icon:"🩺"
+},
+
+{
+id:"nursing",
+name:"নার্সিং কোচিং",
+icon:"👩‍⚕️"
+},
+
+{
+id:"class6-12",
+name:"৬ষ্ঠ-১২শ কোচিং",
+icon:"📚"
+}
+
+],
+
+"ডাক্তার":[
+
+{
+id:"cardiology",
+name:"হৃদরোগ বিশেষজ্ঞ",
+icon:"❤️"
+},
+
+{
+id:"child",
+name:"শিশু বিশেষজ্ঞ",
+icon:"👶"
+},
+
+{
+id:"medicine",
+name:"মেডিসিন বিশেষজ্ঞ",
+icon:"💊"
+},
+
+{
+id:"surgery",
+name:"সার্জন",
+icon:"🔬"
+},
+
+{
+id:"gynecology",
+name:"স্ত্রীরোগ ও প্রসূতি বিশেষজ্ঞ",
+icon:"👩"
+},
+
+{
+id:"orthopedic",
+name:"অর্থোপেডিক বিশেষজ্ঞ",
+icon:"🦴"
+},
+
+{
+id:"ent",
+name:"নাক-কান-গলা বিশেষজ্ঞ",
+icon:"👂"
+},
+
+{
+id:"eye",
+name:"চক্ষু বিশেষজ্ঞ",
+icon:"👁️"
+},
+
+{
+id:"skin",
+name:"চর্মরোগ বিশেষজ্ঞ",
+icon:"🩺"
+},
+
+{
+id:"dental",
+name:"দন্ত বিশেষজ্ঞ",
+icon:"🦷"
+},
+
+{
+id:"other-doctor",
+name:"অন্যান্য বিশেষজ্ঞ",
+icon:"👨‍⚕️"
+}
+
+],
+
+"ইসলামিক কর্নার":[
+
+{
+id:"hadith",
+name:"হাদিস",
+icon:"📖"
+},
+
+{
+id:"quran",
+name:"কুরআনের আয়াত",
+icon:"🕌"
+},
+
+{
+id:"dua",
+name:"দোয়া",
+icon:"🤲"
+},
+
+{
+id:"islamic-post",
+name:"ইসলামিক পোস্ট",
+icon:"☪️"
+}
+
+]
+
+};
 
 
 /* ================= UPAZILA ================= */
@@ -555,13 +757,12 @@ ids:[
 ];
 
 
-/* ================= WEBSITE LINKS ================= */
+/* ================= LINKS ================= */
 
 function makePhoneLinks(text){
 
 let safeText =
 escapeHTML(text || "");
-
 
 safeText =
 safeText.replace(
@@ -586,7 +787,6 @@ cleanUrl.slice(0,-1);
 
 }
 
-
 return `
 <a
 href="${escapeAttribute(cleanUrl)}"
@@ -600,7 +800,6 @@ ${cleanUrl}
 
 }
 );
-
 
 return safeText;
 
@@ -676,7 +875,7 @@ return "";
 
 
 /* ================================================= */
-/* ================= BLOOD DONORS ================== */
+/* ============== BLOOD DONORS ===================== */
 /* ================================================= */
 
 async function loadBloodDonors(){
@@ -688,11 +887,9 @@ document.getElementById(
 
 bloodDonors.innerHTML = "";
 
-
 if(!categoryId){
 return;
 }
-
 
 try{
 
@@ -704,9 +901,7 @@ db,
 )
 );
 
-
 const donors = [];
-
 
 snapshot.forEach(
 function(donorDoc){
@@ -714,12 +909,10 @@ function(donorDoc){
 const data =
 donorDoc.data();
 
-
 const hasCategoryId =
 String(
 data.categoryId || ""
 ).trim() !== "";
-
 
 const sameCategory =
 String(
@@ -730,24 +923,15 @@ String(
 categoryId || ""
 ).trim();
 
-
-/*
-   পুরোনো রক্তদাতার তথ্য:
-   categoryId না থাকলে
-   শুধু রক্তদাতা Topic-এ দেখাবে।
-*/
-
 const oldBloodDonor =
 data.type === "blood" &&
 data.status === "approved" &&
 !hasCategoryId;
 
-
 const newBloodDonor =
 data.type === "blood" &&
 data.status === "approved" &&
 sameCategory;
-
 
 if(
 oldBloodDonor ||
@@ -829,7 +1013,6 @@ bloodDonors.innerHTML = `
 
 `;
 
-
 donors.forEach(
 function(donor){
 
@@ -840,7 +1023,6 @@ document.createElement(
 
 card.className =
 "blood-card";
-
 
 card.innerHTML = `
 
@@ -884,7 +1066,6 @@ bloodDonors.appendChild(card);
 
 });
 
-
 }
 catch(error){
 
@@ -901,7 +1082,7 @@ bloodDonors.innerHTML = "";
 
 
 /* ================================================= */
-/* ============== APPROVED SUBMISSIONS ============= */
+/* ============ APPROVED SUBMISSIONS =============== */
 /* ================================================= */
 
 async function loadApprovedSubmissions(){
@@ -913,11 +1094,9 @@ document.getElementById(
 
 box.innerHTML = "";
 
-
 if(!categoryId){
 return;
 }
-
 
 try{
 
@@ -929,25 +1108,13 @@ db,
 )
 );
 
-
 const submissions = [];
-
 
 snapshot.forEach(
 function(submissionDoc){
 
 const data =
 submissionDoc.data();
-
-
-/*
-   শুধু approved এবং
-   বর্তমান Topic-এর categoryId
-   একই হলে দেখাবে।
-
-   ফলে হাসপাতালের তথ্য
-   রক্তদাতা Topic-এ যাবে না।
-*/
 
 const sameCategory =
 String(
@@ -959,11 +1126,43 @@ categoryId || ""
 ).trim();
 
 
+/*
+   শুধু approved এবং
+   বর্তমান Topic-এর categoryId
+   একই হলে দেখাবে।
+*/
+
 if(
 data.status === "approved" &&
 sameCategory &&
 data.type !== "blood"
 ){
+
+/*
+   SUBCATEGORY FILTER
+*/
+
+if(
+selectedSubCategory
+){
+
+const sameSubCategory =
+
+String(
+data.subCategory || ""
+).trim()
+===
+String(
+selectedSubCategory || ""
+).trim();
+
+if(!sameSubCategory){
+
+return;
+
+}
+
+}
 
 submissions.push({
 
@@ -1009,6 +1208,22 @@ if(
 submissions.length === 0
 ){
 
+box.innerHTML = `
+
+<div class="loading">
+
+${
+selectedSubCategory
+?
+"এই উপ-বিভাগের কোনো অনুমোদিত তথ্য এখনো যোগ হয়নি।"
+:
+"এই Topic-এর কোনো অনুমোদিত তথ্য এখনো যোগ হয়নি।"
+}
+
+</div>
+
+`;
+
 return;
 
 }
@@ -1018,7 +1233,15 @@ box.innerHTML = `
 
 <div class="submission-section-title">
 
-📋 অনুমোদিত তথ্য
+📋
+
+${
+selectedSubCategoryName
+?
+escapeHTML(selectedSubCategoryName)
+:
+"অনুমোদিত তথ্য"
+}
 
 </div>
 
@@ -1061,26 +1284,18 @@ item.schedule ||
 let html = "";
 
 
-/* ================================================= */
-/* ================= PLACE IMAGE =================== */
-/* ================================================= */
-
-/*
-   শুধু দর্শনীয় স্থানের submission-এর
-   imageUrl থাকলে ছবি দেখানো হবে।
-*/
+/* ================= IMAGE ================= */
 
 if(
-item.type === "place" &&
 item.imageUrl
 ){
 
 html += `
 
-<div class="place-image-box">
+<div class="submission-image-box">
 
 <img
-class="place-submission-image"
+class="submission-image"
 src="${escapeAttribute(item.imageUrl)}"
 alt="${escapeAttribute(title)}"
 loading="lazy"
@@ -1106,6 +1321,26 @@ ${escapeHTML(title)}
 `;
 
 
+/* ================= SUBCATEGORY ================= */
+
+if(
+item.subCategoryName
+){
+
+html += `
+
+<div class="submission-row">
+
+📂 <b>বিভাগ:</b>
+${escapeHTML(item.subCategoryName)}
+
+</div>
+
+`;
+
+}
+
+
 /* ================= NAME ================= */
 
 if(
@@ -1119,6 +1354,24 @@ html += `
 
 👤 <b>নাম:</b>
 ${escapeHTML(item.name)}
+
+</div>
+
+`;
+
+}
+
+
+/* ================= DEGREE ================= */
+
+if(item.degree){
+
+html += `
+
+<div class="submission-row">
+
+🎓 <b>ডিগ্রি/যোগ্যতা:</b>
+${escapeHTML(item.degree)}
 
 </div>
 
@@ -1153,7 +1406,7 @@ html += `
 
 <div class="submission-row">
 
-⚖️ <b>বিশেষত্ব:</b>
+🩺 <b>বিশেষত্ব:</b>
 ${escapeHTML(item.specialty)}
 
 </div>
@@ -1406,7 +1659,6 @@ formatPostTime(
 item.createdAt
 );
 
-
 if(time){
 
 html += `
@@ -1423,14 +1675,12 @@ style="padding:12px 0 0;">
 
 }
 
-
 card.innerHTML =
 html;
 
 box.appendChild(card);
 
 });
-
 
 }
 catch(error){
@@ -1448,6 +1698,157 @@ box.innerHTML = "";
 
 
 /* ================================================= */
+/* ============== SUBCATEGORY UI =================== */
+/* ================================================= */
+
+function showSubcategorySelector(
+categoryName
+){
+
+const box =
+document.getElementById(
+"subcategoryBox"
+);
+
+const list =
+specialSubCategories[categoryName];
+
+if(
+!Array.isArray(list)
+){
+
+box.innerHTML = "";
+
+return;
+
+}
+
+
+box.innerHTML = `
+
+<div class="subcategory-title">
+
+📂 বিভাগ নির্বাচন করুন
+
+</div>
+
+<div
+class="subcategory-grid"
+id="subcategoryGrid">
+
+</div>
+
+`;
+
+
+const grid =
+document.getElementById(
+"subcategoryGrid"
+);
+
+
+list.forEach(
+function(item){
+
+const card =
+document.createElement(
+"div"
+);
+
+card.className =
+"subcategory-card";
+
+
+card.innerHTML = `
+
+<div class="subcategory-icon">
+
+${escapeHTML(item.icon)}
+
+</div>
+
+<div class="subcategory-name">
+
+${escapeHTML(item.name)}
+
+</div>
+
+`;
+
+
+card.onclick =
+function(){
+
+selectedSubCategory =
+item.id;
+
+selectedSubCategoryName =
+item.name;
+
+
+/* active */
+
+document
+.querySelectorAll(
+".subcategory-card"
+)
+.forEach(
+function(x){
+
+x.classList.remove("active");
+
+}
+);
+
+card.classList.add("active");
+
+
+/*
+   শুধু এই subcategory-এর
+   approved submission দেখাবে।
+*/
+
+loadApprovedSubmissions();
+
+
+/*
+   নিচে থাকা পুরোনো contents
+   লুকিয়ে রাখা হবে না,
+   কিন্তু selected subcategory
+   submission আলাদা করে দেখাবে।
+*/
+
+const approved =
+document.getElementById(
+"approvedSubmissions"
+);
+
+if(approved){
+
+setTimeout(
+function(){
+
+approved.scrollIntoView({
+behavior:"smooth",
+block:"start"
+});
+
+},
+100
+);
+
+}
+
+};
+
+grid.appendChild(card);
+
+});
+
+}
+
+
+/* ================================================= */
 /* ================= IMAGE POSTS =================== */
 /* ================================================= */
 
@@ -1460,11 +1861,9 @@ document.getElementById(
 
 imagePosts.innerHTML = "";
 
-
 if(!categoryId){
 return;
 }
-
 
 try{
 
@@ -1476,16 +1875,13 @@ db,
 )
 );
 
-
 const posts = [];
-
 
 postsSnapshot.forEach(
 function(postDoc){
 
 const data =
 postDoc.data();
-
 
 const sameCategory =
 String(
@@ -1496,10 +1892,33 @@ String(
 categoryId || ""
 ).trim();
 
+if(sameCategory){
+
+/*
+   যদি post-এ subCategory থাকে,
+   selected subcategory-এর সাথে মিলাবে।
+*/
 
 if(
-sameCategory
+selectedSubCategory
 ){
+
+const sameSub =
+String(
+data.subCategory || ""
+).trim()
+===
+String(
+selectedSubCategory || ""
+).trim();
+
+if(!sameSub){
+
+return;
+
+}
+
+}
 
 posts.push({
 
@@ -1520,7 +1939,6 @@ function(a,b){
 let dateA = 0;
 let dateB = 0;
 
-
 if(
 a.createdAt &&
 typeof a.createdAt.toMillis ===
@@ -1532,7 +1950,6 @@ a.createdAt.toMillis();
 
 }
 
-
 if(
 b.createdAt &&
 typeof b.createdAt.toMillis ===
@@ -1543,7 +1960,6 @@ dateB =
 b.createdAt.toMillis();
 
 }
-
 
 return dateB-dateA;
 
@@ -1582,10 +1998,8 @@ document.createElement(
 card.className =
 "post-card";
 
-
 let images =
 post.images || [];
-
 
 if(
 !Array.isArray(images)
@@ -1595,7 +2009,6 @@ images =
 [images];
 
 }
-
 
 const validImages =
 images.filter(
@@ -1609,9 +2022,7 @@ url.trim() !== ""
 }
 );
 
-
 let imagesHTML = "";
-
 
 validImages.forEach(
 function(url){
@@ -1631,7 +2042,6 @@ onerror="this.style.display='none';">
 
 const caption =
 post.caption || "";
-
 
 const postTime =
 formatPostTime(
@@ -1713,6 +2123,11 @@ document.getElementById(
 "categoryBox"
 );
 
+const subcategoryBox =
+document.getElementById(
+"subcategoryBox"
+);
+
 const upazilaList =
 document.getElementById(
 "upazilaList"
@@ -1741,9 +2156,7 @@ await getDocs(
 collection(db,"categories")
 );
 
-
 let categoryData = null;
-
 
 categorySnapshot.forEach(
 function(categoryDoc){
@@ -1768,6 +2181,12 @@ categoryBox.innerHTML =
 return;
 
 }
+
+
+const categoryName =
+String(
+categoryData.name || ""
+).trim();
 
 
 categoryBox.innerHTML = `
@@ -1803,14 +2222,17 @@ categoryData.description || ""
 `;
 
 
+/* ================= SUBCATEGORY ================= */
+
+showSubcategorySelector(
+categoryName
+);
+
+
 /* ================= BLOOD ================= */
 
 if(
-String(
-categoryData.name || ""
-).trim()
-===
-"রক্তদাতা"
+categoryName === "রক্তদাতা"
 ){
 
 await loadBloodDonors();
@@ -1825,16 +2247,13 @@ await getDocs(
 collection(db,"contents")
 );
 
-
 const allContents = [];
-
 
 contentSnapshot.forEach(
 function(contentDoc){
 
 const data =
 contentDoc.data();
-
 
 allContents.push({
 
@@ -1848,10 +2267,10 @@ id:contentDoc.id,
 
 
 const isUpazila =
-categoryData.name &&
+categoryName &&
 (
-categoryData.name.includes("উপজেলা") ||
-categoryData.name.includes("উপজেলার")
+categoryName.includes("উপজেলা") ||
+categoryName.includes("উপজেলার")
 );
 
 
@@ -1874,7 +2293,7 @@ allContents
 }
 
 
-/* ================= APPROVED USER SUBMISSIONS ================= */
+/* ================= APPROVED ================= */
 
 await loadApprovedSubmissions();
 
@@ -1935,7 +2354,6 @@ document.createElement(
 card.className =
 "card";
 
-
 card.innerHTML = `
 
 <div class="icon">
@@ -1954,7 +2372,6 @@ upazila.name
 
 `;
 
-
 card.onclick =
 function(){
 
@@ -1964,7 +2381,6 @@ allContents
 );
 
 };
-
 
 upazilaList.appendChild(card);
 
@@ -1998,7 +2414,6 @@ document.getElementById(
 "contents"
 );
 
-
 let matched =
 allContents.filter(
 function(item){
@@ -2025,7 +2440,6 @@ const title =
 String(
 item.title || ""
 ).trim();
-
 
 return title.includes(
 upazila.name
@@ -2152,17 +2566,14 @@ function(section){
 const lines =
 section.split("\n");
 
-
 const heading =
 lines[0].trim();
-
 
 const body =
 lines
 .slice(1)
 .join("\n")
 .trim();
-
 
 const card =
 document.createElement(
@@ -2171,7 +2582,6 @@ document.createElement(
 
 card.className =
 "info-section";
-
 
 card.innerHTML = `
 
@@ -2197,7 +2607,6 @@ ${makePhoneLinks(body)}
 
 `;
 
-
 container.appendChild(card);
 
 });
@@ -2215,7 +2624,6 @@ allContents
 ){
 
 contents.innerHTML = "";
-
 
 const matched =
 allContents.filter(
