@@ -558,7 +558,7 @@ cleanUrl.slice(0,-1);
 
 return `
 <a
-href="${cleanUrl}"
+href="${escapeAttribute(cleanUrl)}"
 target="_blank"
 rel="noopener noreferrer">
 
@@ -684,6 +684,22 @@ const data =
 donorDoc.data();
 
 
+/*
+   নতুন ডেটা:
+   categoryId অবশ্যই বর্তমান Topic-এর সাথে
+   মিলতে হবে।
+
+   পুরোনো রক্তদাতা:
+   যদি categoryId না থাকে, তাহলে শুধু
+   "রক্তদাতা" Topic-এ দেখানো হবে।
+*/
+
+const hasCategoryId =
+String(
+data.categoryId || ""
+).trim() !== "";
+
+
 const sameCategory =
 String(
 data.categoryId || ""
@@ -694,10 +710,21 @@ categoryId || ""
 ).trim();
 
 
-if(
+const oldBloodDonor =
 data.type === "blood" &&
 data.status === "approved" &&
-sameCategory
+!hasCategoryId;
+
+
+const newBloodDonor =
+data.type === "blood" &&
+data.status === "approved" &&
+sameCategory;
+
+
+if(
+oldBloodDonor ||
+newBloodDonor
 ){
 
 donors.push({
@@ -885,6 +912,16 @@ function(submissionDoc){
 const data =
 submissionDoc.data();
 
+
+/*
+   সবচেয়ে গুরুত্বপূর্ণ অংশ:
+
+   categoryId ছাড়া কোনো নতুন submission
+   এখানে দেখানো হবে না।
+
+   তাই হাসপাতালের তথ্য কখনো
+   রক্তদাতা Topic-এ আসবে না।
+*/
 
 const sameCategory =
 String(
@@ -1188,6 +1225,38 @@ ${escapeHTML(item.upazila)}
 }
 
 
+if(item.route){
+
+html += `
+
+<div class="submission-row">
+
+🚌 <b>রুট:</b>
+${escapeHTML(item.route)}
+
+</div>
+
+`;
+
+}
+
+
+if(item.serviceName){
+
+html += `
+
+<div class="submission-row">
+
+🛠️ <b>সেবার নাম:</b>
+${escapeHTML(item.serviceName)}
+
+</div>
+
+`;
+
+}
+
+
 if(item.available24h){
 
 html += `
@@ -1321,14 +1390,18 @@ const data =
 postDoc.data();
 
 
-if(
+const sameCategory =
 String(
 data.categoryId || ""
 ).trim()
 ===
 String(
 categoryId || ""
-).trim()
+).trim();
+
+
+if(
+sameCategory
 ){
 
 posts.push({
