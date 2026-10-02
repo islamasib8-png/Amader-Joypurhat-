@@ -244,6 +244,16 @@ resize:vertical;
 color:red;
 }
 
+.selected-topic{
+background:#e8f7f2;
+border:1px solid #8bd5bd;
+padding:10px;
+border-radius:8px;
+margin-bottom:14px;
+font-size:14px;
+line-height:1.6;
+}
+
 .consent{
 background:#fff8e1;
 border:1px solid #efd88a;
@@ -549,6 +559,15 @@ onclick="backToOptions()">
 
 <form id="submissionForm">
 
+<!-- নির্বাচিত Topic এখানে দেখা যাবে -->
+
+<div
+id="selectedTopicBox"
+class="selected-topic">
+
+</div>
+
+
 <div id="dynamicFields"></div>
 
 
@@ -611,10 +630,7 @@ Uchan, Dharanji, Panchbibi, Joypurhat
 </div>
 
 <div>
-📞
-<a href="tel:01319058313">
-013-19058313
-</a>
+📞 013-19058313
 </div>
 
 <div>
@@ -870,6 +886,12 @@ title:"🚚 কুরিয়ার সার্ভিসের তথ্য"
 },
 
 {
+type:"institution",
+label:"🏪 বিভিন্ন প্রতিষ্ঠান",
+title:"🏪 বিভিন্ন প্রতিষ্ঠানের তথ্য"
+},
+
+{
 type:"ambulance",
 label:"🚑 অ্যাম্বুলেন্স",
 title:"🚑 অ্যাম্বুলেন্সের তথ্য"
@@ -943,6 +965,7 @@ title:"🚨 জরুরি সেবার তথ্য"
 /* ================================================= */
 
 let selectedCategoryId = "";
+let selectedCategoryName = "";
 let selectedType = "";
 
 
@@ -953,7 +976,18 @@ let selectedType = "";
 window.openSubmitOptions =
 function(){
 
+/*
+   নতুন submission শুরু হলে
+   আগের Topic/Type selection মুছে যাবে।
+*/
+
+selectedCategoryId = "";
+selectedCategoryName = "";
+selectedType = "";
+
+
 loadSubmissionCategories();
+
 
 document
 .getElementById("optionModal")
@@ -975,11 +1009,14 @@ document.getElementById("optionGrid");
 const title =
 document.getElementById("optionTitle");
 
+
 title.textContent =
 "প্রথমে Topic নির্বাচন করুন";
 
+
 grid.innerHTML =
 '<div class="loading">Topic লোড হচ্ছে...</div>';
+
 
 try{
 
@@ -989,6 +1026,7 @@ collection(db,"categories")
 );
 
 let categories = [];
+
 
 snapshot.forEach(function(docSnap){
 
@@ -1036,6 +1074,7 @@ document.createElement("div");
 div.className =
 "option";
 
+
 div.innerHTML = `
 
 <div style="font-size:28px;margin-bottom:5px;">
@@ -1052,15 +1091,39 @@ ${escapeHTML(cat.name || "")}
 
 `;
 
+
 div.onclick =
 function(){
 
+/*
+   সবচেয়ে গুরুত্বপূর্ণ:
+   User যে Topic select করেছে,
+   তার আসল Firestore document ID
+   এখানে save হচ্ছে।
+*/
+
 selectedCategoryId =
-cat.id;
+String(cat.id || "").trim();
+
+selectedCategoryName =
+String(cat.name || "").trim();
+
+
+if(!selectedCategoryId){
+
+alert(
+"এই Topic-এর ID পাওয়া যায়নি। অন্য Topic নির্বাচন করুন।"
+);
+
+return;
+
+}
+
 
 loadSubmissionOptions();
 
 };
+
 
 grid.appendChild(div);
 
@@ -1091,10 +1154,48 @@ document.getElementById("optionGrid");
 const title =
 document.getElementById("optionTitle");
 
+
 title.textContent =
 "এই Topic-এ কী তথ্য যোগ করবেন?";
 
+
 grid.innerHTML = "";
+
+
+/* SELECTED TOPIC */
+
+const topicBox =
+document.createElement("div");
+
+topicBox.style.gridColumn =
+"1/-1";
+
+topicBox.style.background =
+"#e8f7f2";
+
+topicBox.style.border =
+"1px solid #8bd5bd";
+
+topicBox.style.borderRadius =
+"10px";
+
+topicBox.style.padding =
+"10px";
+
+topicBox.style.textAlign =
+"center";
+
+topicBox.innerHTML = `
+
+📌 নির্বাচিত Topic:
+
+<b>
+${escapeHTML(selectedCategoryName)}
+</b>
+
+`;
+
+grid.appendChild(topicBox);
 
 
 /* BACK */
@@ -1341,6 +1442,20 @@ function buildForm(type){
 let html = "";
 
 
+/* SELECTED TOPIC */
+
+html += `
+
+<div class="selected-topic">
+
+📌 <b>নির্বাচিত Topic:</b>
+${escapeHTML(selectedCategoryName)}
+
+</div>
+
+`;
+
+
 switch(type){
 
 case "blood":
@@ -1459,6 +1574,43 @@ html += field(
 "অতিরিক্ত তথ্য",
 "textarea",
 false
+);
+
+break;
+
+
+/* ================= INSTITUTION ================= */
+
+case "institution":
+
+html += field(
+"name",
+"প্রতিষ্ঠানের নাম"
+);
+
+html += field(
+"address",
+"ঠিকানা"
+);
+
+html += field(
+"upazila",
+"উপজেলা",
+"text",
+false
+);
+
+html += field(
+"mobile",
+"মোবাইল/ফোন",
+"tel",
+false
+);
+
+html += field(
+"description",
+"প্রতিষ্ঠানের বিস্তারিত তথ্য",
+"textarea"
 );
 
 break;
@@ -1826,6 +1978,17 @@ return;
 }
 
 
+if(!selectedCategoryName){
+
+alert(
+"Topic-এর নাম পাওয়া যায়নি। আবার Topic নির্বাচন করুন।"
+);
+
+return;
+
+}
+
+
 selectedType = type;
 
 
@@ -1864,6 +2027,7 @@ document
 .getElementById("submissionForm")
 .reset();
 
+
 buildForm(type);
 
 };
@@ -1889,6 +2053,8 @@ message.style.display =
 "none";
 
 
+/* ================= CONSENT ================= */
+
 if(
 !document
 .getElementById("consent")
@@ -1909,13 +2075,26 @@ return;
 }
 
 
-if(!selectedCategoryId){
+/* ================= CATEGORY CHECK ================= */
+
+const finalCategoryId =
+String(
+selectedCategoryId || ""
+).trim();
+
+const finalCategoryName =
+String(
+selectedCategoryName || ""
+).trim();
+
+
+if(!finalCategoryId){
 
 message.className =
 "message error";
 
 message.textContent =
-"❌ Topic নির্বাচন করা হয়নি।";
+"❌ Topic নির্বাচন করা হয়নি। আবার Topic নির্বাচন করুন।";
 
 message.style.display =
 "block";
@@ -1924,6 +2103,42 @@ return;
 
 }
 
+
+if(!finalCategoryName){
+
+message.className =
+"message error";
+
+message.textContent =
+"❌ Topic-এর নাম পাওয়া যায়নি। আবার Topic নির্বাচন করুন।";
+
+message.style.display =
+"block";
+
+return;
+
+}
+
+
+/* ================= TYPE CHECK ================= */
+
+if(!selectedType){
+
+message.className =
+"message error";
+
+message.textContent =
+"❌ তথ্যের ধরন নির্বাচন করা হয়নি।";
+
+message.style.display =
+"block";
+
+return;
+
+}
+
+
+/* ================= FORM DATA ================= */
 
 const formData =
 new FormData(this);
@@ -1934,11 +2149,25 @@ const data = {};
 formData.forEach(
 function(value,key){
 
+/*
+   categoryId/categoryName যদি কোনো
+   form field থেকেও আসে, তা নেওয়া হবে না।
+*/
+
+if(
+key !== "categoryId" &&
+key !== "categoryName"
+){
+
 data[key] =
 String(value).trim();
 
+}
+
 });
 
+
+/* ================= SAVE ================= */
 
 try{
 
@@ -1946,15 +2175,53 @@ await addDoc(
 collection(db,"submissions"),
 {
 
-type:selectedType,
+/*
+   তথ্যের ধরন
+*/
+type:
+selectedType,
 
-categoryId:selectedCategoryId,
 
+/*
+   User যে Topic নির্বাচন করেছে
+   তার আসল Firestore Document ID
+*/
+categoryId:
+finalCategoryId,
+
+
+/*
+   Topic-এর নামও সংরক্ষণ
+*/
+categoryName:
+finalCategoryName,
+
+
+/*
+   অন্যান্য form তথ্য
+*/
 ...data,
 
-consent:true,
 
-status:"pending",
+/*
+   আবার শেষে নিশ্চিত করা হচ্ছে
+   categoryId/categoryName সঠিক আছে।
+*/
+categoryId:
+finalCategoryId,
+
+categoryName:
+finalCategoryName,
+
+
+/*
+   Admin approval
+*/
+consent:
+true,
+
+status:
+"pending",
 
 createdAt:
 serverTimestamp()
@@ -1963,11 +2230,13 @@ serverTimestamp()
 );
 
 
+/* ================= SUCCESS ================= */
+
 message.className =
 "message success";
 
 message.textContent =
-"✅ আপনার তথ্য সফলভাবে জমা হয়েছে। অ্যাডমিন যাচাই করার পর অনুমোদন করলে নির্বাচিত Topic-এ প্রকাশ হবে।";
+"✅ আপনার তথ্য সফলভাবে জমা হয়েছে। অ্যাডমিন যাচাই করার পর অনুমোদন করলে আপনি যে Topic নির্বাচন করেছেন, সেই Topic-এই তথ্য প্রকাশ হবে।";
 
 message.style.display =
 "block";
@@ -1975,10 +2244,20 @@ message.style.display =
 
 this.reset();
 
+
+/*
+   Submit হয়ে যাওয়ার পর
+   Topic selection reset করা হবে না।
+   কারণ success message দেখানো দরকার।
+*/
+
 }
 catch(error){
 
-console.error(error);
+console.error(
+"Submission Error:",
+error
+);
 
 message.className =
 "message error";
