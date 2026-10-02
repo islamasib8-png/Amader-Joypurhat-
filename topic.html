@@ -159,6 +159,7 @@ color:#222;
 
 .submission-card{
 border-left:5px solid #0f766e;
+overflow:hidden;
 }
 
 .submission-title{
@@ -184,6 +185,25 @@ font-size:16px;
 line-height:1.9;
 white-space:pre-wrap;
 word-break:break-word;
+}
+
+
+/* ================= PLACE IMAGE ================= */
+
+.place-submission-image{
+width:100%;
+max-height:430px;
+object-fit:cover;
+display:block;
+margin:-20px -20px 16px;
+width:calc(100% + 40px);
+background:#eee;
+}
+
+.place-image-box{
+overflow:hidden;
+border-radius:16px 16px 0 0;
+margin-bottom:15px;
 }
 
 
@@ -312,6 +332,17 @@ background:#25D366;
 
 .facebook{
 background:#1877F2;
+}
+
+
+/* ================= MOBILE ================= */
+
+@media(max-width:600px){
+
+.place-submission-image{
+max-height:300px;
+}
+
 }
 
 </style>
@@ -684,16 +715,6 @@ const data =
 donorDoc.data();
 
 
-/*
-   নতুন ডেটা:
-   categoryId অবশ্যই বর্তমান Topic-এর সাথে
-   মিলতে হবে।
-
-   পুরোনো রক্তদাতা:
-   যদি categoryId না থাকে, তাহলে শুধু
-   "রক্তদাতা" Topic-এ দেখানো হবে।
-*/
-
 const hasCategoryId =
 String(
 data.categoryId || ""
@@ -709,6 +730,12 @@ String(
 categoryId || ""
 ).trim();
 
+
+/*
+   পুরোনো রক্তদাতার তথ্য:
+   categoryId না থাকলে
+   শুধু রক্তদাতা Topic-এ দেখাবে।
+*/
 
 const oldBloodDonor =
 data.type === "blood" &&
@@ -914,13 +941,12 @@ submissionDoc.data();
 
 
 /*
-   সবচেয়ে গুরুত্বপূর্ণ অংশ:
+   শুধু approved এবং
+   বর্তমান Topic-এর categoryId
+   একই হলে দেখাবে।
 
-   categoryId ছাড়া কোনো নতুন submission
-   এখানে দেখানো হবে না।
-
-   তাই হাসপাতালের তথ্য কখনো
-   রক্তদাতা Topic-এ আসবে না।
+   ফলে হাসপাতালের তথ্য
+   রক্তদাতা Topic-এ যাবে না।
 */
 
 const sameCategory =
@@ -1032,7 +1058,44 @@ item.schedule ||
 "";
 
 
-let html = `
+let html = "";
+
+
+/* ================================================= */
+/* ================= PLACE IMAGE =================== */
+/* ================================================= */
+
+/*
+   শুধু দর্শনীয় স্থানের submission-এর
+   imageUrl থাকলে ছবি দেখানো হবে।
+*/
+
+if(
+item.type === "place" &&
+item.imageUrl
+){
+
+html += `
+
+<div class="place-image-box">
+
+<img
+class="place-submission-image"
+src="${escapeAttribute(item.imageUrl)}"
+alt="${escapeAttribute(title)}"
+loading="lazy"
+onerror="this.parentElement.style.display='none';">
+
+</div>
+
+`;
+
+}
+
+
+/* ================= TITLE ================= */
+
+html += `
 
 <div class="submission-title">
 
@@ -1042,6 +1105,8 @@ ${escapeHTML(title)}
 
 `;
 
+
+/* ================= NAME ================= */
 
 if(
 item.name &&
@@ -1062,6 +1127,8 @@ ${escapeHTML(item.name)}
 }
 
 
+/* ================= IDENTITY ================= */
+
 if(item.identity){
 
 html += `
@@ -1077,6 +1144,8 @@ ${escapeHTML(item.identity)}
 
 }
 
+
+/* ================= SPECIALTY ================= */
 
 if(item.specialty){
 
@@ -1094,6 +1163,8 @@ ${escapeHTML(item.specialty)}
 }
 
 
+/* ================= CHAMBER ================= */
+
 if(item.chamber){
 
 html += `
@@ -1109,6 +1180,8 @@ ${escapeHTML(item.chamber)}
 
 }
 
+
+/* ================= COUNTER ================= */
 
 if(item.counter){
 
@@ -1126,6 +1199,8 @@ ${escapeHTML(item.counter)}
 }
 
 
+/* ================= ADDRESS ================= */
+
 if(item.address){
 
 html += `
@@ -1142,6 +1217,8 @@ ${escapeHTML(item.address)}
 }
 
 
+/* ================= MOBILE ================= */
+
 if(item.mobile){
 
 html += `
@@ -1157,6 +1234,8 @@ ${escapeHTML(item.mobile)}
 
 }
 
+
+/* ================= PHONE ================= */
 
 if(
 item.phone &&
@@ -1177,6 +1256,8 @@ ${escapeHTML(item.phone)}
 }
 
 
+/* ================= EMAIL ================= */
+
 if(item.email){
 
 html += `
@@ -1192,6 +1273,8 @@ ${escapeHTML(item.email)}
 
 }
 
+
+/* ================= BLOOD ================= */
 
 if(item.bloodGroup){
 
@@ -1209,6 +1292,8 @@ ${escapeHTML(item.bloodGroup)}
 }
 
 
+/* ================= UPAZILA ================= */
+
 if(item.upazila){
 
 html += `
@@ -1224,6 +1309,8 @@ ${escapeHTML(item.upazila)}
 
 }
 
+
+/* ================= ROUTE ================= */
 
 if(item.route){
 
@@ -1241,6 +1328,8 @@ ${escapeHTML(item.route)}
 }
 
 
+/* ================= SERVICE ================= */
+
 if(item.serviceName){
 
 html += `
@@ -1256,6 +1345,8 @@ ${escapeHTML(item.serviceName)}
 
 }
 
+
+/* ================= 24 HOURS ================= */
 
 if(item.available24h){
 
@@ -1273,6 +1364,8 @@ ${escapeHTML(item.available24h)}
 }
 
 
+/* ================= SOURCE ================= */
+
 if(item.source){
 
 html += `
@@ -1289,6 +1382,8 @@ ${makePhoneLinks(item.source)}
 }
 
 
+/* ================= DETAILS ================= */
+
 if(details){
 
 html += `
@@ -1303,6 +1398,8 @@ ${makePhoneLinks(details)}
 
 }
 
+
+/* ================= TIME ================= */
 
 const time =
 formatPostTime(
@@ -1725,10 +1822,7 @@ await loadBloodDonors();
 
 const contentSnapshot =
 await getDocs(
-collection(
-db,
-"contents"
-)
+collection(db,"contents")
 );
 
 
@@ -1780,12 +1874,12 @@ allContents
 }
 
 
-/* APPROVED USER SUBMISSIONS */
+/* ================= APPROVED USER SUBMISSIONS ================= */
 
 await loadApprovedSubmissions();
 
 
-/* IMAGE POSTS */
+/* ================= IMAGE POSTS ================= */
 
 await loadImagePosts();
 
