@@ -57,7 +57,8 @@ text-decoration:none;
 .title,
 .card,
 .info-section,
-.post-card{
+.post-card,
+.submission-card{
 
 background:white;
 padding:20px;
@@ -125,6 +126,47 @@ word-break:break-word;
 font-size:20px;
 font-weight:bold;
 margin:20px 0 12px;
+}
+
+
+/* =========================
+   APPROVED SUBMISSION
+========================= */
+
+.submission-section-title{
+font-size:20px;
+font-weight:bold;
+margin:25px 0 12px;
+color:#222;
+}
+
+.submission-card{
+border-left:5px solid #0f766e;
+}
+
+.submission-title{
+font-size:20px;
+font-weight:bold;
+color:#0f766e;
+margin-bottom:12px;
+}
+
+.submission-row{
+font-size:15px;
+line-height:1.8;
+color:#444;
+margin-top:5px;
+word-break:break-word;
+}
+
+.submission-details{
+margin-top:12px;
+padding-top:12px;
+border-top:1px solid #eee;
+font-size:16px;
+line-height:1.9;
+white-space:pre-wrap;
+word-break:break-word;
 }
 
 .loading{
@@ -305,6 +347,9 @@ class="back">
 <div id="contents"></div>
 
 <div id="bloodDonors"></div>
+
+<!-- নতুন Approved Submission -->
+<div id="approvedSubmissions"></div>
 
 <div id="imagePosts"></div>
 
@@ -768,6 +813,409 @@ bloodDonors.innerHTML = "";
 
 
 /* =====================================================
+   APPROVED SUBMISSIONS
+===================================================== */
+
+async function loadApprovedSubmissions(){
+
+const box =
+document.getElementById(
+"approvedSubmissions"
+);
+
+box.innerHTML = "";
+
+
+if(!categoryId){
+return;
+}
+
+
+try{
+
+const snapshot =
+await getDocs(
+collection(
+db,
+"submissions"
+)
+);
+
+
+const submissions = [];
+
+
+snapshot.forEach(
+function(submissionDoc){
+
+const data =
+submissionDoc.data();
+
+
+/*
+শুধু APPROVED এবং
+এই Topic-এর submission
+*/
+
+const sameCategory =
+String(
+data.categoryId || ""
+).trim()
+===
+String(
+categoryId
+).trim();
+
+
+if(
+data.status === "approved" &&
+sameCategory
+){
+
+/*
+Blood donor আলাদাভাবে
+দেখানো হচ্ছে
+*/
+
+if(
+data.type === "blood"
+){
+
+return;
+
+}
+
+
+submissions.push({
+
+id:
+submissionDoc.id,
+
+...data
+
+});
+
+}
+
+});
+
+
+/*
+নতুন submission আগে
+*/
+
+submissions.sort(
+function(a,b){
+
+const aTime =
+a.createdAt &&
+typeof a.createdAt.toMillis ===
+"function"
+?
+a.createdAt.toMillis()
+:
+0;
+
+const bTime =
+b.createdAt &&
+typeof b.createdAt.toMillis ===
+"function"
+?
+b.createdAt.toMillis()
+:
+0;
+
+return bTime-aTime;
+
+}
+);
+
+
+if(
+submissions.length === 0
+){
+
+return;
+
+}
+
+
+box.innerHTML = `
+
+<div class="submission-section-title">
+
+📋 অনুমোদিত তথ্য
+
+</div>
+
+`;
+
+
+submissions.forEach(
+function(item){
+
+const card =
+document.createElement(
+"div"
+);
+
+card.className =
+"submission-card";
+
+
+/*
+Title
+*/
+
+const title =
+item.title ||
+item.name ||
+item.businessName ||
+item.institutionName ||
+item.restaurantName ||
+"তথ্য";
+
+
+/*
+Details / Content
+*/
+
+const details =
+item.details ||
+item.description ||
+item.content ||
+item.info ||
+"";
+
+
+let html = `
+
+<div class="submission-title">
+
+${escapeHTML(title)}
+
+</div>
+
+`;
+
+
+/*
+Name
+*/
+
+if(
+item.name &&
+item.name !== title
+){
+
+html += `
+
+<div class="submission-row">
+
+👤 <b>নাম:</b>
+${escapeHTML(item.name)}
+
+</div>
+
+`;
+
+}
+
+
+/*
+Address
+*/
+
+if(item.address){
+
+html += `
+
+<div class="submission-row">
+
+📍 <b>ঠিকানা:</b>
+${escapeHTML(item.address)}
+
+</div>
+
+`;
+
+}
+
+
+/*
+Mobile
+*/
+
+if(item.mobile){
+
+html += `
+
+<div class="submission-row">
+
+📱 <b>মোবাইল:</b>
+${escapeHTML(item.mobile)}
+
+</div>
+
+`;
+
+}
+
+
+/*
+Phone
+*/
+
+if(
+item.phone &&
+item.phone !== item.mobile
+){
+
+html += `
+
+<div class="submission-row">
+
+☎️ <b>ফোন:</b>
+${escapeHTML(item.phone)}
+
+</div>
+
+`;
+
+}
+
+
+/*
+Email
+*/
+
+if(item.email){
+
+html += `
+
+<div class="submission-row">
+
+✉️ <b>ই-মেইল:</b>
+${escapeHTML(item.email)}
+
+</div>
+
+`;
+
+}
+
+
+/*
+Blood Group
+*/
+
+if(item.bloodGroup){
+
+html += `
+
+<div class="submission-row">
+
+🩸 <b>রক্তের গ্রুপ:</b>
+${escapeHTML(item.bloodGroup)}
+
+</div>
+
+`;
+
+}
+
+
+/*
+Upazila
+*/
+
+if(item.upazila){
+
+html += `
+
+<div class="submission-row">
+
+🏘️ <b>উপজেলা:</b>
+${escapeHTML(item.upazila)}
+
+</div>
+
+`;
+
+}
+
+
+/*
+Details
+*/
+
+if(details){
+
+html += `
+
+<div class="submission-details">
+
+${escapeHTML(details)}
+
+</div>
+
+`;
+
+}
+
+
+/*
+Created time
+*/
+
+const time =
+formatPostTime(
+item.createdAt
+);
+
+
+if(time){
+
+html += `
+
+<div class="post-time"
+style="padding:12px 0 0;">
+
+🕐 ${time}
+
+</div>
+
+`;
+
+}
+
+
+card.innerHTML =
+html;
+
+box.appendChild(
+card
+);
+
+});
+
+
+}
+catch(error){
+
+console.error(
+"Approved Submission Error:",
+error
+);
+
+box.innerHTML = "";
+
+}
+
+}
+
+
+/* =====================================================
    IMAGE POSTS
 ===================================================== */
 
@@ -1214,6 +1662,13 @@ allContents
 );
 
 }
+
+
+/*
+নতুন Approved Submission
+*/
+
+await loadApprovedSubmissions();
 
 
 /*
