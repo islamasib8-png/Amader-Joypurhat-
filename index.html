@@ -269,16 +269,6 @@ padding:25px;
 color:#666;
 }
 
-.notice{
-background:#fff8e1;
-border:1px solid #ffe082;
-padding:12px;
-border-radius:10px;
-margin-top:12px;
-font-size:13px;
-line-height:1.6;
-}
-
 @media(max-width:600px){
 
 .grid{
@@ -365,20 +355,12 @@ font-size:11px;
 
 <button
 class="add-info"
-onclick="openSubmissionCategoryModal()">
+id="addInfoBtn"
+type="button">
 
 ➕ আপনার তথ্য যোগ করুন
 
 </button>
-
-
-<div class="notice">
-
-<b>ℹ️ তথ্য সংক্রান্ত নির্দেশনা:</b><br>
-
-আপনার দেওয়া তথ্য প্রশাসনের যাচাই ও অনুমোদনের পর অ্যাপে প্রকাশ করা হবে। ভুল বা অসম্পূর্ণ তথ্য গ্রহণযোগ্য নয়।
-
-</div>
 
 </div>
 
@@ -425,7 +407,7 @@ Facebook
 
 <span
 class="close"
-onclick="closeModal('categoryModal')">
+id="closeCategoryModal">
 
 ×
 </span>
@@ -460,7 +442,7 @@ class="subcategory-grid">
 
 <span
 class="close"
-onclick="closeModal('subCategoryModal')">
+id="closeSubCategoryModal">
 
 ×
 </span>
@@ -493,7 +475,7 @@ class="subcategory-grid">
 
 <span
 class="close"
-onclick="closeModal('formModal')">
+id="closeFormModal">
 
 ×
 </span>
@@ -548,6 +530,11 @@ serverTimestamp
 
 /* ================= FIREBASE ================= */
 
+/*
+IMPORTANT:
+এখানে আপনার আগের কাজ করা Firebase Config বসাবেন।
+*/
+
 const firebaseConfig = {
 
 apiKey:
@@ -571,9 +558,11 @@ appId:
 };
 
 
-const app = initializeApp(firebaseConfig);
+const app =
+initializeApp(firebaseConfig);
 
-const db = getFirestore(app);
+const db =
+getFirestore(app);
 
 
 
@@ -619,10 +608,11 @@ return String(name || "")
 
 
 /* ==================================================
-   PUBLIC SUBMISSION-এ যেসব CATEGORY দেখাবে না
+PUBLIC SUBMISSION-এ যেসব CATEGORY থাকবে না
 ================================================== */
 
-const disabledSubmissionCategories = new Set([
+const disabledSubmissionCategories =
+new Set([
 
 "জয়পুরহাটের পরিচয়",
 
@@ -684,31 +674,15 @@ institution:"বিভিন্ন প্রতিষ্ঠান",
 
 ambulance:"অ্যাম্বুলেন্স",
 
-fire:"ফায়ার সার্ভিস",
-
-police:"থানা পুলিশ",
-
-electricity:"বিদ্যুৎ অফিস",
-
-bus:"বাসের সময়সূচি",
-
-train:"ট্রেনের সময়সূচি",
-
 place:"দর্শনীয় স্থান",
 
 person:"কৃতী ব্যক্তিত্ব",
 
-news:"আজকের খবর",
-
 islamic:"ইসলামিক কর্নার",
-
-emergency:"জরুরি সেবা",
 
 coaching:"কোচিং ও প্রাইভেট সেন্টার",
 
-doctor:"ডাক্তার",
-
-joypurhat:"জয়পুরহাটের পরিচয়"
+doctor:"ডাক্তার"
 
 };
 
@@ -751,26 +725,6 @@ ambulance:[
 "অ্যাম্বুলেন্স"
 ],
 
-fire:[
-"ফায়ার সার্ভিস"
-],
-
-police:[
-"থানা পুলিশ"
-],
-
-electricity:[
-"বিদ্যুৎ অফিস"
-],
-
-bus:[
-"বাসের সময়সূচি"
-],
-
-train:[
-"ট্রেনের সময়সূচি"
-],
-
 place:[
 "দর্শনীয় স্থান"
 ],
@@ -779,19 +733,8 @@ person:[
 "কৃতী ব্যক্তিত্ব"
 ],
 
-news:[
-"আজকের খবর",
-"আজকের নিউজ",
-"খবর",
-"আজকের সংবাদ"
-],
-
 islamic:[
 "ইসলামিক কর্নার"
-],
-
-emergency:[
-"জরুরি সেবা"
 ],
 
 coaching:[
@@ -801,10 +744,6 @@ coaching:[
 
 doctor:[
 "ডাক্তার"
-],
-
-joypurhat:[
-"জয়পুরহাটের পরিচয়"
 ]
 
 };
@@ -815,51 +754,74 @@ joypurhat:[
 
 function getCategoryIcon(name){
 
-const n = normalizeCategoryName(name);
+const n =
+normalizeCategoryName(name);
 
-if(n==="রক্তদাতা") return "🩸";
+if(n==="রক্তদাতা")
+return "🩸";
 
-if(n.includes("ক্লিনিক")) return "🏥";
+if(n.includes("ক্লিনিক"))
+return "🏥";
 
-if(n==="হাসপাতাল") return "🏥";
+if(n==="হাসপাতাল")
+return "🏥";
 
-if(n==="রেস্টুরেন্ট") return "🍽️";
+if(n==="রেস্টুরেন্ট")
+return "🍽️";
 
-if(n==="আইনজীবী") return "⚖️";
+if(n==="আইনজীবী")
+return "⚖️";
 
-if(n.includes("কুরিয়ার")) return "🚚";
+if(n.includes("কুরিয়ার"))
+return "🚚";
 
-if(n.includes("প্রতিষ্ঠান")) return "🏪";
+if(n.includes("প্রতিষ্ঠান"))
+return "🏪";
 
-if(n==="অ্যাম্বুলেন্স") return "🚑";
+if(n==="অ্যাম্বুলেন্স")
+return "🚑";
 
-if(n==="ফায়ার সার্ভিস") return "🚒";
+if(n==="ফায়ার সার্ভিস")
+return "🚒";
 
-if(n==="থানা পুলিশ") return "👮";
+if(n==="থানা পুলিশ")
+return "👮";
 
-if(n==="বিদ্যুৎ অফিস") return "⚡";
+if(n==="বিদ্যুৎ অফিস")
+return "⚡";
 
-if(n.includes("বাস")) return "🚌";
+if(n.includes("বাস"))
+return "🚌";
 
-if(n.includes("ট্রেন")) return "🚆";
+if(n.includes("ট্রেন"))
+return "🚆";
 
-if(n==="দর্শনীয় স্থান") return "🏞️";
+if(n==="দর্শনীয় স্থান")
+return "🏞️";
 
-if(n==="কৃতী ব্যক্তিত্ব") return "🌟";
+if(n==="কৃতী ব্যক্তিত্ব")
+return "🌟";
 
-if(n.includes("খবর")) return "📰";
+if(n.includes("খবর"))
+return "📰";
 
-if(n==="ইসলামিক কর্নার") return "☪️";
+if(n==="ইসলামিক কর্নার")
+return "☪️";
 
-if(n==="জরুরি সেবা") return "🆘";
+if(n==="জরুরি সেবা")
+return "🆘";
 
-if(n.includes("কোচিং")) return "📚";
+if(n.includes("কোচিং"))
+return "📚";
 
-if(n==="ডাক্তার") return "👨‍⚕️";
+if(n==="ডাক্তার")
+return "👨‍⚕️";
 
-if(n==="জয়পুরহাটের পরিচয়") return "🏛️";
+if(n==="জয়পুরহাটের পরিচয়")
+return "🏛️";
 
-if(n==="উপজেলার পরিচয়") return "📍";
+if(n==="উপজেলার পরিচয়")
+return "📍";
 
 return "📌";
 
@@ -874,7 +836,9 @@ function getSubmissionTypeByCategoryName(name){
 const normalized =
 normalizeCategoryName(name);
 
-for(const type in submissionCategoryAliases){
+for(
+const type in submissionCategoryAliases
+){
 
 const aliases =
 submissionCategoryAliases[type];
@@ -914,7 +878,8 @@ categories = [];
 
 snap.forEach(docSnap=>{
 
-const data = docSnap.data();
+const data =
+docSnap.data();
 
 categories.push({
 
@@ -941,7 +906,9 @@ categoryOrder[aName] || 100;
 const bOrder =
 categoryOrder[bName] || 100;
 
-if(aOrder !== bOrder){
+if(
+aOrder !== bOrder
+){
 
 return aOrder-bOrder;
 
@@ -959,7 +926,10 @@ renderMainCategories();
 
 }catch(error){
 
-console.error(error);
+console.error(
+"Category Load Error:",
+error
+);
 
 document.getElementById(
 "categoryGrid"
@@ -1012,29 +982,42 @@ categories.forEach(category=>{
 const card =
 document.createElement("div");
 
-card.className = "card";
+card.className =
+"card";
 
 const icon =
 category.icon ||
-getCategoryIcon(category.name);
+getCategoryIcon(
+category.name
+);
 
 card.innerHTML = `
 
 <div class="icon">
+
 ${icon}
+
 </div>
 
 <div class="name">
-${escapeHtml(category.name || "")}
+
+${escapeHtml(
+category.name || ""
+)}
+
 </div>
 
 `;
 
-card.onclick = ()=>{
+card.addEventListener(
+"click",
+()=>{
 
-openMainTopic(category);
+openMainTopic(
+category
+);
 
-};
+});
 
 grid.appendChild(card);
 
@@ -1049,7 +1032,10 @@ grid.appendChild(card);
 function openMainTopic(category){
 
 const name =
-normalizeCategoryName(category.name);
+normalizeCategoryName(
+category.name
+);
+
 
 if(
 name==="আজকের খবর" ||
@@ -1066,29 +1052,29 @@ return;
 }
 
 
-/*
-বাস ও ট্রেনের মূল Topic
-আগের অ্যাপের flow ঠিক রাখার জন্য
-topic.html-এ পাঠানো হচ্ছে।
-*/
-
 window.location.href =
 "topic.html?id=" +
-encodeURIComponent(category.id);
+encodeURIComponent(
+category.id
+);
 
 }
 
 
 
 /* ==================================================
-   PUBLIC SUBMISSION CATEGORY MODAL
+PUBLIC SUBMISSION CATEGORY MODAL
 ================================================== */
 
 async function openSubmissionCategoryModal(){
 
+const modal =
 document.getElementById(
 "categoryModal"
-).style.display = "block";
+);
+
+modal.style.display =
+"block";
 
 await loadSubmissionCategories();
 
@@ -1115,6 +1101,7 @@ box.innerHTML = `
 
 `;
 
+
 try{
 
 const snap =
@@ -1125,28 +1112,34 @@ collection(db,"categories")
 
 let submissionCategories = [];
 
+
 snap.forEach(docSnap=>{
 
 const data =
 docSnap.data();
 
 const name =
-normalizeCategoryName(data.name);
+normalizeCategoryName(
+data.name
+);
 
 
 /*
-মূল Topic থাকবে,
-কিন্তু public submission list
-থেকে নির্দিষ্ট Topic বাদ যাবে।
+এই Topicগুলো শুধু public upload
+থেকে বাদ যাবে।
+মূল Topic delete হবে না।
 */
 
 if(
-disabledSubmissionCategories.has(name)
+disabledSubmissionCategories.has(
+name
+)
 ){
 
 return;
 
 }
+
 
 submissionCategories.push({
 
@@ -1160,16 +1153,21 @@ id:docSnap.id,
 
 
 /*
-রক্তদাতাকে সবসময় প্রথমে রাখবে।
+রক্তদাতা সবসময় প্রথম।
 */
 
-submissionCategories.sort((a,b)=>{
+submissionCategories.sort(
+(a,b)=>{
 
 const aName =
-normalizeCategoryName(a.name);
+normalizeCategoryName(
+a.name
+);
 
 const bName =
-normalizeCategoryName(b.name);
+normalizeCategoryName(
+b.name
+);
 
 
 if(
@@ -1192,20 +1190,6 @@ return 1;
 }
 
 
-const aOrder =
-categoryOrder[aName] || 100;
-
-const bOrder =
-categoryOrder[bName] || 100;
-
-
-if(aOrder !== bOrder){
-
-return aOrder-bOrder;
-
-}
-
-
 return aName.localeCompare(
 bName,
 "bn"
@@ -1217,7 +1201,9 @@ bName,
 box.innerHTML = "";
 
 
-if(!submissionCategories.length){
+if(
+!submissionCategories.length
+){
 
 box.innerHTML = `
 
@@ -1234,32 +1220,44 @@ return;
 }
 
 
-submissionCategories.forEach(category=>{
+submissionCategories.forEach(
+category=>{
 
 const card =
 document.createElement("div");
 
-card.className = "sub-card";
+card.className =
+"sub-card";
 
 const icon =
 category.icon ||
-getCategoryIcon(category.name);
+getCategoryIcon(
+category.name
+);
 
 card.innerHTML = `
 
 <span class="sub-icon">
+
 ${icon}
+
 </span>
 
-${escapeHtml(category.name || "")}
+${escapeHtml(
+category.name || ""
+)}
 
 `;
 
-card.onclick = ()=>{
+card.addEventListener(
+"click",
+()=>{
 
-loadSubmissionOptions(category);
+loadSubmissionOptions(
+category
+);
 
-};
+});
 
 box.appendChild(card);
 
@@ -1268,7 +1266,10 @@ box.appendChild(card);
 
 }catch(error){
 
-console.error(error);
+console.error(
+"Submission Category Error:",
+error
+);
 
 box.innerHTML = `
 
@@ -1288,10 +1289,15 @@ box.innerHTML = `
 
 /* ================= SUBMISSION OPTION ================= */
 
-function loadSubmissionOptions(category){
+function loadSubmissionOptions(
+category
+){
 
 const categoryName =
-normalizeCategoryName(category.name);
+normalizeCategoryName(
+category.name
+);
+
 
 selectedCategoryId =
 category.id;
@@ -1300,10 +1306,7 @@ selectedCategoryName =
 categoryName;
 
 
-/*
-জয়পুরহাটের পরিচয় এখন public submission-এ
-আসবে না।
-*/
+/* blocked category */
 
 if(
 disabledSubmissionCategories.has(
@@ -1316,11 +1319,11 @@ return;
 }
 
 
-/*
-ডাক্তার
-*/
+/* DOCTOR */
 
-if(categoryName==="ডাক্তার"){
+if(
+categoryName==="ডাক্তার"
+){
 
 showSubCategories(
 "ডাক্তার",
@@ -1332,9 +1335,7 @@ return;
 }
 
 
-/*
-কোচিং
-*/
+/* COACHING */
 
 if(
 categoryName==="কোচিং ও প্রাইভেট সেন্টার" ||
@@ -1351,11 +1352,11 @@ return;
 }
 
 
-/*
-ইসলামিক কর্নার
-*/
+/* ISLAMIC */
 
-if(categoryName==="ইসলামিক কর্নার"){
+if(
+categoryName==="ইসলামিক কর্নার"
+){
 
 showSubCategories(
 "ইসলামিক কর্নার",
@@ -1367,14 +1368,13 @@ return;
 }
 
 
-/*
-সাধারণ Topic
-*/
+/* NORMAL */
 
 const type =
 getSubmissionTypeByCategoryName(
 categoryName
 );
+
 
 if(!type){
 
@@ -1387,9 +1387,13 @@ return;
 }
 
 
-closeModal("categoryModal");
+closeModal(
+"categoryModal"
+);
 
-openSubmissionForm(type);
+openSubmissionForm(
+type
+);
 
 }
 
@@ -1547,13 +1551,19 @@ icon:"☪️"
 
 /* ================= SHOW SUBCATEGORIES ================= */
 
-function showSubCategories(title,items){
+function showSubCategories(
+title,
+items
+){
 
-closeModal("categoryModal");
+closeModal(
+"categoryModal"
+);
 
 document.getElementById(
 "subCategoryModal"
-).style.display = "block";
+).style.display =
+"block";
 
 document.getElementById(
 "subCategoryTitle"
@@ -1568,24 +1578,30 @@ document.getElementById(
 box.innerHTML = "";
 
 
-items.forEach(item=>{
+items.forEach(
+item=>{
 
 const card =
 document.createElement("div");
 
-card.className = "sub-card";
+card.className =
+"sub-card";
 
 card.innerHTML = `
 
 <span class="sub-icon">
+
 ${item.icon}
+
 </span>
 
 ${item.name}
 
 `;
 
-card.onclick = ()=>{
+card.addEventListener(
+"click",
+()=>{
 
 selectedSubCategory =
 item.id;
@@ -1593,16 +1609,20 @@ item.id;
 selectedSubCategoryName =
 item.name;
 
-closeModal("subCategoryModal");
+closeModal(
+"subCategoryModal"
+);
 
 const type =
 getSubmissionTypeByCategoryName(
 selectedCategoryName
 );
 
-openSubmissionForm(type);
+openSubmissionForm(
+type
+);
 
-};
+});
 
 box.appendChild(card);
 
@@ -1614,34 +1634,43 @@ box.appendChild(card);
 
 /* ================= OPEN FORM ================= */
 
-function openSubmissionForm(type){
+function openSubmissionForm(
+type
+){
 
-selectedType = type;
+selectedType =
+type;
 
 const title =
 submissionTypes[type] ||
 "তথ্য যোগ করুন";
 
+
 document.getElementById(
 "formTitle"
 ).textContent =
-"➕ " + title + " তথ্য যোগ করুন";
+"➕ " +
+title +
+" তথ্য যোগ করুন";
+
 
 document.getElementById(
 "formFields"
 ).innerHTML =
 buildForm(type);
 
+
 document.getElementById(
 "formModal"
-).style.display = "block";
-
+).style.display =
+"block";
 
 
 const imageInput =
 document.getElementById(
 "image"
 );
+
 
 if(imageInput){
 
@@ -1674,7 +1703,9 @@ return `
 
 ${label}
 
-${required ?
+${
+required
+?
 '<span class="required">*</span>'
 :
 ''
@@ -1714,7 +1745,9 @@ return `
 
 ${label}
 
-${required ?
+${
+required
+?
 '<span class="required">*</span>'
 :
 ''
@@ -1745,7 +1778,9 @@ return `
 <div class="form-group">
 
 <label>
+
 ছবি
+
 </label>
 
 <input
@@ -1775,7 +1810,6 @@ function buildForm(type){
 let html = "";
 
 
-
 /* BLOOD */
 
 if(type==="blood"){
@@ -1801,8 +1835,10 @@ html += `
 <div class="form-group">
 
 <label>
+
 রক্তের গ্রুপ
 <span class="required">*</span>
+
 </label>
 
 <select
@@ -1833,7 +1869,6 @@ required
 return html;
 
 }
-
 
 
 /* RESTAURANT */
@@ -1869,7 +1904,6 @@ return html;
 }
 
 
-
 /* CLINIC */
 
 if(type==="clinic"){
@@ -1895,7 +1929,6 @@ html += field(
 return html;
 
 }
-
 
 
 /* HOSPITAL */
@@ -1929,7 +1962,6 @@ false
 return html;
 
 }
-
 
 
 /* LAWYER */
@@ -1966,7 +1998,6 @@ return html;
 }
 
 
-
 /* COURIER */
 
 if(type==="courier"){
@@ -2000,7 +2031,6 @@ return html;
 }
 
 
-
 /* INSTITUTION */
 
 if(type==="institution"){
@@ -2032,7 +2062,6 @@ false
 return html;
 
 }
-
 
 
 /* AMBULANCE */
@@ -2070,143 +2099,6 @@ return html;
 }
 
 
-
-/* FIRE */
-
-if(type==="fire"){
-
-html += field(
-"name",
-"ফায়ার সার্ভিসের নাম"
-);
-
-html += field(
-"address",
-"ঠিকানা"
-);
-
-html += field(
-"mobile",
-"মোবাইল নং",
-"tel"
-);
-
-return html;
-
-}
-
-
-
-/* POLICE */
-
-if(type==="police"){
-
-html += field(
-"name",
-"থানার নাম"
-);
-
-html += field(
-"address",
-"ঠিকানা"
-);
-
-html += field(
-"mobile",
-"মোবাইল নং",
-"tel"
-);
-
-return html;
-
-}
-
-
-
-/* ELECTRICITY */
-
-if(type==="electricity"){
-
-html += field(
-"name",
-"বিদ্যুৎ অফিসের নাম"
-);
-
-html += field(
-"address",
-"ঠিকানা"
-);
-
-html += field(
-"mobile",
-"মোবাইল নং",
-"tel"
-);
-
-html += textareaField(
-"details",
-"বিস্তারিত তথ্য",
-false
-);
-
-return html;
-
-}
-
-
-
-/* BUS */
-
-if(type==="bus"){
-
-html += field(
-"name",
-"বাসের নাম"
-);
-
-html += field(
-"route",
-"রুট"
-);
-
-html += textareaField(
-"details",
-"সময় ও অন্যান্য তথ্য",
-true
-);
-
-return html;
-
-}
-
-
-
-/* TRAIN */
-
-if(type==="train"){
-
-html += field(
-"name",
-"ট্রেনের নাম"
-);
-
-html += field(
-"route",
-"রুট"
-);
-
-html += textareaField(
-"details",
-"সময় ও অন্যান্য তথ্য",
-true
-);
-
-return html;
-
-}
-
-
-
 /* PLACE */
 
 if(type==="place"){
@@ -2234,7 +2126,6 @@ return html;
 }
 
 
-
 /* PERSON */
 
 if(type==="person"){
@@ -2255,30 +2146,6 @@ true
 return html;
 
 }
-
-
-
-/* NEWS */
-
-if(type==="news"){
-
-html += field(
-"title",
-"শিরোনাম"
-);
-
-html += imageField();
-
-html += textareaField(
-"details",
-"বিস্তারিত খবর",
-true
-);
-
-return html;
-
-}
-
 
 
 /* DOCTOR */
@@ -2337,7 +2204,6 @@ return html;
 }
 
 
-
 /* COACHING */
 
 if(type==="coaching"){
@@ -2371,7 +2237,6 @@ return html;
 }
 
 
-
 /* ISLAMIC */
 
 if(type==="islamic"){
@@ -2379,64 +2244,6 @@ if(type==="islamic"){
 html += field(
 "title",
 "শিরোনাম"
-);
-
-html += imageField();
-
-html += textareaField(
-"details",
-"বিস্তারিত তথ্য",
-true
-);
-
-return html;
-
-}
-
-
-
-/* EMERGENCY */
-
-if(type==="emergency"){
-
-html += field(
-"name",
-"সেবার নাম"
-);
-
-html += field(
-"mobile",
-"মোবাইল নং",
-"tel"
-);
-
-html += textareaField(
-"details",
-"বিস্তারিত তথ্য",
-false
-);
-
-return html;
-
-}
-
-
-
-/* JOYPURHAT */
-
-if(type==="joypurhat"){
-
-/*
-এই ফর্ম রাখা হয়েছে যাতে পুরোনো
-কোডের কোনো অংশ ভেঙে না যায়।
-
-Public submission option-এ এটি
-দেখানো হচ্ছে না।
-*/
-
-html += field(
-"name",
-"নাম"
 );
 
 html += imageField();
@@ -2480,7 +2287,8 @@ document.getElementById(
 
 if(!file){
 
-preview.style.display="none";
+preview.style.display =
+"none";
 
 return;
 
@@ -2489,7 +2297,8 @@ return;
 const reader =
 new FileReader();
 
-reader.onload = function(e){
+reader.onload =
+function(e){
 
 preview.src =
 e.target.result;
@@ -2533,8 +2342,11 @@ const response =
 await fetch(
 CLOUDINARY_UPLOAD_URL,
 {
+
 method:"POST",
+
 body:formData
+
 }
 );
 
@@ -2574,7 +2386,8 @@ document.getElementById(
 );
 
 
-button.disabled = true;
+button.disabled =
+true;
 
 button.textContent =
 "জমা হচ্ছে...";
@@ -2588,7 +2401,7 @@ e.target;
 const data = {};
 
 
-/* সাধারণ input */
+/* INPUT DATA */
 
 const elements =
 form.querySelectorAll(
@@ -2596,7 +2409,8 @@ form.querySelectorAll(
 );
 
 
-elements.forEach(element=>{
+elements.forEach(
+element=>{
 
 if(
 element.name &&
@@ -2620,6 +2434,7 @@ document.getElementById(
 
 let imageUrl = "";
 
+
 if(
 imageInput &&
 imageInput.files &&
@@ -2642,7 +2457,7 @@ imageUrl;
 }
 
 
-/* SAVE */
+/* FIRESTORE */
 
 await addDoc(
 collection(
@@ -2651,7 +2466,8 @@ db,
 ),
 {
 
-type:selectedType,
+type:
+selectedType,
 
 categoryId:
 selectedCategoryId,
@@ -2680,7 +2496,7 @@ serverTimestamp()
 
 
 alert(
-"✅ আপনার তথ্য সফলভাবে জমা হয়েছে।\n\nঅ্যাডমিন যাচাই ও অনুমোদনের পর তথ্যটি অ্যাপে প্রকাশ হবে।"
+"✅ আপনার তথ্য সফলভাবে জমা হয়েছে।"
 );
 
 
@@ -2692,6 +2508,7 @@ document.getElementById(
 "imagePreview"
 );
 
+
 if(preview){
 
 preview.style.display =
@@ -2702,12 +2519,16 @@ preview.src = "";
 }
 
 
-closeModal("formModal");
+closeModal(
+"formModal"
+);
 
 
-selectedSubCategory = "";
+selectedSubCategory =
+"";
 
-selectedSubCategoryName = "";
+selectedSubCategoryName =
+"";
 
 
 }catch(error){
@@ -2720,7 +2541,8 @@ alert(
 
 }finally{
 
-button.disabled = false;
+button.disabled =
+false;
 
 button.textContent =
 "তথ্য জমা দিন";
@@ -2733,33 +2555,87 @@ button.textContent =
 
 /* ================= CLOSE MODAL ================= */
 
-window.closeModal =
-function(id){
+function closeModal(id){
 
-document.getElementById(
-id
-).style.display = "none";
+const modal =
+document.getElementById(id);
 
-};
+if(modal){
 
+modal.style.display =
+"none";
 
-
-/* ================= ESCAPE HTML ================= */
-
-function escapeHtml(value){
-
-return String(value || "")
-.replace(/&/g,"&amp;")
-.replace(/</g,"&lt;")
-.replace(/>/g,"&gt;")
-.replace(/"/g,"&quot;")
-.replace(/'/g,"&#039;");
+}
 
 }
 
 
 
-/* ================= MODAL OUTSIDE CLICK ================= */
+/* ================= BUTTON EVENTS ================= */
+
+/*
+IMPORTANT:
+script type="module" হওয়ায়
+HTML onclick ব্যবহার না করে
+এখানে event listener দেওয়া হয়েছে।
+*/
+
+document.getElementById(
+"addInfoBtn"
+).addEventListener(
+"click",
+function(){
+
+openSubmissionCategoryModal();
+
+}
+);
+
+
+document.getElementById(
+"closeCategoryModal"
+).addEventListener(
+"click",
+function(){
+
+closeModal(
+"categoryModal"
+);
+
+}
+);
+
+
+document.getElementById(
+"closeSubCategoryModal"
+).addEventListener(
+"click",
+function(){
+
+closeModal(
+"subCategoryModal"
+);
+
+}
+);
+
+
+document.getElementById(
+"closeFormModal"
+).addEventListener(
+"click",
+function(){
+
+closeModal(
+"formModal"
+);
+
+}
+);
+
+
+
+/* ================= OUTSIDE CLICK ================= */
 
 window.addEventListener(
 "click",
@@ -2777,6 +2653,38 @@ e.target.style.display =
 }
 
 });
+
+
+
+/* ================= ESCAPE HTML ================= */
+
+function escapeHtml(value){
+
+return String(
+value || ""
+)
+.replace(
+/&/g,
+"&amp;"
+)
+.replace(
+/</g,
+"&lt;"
+)
+.replace(
+/>/g,
+"&gt;"
+)
+.replace(
+/"/g,
+"&quot;"
+)
+.replace(
+/'/g,
+"&#039;"
+);
+
+}
 
 
 
