@@ -122,10 +122,31 @@ white-space:pre-wrap;
 word-break:break-word;
 }
 
+.info-text a{
+color:#0f766e;
+font-weight:bold;
+text-decoration:underline;
+word-break:break-all;
+}
+
 .section-title{
 font-size:20px;
 font-weight:bold;
 margin:20px 0 12px;
+}
+
+.loading{
+text-align:center;
+padding:30px;
+color:#666;
+}
+
+.error{
+background:white;
+padding:20px;
+border-radius:15px;
+text-align:center;
+color:#b91c1c;
 }
 
 
@@ -167,20 +188,6 @@ font-size:16px;
 line-height:1.9;
 white-space:pre-wrap;
 word-break:break-word;
-}
-
-.loading{
-text-align:center;
-padding:30px;
-color:#666;
-}
-
-.error{
-background:white;
-padding:20px;
-border-radius:15px;
-text-align:center;
-color:#b91c1c;
 }
 
 
@@ -348,7 +355,6 @@ class="back">
 
 <div id="bloodDonors"></div>
 
-<!-- নতুন Approved Submission -->
 <div id="approvedSubmissions"></div>
 
 <div id="imagePosts"></div>
@@ -525,12 +531,69 @@ ids:[
 
 
 /* =========================
-   PHONE
+   WEBSITE LINK
 ========================= */
 
 function makePhoneLinks(text){
 
-return text;
+let safeText =
+escapeHTML(
+text || ""
+);
+
+
+/*
+http:// অথবা https://
+দিয়ে শুরু হওয়া website
+clickable করা
+*/
+
+safeText =
+safeText.replace(
+/(https?:\/\/[^\s<]+)/g,
+function(url){
+
+/*
+শেষের punctuation URL-এর
+বাইরে রাখা
+*/
+
+let cleanUrl = url;
+let ending = "";
+
+while(
+cleanUrl.length > 0 &&
+/[.,!?;:)\]}]$/.test(
+cleanUrl
+)
+){
+
+ending =
+cleanUrl.slice(-1)
++
+ending;
+
+cleanUrl =
+cleanUrl.slice(0,-1);
+
+}
+
+
+return `
+<a
+href="${cleanUrl}"
+target="_blank"
+rel="noopener noreferrer"
+>
+${cleanUrl}
+</a>${ending}
+`;
+
+}
+);
+
+
+return safeText;
 
 }
 
@@ -646,10 +709,6 @@ const data =
 donorDoc.data();
 
 
-/*
-শুধু blood + approved
-*/
-
 if(
 data.type === "blood" &&
 data.status === "approved"
@@ -668,10 +727,6 @@ donorDoc.id,
 
 });
 
-
-/*
-নতুন approved donor আগে
-*/
 
 donors.sort(
 function(a,b){
@@ -852,11 +907,6 @@ const data =
 submissionDoc.data();
 
 
-/*
-শুধু APPROVED এবং
-এই Topic-এর submission
-*/
-
 const sameCategory =
 String(
 data.categoryId || ""
@@ -871,11 +921,6 @@ if(
 data.status === "approved" &&
 sameCategory
 ){
-
-/*
-Blood donor আলাদাভাবে
-দেখানো হচ্ছে
-*/
 
 if(
 data.type === "blood"
@@ -899,10 +944,6 @@ submissionDoc.id,
 
 });
 
-
-/*
-নতুন submission আগে
-*/
 
 submissions.sort(
 function(a,b){
@@ -963,10 +1004,6 @@ card.className =
 "submission-card";
 
 
-/*
-Title
-*/
-
 const title =
 item.title ||
 item.name ||
@@ -975,10 +1012,6 @@ item.institutionName ||
 item.restaurantName ||
 "তথ্য";
 
-
-/*
-Details / Content
-*/
 
 const details =
 item.details ||
@@ -999,10 +1032,6 @@ ${escapeHTML(title)}
 `;
 
 
-/*
-Name
-*/
-
 if(
 item.name &&
 item.name !== title
@@ -1022,10 +1051,6 @@ ${escapeHTML(item.name)}
 }
 
 
-/*
-Address
-*/
-
 if(item.address){
 
 html += `
@@ -1042,10 +1067,6 @@ ${escapeHTML(item.address)}
 }
 
 
-/*
-Mobile
-*/
-
 if(item.mobile){
 
 html += `
@@ -1061,10 +1082,6 @@ ${escapeHTML(item.mobile)}
 
 }
 
-
-/*
-Phone
-*/
 
 if(
 item.phone &&
@@ -1085,10 +1102,6 @@ ${escapeHTML(item.phone)}
 }
 
 
-/*
-Email
-*/
-
 if(item.email){
 
 html += `
@@ -1104,10 +1117,6 @@ ${escapeHTML(item.email)}
 
 }
 
-
-/*
-Blood Group
-*/
 
 if(item.bloodGroup){
 
@@ -1125,10 +1134,6 @@ ${escapeHTML(item.bloodGroup)}
 }
 
 
-/*
-Upazila
-*/
-
 if(item.upazila){
 
 html += `
@@ -1145,17 +1150,13 @@ ${escapeHTML(item.upazila)}
 }
 
 
-/*
-Details
-*/
-
 if(details){
 
 html += `
 
 <div class="submission-details">
 
-${escapeHTML(details)}
+${makePhoneLinks(details)}
 
 </div>
 
@@ -1163,10 +1164,6 @@ ${escapeHTML(details)}
 
 }
 
-
-/*
-Created time
-*/
 
 const time =
 formatPostTime(
@@ -1427,7 +1424,7 @@ caption
 `
 <div class="post-caption">
 
-${escapeHTML(caption)}
+${makePhoneLinks(caption)}
 
 </div>
 `
@@ -1665,7 +1662,7 @@ allContents
 
 
 /*
-নতুন Approved Submission
+Approved Submission
 */
 
 await loadApprovedSubmissions();
@@ -1978,12 +1975,6 @@ card.className =
 "info-section";
 
 
-const linkedBody =
-makePhoneLinks(
-body
-);
-
-
 card.innerHTML = `
 
 <div class="info-heading">
@@ -2000,9 +1991,7 @@ body
 `
 <div class="info-text">
 
-${escapeHTML(
-linkedBody
-)}
+${makePhoneLinks(body)}
 
 </div>
 `
@@ -2039,8 +2028,14 @@ const matched =
 allContents.filter(
 function(item){
 
-return item.categoryId ===
-categoryId;
+return String(
+item.categoryId ||
+""
+).trim()
+===
+String(
+categoryId
+).trim();
 
 }
 );
