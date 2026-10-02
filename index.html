@@ -1,589 +1,370 @@
 <!DOCTYPE html>
 <html lang="bn">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>আমাদের জয়পুরহাট</title>
+<title>আমাদের জয়পুরহাট</title>
 
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+<style>
+*{
+  box-sizing:border-box;
+}
 
-    body {
-      font-family: Arial, sans-serif;
-      background: #f5f7fa;
-      color: #222;
-      min-height: 100vh;
-    }
+body{
+  margin:0;
+  font-family:Arial,"Noto Sans Bengali",sans-serif;
+  background:#f5f7fb;
+  color:#222;
+}
 
-    header {
-      background: #1976d2;
-      color: white;
-      text-align: center;
-      padding: 18px 10px;
-    }
+.header{
+  background:linear-gradient(135deg,#0066cc,#008fba);
+  color:white;
+  text-align:center;
+  padding:18px 10px;
+}
 
-    header h1 {
-      font-size: 27px;
-      margin-bottom: 5px;
-    }
+.header h1{
+  margin:0;
+  font-size:27px;
+}
 
-    header p {
-      font-size: 15px;
-      opacity: 0.95;
-    }
+.header p{
+  margin:6px 0 0;
+  font-size:15px;
+}
 
-    .slider {
-      width: 100%;
-      height: 220px;
-      position: relative;
-      overflow: hidden;
-      background: #ddd;
-    }
+.slider{
+  width:100%;
+  overflow:hidden;
+  background:#ddd;
+}
 
-    .slides {
-      display: flex;
-      width: 800%;
-      height: 100%;
-      transition: transform 0.5s ease;
-    }
+.slider img{
+  width:100%;
+  height:210px;
+  object-fit:cover;
+  display:none;
+}
 
-    .slide {
-      width: 12.5%;
-      height: 100%;
-      flex-shrink: 0;
-    }
+.slider img.active{
+  display:block;
+}
 
-    .slide img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-    }
+.container{
+  padding:12px;
+  max-width:1000px;
+  margin:auto;
+}
 
-    .dots {
-      position: absolute;
-      bottom: 10px;
-      left: 0;
-      right: 0;
-      text-align: center;
-    }
+.add-info-btn{
+  width:100%;
+  border:0;
+  border-radius:12px;
+  padding:14px;
+  background:#008f5a;
+  color:white;
+  font-size:17px;
+  font-weight:bold;
+  margin-bottom:15px;
+  cursor:pointer;
+}
 
-    .dot {
-      display: inline-block;
-      width: 9px;
-      height: 9px;
-      margin: 0 4px;
-      background: rgba(255,255,255,0.7);
-      border-radius: 50%;
-      cursor: pointer;
-    }
+.grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:9px;
+}
 
-    .dot.active {
-      background: #1976d2;
-    }
+.category{
+  background:white;
+  border-radius:12px;
+  padding:13px 5px;
+  text-align:center;
+  box-shadow:0 2px 8px rgba(0,0,0,.08);
+  cursor:pointer;
+  min-height:85px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+}
 
-    .container {
-      width: 94%;
-      max-width: 900px;
-      margin: 20px auto;
-    }
+.category .icon{
+  font-size:27px;
+  margin-bottom:5px;
+}
 
-    #loading {
-      text-align: center;
-      padding: 25px;
-      font-size: 17px;
-      color: #555;
-    }
+.category .name{
+  font-size:13px;
+  line-height:1.3;
+}
 
-    #error {
-      display: none;
-      text-align: center;
-      padding: 20px;
-      color: red;
-    }
+.loading{
+  text-align:center;
+  padding:25px;
+  color:#666;
+}
 
-    .category-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 10px;
-    }
+.modal{
+  display:none;
+  position:fixed;
+  z-index:9999;
+  left:0;
+  top:0;
+  width:100%;
+  height:100%;
+  background:rgba(0,0,0,.6);
+  overflow:auto;
+}
 
-    .category-card {
-      background: white;
-      border-radius: 12px;
-      padding: 15px 6px;
-      text-align: center;
-      box-shadow: 0 2px 7px rgba(0,0,0,0.10);
-      cursor: pointer;
-      transition: 0.2s;
-      min-height: 105px;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-    }
+.modal-box{
+  background:white;
+  width:94%;
+  max-width:600px;
+  margin:35px auto;
+  border-radius:15px;
+  padding:18px;
+}
 
-    .category-card:active {
-      transform: scale(0.96);
-    }
+.modal-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  border-bottom:1px solid #ddd;
+  padding-bottom:10px;
+  margin-bottom:15px;
+}
 
-    .category-icon {
-      font-size: 30px;
-      margin-bottom: 8px;
-    }
+.modal-header h2{
+  margin:0;
+  font-size:20px;
+}
 
-    .category-name {
-      font-size: 14px;
-      font-weight: bold;
-      line-height: 1.3;
-    }
+.close{
+  font-size:30px;
+  cursor:pointer;
+  color:#777;
+}
 
-    .category-description {
-      font-size: 11px;
-      color: #777;
-      margin-top: 4px;
-    }
+.option-grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:10px;
+}
 
-    #addInfoBtn {
-      display: block;
-      width: 90%;
-      margin: 20px auto;
-      padding: 13px;
-      border: none;
-      border-radius: 10px;
-      background: #1976d2;
-      color: white;
-      font-size: 17px;
-      font-weight: bold;
-      cursor: pointer;
-    }
+.option{
+  background:#f3f7fb;
+  border:1px solid #dce5ee;
+  border-radius:12px;
+  padding:15px 8px;
+  text-align:center;
+  cursor:pointer;
+  font-size:14px;
+  font-weight:bold;
+}
 
-    #addInfoBtn:active {
-      transform: scale(0.98);
-    }
+.option:hover{
+  background:#e6f3ff;
+}
 
-    .modal {
-      display: none;
-      position: fixed;
-      z-index: 1000;
-      left: 0;
-      top: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0,0,0,0.55);
-      overflow-y: auto;
-      padding: 20px 10px;
-    }
+.form-group{
+  margin-bottom:13px;
+}
 
-    .modal-box {
-      width: 94%;
-      max-width: 500px;
-      background: white;
-      margin: 20px auto;
-      border-radius: 15px;
-      padding: 20px;
-      position: relative;
-    }
+.form-group label{
+  display:block;
+  font-weight:bold;
+  margin-bottom:6px;
+  font-size:14px;
+}
 
-    .modal-box h2 {
-      text-align: center;
-      color: #1976d2;
-      margin-bottom: 18px;
-      font-size: 22px;
-    }
+.form-group input,
+.form-group textarea,
+.form-group select{
+  width:100%;
+  padding:11px;
+  border:1px solid #ccc;
+  border-radius:8px;
+  font-size:15px;
+  font-family:inherit;
+}
 
-    .close-btn {
-      position: absolute;
-      right: 12px;
-      top: 8px;
-      border: none;
-      background: none;
-      font-size: 28px;
-      color: #555;
-      cursor: pointer;
-    }
+.form-group textarea{
+  min-height:90px;
+  resize:vertical;
+}
 
-    .info-option {
-      width: 100%;
-      padding: 14px;
-      margin: 8px 0;
-      border: 1px solid #ddd;
-      border-radius: 10px;
-      background: #f8f9fa;
-      text-align: left;
-      font-size: 16px;
-      font-weight: bold;
-      cursor: pointer;
-    }
+.required{
+  color:red;
+}
 
-    .info-option:active {
-      background: #e3f2fd;
-    }
+.consent{
+  background:#fff8e1;
+  border:1px solid #f0d98a;
+  padding:10px;
+  border-radius:8px;
+  font-size:13px;
+  line-height:1.5;
+  margin:12px 0;
+}
 
-    .form-group {
-      margin-bottom: 14px;
-    }
+.submit-btn{
+  width:100%;
+  border:0;
+  border-radius:9px;
+  background:#0066cc;
+  color:white;
+  padding:13px;
+  font-size:16px;
+  font-weight:bold;
+  cursor:pointer;
+}
 
-    .form-group label {
-      display: block;
-      margin-bottom: 6px;
-      font-weight: bold;
-      font-size: 14px;
-    }
+.back-btn{
+  background:#777;
+  margin-bottom:8px;
+}
 
-    .form-group input,
-    .form-group select,
-    .form-group textarea {
-      width: 100%;
-      padding: 12px;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      font-size: 15px;
-      outline: none;
-    }
+.message{
+  margin-top:10px;
+  padding:10px;
+  border-radius:8px;
+  display:none;
+}
 
-    .form-group input:focus,
-    .form-group select:focus,
-    .form-group textarea:focus {
-      border-color: #1976d2;
-    }
+.success{
+  background:#e7f7ed;
+  color:#087532;
+}
 
-    .consent-box {
-      display: flex;
-      align-items: flex-start;
-      gap: 8px;
-      margin: 15px 0;
-      font-size: 13px;
-      line-height: 1.5;
-    }
+.error{
+  background:#ffe8e8;
+  color:#b00020;
+}
 
-    .consent-box input {
-      margin-top: 4px;
-      width: 17px;
-      height: 17px;
-      flex-shrink: 0;
-    }
+footer{
+  background:#123;
+  color:#fff;
+  text-align:center;
+  padding:22px 12px;
+  margin-top:25px;
+  line-height:1.7;
+  font-size:13px;
+}
 
-    .submit-btn {
-      width: 100%;
-      padding: 13px;
-      border: none;
-      border-radius: 9px;
-      background: #1976d2;
-      color: white;
-      font-size: 16px;
-      font-weight: bold;
-      cursor: pointer;
-    }
+footer a{
+  color:#fff;
+  text-decoration:none;
+}
 
-    .submit-btn:disabled {
-      background: #90caf9;
-      cursor: not-allowed;
-    }
+@media(max-width:600px){
+  .grid{
+    grid-template-columns:repeat(4,1fr);
+  }
 
-    .back-btn {
-      width: 100%;
-      padding: 11px;
-      margin-top: 9px;
-      border: none;
-      border-radius: 9px;
-      background: #eeeeee;
-      color: #333;
-      font-size: 15px;
-      cursor: pointer;
-    }
+  .category{
+    min-height:78px;
+    padding:8px 3px;
+  }
 
-    footer {
-      margin-top: 30px;
-      background: #1976d2;
-      color: white;
-      text-align: center;
-      padding: 20px 10px;
-      line-height: 1.7;
-      font-size: 13px;
-    }
+  .category .icon{
+    font-size:23px;
+  }
 
-    footer a {
-      color: white;
-      text-decoration: none;
-    }
+  .category .name{
+    font-size:11px;
+  }
 
-    @media (max-width: 600px) {
-
-      .category-grid {
-        grid-template-columns: repeat(4, 1fr);
-        gap: 7px;
-      }
-
-      .category-card {
-        min-height: 95px;
-        padding: 10px 4px;
-      }
-
-      .category-icon {
-        font-size: 25px;
-      }
-
-      .category-name {
-        font-size: 12px;
-      }
-
-      .category-description {
-        display: none;
-      }
-
-      .slider {
-        height: 190px;
-      }
-
-      header h1 {
-        font-size: 24px;
-      }
-    }
-
-    @media (max-width: 380px) {
-
-      .category-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
-
-      .category-card {
-        min-height: 100px;
-      }
-    }
-  </style>
+  .slider img{
+    height:175px;
+  }
+}
+</style>
 </head>
 
 <body>
 
-<header>
+<div class="header">
   <h1>আমাদের জয়পুরহাট</h1>
   <p>জয়পুরহাট জেলার তথ্যভান্ডার</p>
-</header>
+</div>
 
 <div class="slider">
-
-  <div class="slides" id="slides">
-
-    <div class="slide">
-      <img src="joypurhat.jpg" alt="জয়পুরহাট">
-    </div>
-
-    <div class="slide">
-      <img src="picjoypurhat2.jpg" alt="জয়পুরহাট">
-    </div>
-
-    <div class="slide">
-      <img src="picjoypurhat3.jpg" alt="জয়পুরহাট">
-    </div>
-
-    <div class="slide">
-      <img src="picjoypurhat4.jpg" alt="জয়পুরহাট">
-    </div>
-
-    <div class="slide">
-      <img src="picjoypurhat5.jpg" alt="জয়পুরহাট">
-    </div>
-
-    <div class="slide">
-      <img src="picjoypurhat6.jpg" alt="জয়পুরহাট">
-    </div>
-
-    <div class="slide">
-      <img src="picjoypurhat7.jpg" alt="জয়পুরহাট">
-    </div>
-
-    <div class="slide">
-      <img src="picjoypurhat8.jpg" alt="জয়পুরহাট">
-    </div>
-
-  </div>
-
-  <div class="dots" id="dots"></div>
-
+  <img src="joypurhat.jpg" class="active">
+  <img src="picjoypurhat2.jpg">
+  <img src="picjoypurhat3.jpg">
+  <img src="picjoypurhat4.jpg">
+  <img src="picjoypurhat5.jpg">
+  <img src="picjoypurhat6.jpg">
+  <img src="picjoypurhat7.jpg">
+  <img src="picjoypurhat8.jpg">
 </div>
 
 <div class="container">
 
-  <div id="loading">
-    তথ্য লোড হচ্ছে...
-  </div>
-
-  <div id="error">
-    তথ্য লোড করতে সমস্যা হয়েছে।
-    <br>
-    ইন্টারনেট সংযোগ পরীক্ষা করুন।
-  </div>
-
-  <div class="category-grid" id="categoryGrid"></div>
-
-  <button id="addInfoBtn">
+  <button class="add-info-btn" onclick="openSubmitOptions()">
     ➕ আপনার তথ্য যোগ করুন
   </button>
 
-</div>
-
-
-<!-- Information Modal -->
-
-<div class="modal" id="infoModal">
-
-  <div class="modal-box">
-
-    <button class="close-btn" id="closeInfoModal">
-      ×
-    </button>
-
-    <h2>আপনার তথ্য যোগ করুন</h2>
-
-    <button class="info-option" data-type="blood">
-      🩸 রক্তদাতা
-    </button>
-
-    <button class="info-option" data-type="hospital">
-      🏥 হাসপাতাল/ক্লিনিক
-    </button>
-
-    <button class="info-option" data-type="restaurant">
-      🍽️ রেস্টুরেন্ট
-    </button>
-
-    <button class="info-option" data-type="courier">
-      🚚 কুরিয়ার
-    </button>
-
-    <button class="info-option" data-type="lawyer">
-      ⚖️ আইনজীবী
-    </button>
-
-    <button class="info-option" data-type="business">
-      🏪 প্রতিষ্ঠান
-    </button>
-
+  <div id="categoryGrid" class="grid">
+    <div class="loading">তথ্য লোড হচ্ছে...</div>
   </div>
 
 </div>
 
+<!-- ================= SUBMISSION OPTION MODAL ================= -->
 
-<!-- Blood Donor Modal -->
+<div id="optionModal" class="modal">
+  <div class="modal-box">
 
-<div class="modal" id="bloodModal">
+    <div class="modal-header">
+      <h2>আপনি কী তথ্য যোগ করতে চান?</h2>
+      <span class="close" onclick="closeAllModals()">×</span>
+    </div>
+
+    <div id="optionGrid" class="option-grid"></div>
+
+  </div>
+</div>
+
+
+<!-- ================= FORM MODAL ================= -->
+
+<div id="formModal" class="modal">
 
   <div class="modal-box">
 
-    <button class="close-btn" id="closeBloodModal">
-      ×
+    <div class="modal-header">
+      <h2 id="formTitle">তথ্য যোগ করুন</h2>
+      <span class="close" onclick="closeAllModals()">×</span>
+    </div>
+
+    <button class="submit-btn back-btn" onclick="backToOptions()">
+      ← পিছনে
     </button>
 
-    <h2>🩸 রক্তদাতার তথ্য</h2>
+    <form id="submissionForm">
 
-    <div class="form-group">
+      <div id="dynamicFields"></div>
 
-      <label for="bloodGroup">
-        রক্তের গ্রুপ *
-      </label>
+      <div class="consent">
+        <label>
+          <input type="checkbox" id="consent">
+          আমি নিশ্চিত করছি যে উপরের তথ্যগুলো আমার জানা অনুযায়ী সঠিক এবং
+          প্রয়োজনীয় যাচাইয়ের পর এই তথ্য “আমাদের জয়পুরহাট” অ্যাপে প্রকাশে
+          আমার সম্মতি রয়েছে।
+        </label>
+      </div>
 
-      <select id="bloodGroup">
+      <button type="submit" class="submit-btn">
+        📤 তথ্য জমা দিন
+      </button>
 
-        <option value="">
-          রক্তের গ্রুপ নির্বাচন করুন
-        </option>
+      <div id="formMessage" class="message"></div>
 
-        <option value="A+">A+</option>
-        <option value="A-">A-</option>
-        <option value="B+">B+</option>
-        <option value="B-">B-</option>
-        <option value="AB+">AB+</option>
-        <option value="AB-">AB-</option>
-        <option value="O+">O+</option>
-        <option value="O-">O-</option>
-
-      </select>
-
-    </div>
-
-
-    <div class="form-group">
-
-      <label for="bloodName">
-        নাম *
-      </label>
-
-      <input
-        type="text"
-        id="bloodName"
-        placeholder="আপনার নাম লিখুন"
-      >
-
-    </div>
-
-
-    <div class="form-group">
-
-      <label for="bloodAddress">
-        ঠিকানা *
-      </label>
-
-      <textarea
-        id="bloodAddress"
-        rows="3"
-        placeholder="আপনার ঠিকানা লিখুন"
-      ></textarea>
-
-    </div>
-
-
-    <div class="form-group">
-
-      <label for="bloodMobile">
-        মোবাইল নং *
-      </label>
-
-      <input
-        type="tel"
-        id="bloodMobile"
-        placeholder="01XXXXXXXXX"
-        inputmode="numeric"
-      >
-
-    </div>
-
-
-    <div class="consent-box">
-
-      <input
-        type="checkbox"
-        id="bloodConsent"
-      >
-
-      <label for="bloodConsent">
-        আমি নিশ্চিত করছি যে উপরের তথ্য সঠিক এবং
-        প্রয়োজনীয় যাচাইয়ের পর আমার তথ্য রক্তদাতা
-        তালিকায় প্রকাশ করতে সম্মত আছি।
-      </label>
-
-    </div>
-
-
-    <button
-      class="submit-btn"
-      id="bloodSubmitBtn"
-    >
-      জমা দিন
-    </button>
-
-
-    <button
-      class="back-btn"
-      id="bloodBackBtn"
-    >
-      ← পিছনে যান
-    </button>
+    </form>
 
   </div>
 
@@ -592,46 +373,30 @@
 
 <footer>
 
+  <div>© 2026 আমাদের জয়পুরহাট</div>
+
   <div>
-    © 2026 আমাদের জয়পুরহাট
+    উপরোক্ত তথ্যে কোনো ভুল বা সংশোধনের প্রয়োজন হলে অনুগ্রহ করে যোগাযোগ করুন।
+    যাচাই সাপেক্ষে প্রয়োজনীয় সংশোধন করা হবে।
+  </div>
+
+  <div>Md. Asib Islam</div>
+
+  <div>Uchan, Dharanji, Panchbibi, Joypurhat</div>
+
+  <div>
+    📞
+    <a href="tel:01319058313">013-19058313</a>
   </div>
 
   <div>
-    উপরোক্ত তথ্যে কোনো ভুল বা সংশোধনের প্রয়োজন হলে
-    অনুগ্রহ করে যোগাযোগ করুন। যাচাই সাপেক্ষে প্রয়োজনীয়
-    সংশোধন করা হবে।
-  </div>
-
-  <div>
-    Md. Asib Islam
-  </div>
-
-  <div>
-    Uchan, Dharanji, Panchbibi, Joypurhat
-  </div>
-
-  <div>
-    📞 013-19058313
-  </div>
-
-  <div>
-
-    <a
-      href="https://wa.me/8801319058313"
-      target="_blank"
-    >
+    <a href="https://wa.me/8801319058313" target="_blank">
       WhatsApp
     </a>
-
-    &nbsp; | &nbsp;
-
-    <a
-      href="https://www.facebook.com/Asibislam01"
-      target="_blank"
-    >
+    |
+    <a href="https://www.facebook.com/Asibislam01" target="_blank">
       Facebook
     </a>
-
   </div>
 
 </footer>
@@ -643,7 +408,6 @@ import {
   initializeApp
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
 
-
 import {
   getFirestore,
   collection,
@@ -653,212 +417,732 @@ import {
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
 
-/* Firebase */
+/* ================= FIREBASE ================= */
 
 const firebaseConfig = {
+  apiKey: "AIzaSyAG05o2MjHH3UL8Gp7VNmrQGeqq-4YrDEk",
+  authDomain: "amader-joypurhat-7b3fb.firebaseapp.com",
+  projectId: "amader-joypurhat-7b3fb",
+  storageBucket: "amader-joypurhat-7b3fb.firebasestorage.app",
+  messagingSenderId: "542366008798",
+  appId: "1:542366008798:web:4f9a7c210b561406a5494f"
+};
 
-  apiKey:
-    "AIzaSyAG05o2MjHH3UL8Gp7VNmrQGeqq-4YrDEk",
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
 
-  authDomain:
-    "amader-joypurhat-7b3fb.firebaseapp.com",
 
-  projectId:
-    "amader-joypurhat-7b3fb",
+/* ================= SLIDER ================= */
 
-  storageBucket:
-    "amader-joypurhat-7b3fb.firebasestorage.app",
+const slides = document.querySelectorAll(".slider img");
 
-  messagingSenderId:
-    "542366008798",
+let slideIndex = 0;
 
-  appId:
-    "1:542366008798:web:4f9a7c210b561406a5494f"
+setInterval(() => {
+
+  slides[slideIndex].classList.remove("active");
+
+  slideIndex++;
+
+  if(slideIndex >= slides.length){
+    slideIndex = 0;
+  }
+
+  slides[slideIndex].classList.add("active");
+
+},4000);
+
+
+/* ================= SUBMISSION TYPES ================= */
+
+const submissionTypes = [
+
+  {
+    type:"blood",
+    label:"🩸 রক্তদাতা",
+    title:"🩸 রক্তদাতার তথ্য"
+  },
+
+  {
+    type:"clinic",
+    label:"🏥 ক্লিনিক ও ডায়াগনস্টিক",
+    title:"🏥 ক্লিনিক ও ডায়াগনস্টিকের তথ্য"
+  },
+
+  {
+    type:"hospital",
+    label:"🏥 হাসপাতাল",
+    title:"🏥 হাসপাতালের তথ্য"
+  },
+
+  {
+    type:"restaurant",
+    label:"🍽️ রেস্টুরেন্ট",
+    title:"🍽️ রেস্টুরেন্টের তথ্য"
+  },
+
+  {
+    type:"lawyer",
+    label:"⚖️ আইনজীবী",
+    title:"⚖️ আইনজীবীর তথ্য"
+  },
+
+  {
+    type:"courier",
+    label:"🚚 কুরিয়ার সার্ভিস",
+    title:"🚚 কুরিয়ার সার্ভিসের তথ্য"
+  },
+
+  {
+    type:"ambulance",
+    label:"🚑 অ্যাম্বুলেন্স",
+    title:"🚑 অ্যাম্বুলেন্সের তথ্য"
+  },
+
+  {
+    type:"fire",
+    label:"🔥 ফায়ার সার্ভিস",
+    title:"🔥 ফায়ার সার্ভিসের তথ্য"
+  },
+
+  {
+    type:"police",
+    label:"🚓 থানা পুলিশ",
+    title:"🚓 থানা পুলিশের তথ্য"
+  },
+
+  {
+    type:"electricity",
+    label:"⚡ বিদ্যুৎ অফিস",
+    title:"⚡ বিদ্যুৎ অফিসের তথ্য"
+  },
+
+  {
+    type:"bus",
+    label:"🚌 বাসের সময়সূচি",
+    title:"🚌 বাসের তথ্য"
+  },
+
+  {
+    type:"train",
+    label:"🚆 ট্রেনের সময়সূচি",
+    title:"🚆 ট্রেনের তথ্য"
+  },
+
+  {
+    type:"place",
+    label:"📍 দর্শনীয় স্থান",
+    title:"📍 দর্শনীয় স্থানের তথ্য"
+  },
+
+  {
+    type:"person",
+    label:"👤 কৃতী ব্যক্তিত্ব",
+    title:"👤 কৃতী ব্যক্তিত্বের তথ্য"
+  },
+
+  {
+    type:"news",
+    label:"📰 আজকের খবর",
+    title:"📰 খবরের তথ্য"
+  },
+
+  {
+    type:"islamic",
+    label:"🕌 ইসলামিক কর্নার",
+    title:"🕌 ইসলামিক পোস্ট"
+  },
+
+  {
+    type:"emergency",
+    label:"🚨 জরুরি সেবা",
+    title:"🚨 জরুরি সেবার তথ্য"
+  }
+
+];
+
+
+/* ================= OPTIONS ================= */
+
+function loadSubmissionOptions(){
+
+  const grid = document.getElementById("optionGrid");
+
+  grid.innerHTML = "";
+
+  submissionTypes.forEach(item => {
+
+    const div = document.createElement("div");
+
+    div.className = "option";
+
+    div.textContent = item.label;
+
+    div.onclick = () => openSubmissionForm(item.type);
+
+    grid.appendChild(div);
+
+  });
+
+}
+
+loadSubmissionOptions();
+
+
+/* ================= OPEN OPTIONS ================= */
+
+window.openSubmitOptions = function(){
+
+  document.getElementById("optionModal").style.display = "block";
 
 };
 
 
-const app =
-  initializeApp(firebaseConfig);
+/* ================= CLOSE ================= */
 
+window.closeAllModals = function(){
 
-const db =
-  getFirestore(app);
+  document.getElementById("optionModal").style.display = "none";
 
+  document.getElementById("formModal").style.display = "none";
 
-/* =========================
-   CATEGORY
-========================= */
-
-const categoryGrid =
-  document.getElementById("categoryGrid");
-
-
-const loading =
-  document.getElementById("loading");
-
-
-const errorBox =
-  document.getElementById("error");
-
-
-const specialLinks = {
-
-  "বাসের সময়সূচি":
-    "https://www.shohoz.com/bus-tickets",
-
-  "ট্রেনের সময়সূচি":
-    "https://eticket.railway.gov.bd/",
-
-  "আজকের খবর":
-    "https://dailyjoypurbarta.com/"
+  document.getElementById("formMessage").style.display = "none";
 
 };
 
+
+/* ================= BACK ================= */
+
+window.backToOptions = function(){
+
+  document.getElementById("formModal").style.display = "none";
+
+  document.getElementById("optionModal").style.display = "block";
+
+};
+
+
+/* ================= FORM FIELD HELPER ================= */
+
+function field(
+  name,
+  label,
+  type="text",
+  required=true,
+  placeholder=""
+){
+
+  let req = required
+    ? `<span class="required">*</span>`
+    : "";
+
+  if(type === "textarea"){
+
+    return `
+      <div class="form-group">
+        <label>${label} ${req}</label>
+        <textarea
+          name="${name}"
+          ${required ? "required" : ""}
+          placeholder="${placeholder}"
+        ></textarea>
+      </div>
+    `;
+
+  }
+
+  if(type === "selectBlood"){
+
+    return `
+      <div class="form-group">
+        <label>${label} <span class="required">*</span></label>
+
+        <select name="${name}" required>
+
+          <option value="">রক্তের গ্রুপ নির্বাচন করুন</option>
+          <option value="A+">A+</option>
+          <option value="A-">A-</option>
+          <option value="B+">B+</option>
+          <option value="B-">B-</option>
+          <option value="AB+">AB+</option>
+          <option value="AB-">AB-</option>
+          <option value="O+">O+</option>
+          <option value="O-">O-</option>
+
+        </select>
+
+      </div>
+    `;
+
+  }
+
+  if(type === "selectYesNo"){
+
+    return `
+      <div class="form-group">
+        <label>${label} ${req}</label>
+
+        <select name="${name}" ${required ? "required" : ""}>
+
+          <option value="">নির্বাচন করুন</option>
+          <option value="হ্যাঁ">হ্যাঁ</option>
+          <option value="না">না</option>
+
+        </select>
+
+      </div>
+    `;
+
+  }
+
+  return `
+    <div class="form-group">
+
+      <label>${label} ${req}</label>
+
+      <input
+        type="${type}"
+        name="${name}"
+        ${required ? "required" : ""}
+        placeholder="${placeholder}"
+      >
+
+    </div>
+  `;
+
+}
+
+
+/* ================= BUILD FORM ================= */
+
+function buildForm(type){
+
+  let html = "";
+
+  switch(type){
+
+    case "blood":
+
+      html += field(
+        "bloodGroup",
+        "রক্তের গ্রুপ",
+        "selectBlood"
+      );
+
+      html += field(
+        "name",
+        "নাম",
+        "text",
+        true,
+        "রক্তদাতার নাম"
+      );
+
+      html += field(
+        "address",
+        "ঠিকানা",
+        "text",
+        true,
+        "সম্পূর্ণ ঠিকানা"
+      );
+
+      html += field(
+        "mobile",
+        "মোবাইল নং",
+        "tel",
+        true,
+        "মোবাইল নম্বর"
+      );
+
+      break;
+
+
+    case "clinic":
+
+      html += field("name","ক্লিনিক/ডায়াগনস্টিকের নাম");
+      html += field("address","ঠিকানা");
+      html += field("upazila","উপজেলা", "text", false);
+      html += field("mobile","মোবাইল/ফোন","tel");
+      html += field("description","অতিরিক্ত তথ্য","textarea",false);
+
+      break;
+
+
+    case "hospital":
+
+      html += field("name","হাসপাতালের নাম");
+      html += field("address","ঠিকানা");
+      html += field("upazila","উপজেলা","text",false);
+      html += field("mobile","মোবাইল/ফোন","tel");
+      html += field("description","অতিরিক্ত তথ্য","textarea",false);
+
+      break;
+
+
+    case "restaurant":
+
+      html += field("name","রেস্টুরেন্টের নাম");
+      html += field("address","ঠিকানা");
+      html += field("upazila","উপজেলা","text",false);
+      html += field("mobile","মোবাইল/ফোন","tel");
+      html += field("description","অনলাইন অর্ডার/অন্যান্য তথ্য","textarea",false);
+
+      break;
+
+
+    case "lawyer":
+
+      html += field("name","আইনজীবীর নাম");
+      html += field("specialty","আইনের ধরন/বিশেষত্ব","text",false);
+      html += field("chamber","চেম্বারের নাম/স্থান");
+      html += field("address","ঠিকানা");
+      html += field("mobile","মোবাইল নং","tel");
+
+      break;
+
+
+    case "courier":
+
+      html += field("name","কুরিয়ার সার্ভিসের নাম");
+      html += field("address","শাখা/ঠিকানা");
+      html += field("upazila","উপজেলা","text",false);
+      html += field("mobile","মোবাইল/ফোন","tel");
+      html += field("description","অতিরিক্ত তথ্য","textarea",false);
+
+      break;
+
+
+    case "ambulance":
+
+      html += field("name","অ্যাম্বুলেন্স/সেবাদাতার নাম");
+      html += field("address","ঠিকানা","text",false);
+      html += field("upazila","উপজেলা","text",false);
+      html += field("mobile","মোবাইল নং","tel");
+      html += field("available24h","২৪ ঘণ্টা সেবা?","selectYesNo");
+      html += field("description","অতিরিক্ত তথ্য","textarea",false);
+
+      break;
+
+
+    case "fire":
+
+      html += field("name","ফায়ার সার্ভিস অফিস");
+      html += field("address","ঠিকানা");
+      html += field("upazila","উপজেলা","text",false);
+      html += field("mobile","ফোন/মোবাইল","tel");
+
+      break;
+
+
+    case "police":
+
+      html += field("name","থানা/পুলিশ অফিসের নাম");
+      html += field("address","ঠিকানা");
+      html += field("upazila","উপজেলা","text",false);
+      html += field("mobile","ফোন/মোবাইল","tel");
+
+      break;
+
+
+    case "electricity":
+
+      html += field("name","বিদ্যুৎ অফিসের নাম");
+      html += field("address","ঠিকানা");
+      html += field("upazila","উপজেলা","text",false);
+      html += field("mobile","মোবাইল/ফোন","tel");
+      html += field("description","অতিরিক্ত তথ্য","textarea",false);
+
+      break;
+
+
+    case "bus":
+
+      html += field("route","বাসের রুট");
+      html += field("counter","কাউন্টার/ঠিকানা","text",false);
+      html += field("mobile","মোবাইল/ফোন","tel",false);
+      html += field("schedule","বাসের সময়সূচি","textarea");
+
+      break;
+
+
+    case "train":
+
+      html += field("name","স্টেশন/রুট");
+      html += field("schedule","ট্রেনের সময়সূচি","textarea");
+      html += field("mobile","যোগাযোগ","tel",false);
+
+      break;
+
+
+    case "place":
+
+      html += field("name","দর্শনীয় স্থানের নাম");
+      html += field("upazila","উপজেলা","text",false);
+      html += field("address","ঠিকানা","text",false);
+      html += field("description","দর্শনীয় স্থানের বিবরণ","textarea");
+
+      break;
+
+
+    case "person":
+
+      html += field("name","ব্যক্তির নাম");
+      html += field("identity","পরিচয়/ক্ষেত্র");
+      html += field("upazila","উপজেলা","text",false);
+      html += field("bio","জীবনী/পরিচিতি","textarea");
+
+      break;
+
+
+    case "news":
+
+      html += field("title","খবরের শিরোনাম");
+      html += field("upazila","উপজেলা","text",false);
+      html += field("details","খবরের বিস্তারিত","textarea");
+      html += field("source","তথ্যসূত্র","text",false);
+
+      break;
+
+
+    case "islamic":
+
+      html += field("title","পোস্টের শিরোনাম");
+      html += field("details","বিস্তারিত লেখা","textarea");
+      html += field("source","তথ্যসূত্র","text",false);
+
+      break;
+
+
+    case "emergency":
+
+      html += field("serviceName","জরুরি সেবার নাম");
+      html += field("person","ব্যক্তি/অফিসের নাম","text",false);
+      html += field("address","ঠিকানা","text",false);
+      html += field("mobile","মোবাইল/ফোন","tel");
+      html += field("details","সেবার বিস্তারিত","textarea");
+
+      break;
+
+  }
+
+  document.getElementById("dynamicFields").innerHTML = html;
+
+}
+
+
+/* ================= OPEN FORM ================= */
+
+let selectedType = "";
+
+window.openSubmissionForm = function(type){
+
+  selectedType = type;
+
+  const item = submissionTypes.find(x => x.type === type);
+
+  if(!item) return;
+
+  document.getElementById("optionModal").style.display = "none";
+
+  document.getElementById("formModal").style.display = "block";
+
+  document.getElementById("formTitle").textContent = item.title;
+
+  document.getElementById("formMessage").style.display = "none";
+
+  document.getElementById("submissionForm").reset();
+
+  buildForm(type);
+
+};
+
+
+/* ================= SUBMIT ================= */
+
+document
+.getElementById("submissionForm")
+.addEventListener("submit", async function(e){
+
+  e.preventDefault();
+
+  const message = document.getElementById("formMessage");
+
+  message.style.display = "none";
+
+  if(!document.getElementById("consent").checked){
+
+    message.className = "message error";
+
+    message.textContent =
+      "অনুগ্রহ করে তথ্য প্রকাশের সম্মতিতে টিক দিন।";
+
+    message.style.display = "block";
+
+    return;
+  }
+
+
+  const formData = new FormData(this);
+
+  const data = {};
+
+  formData.forEach((value,key) => {
+
+    data[key] = String(value).trim();
+
+  });
+
+
+  try{
+
+    await addDoc(
+      collection(db,"submissions"),
+      {
+        type:selectedType,
+        ...data,
+        consent:true,
+        status:"pending",
+        createdAt:serverTimestamp()
+      }
+    );
+
+
+    message.className = "message success";
+
+    message.textContent =
+      "✅ আপনার তথ্য সফলভাবে জমা হয়েছে। অ্যাডমিন যাচাই করার পর অনুমোদন করলে সংশ্লিষ্ট টপিকে প্রকাশ হবে।";
+
+    message.style.display = "block";
+
+
+    this.reset();
+
+  }
+  catch(error){
+
+    console.error(error);
+
+    message.className = "message error";
+
+    message.textContent =
+      "❌ তথ্য জমা দেওয়া যায়নি। আবার চেষ্টা করুন।";
+
+    message.style.display = "block";
+
+  }
+
+});
+
+
+/* ================= LOAD CATEGORIES ================= */
 
 const categoryOrder = {
 
-  "জয়পুরহাটের পরিচয়": 1,
-
-  "উপজেলার পরিচয়": 2,
-
-  "দর্শনীয় স্থান": 3
+  "জয়পুরহাটের পরিচয়":1,
+  "উপজেলার পরিচয়":2,
+  "দর্শনীয় স্থান":3
 
 };
 
 
-async function loadCategories() {
+async function loadCategories(){
 
-  try {
+  const grid = document.getElementById("categoryGrid");
 
-    const snapshot =
-      await getDocs(
-        collection(
-          db,
-          "categories"
-        )
-      );
+  try{
 
+    const snap = await getDocs(
+      collection(db,"categories")
+    );
 
     let categories = [];
 
-
-    snapshot.forEach(doc => {
+    snap.forEach(docSnap => {
 
       categories.push({
-
-        id: doc.id,
-
-        ...doc.data()
-
+        id:docSnap.id,
+        ...docSnap.data()
       });
 
     });
 
 
-    categories.sort((a, b) => {
+    categories.sort((a,b)=>{
 
-      const orderA =
-        categoryOrder[a.name] || 999;
+      const aOrder = categoryOrder[a.name] || 100;
+      const bOrder = categoryOrder[b.name] || 100;
 
-      const orderB =
-        categoryOrder[b.name] || 999;
-
-      return orderA - orderB;
+      return aOrder-bOrder;
 
     });
 
 
-    categoryGrid.innerHTML = "";
+    grid.innerHTML = "";
 
 
-    categories.forEach(category => {
+    if(categories.length === 0){
 
-      const card =
-        document.createElement("div");
+      grid.innerHTML =
+        `<div class="loading">কোনো তথ্য পাওয়া যায়নি।</div>`;
+
+      return;
+
+    }
 
 
-      card.className =
-        "category-card";
+    categories.forEach(cat => {
+
+      const div = document.createElement("div");
+
+      div.className = "category";
+
+      div.onclick = () => {
+
+        location.href =
+          "topic.html?id=" +
+          encodeURIComponent(cat.id);
+
+      };
 
 
-      card.innerHTML = `
+      div.innerHTML = `
 
-        <div class="category-icon">
-          ${category.icon || "📌"}
+        <div class="icon">
+          ${cat.icon || "📌"}
         </div>
 
-        <div class="category-name">
-          ${category.name || ""}
+        <div class="name">
+          ${escapeHTML(cat.name || "")}
         </div>
-
-        ${
-          category.description
-            ? `
-              <div class="category-description">
-                ${category.description}
-              </div>
-            `
-            : ""
-        }
 
       `;
 
-
-      card.addEventListener(
-        "click",
-        () => {
-
-          const categoryName =
-            category.name || "";
-
-
-          if (
-            specialLinks[categoryName]
-          ) {
-
-            window.open(
-              specialLinks[categoryName],
-              "_blank"
-            );
-
-            return;
-
-          }
-
-
-          window.location.href =
-            `topic.html?id=${category.id}`;
-
-        }
-      );
-
-
-      categoryGrid.appendChild(card);
+      grid.appendChild(div);
 
     });
 
+  }
+  catch(error){
 
-    loading.style.display =
-      "none";
+    console.error(error);
 
-
-  } catch (error) {
-
-    console.error(
-      "Category loading error:",
-      error
-    );
-
-
-    loading.style.display =
-      "none";
-
-
-    errorBox.style.display =
-      "block";
+    grid.innerHTML =
+      `<div class="loading">
+        তথ্য লোড করতে সমস্যা হয়েছে।
+      </div>`;
 
   }
+
+}
+
+
+function escapeHTML(value){
+
+  return String(value || "")
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
 
 }
 
@@ -866,578 +1150,19 @@ async function loadCategories() {
 loadCategories();
 
 
-/* =========================
-   SLIDER
-========================= */
+/* ================= MODAL OUTSIDE CLICK ================= */
 
-const slides =
-  document.getElementById("slides");
+window.addEventListener("click",function(e){
 
-
-const dotsContainer =
-  document.getElementById("dots");
-
-
-const totalSlides = 8;
-
-let currentSlide = 0;
-
-
-for (
-  let i = 0;
-  i < totalSlides;
-  i++
-) {
-
-  const dot =
-    document.createElement("span");
-
-
-  dot.className =
-    "dot";
-
-
-  if (i === 0) {
-
-    dot.classList.add(
-      "active"
-    );
-
+  if(e.target === document.getElementById("optionModal")){
+    closeAllModals();
   }
 
-
-  dot.addEventListener(
-    "click",
-    () => {
-
-      currentSlide = i;
-
-      updateSlider();
-
-    }
-  );
-
-
-  dotsContainer.appendChild(
-    dot
-  );
-
-}
-
-
-function updateSlider() {
-
-  slides.style.transform =
-    `translateX(-${currentSlide * 12.5}%)`;
-
-
-  const dots =
-    document.querySelectorAll(
-      ".dot"
-    );
-
-
-  dots.forEach(
-    (dot, index) => {
-
-      dot.classList.toggle(
-        "active",
-        index === currentSlide
-      );
-
-    }
-  );
-
-}
-
-
-setInterval(
-  () => {
-
-    currentSlide++;
-
-
-    if (
-      currentSlide >=
-      totalSlides
-    ) {
-
-      currentSlide = 0;
-
-    }
-
-
-    updateSlider();
-
-  },
-  4000
-);
-
-
-/* =========================
-   INFORMATION MODAL
-========================= */
-
-const addInfoBtn =
-  document.getElementById(
-    "addInfoBtn"
-  );
-
-
-const infoModal =
-  document.getElementById(
-    "infoModal"
-  );
-
-
-const closeInfoModal =
-  document.getElementById(
-    "closeInfoModal"
-  );
-
-
-addInfoBtn.addEventListener(
-  "click",
-  () => {
-
-    infoModal.style.display =
-      "block";
-
+  if(e.target === document.getElementById("formModal")){
+    closeAllModals();
   }
-);
 
-
-closeInfoModal.addEventListener(
-  "click",
-  () => {
-
-    infoModal.style.display =
-      "none";
-
-  }
-);
-
-
-/* =========================
-   BLOOD MODAL
-========================= */
-
-const bloodModal =
-  document.getElementById(
-    "bloodModal"
-  );
-
-
-const closeBloodModal =
-  document.getElementById(
-    "closeBloodModal"
-  );
-
-
-const bloodBackBtn =
-  document.getElementById(
-    "bloodBackBtn"
-  );
-
-
-const bloodSubmitBtn =
-  document.getElementById(
-    "bloodSubmitBtn"
-  );
-
-
-document
-  .querySelectorAll(
-    ".info-option"
-  )
-  .forEach(button => {
-
-    button.addEventListener(
-      "click",
-      () => {
-
-        const type =
-          button.dataset.type;
-
-
-        if (
-          type === "blood"
-        ) {
-
-          infoModal.style.display =
-            "none";
-
-
-          bloodModal.style.display =
-            "block";
-
-
-        } else {
-
-          alert(
-            "এই তথ্যের ফর্ম পরবর্তী ধাপে যোগ করা হবে।"
-          );
-
-        }
-
-      }
-    );
-
-  });
-
-
-closeBloodModal.addEventListener(
-  "click",
-  () => {
-
-    bloodModal.style.display =
-      "none";
-
-  }
-);
-
-
-bloodBackBtn.addEventListener(
-  "click",
-  () => {
-
-    bloodModal.style.display =
-      "none";
-
-
-    infoModal.style.display =
-      "block";
-
-  }
-);
-
-
-/* =========================
-   BLOOD DONOR
-   FIREBASE SUBMISSION
-========================= */
-
-bloodSubmitBtn.addEventListener(
-  "click",
-  async () => {
-
-
-    const bloodGroup =
-      document
-        .getElementById(
-          "bloodGroup"
-        )
-        .value;
-
-
-    const bloodName =
-      document
-        .getElementById(
-          "bloodName"
-        )
-        .value
-        .trim();
-
-
-    const bloodAddress =
-      document
-        .getElementById(
-          "bloodAddress"
-        )
-        .value
-        .trim();
-
-
-    const bloodMobile =
-      document
-        .getElementById(
-          "bloodMobile"
-        )
-        .value
-        .trim();
-
-
-    const bloodConsent =
-      document
-        .getElementById(
-          "bloodConsent"
-        )
-        .checked;
-
-
-    /* Validation */
-
-    if (!bloodGroup) {
-
-      alert(
-        "দয়া করে রক্তের গ্রুপ নির্বাচন করুন।"
-      );
-
-      return;
-
-    }
-
-
-    if (!bloodName) {
-
-      alert(
-        "দয়া করে নাম লিখুন।"
-      );
-
-      return;
-
-    }
-
-
-    if (!bloodAddress) {
-
-      alert(
-        "দয়া করে ঠিকানা লিখুন।"
-      );
-
-      return;
-
-    }
-
-
-    if (!bloodMobile) {
-
-      alert(
-        "দয়া করে মোবাইল নম্বর লিখুন।"
-      );
-
-      return;
-
-    }
-
-
-    if (!bloodConsent) {
-
-      alert(
-        "তথ্য প্রকাশের সম্মতিতে টিক চিহ্ন দিন।"
-      );
-
-      return;
-
-    }
-
-
-    try {
-
-      bloodSubmitBtn.disabled =
-        true;
-
-
-      bloodSubmitBtn.textContent =
-        "জমা হচ্ছে...";
-
-
-      /* IMPORTANT:
-         No automatic publication.
-         Status = pending
-      */
-
-      await addDoc(
-        collection(
-          db,
-          "submissions"
-        ),
-        {
-
-          type: "blood",
-
-          name: bloodName,
-
-          address: bloodAddress,
-
-          mobile: bloodMobile,
-
-          bloodGroup: bloodGroup,
-
-          status: "pending",
-
-          createdAt:
-            serverTimestamp()
-
-        }
-      );
-
-
-      alert(
-        "আপনার তথ্য সফলভাবে জমা হয়েছে।\n\n" +
-        "অ্যাডমিন যাচাই করার পর অনুমোদন করলে " +
-        "তথ্যটি রক্তদাতা টপিকে প্রকাশ হবে।"
-      );
-
-
-      /* Clear */
-
-      document.getElementById(
-        "bloodGroup"
-      ).value = "";
-
-
-      document.getElementById(
-        "bloodName"
-      ).value = "";
-
-
-      document.getElementById(
-        "bloodAddress"
-      ).value = "";
-
-
-      document.getElementById(
-        "bloodMobile"
-      ).value = "";
-
-
-      document.getElementById(
-        "bloodConsent"
-      ).checked = false;
-
-
-      bloodModal.style.display =
-        "none";
-
-
-    } catch (error) {
-
-      console.error(
-        "Firebase submission error:",
-        error
-      );
-
-
-      alert(
-        "তথ্য Firebase-এ জমা দেওয়া যায়নি।\n\n" +
-        "আবার চেষ্টা করুন।"
-      );
-
-
-    } finally {
-
-      bloodSubmitBtn.disabled =
-        false;
-
-
-      bloodSubmitBtn.textContent =
-        "জমা দিন";
-
-    }
-
-  }
-);
-
-
-/* =========================
-   MODAL CLOSE
-========================= */
-
-window.addEventListener(
-  "click",
-  event => {
-
-    if (
-      event.target === infoModal
-    ) {
-
-      infoModal.style.display =
-        "none";
-
-    }
-
-
-    if (
-      event.target === bloodModal
-    ) {
-
-      bloodModal.style.display =
-        "none";
-
-    }
-
-  }
-);
-
-
-/* =========================
-   SLIDER SWIPE
-========================= */
-
-let touchStartX = 0;
-
-let touchEndX = 0;
-
-
-slides.addEventListener(
-  "touchstart",
-  event => {
-
-    touchStartX =
-      event.changedTouches[0]
-        .screenX;
-
-  }
-);
-
-
-slides.addEventListener(
-  "touchend",
-  event => {
-
-    touchEndX =
-      event.changedTouches[0]
-        .screenX;
-
-
-    if (
-      touchEndX <
-      touchStartX - 50
-    ) {
-
-      currentSlide++;
-
-
-      if (
-        currentSlide >=
-        totalSlides
-      ) {
-
-        currentSlide = 0;
-
-      }
-
-
-      updateSlider();
-
-    }
-
-
-    if (
-      touchEndX >
-      touchStartX + 50
-    ) {
-
-      currentSlide--;
-
-
-      if (
-        currentSlide < 0
-      ) {
-
-        currentSlide =
-          totalSlides - 1;
-
-      }
-
-
-      updateSlider();
-
-    }
-
-  }
-);
+});
 
 </script>
 
