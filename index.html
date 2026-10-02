@@ -188,7 +188,7 @@ transform:scale(.97);
 }
 
 
-/* ================= TICKET OPTION ================= */
+/* ================= TICKET ================= */
 
 .ticket-option{
 background:#f3f7fb;
@@ -289,6 +289,13 @@ background:#ffe8e8;
 color:#b00020;
 }
 
+.loading{
+text-align:center;
+padding:25px;
+color:#666;
+grid-column:1/-1;
+}
+
 
 /* ================= FOOTER ================= */
 
@@ -305,13 +312,6 @@ font-size:13px;
 footer a{
 color:white;
 text-decoration:none;
-}
-
-.loading{
-text-align:center;
-padding:25px;
-color:#666;
-grid-column:1/-1;
 }
 
 
@@ -368,25 +368,15 @@ height:175px;
 <img src="joypurhat.jpg" class="active">
 
 <img src="picjoypurhat2.jpg">
-
 <img src="picjoypurhat3.jpg">
-
 <img src="picjoypurhat4.jpg">
-
 <img src="picjoypurhat5.jpg">
-
 <img src="picjoypurhat6.jpg">
-
 <img src="picjoypurhat7.jpg">
-
 <img src="picjoypurhat8.jpg">
-
 <img src="picjoypurhat9.jpg">
-
 <img src="picjoypurhat10.jpg">
-
 <img src="picjoypurhat11.jpg">
-
 <img src="picjoypurhat12.jpg">
 
 </div>
@@ -426,9 +416,7 @@ onclick="openSubmitOptions()">
 </div>
 
 
-<!-- ================================================= -->
-<!-- ================= SUBMISSION OPTION MODAL ======= -->
-<!-- ================================================= -->
+<!-- ================= OPTION MODAL ================= -->
 
 <div
 id="optionModal"
@@ -436,11 +424,10 @@ class="modal">
 
 <div class="modal-box">
 
-
 <div class="modal-header">
 
-<h2>
-আপনি কী তথ্য যোগ করতে চান?
+<h2 id="optionTitle">
+প্রথমে Topic নির্বাচন করুন
 </h2>
 
 <span
@@ -453,29 +440,24 @@ onclick="closeAllModals()">
 
 </div>
 
-
 <div
 id="optionGrid"
 class="option-grid">
 
 </div>
 
-
 </div>
 
 </div>
 
 
-<!-- ================================================= -->
-<!-- ================= TICKET MODAL ================== -->
-<!-- ================================================= -->
+<!-- ================= TICKET MODAL ================= -->
 
 <div
 id="ticketModal"
 class="modal">
 
 <div class="modal-box">
-
 
 <div class="modal-header">
 
@@ -493,9 +475,7 @@ onclick="closeTicketModal()">
 
 </div>
 
-
 <div class="option-grid">
-
 
 <div
 class="ticket-option"
@@ -526,7 +506,6 @@ onclick="openTrainWebsite()">
 
 </div>
 
-
 </div>
 
 </div>
@@ -534,16 +513,13 @@ onclick="openTrainWebsite()">
 </div>
 
 
-<!-- ================================================= -->
-<!-- ================= FORM MODAL ==================== -->
-<!-- ================================================= -->
+<!-- ================= FORM MODAL ================= -->
 
 <div
 id="formModal"
 class="modal">
 
 <div class="modal-box">
-
 
 <div class="modal-header">
 
@@ -606,9 +582,7 @@ class="message">
 
 </div>
 
-
 </form>
-
 
 </div>
 
@@ -671,9 +645,7 @@ Facebook
 <script type="module">
 
 
-/* ================================================= */
-/* ================= FIREBASE ====================== */
-/* ================================================= */
+/* ================= FIREBASE ================= */
 
 import {
 initializeApp
@@ -723,15 +695,12 @@ const db =
 getFirestore(app);
 
 
-/* ================================================= */
-/* ================= SLIDER ========================= */
-/* ================================================= */
+/* ================= SLIDER ================= */
 
 const slides =
 document.querySelectorAll(".slider img");
 
 let slideIndex = 0;
-
 
 setInterval(function(){
 
@@ -739,50 +708,31 @@ if(slides.length === 0){
 return;
 }
 
-slides[slideIndex]
-.classList.remove("active");
-
+slides[slideIndex].classList.remove("active");
 
 slideIndex++;
 
-
 if(slideIndex >= slides.length){
-
 slideIndex = 0;
-
 }
 
-
-slides[slideIndex]
-.classList.add("active");
+slides[slideIndex].classList.add("active");
 
 },4000);
 
 
-/* ================================================= */
-/* ================= CATEGORY ORDER ================ */
-/* ================================================= */
+/* ================= CATEGORY ORDER ================= */
 
 const categoryOrder = {
 
 "জয়পুরহাটের পরিচয়":1,
-
 "উপজেলার পরিচয়":2,
-
 "দর্শনীয় স্থান":3
 
 };
 
 
-/* ================================================= */
-/* ================= SPECIAL CATEGORY ============== */
-/* ================================================= */
-
-
-/*
-এই function category-এর নাম দেখে
-বাস/ট্রেন category শনাক্ত করবে।
-*/
+/* ================= TRANSPORT ================= */
 
 function getTransportType(name){
 
@@ -792,39 +742,27 @@ String(name || "")
 .replace(/\s+/g," ");
 
 
-/* আলাদা বাস Category */
-
 if(
 n.includes("বাস") &&
 !n.includes("ট্রেন")
 ){
-
 return "bus";
-
 }
 
-
-/* আলাদা ট্রেন Category */
 
 if(
 n.includes("ট্রেন") &&
 !n.includes("বাস")
 ){
-
 return "train";
-
 }
 
-
-/* একই Category-তে বাস + ট্রেন */
 
 if(
 n.includes("বাস") &&
 n.includes("ট্রেন")
 ){
-
 return "both";
-
 }
 
 
@@ -833,9 +771,7 @@ return "";
 }
 
 
-/* ================================================= */
-/* ================= NEWS CATEGORY ================== */
-/* ================================================= */
+/* ================= NEWS ================= */
 
 function isNewsCategory(name){
 
@@ -844,15 +780,11 @@ String(name || "")
 .trim()
 .replace(/\s+/g," ");
 
-
 return (
 
 n.includes("আজকের খবর") ||
-
 n.includes("আজকের নিউজ") ||
-
 n === "খবর" ||
-
 n.includes("আজকের সংবাদ")
 
 );
@@ -860,9 +792,7 @@ n.includes("আজকের সংবাদ")
 }
 
 
-/* ================================================= */
-/* ================= BUS WEBSITE ==================== */
-/* ================================================= */
+/* ================= BUS ================= */
 
 window.openBusWebsite =
 function(){
@@ -873,9 +803,7 @@ window.location.href =
 };
 
 
-/* ================================================= */
-/* ================= TRAIN WEBSITE ================== */
-/* ================================================= */
+/* ================= TRAIN ================= */
 
 window.openTrainWebsite =
 function(){
@@ -886,9 +814,7 @@ window.location.href =
 };
 
 
-/* ================================================= */
-/* ================= CLOSE TICKET =================== */
-/* ================================================= */
+/* ================= TICKET CLOSE ================= */
 
 window.closeTicketModal =
 function(){
@@ -902,7 +828,7 @@ document
 
 
 /* ================================================= */
-/* ================= SUBMISSION TYPES =============== */
+/* ============== SUBMISSION TYPES ================= */
 /* ================================================= */
 
 const submissionTypes = [
@@ -1013,7 +939,148 @@ title:"🚨 জরুরি সেবার তথ্য"
 
 
 /* ================================================= */
-/* ================= OPTION LIST ==================== */
+/* ============== SELECTED DATA ==================== */
+/* ================================================= */
+
+let selectedCategoryId = "";
+let selectedType = "";
+
+
+/* ================================================= */
+/* ============== OPEN SUBMISSION ================== */
+/* ================================================= */
+
+window.openSubmitOptions =
+function(){
+
+loadSubmissionCategories();
+
+document
+.getElementById("optionModal")
+.style.display =
+"block";
+
+};
+
+
+/* ================================================= */
+/* ============== LOAD TOPICS ====================== */
+/* ================================================= */
+
+async function loadSubmissionCategories(){
+
+const grid =
+document.getElementById("optionGrid");
+
+const title =
+document.getElementById("optionTitle");
+
+title.textContent =
+"প্রথমে Topic নির্বাচন করুন";
+
+grid.innerHTML =
+'<div class="loading">Topic লোড হচ্ছে...</div>';
+
+try{
+
+const snapshot =
+await getDocs(
+collection(db,"categories")
+);
+
+let categories = [];
+
+snapshot.forEach(function(docSnap){
+
+categories.push({
+
+id:docSnap.id,
+...docSnap.data()
+
+});
+
+});
+
+
+categories.sort(function(a,b){
+
+const aOrder =
+categoryOrder[a.name] || 100;
+
+const bOrder =
+categoryOrder[b.name] || 100;
+
+return aOrder-bOrder;
+
+});
+
+
+grid.innerHTML = "";
+
+
+if(categories.length === 0){
+
+grid.innerHTML =
+'<div class="loading">কোনো Topic পাওয়া যায়নি।</div>';
+
+return;
+
+}
+
+
+categories.forEach(function(cat){
+
+const div =
+document.createElement("div");
+
+div.className =
+"option";
+
+div.innerHTML = `
+
+<div style="font-size:28px;margin-bottom:5px;">
+
+${escapeHTML(cat.icon || "📌")}
+
+</div>
+
+<div>
+
+${escapeHTML(cat.name || "")}
+
+</div>
+
+`;
+
+div.onclick =
+function(){
+
+selectedCategoryId =
+cat.id;
+
+loadSubmissionOptions();
+
+};
+
+grid.appendChild(div);
+
+});
+
+}
+catch(error){
+
+console.error(error);
+
+grid.innerHTML =
+'<div class="loading">Topic লোড করা যায়নি।</div>';
+
+}
+
+}
+
+
+/* ================================================= */
+/* ============== LOAD SUBMISSION TYPES ============ */
 /* ================================================= */
 
 function loadSubmissionOptions(){
@@ -1021,8 +1088,40 @@ function loadSubmissionOptions(){
 const grid =
 document.getElementById("optionGrid");
 
+const title =
+document.getElementById("optionTitle");
+
+title.textContent =
+"এই Topic-এ কী তথ্য যোগ করবেন?";
+
 grid.innerHTML = "";
 
+
+/* BACK */
+
+const back =
+document.createElement("div");
+
+back.className =
+"option";
+
+back.style.background =
+"#eeeeee";
+
+back.innerHTML =
+"← Topic পরিবর্তন করুন";
+
+back.onclick =
+function(){
+
+loadSubmissionCategories();
+
+};
+
+grid.appendChild(back);
+
+
+/* TYPES */
 
 submissionTypes.forEach(function(item){
 
@@ -1035,14 +1134,12 @@ div.className =
 div.textContent =
 item.label;
 
-
 div.onclick =
 function(){
 
 openSubmissionForm(item.type);
 
 };
-
 
 grid.appendChild(div);
 
@@ -1051,23 +1148,9 @@ grid.appendChild(div);
 }
 
 
-loadSubmissionOptions();
-
-
 /* ================================================= */
-/* ================= MODAL ========================== */
+/* ================= CLOSE MODALS ================== */
 /* ================================================= */
-
-window.openSubmitOptions =
-function(){
-
-document
-.getElementById("optionModal")
-.style.display =
-"block";
-
-};
-
 
 window.closeAllModals =
 function(){
@@ -1077,18 +1160,15 @@ document
 .style.display =
 "none";
 
-
 document
 .getElementById("formModal")
 .style.display =
 "none";
 
-
 document
 .getElementById("ticketModal")
 .style.display =
 "none";
-
 
 document
 .getElementById("formMessage")
@@ -1106,11 +1186,12 @@ document
 .style.display =
 "none";
 
-
 document
 .getElementById("optionModal")
 .style.display =
 "block";
+
+loadSubmissionOptions();
 
 };
 
@@ -1179,13 +1260,10 @@ required>
 
 <option value="A+">A+</option>
 <option value="A-">A-</option>
-
 <option value="B+">B+</option>
 <option value="B-">B-</option>
-
 <option value="AB+">AB+</option>
 <option value="AB-">AB-</option>
-
 <option value="O+">O+</option>
 <option value="O-">O-</option>
 
@@ -1265,14 +1343,9 @@ let html = "";
 
 switch(type){
 
-
 case "blood":
 
-html += field(
-"bloodGroup",
-"রক্তের গ্রুপ",
-"selectBlood"
-);
+html += field("bloodGroup","রক্তের গ্রুপ","selectBlood");
 
 html += field(
 "name",
@@ -1303,99 +1376,32 @@ break;
 
 case "clinic":
 
-html += field(
-"name",
-"ক্লিনিক/ডায়াগনস্টিকের নাম"
-);
-
-html += field(
-"address",
-"ঠিকানা"
-);
-
-html += field(
-"upazila",
-"উপজেলা",
-"text",
-false
-);
-
-html += field(
-"mobile",
-"মোবাইল/ফোন",
-"tel"
-);
-
-html += field(
-"description",
-"অতিরিক্ত তথ্য",
-"textarea",
-false
-);
+html += field("name","ক্লিনিক/ডায়াগনস্টিকের নাম");
+html += field("address","ঠিকানা");
+html += field("upazila","উপজেলা","text",false);
+html += field("mobile","মোবাইল/ফোন","tel");
+html += field("description","অতিরিক্ত তথ্য","textarea",false);
 
 break;
 
 
 case "hospital":
 
-html += field(
-"name",
-"হাসপাতালের নাম"
-);
-
-html += field(
-"address",
-"ঠিকানা"
-);
-
-html += field(
-"upazila",
-"উপজেলা",
-"text",
-false
-);
-
-html += field(
-"mobile",
-"মোবাইল/ফোন",
-"tel"
-);
-
-html += field(
-"description",
-"অতিরিক্ত তথ্য",
-"textarea",
-false
-);
+html += field("name","হাসপাতালের নাম");
+html += field("address","ঠিকানা");
+html += field("upazila","উপজেলা","text",false);
+html += field("mobile","মোবাইল/ফোন","tel");
+html += field("description","অতিরিক্ত তথ্য","textarea",false);
 
 break;
 
 
 case "restaurant":
 
-html += field(
-"name",
-"রেস্টুরেন্টের নাম"
-);
-
-html += field(
-"address",
-"ঠিকানা"
-);
-
-html += field(
-"upazila",
-"উপজেলা",
-"text",
-false
-);
-
-html += field(
-"mobile",
-"মোবাইল/ফোন",
-"tel"
-);
-
+html += field("name","রেস্টুরেন্টের নাম");
+html += field("address","ঠিকানা");
+html += field("upazila","উপজেলা","text",false);
+html += field("mobile","মোবাইল/ফোন","tel");
 html += field(
 "description",
 "অনলাইন অর্ডার/অন্যান্য তথ্য",
@@ -1408,11 +1414,7 @@ break;
 
 case "lawyer":
 
-html += field(
-"name",
-"আইনজীবীর নাম"
-);
-
+html += field("name","আইনজীবীর নাম");
 html += field(
 "specialty",
 "আইনের ধরন/বিশেষত্ব",
@@ -1420,21 +1422,9 @@ html += field(
 false
 );
 
-html += field(
-"chamber",
-"চেম্বারের নাম/স্থান"
-);
-
-html += field(
-"address",
-"ঠিকানা"
-);
-
-html += field(
-"mobile",
-"মোবাইল নং",
-"tel"
-);
+html += field("chamber","চেম্বারের নাম/স্থান");
+html += field("address","ঠিকানা");
+html += field("mobile","মোবাইল নং","tel");
 
 break;
 
@@ -1819,18 +1809,22 @@ html;
 
 
 /* ================================================= */
-/* ================= SELECTED TYPE ================= */
-/* ================================================= */
-
-let selectedType = "";
-
-
-/* ================================================= */
-/* ================= OPEN FORM ====================== */
+/* ================= OPEN FORM ===================== */
 /* ================================================= */
 
 window.openSubmissionForm =
 function(type){
+
+if(!selectedCategoryId){
+
+alert(
+"অনুগ্রহ করে প্রথমে একটি Topic নির্বাচন করুন।"
+);
+
+return;
+
+}
+
 
 selectedType = type;
 
@@ -1851,29 +1845,24 @@ document
 .style.display =
 "none";
 
-
 document
 .getElementById("formModal")
 .style.display =
 "block";
-
 
 document
 .getElementById("formTitle")
 .textContent =
 item.title;
 
-
 document
 .getElementById("formMessage")
 .style.display =
 "none";
 
-
 document
 .getElementById("submissionForm")
 .reset();
-
 
 buildForm(type);
 
@@ -1895,7 +1884,6 @@ e.preventDefault();
 
 const message =
 document.getElementById("formMessage");
-
 
 message.style.display =
 "none";
@@ -1921,9 +1909,24 @@ return;
 }
 
 
+if(!selectedCategoryId){
+
+message.className =
+"message error";
+
+message.textContent =
+"❌ Topic নির্বাচন করা হয়নি।";
+
+message.style.display =
+"block";
+
+return;
+
+}
+
+
 const formData =
 new FormData(this);
-
 
 const data = {};
 
@@ -1945,6 +1948,8 @@ collection(db,"submissions"),
 
 type:selectedType,
 
+categoryId:selectedCategoryId,
+
 ...data,
 
 consent:true,
@@ -1961,10 +1966,8 @@ serverTimestamp()
 message.className =
 "message success";
 
-
 message.textContent =
-"✅ আপনার তথ্য সফলভাবে জমা হয়েছে। অ্যাডমিন যাচাই করার পর অনুমোদন করলে সংশ্লিষ্ট টপিকে প্রকাশ হবে।";
-
+"✅ আপনার তথ্য সফলভাবে জমা হয়েছে। অ্যাডমিন যাচাই করার পর অনুমোদন করলে নির্বাচিত Topic-এ প্রকাশ হবে।";
 
 message.style.display =
 "block";
@@ -1973,19 +1976,15 @@ message.style.display =
 this.reset();
 
 }
-
 catch(error){
 
 console.error(error);
 
-
 message.className =
 "message error";
 
-
 message.textContent =
 "❌ তথ্য জমা দেওয়া যায়নি। আবার চেষ্টা করুন।";
-
 
 message.style.display =
 "block";
@@ -2006,14 +2005,12 @@ document.getElementById(
 "categoryGrid"
 );
 
-
 try{
 
 const snap =
 await getDocs(
 collection(db,"categories")
 );
-
 
 let categories = [];
 
@@ -2024,7 +2021,6 @@ function(docSnap){
 categories.push({
 
 id:docSnap.id,
-
 ...docSnap.data()
 
 });
@@ -2056,9 +2052,7 @@ categories.length === 0
 grid.innerHTML = `
 
 <div class="loading">
-
 কোনো তথ্য পাওয়া যায়নি।
-
 </div>
 
 `;
@@ -2076,14 +2070,9 @@ document.createElement(
 "div"
 );
 
-
 div.className =
 "category-card";
 
-
-/* ================================================= */
-/* ============== CATEGORY CLICK =================== */
-/* ================================================= */
 
 div.onclick =
 function(){
@@ -2098,7 +2087,7 @@ const transport =
 getTransportType(categoryName);
 
 
-/* ================= BUS ================= */
+/* BUS */
 
 if(
 transport === "bus"
@@ -2112,7 +2101,7 @@ return;
 }
 
 
-/* ================= TRAIN ================= */
+/* TRAIN */
 
 if(
 transport === "train"
@@ -2126,7 +2115,7 @@ return;
 }
 
 
-/* ================= BOTH ================= */
+/* BOTH */
 
 if(
 transport === "both"
@@ -2142,7 +2131,7 @@ return;
 }
 
 
-/* ================= NEWS ================= */
+/* NEWS */
 
 if(
 isNewsCategory(categoryName)
@@ -2156,7 +2145,7 @@ return;
 }
 
 
-/* ================= OTHER ================= */
+/* OTHER */
 
 window.location.href =
 "topic.html?id=" +
@@ -2187,24 +2176,19 @@ cat.name || ""
 
 `;
 
-
 grid.appendChild(div);
 
 });
 
 }
-
 catch(error){
 
 console.error(error);
 
-
 grid.innerHTML = `
 
 <div class="loading">
-
 তথ্য লোড করতে সমস্যা হয়েছে।
-
 </div>
 
 `;
@@ -2223,19 +2207,12 @@ function escapeHTML(value){
 return String(value || "")
 
 .replace(/&/g,"&amp;")
-
 .replace(/</g,"&lt;")
-
 .replace(/>/g,"&gt;")
-
 .replace(/"/g,"&quot;")
-
 .replace(/'/g,"&#039;");
 
 }
-
-
-loadCategories();
 
 
 /* ================================================= */
@@ -2248,33 +2225,25 @@ function(e){
 
 if(
 e.target ===
-document.getElementById(
-"optionModal"
-)
+document.getElementById("optionModal")
 ){
 
 closeAllModals();
 
 }
 
-
 if(
 e.target ===
-document.getElementById(
-"formModal"
-)
+document.getElementById("formModal")
 ){
 
 closeAllModals();
 
 }
 
-
 if(
 e.target ===
-document.getElementById(
-"ticketModal"
-)
+document.getElementById("ticketModal")
 ){
 
 closeTicketModal();
@@ -2282,6 +2251,9 @@ closeTicketModal();
 }
 
 });
+
+
+loadCategories();
 
 </script>
 
