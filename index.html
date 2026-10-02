@@ -54,6 +54,7 @@ display:flex;
 overflow-x:auto;
 scroll-snap-type:x mandatory;
 scrollbar-width:none;
+scroll-behavior:smooth;
 }
 
 .slider::-webkit-scrollbar{
@@ -305,33 +306,35 @@ font-size:11px;
 </header>
 
 
+<!-- ================= IMAGE SLIDER ================= -->
+
 <div class="hero">
 
-<div class="slider">
+<div class="slider" id="imageSlider">
 
-<img src="joypurhat.jpg">
+<img src="joypurhat.jpg" alt="জয়পুরহাট">
 
-<img src="picjoypurhat2.jpg">
+<img src="picjoypurhat2.jpg" alt="জয়পুরহাট">
 
-<img src="picjoypurhat3.jpg">
+<img src="picjoypurhat3.jpg" alt="জয়পুরহাট">
 
-<img src="picjoypurhat4.jpg">
+<img src="picjoypurhat4.jpg" alt="জয়পুরহাট">
 
-<img src="picjoypurhat5.jpg">
+<img src="picjoypurhat5.jpg" alt="জয়পুরহাট">
 
-<img src="picjoypurhat6.jpg">
+<img src="picjoypurhat6.jpg" alt="জয়পুরহাট">
 
-<img src="picjoypurhat7.jpg">
+<img src="picjoypurhat7.jpg" alt="জয়পুরহাট">
 
-<img src="picjoypurhat8.jpg">
+<img src="picjoypurhat8.jpg" alt="জয়পুরহাট">
 
-<img src="picjoypurhat9.jpg">
+<img src="picjoypurhat9.jpg" alt="জয়পুরহাট">
 
-<img src="picjoypurhat10.jpg">
+<img src="picjoypurhat10.jpg" alt="জয়পুরহাট">
 
-<img src="picjoypurhat11.jpg">
+<img src="picjoypurhat11.jpg" alt="জয়পুরহাট">
 
-<img src="picjoypurhat12.jpg">
+<img src="picjoypurhat12.jpg" alt="জয়পুরহাট">
 
 </div>
 
@@ -398,7 +401,6 @@ Facebook
 </footer>
 
 
-
 <!-- ================= CATEGORY MODAL ================= -->
 
 <div id="categoryModal" class="modal">
@@ -433,7 +435,6 @@ class="subcategory-grid">
 </div>
 
 
-
 <!-- ================= SUB CATEGORY MODAL ================= -->
 
 <div id="subCategoryModal" class="modal">
@@ -464,7 +465,6 @@ class="subcategory-grid">
 </div>
 
 </div>
-
 
 
 <!-- ================= FORM MODAL ================= -->
@@ -508,7 +508,6 @@ id="saveSubmissionBtn">
 </div>
 
 
-
 <script type="module">
 
 import {
@@ -527,13 +526,7 @@ serverTimestamp
 "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
 
-
 /* ================= FIREBASE ================= */
-
-/*
-IMPORTANT:
-এখানে আপনার আগের কাজ করা Firebase Config বসাবেন।
-*/
 
 const firebaseConfig = {
 
@@ -565,7 +558,6 @@ const db =
 getFirestore(app);
 
 
-
 /* ================= CLOUDINARY ================= */
 
 const CLOUDINARY_CLOUD_NAME =
@@ -576,7 +568,6 @@ const CLOUDINARY_UPLOAD_PRESET =
 
 const CLOUDINARY_UPLOAD_URL =
 `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload`;
-
 
 
 /* ================= VARIABLES ================= */
@@ -594,6 +585,114 @@ let selectedSubCategory = "";
 let selectedSubCategoryName = "";
 
 
+/* ================= AUTO SLIDER ================= */
+
+const slider =
+document.getElementById("imageSlider");
+
+const sliderImages =
+slider ?
+slider.querySelectorAll("img") :
+[];
+
+let sliderIndex = 0;
+
+let sliderTimer = null;
+
+
+/* ছবি লোড হওয়ার পর Slider শুরু */
+
+function startAutoSlider(){
+
+if(
+!slider ||
+!sliderImages.length
+){
+
+return;
+
+}
+
+
+/*
+আগের Timer থাকলে বন্ধ করবে
+*/
+
+if(sliderTimer){
+
+clearInterval(
+sliderTimer
+);
+
+}
+
+
+/*
+প্রতি ৩ সেকেন্ডে ছবি পরিবর্তন
+*/
+
+sliderTimer =
+setInterval(
+function(){
+
+sliderIndex++;
+
+if(
+sliderIndex >=
+sliderImages.length
+){
+
+sliderIndex = 0;
+
+}
+
+
+slider.scrollTo({
+
+left:
+sliderIndex *
+slider.clientWidth,
+
+behavior:
+"smooth"
+
+});
+
+},
+3000
+);
+
+}
+
+
+/*
+ব্যবহারকারী হাতে Slider সরালে
+বর্তমান ছবির অবস্থান বুঝে রাখবে।
+*/
+
+if(slider){
+
+slider.addEventListener(
+"scroll",
+function(){
+
+const width =
+slider.clientWidth;
+
+if(width > 0){
+
+sliderIndex =
+Math.round(
+slider.scrollLeft /
+width
+);
+
+}
+
+});
+
+}
+
 
 /* ================= NORMALIZE ================= */
 
@@ -604,7 +703,6 @@ return String(name || "")
 .replace(/\s+/g," ");
 
 }
-
 
 
 /* ==================================================
@@ -639,7 +737,6 @@ new Set([
 ]);
 
 
-
 /* ================= CATEGORY ORDER ================= */
 
 const categoryOrder = {
@@ -651,7 +748,6 @@ const categoryOrder = {
 "দর্শনীয় স্থান":3
 
 };
-
 
 
 /* ================= SUBMISSION TYPES ================= */
@@ -685,7 +781,6 @@ coaching:"কোচিং ও প্রাইভেট সেন্টার",
 doctor:"ডাক্তার"
 
 };
-
 
 
 /* ================= ALIASES ================= */
@@ -747,7 +842,6 @@ doctor:[
 ]
 
 };
-
 
 
 /* ================= ICON ================= */
@@ -828,7 +922,6 @@ return "📌";
 }
 
 
-
 /* ================= GET TYPE ================= */
 
 function getSubmissionTypeByCategoryName(name){
@@ -862,7 +955,6 @@ return null;
 }
 
 
-
 /* ================= LOAD MAIN TOPICS ================= */
 
 async function loadMainCategories(){
@@ -876,7 +968,8 @@ collection(db,"categories")
 
 categories = [];
 
-snap.forEach(docSnap=>{
+snap.forEach(
+docSnap=>{
 
 const data =
 docSnap.data();
@@ -892,7 +985,8 @@ id:docSnap.id,
 });
 
 
-categories.sort((a,b)=>{
+categories.sort(
+(a,b)=>{
 
 const aName =
 normalizeCategoryName(a.name);
@@ -948,7 +1042,6 @@ document.getElementById(
 }
 
 
-
 /* ================= RENDER MAIN TOPICS ================= */
 
 function renderMainCategories(){
@@ -977,7 +1070,8 @@ return;
 }
 
 
-categories.forEach(category=>{
+categories.forEach(
+category=>{
 
 const card =
 document.createElement("div");
@@ -1026,7 +1120,6 @@ grid.appendChild(card);
 }
 
 
-
 /* ================= OPEN MAIN TOPIC ================= */
 
 function openMainTopic(category){
@@ -1061,7 +1154,6 @@ category.id
 }
 
 
-
 /* ==================================================
 PUBLIC SUBMISSION CATEGORY MODAL
 ================================================== */
@@ -1079,7 +1171,6 @@ modal.style.display =
 await loadSubmissionCategories();
 
 }
-
 
 
 /* ================= LOAD SUBMISSION OPTIONS ================= */
@@ -1113,7 +1204,8 @@ collection(db,"categories")
 let submissionCategories = [];
 
 
-snap.forEach(docSnap=>{
+snap.forEach(
+docSnap=>{
 
 const data =
 docSnap.data();
@@ -1123,12 +1215,6 @@ normalizeCategoryName(
 data.name
 );
 
-
-/*
-এই Topicগুলো শুধু public upload
-থেকে বাদ যাবে।
-মূল Topic delete হবে না।
-*/
 
 if(
 disabledSubmissionCategories.has(
@@ -1152,9 +1238,7 @@ id:docSnap.id,
 });
 
 
-/*
-রক্তদাতা সবসময় প্রথম।
-*/
+/* রক্তদাতা সবসময় প্রথম */
 
 submissionCategories.sort(
 (a,b)=>{
@@ -1286,7 +1370,6 @@ box.innerHTML = `
 }
 
 
-
 /* ================= SUBMISSION OPTION ================= */
 
 function loadSubmissionOptions(
@@ -1398,7 +1481,6 @@ type
 }
 
 
-
 /* ================= DOCTOR ================= */
 
 function getDoctorSubCategories(){
@@ -1476,7 +1558,6 @@ icon:"👨‍⚕️"
 }
 
 
-
 /* ================= COACHING ================= */
 
 function getCoachingSubCategories(){
@@ -1512,7 +1593,6 @@ icon:"📚"
 }
 
 
-
 /* ================= ISLAMIC ================= */
 
 function getIslamicSubCategories(){
@@ -1546,7 +1626,6 @@ icon:"☪️"
 ];
 
 }
-
 
 
 /* ================= SHOW SUBCATEGORIES ================= */
@@ -1631,7 +1710,6 @@ box.appendChild(card);
 }
 
 
-
 /* ================= OPEN FORM ================= */
 
 function openSubmissionForm(
@@ -1684,7 +1762,6 @@ previewImage
 }
 
 
-
 /* ================= FORM FIELD ================= */
 
 function field(
@@ -1728,7 +1805,6 @@ placeholder="${placeholder}"
 }
 
 
-
 /* ================= TEXTAREA ================= */
 
 function textareaField(
@@ -1768,7 +1844,6 @@ ${required ? "required" : ""}
 }
 
 
-
 /* ================= IMAGE FIELD ================= */
 
 function imageField(){
@@ -1800,7 +1875,6 @@ class="preview"
 `;
 
 }
-
 
 
 /* ================= BUILD FORM ================= */
@@ -2272,7 +2346,6 @@ return `
 }
 
 
-
 /* ================= IMAGE PREVIEW ================= */
 
 function previewImage(event){
@@ -2311,7 +2384,6 @@ preview.style.display =
 reader.readAsDataURL(file);
 
 }
-
 
 
 /* ================= UPLOAD IMAGE ================= */
@@ -2368,7 +2440,6 @@ return data.secure_url || "";
 }
 
 
-
 /* ================= FORM SUBMIT ================= */
 
 document.getElementById(
@@ -2401,8 +2472,6 @@ e.target;
 const data = {};
 
 
-/* INPUT DATA */
-
 const elements =
 form.querySelectorAll(
 "input, textarea, select"
@@ -2424,8 +2493,6 @@ element.value.trim();
 
 });
 
-
-/* IMAGE */
 
 const imageInput =
 document.getElementById(
@@ -2552,7 +2619,6 @@ button.textContent =
 });
 
 
-
 /* ================= CLOSE MODAL ================= */
 
 function closeModal(id){
@@ -2570,15 +2636,7 @@ modal.style.display =
 }
 
 
-
 /* ================= BUTTON EVENTS ================= */
-
-/*
-IMPORTANT:
-script type="module" হওয়ায়
-HTML onclick ব্যবহার না করে
-এখানে event listener দেওয়া হয়েছে।
-*/
 
 document.getElementById(
 "addInfoBtn"
@@ -2588,8 +2646,7 @@ function(){
 
 openSubmissionCategoryModal();
 
-}
-);
+});
 
 
 document.getElementById(
@@ -2602,8 +2659,7 @@ closeModal(
 "categoryModal"
 );
 
-}
-);
+});
 
 
 document.getElementById(
@@ -2616,8 +2672,7 @@ closeModal(
 "subCategoryModal"
 );
 
-}
-);
+});
 
 
 document.getElementById(
@@ -2630,9 +2685,7 @@ closeModal(
 "formModal"
 );
 
-}
-);
-
+});
 
 
 /* ================= OUTSIDE CLICK ================= */
@@ -2653,7 +2706,6 @@ e.target.style.display =
 }
 
 });
-
 
 
 /* ================= ESCAPE HTML ================= */
@@ -2687,8 +2739,9 @@ value || ""
 }
 
 
-
 /* ================= INITIAL LOAD ================= */
+
+startAutoSlider();
 
 loadMainCategories();
 
