@@ -600,8 +600,6 @@ let sliderIndex = 0;
 let sliderTimer = null;
 
 
-/* ছবি লোড হওয়ার পর Slider শুরু */
-
 function startAutoSlider(){
 
 if(
@@ -613,11 +611,6 @@ return;
 
 }
 
-
-/*
-আগের Timer থাকলে বন্ধ করবে
-*/
-
 if(sliderTimer){
 
 clearInterval(
@@ -625,11 +618,6 @@ sliderTimer
 );
 
 }
-
-
-/*
-প্রতি ৩ সেকেন্ডে ছবি পরিবর্তন
-*/
 
 sliderTimer =
 setInterval(
@@ -645,7 +633,6 @@ sliderImages.length
 sliderIndex = 0;
 
 }
-
 
 slider.scrollTo({
 
@@ -664,11 +651,6 @@ behavior:
 
 }
 
-
-/*
-ব্যবহারকারী হাতে Slider সরালে
-বর্তমান ছবির অবস্থান বুঝে রাখবে।
-*/
 
 if(slider){
 
@@ -1120,7 +1102,9 @@ grid.appendChild(card);
 }
 
 
-/* ================= OPEN MAIN TOPIC ================= */
+/* ==================================================
+OPEN MAIN TOPIC
+================================================== */
 
 function openMainTopic(category){
 
@@ -1130,20 +1114,58 @@ category.name
 );
 
 
+/* ================= TRAIN ================= */
+
 if(
-name==="আজকের খবর" ||
-name==="আজকের নিউজ" ||
-name==="খবর" ||
-name==="আজকের সংবাদ"
+name.includes("ট্রেন")
 ){
 
-window.location.href =
-"https://joypurhatnews24.com/";
+window.open(
+"https://eticket.railway.gov.bd/",
+"_blank"
+);
 
 return;
 
 }
 
+
+/* ================= BUS ================= */
+
+if(
+name.includes("বাস")
+){
+
+window.open(
+"https://www.shohoz.com/bus-tickets",
+"_blank"
+);
+
+return;
+
+}
+
+
+/* ================= NEWS ================= */
+
+if(
+name.includes("আজকের খবর") ||
+name.includes("আজকের নিউজ") ||
+name==="খবর" ||
+name.includes("আজকের সংবাদ")
+){
+
+window.open(
+"https://joypurhatnews24.com/",
+"_blank"
+);
+
+return;
+
+}
+
+
+/* ================= NORMAL TOPIC ================= */
 
 window.location.href =
 "topic.html?id=" +
@@ -2603,7 +2625,7 @@ selectedSubCategoryName =
 console.error(error);
 
 alert(
-"❌ তথ্য জমা দিতে সমস্যা হয়েছে।\n\nদয়া করে আবার চেষ্টা করুন।"
+"❌ তথ্য জমা দিতে সমস্যা হয়েছে.\n\nদয়া করে আবার চেষ্টা করুন।"
 );
 
 }finally{
