@@ -256,7 +256,6 @@ word-break:break-word;
 color:#0f766e;
 font-weight:bold;
 text-decoration:underline;
-word-break:break-all;
 }
 
 
@@ -539,6 +538,8 @@ from
 "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
 
+/* ================= FIREBASE ================= */
+
 const firebaseConfig = {
 
 apiKey:
@@ -578,15 +579,22 @@ const categoryId =
 params.get("id");
 
 
-/* ================= SELECTED SUBCATEGORY ================= */
+/* ================================================= */
+/* ============== SELECTED SUBCATEGORY ============= */
+/* ================================================= */
 
 let selectedSubCategory = "";
 let selectedSubCategoryName = "";
 
 
-/* ================= SPECIAL SUBCATEGORIES ================= */
+/* ================================================= */
+/* ============== SPECIAL SUBCATEGORIES ============ */
+/* ================================================= */
 
 const specialSubCategories = {
+
+
+/* ================= COACHING ================= */
 
 "কোচিং ও প্রাইভেট সেন্টার":[
 
@@ -615,6 +623,9 @@ icon:"📚"
 }
 
 ],
+
+
+/* ================= DOCTOR ================= */
 
 "ডাক্তার":[
 
@@ -686,23 +697,52 @@ icon:"👨‍⚕️"
 
 ],
 
+
+/* ================= ISLAMIC CORNER ================= */
+
 "ইসলামিক কর্নার":[
+
+{
+id:"quran",
+name:"কুরআন",
+icon:"📖",
+externalLink:"https://quran.com/bn/surahs"
+},
 
 {
 id:"hadith",
 name:"হাদিস",
-icon:"📖"
+icon:"📚",
+externalLink:"https://ihadis.com/"
 },
 
 {
-id:"quran",
-name:"কুরআনের আয়াত",
+id:"kalema",
+name:"কলেমা",
+icon:"☪️"
+},
+
+{
+id:"namaz",
+name:"নামাজ",
 icon:"🕌"
 },
 
 {
-id:"dua",
-name:"দোয়া",
+id:"roza",
+name:"রোজা",
+icon:"🌙"
+},
+
+{
+id:"hajj",
+name:"হজ্ব",
+icon:"🕋"
+},
+
+{
+id:"zakat",
+name:"যাকাত",
 icon:"🤲"
 },
 
@@ -717,7 +757,9 @@ icon:"☪️"
 };
 
 
-/* ================= UPAZILA ================= */
+/* ================================================= */
+/* ================= UPAZILA ======================== */
+/* ================================================= */
 
 const upazilas = [
 
@@ -769,7 +811,9 @@ ids:[
 ];
 
 
-/* ================= EMPTY STATE ================= */
+/* ================================================= */
+/* ================= EMPTY STATE =================== */
+/* ================================================= */
 
 let hasContent = false;
 let hasApprovedSubmission = false;
@@ -824,7 +868,9 @@ box.innerHTML = `
 }
 
 
-/* ================= LINKS ================= */
+/* ================================================= */
+/* ================= LINKS ========================= */
+/* ================================================= */
 
 function makePhoneLinks(text){
 
@@ -873,7 +919,9 @@ return safeText;
 }
 
 
-/* ================= TIME ================= */
+/* ================================================= */
+/* ================= TIME ========================== */
+/* ================================================= */
 
 function formatPostTime(timestamp){
 
@@ -1756,7 +1804,7 @@ return 0;
 
 
 /* ================================================= */
-/* ============== SUBCATEGORY UI =================== */
+/* ============ SPECIAL SUBCATEGORY UI ============= */
 /* ================================================= */
 
 function showSubcategorySelector(
@@ -1836,6 +1884,24 @@ ${escapeHTML(item.name)}
 
 card.onclick =
 function(){
+
+/* ================= EXTERNAL LINK ================= */
+
+if(
+item.externalLink
+){
+
+window.open(
+item.externalLink,
+"_blank"
+);
+
+return;
+
+}
+
+
+/* ================= NORMAL CATEGORY ================= */
 
 selectedSubCategory =
 item.id;
@@ -2286,9 +2352,9 @@ categoryName
 
 
 /*
-   Special parent category-তে
-   শুরুতেই সব mixed submission
-   দেখানো হবে না।
+Special parent category-তে
+শুরুতেই mixed submission
+দেখানো হবে না।
 */
 
 const isSpecialParent =
@@ -2389,6 +2455,8 @@ document
 
 }
 
+
+/* SPECIAL PARENT MESSAGE */
 
 if(isSpecialParent){
 
