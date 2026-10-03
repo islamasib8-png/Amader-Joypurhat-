@@ -1463,9 +1463,14 @@ if(
 categoryName==="ইসলামিক কর্নার"
 ){
 
+/*
+ইসলামিক কর্নারে নতুন তথ্য যোগ করলে
+শুধু ইসলামিক পোস্ট অপশন থাকবে।
+*/
+
 showSubCategories(
 "ইসলামিক কর্নার",
-getIslamicSubCategories()
+getIslamicPostOnly()
 );
 
 return;
@@ -1615,34 +1620,19 @@ icon:"📚"
 }
 
 
-/* ================= ISLAMIC ================= */
+/* ==================================================
+ISLAMIC SUBMISSION
+শুধু ইসলামিক পোস্ট
+================================================== */
 
-function getIslamicSubCategories(){
+function getIslamicPostOnly(){
 
 return [
 
 {
-id:"hadith",
-name:"হাদিস",
-icon:"📖"
-},
-
-{
-id:"quran",
-name:"কুরআনের আয়াত",
-icon:"🕌"
-},
-
-{
-id:"dua",
-name:"দোয়া",
-icon:"🤲"
-},
-
-{
 id:"islamic-post",
 name:"ইসলামিক পোস্ট",
-icon:"☪️"
+icon:"📝"
 }
 
 ];
@@ -1868,7 +1858,9 @@ ${required ? "required" : ""}
 
 /* ================= IMAGE FIELD ================= */
 
-function imageField(){
+function imageField(
+required=false
+){
 
 return `
 
@@ -1878,6 +1870,14 @@ return `
 
 ছবি
 
+${
+required
+?
+'<span class="required">*</span>'
+:
+''
+}
+
 </label>
 
 <input
@@ -1885,6 +1885,7 @@ id="image"
 name="image"
 type="file"
 accept="image/*"
+${required ? "required" : ""}
 >
 
 <img
@@ -2160,16 +2161,19 @@ return html;
 }
 
 
-/* AMBULANCE */
+/* ==================================================
+AMBULANCE
+সবগুলো OPTIONAL
+================================================== */
 
 if(type==="ambulance"){
 
 html += field(
 "name",
-"অ্যাম্বুলেন্স সেবার নাম"
+"নাম",
+"text",
+false
 );
-
-html += imageField();
 
 html += field(
 "address",
@@ -2178,15 +2182,14 @@ html += field(
 false
 );
 
+html += imageField(
+false
+);
+
 html += field(
 "mobile",
 "মোবাইল নং",
-"tel"
-);
-
-html += textareaField(
-"details",
-"বিস্তারিত তথ্য",
+"tel",
 false
 );
 
@@ -2333,20 +2336,21 @@ return html;
 }
 
 
-/* ISLAMIC */
+/* ==================================================
+ISLAMIC POST
+
+ছবি + ছবি রিলেটেড পোস্ট
+================================================== */
 
 if(type==="islamic"){
 
-html += field(
-"title",
-"শিরোনাম"
+html += imageField(
+false
 );
-
-html += imageField();
 
 html += textareaField(
 "details",
-"বিস্তারিত তথ্য",
+"ছবি রিলেটেড পোস্ট",
 true
 );
 
