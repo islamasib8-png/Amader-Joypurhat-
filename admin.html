@@ -5,9 +5,7 @@
 
 <meta charset="UTF-8">
 
-<meta
-name="viewport"
-content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Admin Panel - আমাদের জয়পুরহাট</title>
 
@@ -370,6 +368,7 @@ hr{
   margin-bottom:15px;
 }
 
+
 /* ================= SUBMISSION ================= */
 
 .submission-card{
@@ -440,11 +439,99 @@ hr{
   min-width:120px;
 }
 
+.approved-topic-box{
+  margin-top:14px;
+  padding:14px;
+  background:#f8f9fa;
+  border:1px solid #e2e6ea;
+  border-radius:10px;
+}
+
+.approved-topic-box label{
+  margin-top:0;
+}
+
+.approved-info{
+  background:#e7f1ff;
+  color:#084298;
+  padding:10px;
+  border-radius:8px;
+  font-size:13px;
+  margin-top:10px;
+}
+
+
+/* ================= MODAL ================= */
+
+.modal{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.55);
+  z-index:9999;
+  overflow-y:auto;
+  padding:15px;
+}
+
+.modal-box{
+  background:white;
+  max-width:650px;
+  margin:25px auto;
+  border-radius:15px;
+  padding:18px;
+  position:relative;
+}
+
+.modal-title{
+  font-size:20px;
+  font-weight:bold;
+  color:#0d6efd;
+  margin-bottom:15px;
+}
+
+.close-modal{
+  position:absolute;
+  right:13px;
+  top:8px;
+  font-size:28px;
+  color:#555;
+  cursor:pointer;
+}
+
+.edit-submission-field{
+  margin-bottom:12px;
+}
+
+.edit-submission-field label{
+  margin-top:0;
+}
+
+.edit-submission-image{
+  width:100%;
+  max-height:220px;
+  object-fit:cover;
+  border-radius:10px;
+  margin-top:8px;
+}
+
+@media(max-width:600px){
+
+  .row button{
+    min-width:100%;
+  }
+
+  .submission-actions button{
+    min-width:100%;
+  }
+
+}
+
 </style>
 
 </head>
 
 <body>
+
 
 <header>
 
@@ -917,10 +1004,6 @@ Submission Status
 
 <select id="submissionFilter">
 
-<option value="">
-সব Submission
-</option>
-
 <option value="pending">
 ⏳ Pending
 </option>
@@ -930,10 +1013,36 @@ Submission Status
 </option>
 
 <option value="rejected">
-❌ Rejected
+❌ Reject
 </option>
 
 </select>
+
+
+<!-- APPROVED TOPIC SELECT -->
+
+<div
+id="approvedTopicBox"
+class="approved-topic-box hidden">
+
+<label>
+📌 Approved Topic নির্বাচন করুন
+</label>
+
+<select id="approvedTopicFilter">
+
+<option value="">
+-- Topic নির্বাচন করুন --
+</option>
+
+</select>
+
+<div class="approved-info">
+Approved থেকে একটি Topic নির্বাচন করলে শুধু সেই Topic-এর Approved Submission দেখা যাবে।
+</div>
+
+</div>
+
 
 <button
 id="refreshSubmissionsBtn"
@@ -965,6 +1074,43 @@ class="logout">
 
 </div>
 
+
+</div>
+
+</div>
+
+
+<!-- ================= EDIT SUBMISSION MODAL ================= -->
+
+<div
+id="editSubmissionModal"
+class="modal">
+
+<div class="modal-box">
+
+<span
+id="closeEditSubmissionModal"
+class="close-modal">
+×
+</span>
+
+<div class="modal-title">
+✏️ Approved Submission Edit
+</div>
+
+<form id="editSubmissionForm">
+
+<div id="editSubmissionFields"></div>
+
+<button
+type="submit"
+id="saveEditedSubmissionBtn"
+class="primary"
+style="width:100%;margin-top:15px;">
+💾 Update Submission
+</button>
+
+</form>
 
 </div>
 
@@ -1067,6 +1213,8 @@ let editingPostImages = [];
 let selectedPostFiles = [];
 
 let categoryCache = {};
+
+let currentEditingSubmissionId = null;
 
 
 /* ================= ELEMENTS ================= */
@@ -1360,12 +1508,6 @@ async function(user){
 
     showSection("topicSection");
 
-
-    /*
-      প্রত্যেকটি Load আলাদা try/catch-এর মধ্যে।
-      কোনো একটি collection-এ সমস্যা হলেও
-      Login/Admin Panel বন্ধ হবে না।
-    */
 
     try{
       await loadCategories();
@@ -3771,30 +3913,186 @@ async function loadSubmissions(){
     .value;
 
 
-    const submissions = [];
+    const approvedTopicBox =
+    document.getElementById(
+      "approvedTopicBox"
+    );
+
+
+    const approvedTopicFilter =
+    document.getElementById(
+      "approvedTopicFilter"
+    );
+
+
+    const allSubmissions = [];
 
 
     snapshot.forEach(
     function(submissionDoc){
 
-      const data =
-      submissionDoc.data();
+      allSubmissions.push({
+
+        id:submissionDoc.id,
+
+        ...submissionDoc.data()
+
+      });
+
+    });
+
+
+    /* ================= APPROVED TOPIC ================= */
+
+    if(filter === "approved"){
+
+      approvedTopicBox.classList.remove(
+        "hidden"
+      );
+
+
+      const approvedSubmissions =
+      allSubmissions.filter(
+        function(item){
+
+          return item.status === "approved";
+
+        }
+      );
+
+
+      const topicMap = {};
+
+
+      approvedSubmissions.forEach(
+      function(item){
+
+        const topic =
+        String(
+          item.categoryName ||
+          categoryCache[item.categoryId] ||
+          "Unknown Topic"
+        ).trim();
+
+
+        if(topic){
+
+          topicMap[topic] = true;
+
+        }
+
+      });
+
+
+      const previousValue =
+      approvedTopicFilter.value;
+
+
+      approvedTopicFilter.innerHTML =
+      "<option value=''>-- Topic নির্বাচন করুন --</option>";
+
+
+      Object.keys(topicMap)
+      .sort(function(a,b){
+
+        return a.localeCompare(
+          b,
+          "bn"
+        );
+
+      })
+      .forEach(function(topic){
+
+        const option =
+        document.createElement(
+          "option"
+        );
+
+        option.value =
+        topic;
+
+        option.textContent =
+        "📌 " + topic;
+
+        approvedTopicFilter.appendChild(
+          option
+        );
+
+      });
 
 
       if(
-        !filter ||
-        data.status === filter
+        topicMap[previousValue]
       ){
 
-        submissions.push({
+        approvedTopicFilter.value =
+        previousValue;
 
-          id:submissionDoc.id,
+      }else{
 
-          ...data
-
-        });
+        approvedTopicFilter.value =
+        "";
 
       }
+
+
+      const selectedTopic =
+      approvedTopicFilter.value;
+
+
+      if(!selectedTopic){
+
+        list.innerHTML =
+        "<div class='empty'>Approved Submission দেখতে উপরের Topic নির্বাচন করুন।</div>";
+
+        return;
+
+      }
+
+
+      const submissions =
+      approvedSubmissions.filter(
+      function(item){
+
+        const topic =
+        String(
+          item.categoryName ||
+          categoryCache[item.categoryId] ||
+          "Unknown Topic"
+        ).trim();
+
+
+        return topic === selectedTopic;
+
+      });
+
+
+      renderSubmissionList(
+        submissions,
+        list
+      );
+
+
+      return;
+
+    }
+
+
+    /* ================= PENDING / REJECTED ================= */
+
+    approvedTopicBox.classList.add(
+      "hidden"
+    );
+
+
+    approvedTopicFilter.value = "";
+
+
+    const submissions =
+    allSubmissions.filter(
+    function(item){
+
+      return item.status === filter;
 
     });
 
@@ -3825,402 +4123,10 @@ async function loadSubmissions(){
     });
 
 
-    list.innerHTML = "";
-
-
-    if(
-      submissions.length === 0
-    ){
-
-      list.innerHTML =
-      "<div class='empty'>কোনো Submission পাওয়া যায়নি।</div>";
-
-      return;
-
-    }
-
-
-    submissions.forEach(
-    function(submission){
-
-      const card =
-      document.createElement(
-        "div"
-      );
-
-
-      const status =
-      submission.status ||
-      "pending";
-
-
-      card.className =
-      `submission-card ${escapeAttribute(status)}`;
-
-
-      let statusHTML = "";
-
-
-      if(status === "pending"){
-
-        statusHTML =
-        `<span class="status-badge status-pending">
-          ⏳ Pending
-        </span>`;
-
-      }
-
-      else if(status === "approved"){
-
-        statusHTML =
-        `<span class="status-badge status-approved">
-          ✅ Approved
-        </span>`;
-
-      }
-
-      else if(status === "rejected"){
-
-        statusHTML =
-        `<span class="status-badge status-rejected">
-          ❌ Rejected
-        </span>`;
-
-      }
-
-      else{
-
-        statusHTML =
-        `<span class="status-badge status-pending">
-          ${escapeHTML(status)}
-        </span>`;
-
-      }
-
-
-      let typeName =
-      "অন্যান্য";
-
-
-      if(
-        submission.type === "blood"
-      ){
-
-        typeName =
-        "🩸 রক্তদাতা";
-
-      }
-
-      else if(
-        submission.type === "hospital"
-      ){
-
-        typeName =
-        "🏥 হাসপাতাল/ক্লিনিক";
-
-      }
-
-      else if(
-        submission.type === "restaurant"
-      ){
-
-        typeName =
-        "🍽️ রেস্টুরেন্ট";
-
-      }
-
-      else if(
-        submission.type === "courier"
-      ){
-
-        typeName =
-        "🚚 কুরিয়ার";
-
-      }
-
-      else if(
-        submission.type === "lawyer"
-      ){
-
-        typeName =
-        "⚖️ আইনজীবী";
-
-      }
-
-      else if(
-        submission.type === "institution"
-      ){
-
-        typeName =
-        "🏪 প্রতিষ্ঠান";
-
-      }
-
-
-      let detailsHTML = "";
-
-
-      if(
-        submission.name
-      ){
-
-        detailsHTML += `
-          <div class="submission-line">
-            👤 <b>নাম:</b>
-            ${escapeHTML(
-              submission.name
-            )}
-          </div>
-        `;
-
-      }
-
-
-      if(
-        submission.address
-      ){
-
-        detailsHTML += `
-          <div class="submission-line">
-            📍 <b>ঠিকানা:</b>
-            ${escapeHTML(
-              submission.address
-            )}
-          </div>
-        `;
-
-      }
-
-
-      if(
-        submission.mobile
-      ){
-
-        detailsHTML += `
-          <div class="submission-line">
-            📱 <b>মোবাইল:</b>
-            ${escapeHTML(
-              submission.mobile
-            )}
-          </div>
-        `;
-
-      }
-
-
-      if(
-        submission.bloodGroup
-      ){
-
-        detailsHTML += `
-          <div class="submission-line">
-            🩸 <b>রক্তের গ্রুপ:</b>
-            ${escapeHTML(
-              submission.bloodGroup
-            )}
-          </div>
-        `;
-
-      }
-
-
-      if(
-        submission.title
-      ){
-
-        detailsHTML += `
-          <div class="submission-line">
-            📝 <b>Title:</b>
-            ${escapeHTML(
-              submission.title
-            )}
-          </div>
-        `;
-
-      }
-
-
-      if(
-        submission.description
-      ){
-
-        detailsHTML += `
-          <div class="submission-line">
-            📄 <b>বিস্তারিত:</b><br>
-            ${escapeHTML(
-              submission.description
-            )}
-          </div>
-        `;
-
-      }
-
-
-      if(
-        submission.createdAt
-      ){
-
-        detailsHTML += `
-          <div class="post-time">
-            🕐 ${formatPostTime(
-              submission.createdAt
-            )}
-          </div>
-        `;
-
-      }
-
-
-      /* ================= ACTION BUTTONS ================= */
-
-      let actionHTML = "";
-
-
-      /*
-        Pending হলে Approve + Reject
-      */
-
-      if(status === "pending"){
-
-        actionHTML = `
-
-          <div class="submission-actions">
-
-            <button
-              class="success approve-btn"
-              data-id="${submission.id}">
-              ✅ Approve
-            </button>
-
-            <button
-              class="danger reject-btn"
-              data-id="${submission.id}">
-              ❌ Reject
-            </button>
-
-          </div>
-
-        `;
-
-      }
-
-
-      /*
-        Approved অথবা Rejected হলেও
-        Delete করা যাবে।
-      */
-
-      else if(
-        status === "approved" ||
-        status === "rejected"
-      ){
-
-        actionHTML = `
-
-          <div class="submission-actions">
-
-            <button
-              class="danger submission-delete-btn"
-              data-id="${submission.id}">
-              🗑️ Delete
-            </button>
-
-          </div>
-
-        `;
-
-      }
-
-
-      card.innerHTML = `
-
-        <div class="submission-title">
-          ${escapeHTML(typeName)}
-        </div>
-
-        ${statusHTML}
-
-        ${detailsHTML}
-
-        ${actionHTML}
-
-      `;
-
-
-      list.appendChild(
-        card
-      );
-
-    });
-
-
-    /* ================= APPROVE BUTTON ================= */
-
-    list
-    .querySelectorAll(
-      ".approve-btn"
-    )
-    .forEach(
-    function(button){
-
-      button.addEventListener(
-        "click",
-        function(){
-
-          approveSubmission(
-            button.dataset.id
-          );
-
-        }
-      );
-
-    });
-
-
-    /* ================= REJECT BUTTON ================= */
-
-    list
-    .querySelectorAll(
-      ".reject-btn"
-    )
-    .forEach(
-    function(button){
-
-      button.addEventListener(
-        "click",
-        function(){
-
-          rejectSubmission(
-            button.dataset.id
-          );
-
-        }
-      );
-
-    });
-
-
-    /* ================= DELETE BUTTON ================= */
-
-    list
-    .querySelectorAll(
-      ".submission-delete-btn"
-    )
-    .forEach(
-    function(button){
-
-      button.addEventListener(
-        "click",
-        function(){
-
-          deleteSubmission(
-            button.dataset.id
-          );
-
-        }
-      );
-
-    });
+    renderSubmissionList(
+      submissions,
+      list
+    );
 
 
   }catch(error){
@@ -4249,6 +4155,591 @@ async function loadSubmissions(){
     </div>`;
 
   }
+
+}
+
+
+/* ================= RENDER SUBMISSIONS ================= */
+
+function renderSubmissionList(
+  submissions,
+  list
+){
+
+  submissions.sort(
+  function(a,b){
+
+    const aTime =
+    a.createdAt &&
+    typeof a.createdAt.toMillis === "function"
+    ?
+    a.createdAt.toMillis()
+    :
+    0;
+
+
+    const bTime =
+    b.createdAt &&
+    typeof b.createdAt.toMillis === "function"
+    ?
+    b.createdAt.toMillis()
+    :
+    0;
+
+
+    return bTime-aTime;
+
+  });
+
+
+  list.innerHTML = "";
+
+
+  if(
+    submissions.length === 0
+  ){
+
+    list.innerHTML =
+    "<div class='empty'>কোনো Submission পাওয়া যায়নি।</div>";
+
+    return;
+
+  }
+
+
+  submissions.forEach(
+  function(submission){
+
+    const card =
+    document.createElement(
+      "div"
+    );
+
+
+    const status =
+    submission.status ||
+    "pending";
+
+
+    card.className =
+    `submission-card ${escapeAttribute(status)}`;
+
+
+    let statusHTML = "";
+
+
+    if(status === "pending"){
+
+      statusHTML =
+      `<span class="status-badge status-pending">
+        ⏳ Pending
+      </span>`;
+
+    }
+
+    else if(status === "approved"){
+
+      statusHTML =
+      `<span class="status-badge status-approved">
+        ✅ Approved
+      </span>`;
+
+    }
+
+    else if(status === "rejected"){
+
+      statusHTML =
+      `<span class="status-badge status-rejected">
+        ❌ Reject
+      </span>`;
+
+    }
+
+
+    /* ================= TYPE NAME ================= */
+
+    let typeName =
+    "📌 অন্যান্য";
+
+
+    const typeLabels = {
+
+      blood:"🩸 রক্তদাতা",
+
+      clinic:"🏥 ক্লিনিক ও ডায়াগনস্টিক সেন্টার",
+
+      hospital:"🏥 হাসপাতাল",
+
+      restaurant:"🍽️ রেস্টুরেন্ট",
+
+      lawyer:"⚖️ আইনজীবী",
+
+      courier:"🚚 কুরিয়ার সার্ভিস",
+
+      institution:"🏪 বিভিন্ন প্রতিষ্ঠান",
+
+      ambulance:"🚑 অ্যাম্বুলেন্স",
+
+      place:"🏞️ দর্শনীয় স্থান",
+
+      person:"🌟 কৃতী ব্যক্তিত্ব",
+
+      islamic:"☪️ ইসলামিক কর্নার",
+
+      coaching:"📚 কোচিং ও প্রাইভেট সেন্টার",
+
+      doctor:"👨‍⚕️ ডাক্তার",
+
+      emergency:"🆘 জরুরি সেবা",
+
+      police:"👮 থানা পুলিশ",
+
+      fireService:"🚒 ফায়ার সার্ভিস",
+
+      electricity:"⚡ বিদ্যুৎ অফিস"
+
+    };
+
+
+    if(typeLabels[submission.type]){
+
+      typeName =
+      typeLabels[submission.type];
+
+    }
+
+
+    /* ================= TOPIC ================= */
+
+    const topicName =
+    submission.categoryName ||
+    categoryCache[submission.categoryId] ||
+    "Unknown Topic";
+
+
+    let detailsHTML = "";
+
+
+    detailsHTML += `
+      <div class="submission-line">
+        📌 <b>Topic:</b>
+        ${escapeHTML(topicName)}
+      </div>
+    `;
+
+
+    if(
+      submission.subCategoryName
+    ){
+
+      detailsHTML += `
+        <div class="submission-line">
+          📂 <b>Sub Category:</b>
+          ${escapeHTML(
+            submission.subCategoryName
+          )}
+        </div>
+      `;
+
+    }
+
+
+    if(
+      submission.name
+    ){
+
+      detailsHTML += `
+        <div class="submission-line">
+          👤 <b>নাম:</b>
+          ${escapeHTML(
+            submission.name
+          )}
+        </div>
+      `;
+
+    }
+
+
+    if(
+      submission.address
+    ){
+
+      detailsHTML += `
+        <div class="submission-line">
+          📍 <b>ঠিকানা:</b>
+          ${escapeHTML(
+            submission.address
+          )}
+        </div>
+      `;
+
+    }
+
+
+    if(
+      submission.mobile
+    ){
+
+      detailsHTML += `
+        <div class="submission-line">
+          📱 <b>মোবাইল:</b>
+          ${escapeHTML(
+            submission.mobile
+          )}
+        </div>
+      `;
+
+    }
+
+
+    if(
+      submission.serialInfo
+    ){
+
+      detailsHTML += `
+        <div class="submission-line">
+          📞 <b>সিরিয়াল তথ্য:</b>
+          ${escapeHTML(
+            submission.serialInfo
+          )}
+        </div>
+      `;
+
+    }
+
+
+    if(
+      submission.bloodGroup
+    ){
+
+      detailsHTML += `
+        <div class="submission-line">
+          🩸 <b>রক্তের গ্রুপ:</b>
+          ${escapeHTML(
+            submission.bloodGroup
+          )}
+        </div>
+      `;
+
+    }
+
+
+    if(
+      submission.degree
+    ){
+
+      detailsHTML += `
+        <div class="submission-line">
+          🎓 <b>ডিগ্রি:</b>
+          ${escapeHTML(
+            submission.degree
+          )}
+        </div>
+      `;
+
+    }
+
+
+    if(
+      submission.specialty
+    ){
+
+      detailsHTML += `
+        <div class="submission-line">
+          🩺 <b>বিশেষত্ব:</b>
+          ${escapeHTML(
+            submission.specialty
+          )}
+        </div>
+      `;
+
+    }
+
+
+    if(
+      submission.chamber
+    ){
+
+      detailsHTML += `
+        <div class="submission-line">
+          🏢 <b>চেম্বার:</b>
+          ${escapeHTML(
+            submission.chamber
+          )}
+        </div>
+      `;
+
+    }
+
+
+    if(
+      submission.title
+    ){
+
+      detailsHTML += `
+        <div class="submission-line">
+          📝 <b>Title:</b>
+          ${escapeHTML(
+            submission.title
+          )}
+        </div>
+      `;
+
+    }
+
+
+    if(
+      submission.details
+    ){
+
+      detailsHTML += `
+        <div class="submission-line">
+          📄 <b>বিস্তারিত:</b><br>
+          ${escapeHTML(
+            submission.details
+          )}
+        </div>
+      `;
+
+    }
+
+
+    if(
+      submission.description
+    ){
+
+      detailsHTML += `
+        <div class="submission-line">
+          📄 <b>বিস্তারিত:</b><br>
+          ${escapeHTML(
+            submission.description
+          )}
+        </div>
+      `;
+
+    }
+
+
+    if(
+      submission.imageUrl
+    ){
+
+      detailsHTML += `
+        <div class="submission-line">
+          🖼️ <b>ছবি:</b>
+          <img
+            class="edit-submission-image"
+            src="${escapeAttribute(
+              submission.imageUrl
+            )}"
+            onerror="this.style.display='none'">
+        </div>
+      `;
+
+    }
+
+
+    if(
+      submission.createdAt
+    ){
+
+      detailsHTML += `
+        <div class="post-time">
+          🕐 ${formatPostTime(
+            submission.createdAt
+          )}
+        </div>
+      `;
+
+    }
+
+
+    /* ================= ACTION BUTTONS ================= */
+
+    let actionHTML = "";
+
+
+    if(status === "pending"){
+
+      actionHTML = `
+
+        <div class="submission-actions">
+
+          <button
+            class="success approve-btn"
+            data-id="${submission.id}">
+            ✅ Approve
+          </button>
+
+          <button
+            class="danger reject-btn"
+            data-id="${submission.id}">
+            ❌ Reject
+          </button>
+
+        </div>
+
+      `;
+
+    }
+
+
+    else if(status === "approved"){
+
+      actionHTML = `
+
+        <div class="submission-actions">
+
+          <button
+            class="warning edit-submission-btn"
+            data-id="${submission.id}">
+            ✏️ Edit
+          </button>
+
+          <button
+            class="danger submission-delete-btn"
+            data-id="${submission.id}">
+            🗑️ Delete
+          </button>
+
+        </div>
+
+      `;
+
+    }
+
+
+    else if(status === "rejected"){
+
+      actionHTML = `
+
+        <div class="submission-actions">
+
+          <button
+            class="danger submission-delete-btn"
+            data-id="${submission.id}">
+            🗑️ Delete
+          </button>
+
+        </div>
+
+      `;
+
+    }
+
+
+    card.innerHTML = `
+
+      <div class="submission-title">
+        ${escapeHTML(typeName)}
+      </div>
+
+      ${statusHTML}
+
+      ${detailsHTML}
+
+      ${actionHTML}
+
+    `;
+
+
+    list.appendChild(
+      card
+    );
+
+  });
+
+
+  /* ================= APPROVE ================= */
+
+  list
+  .querySelectorAll(
+    ".approve-btn"
+  )
+  .forEach(
+  function(button){
+
+    button.addEventListener(
+      "click",
+      function(){
+
+        approveSubmission(
+          button.dataset.id
+        );
+
+      }
+    );
+
+  });
+
+
+  /* ================= REJECT ================= */
+
+  list
+  .querySelectorAll(
+    ".reject-btn"
+  )
+  .forEach(
+  function(button){
+
+    button.addEventListener(
+      "click",
+      function(){
+
+        rejectSubmission(
+          button.dataset.id
+        );
+
+      }
+    );
+
+  });
+
+
+  /* ================= EDIT ================= */
+
+  list
+  .querySelectorAll(
+    ".edit-submission-btn"
+  )
+  .forEach(
+  function(button){
+
+    button.addEventListener(
+      "click",
+      function(){
+
+        editSubmission(
+          button.dataset.id
+        );
+
+      }
+    );
+
+  });
+
+
+  /* ================= DELETE ================= */
+
+  list
+  .querySelectorAll(
+    ".submission-delete-btn"
+  )
+  .forEach(
+  function(button){
+
+    button.addEventListener(
+      "click",
+      function(){
+
+        deleteSubmission(
+          button.dataset.id
+        );
+
+      }
+    );
+
+  });
 
 }
 
@@ -4361,6 +4852,544 @@ async function rejectSubmission(id){
 }
 
 
+/* ===================================================== */
+/* ================= EDIT SUBMISSION =================== */
+/* ===================================================== */
+
+async function editSubmission(id){
+
+  try{
+
+    const snapshot =
+    await getDocs(
+      collection(
+        db,
+        "submissions"
+      )
+    );
+
+
+    let data = null;
+
+
+    snapshot.forEach(
+    function(submissionDoc){
+
+      if(
+        submissionDoc.id === id
+      ){
+
+        data =
+        submissionDoc.data();
+
+      }
+
+    });
+
+
+    if(!data){
+
+      alert(
+        "Submission পাওয়া যায়নি।"
+      );
+
+      return;
+
+    }
+
+
+    currentEditingSubmissionId =
+    id;
+
+
+    const fields =
+    document.getElementById(
+      "editSubmissionFields"
+    );
+
+
+    fields.innerHTML = "";
+
+
+    /* ================= TOPIC ================= */
+
+    fields.innerHTML += `
+
+      <div class="edit-submission-field">
+
+        <label>
+          Topic
+        </label>
+
+        <input
+          type="text"
+          value="${escapeAttribute(
+            data.categoryName ||
+            categoryCache[data.categoryId] ||
+            ""
+          )}"
+          disabled>
+
+      </div>
+
+    `;
+
+
+    /* ================= SUB CATEGORY ================= */
+
+    if(
+      data.subCategoryName
+    ){
+
+      fields.innerHTML += `
+
+        <div class="edit-submission-field">
+
+          <label>
+            Sub Category
+          </label>
+
+          <input
+            type="text"
+            value="${escapeAttribute(
+              data.subCategoryName
+            )}"
+            disabled>
+
+        </div>
+
+      `;
+
+    }
+
+
+    /* ================= COMMON FIELDS ================= */
+
+    addEditInput(
+      fields,
+      "name",
+      "নাম",
+      data.name || ""
+    );
+
+
+    addEditInput(
+      fields,
+      "address",
+      "ঠিকানা",
+      data.address || ""
+    );
+
+
+    addEditInput(
+      fields,
+      "mobile",
+      "মোবাইল নং",
+      data.mobile || "",
+      "tel"
+    );
+
+
+    addEditInput(
+      fields,
+      "serialInfo",
+      "সিরিয়াল তথ্য",
+      data.serialInfo || "",
+      "tel"
+    );
+
+
+    addEditInput(
+      fields,
+      "bloodGroup",
+      "রক্তের গ্রুপ",
+      data.bloodGroup || ""
+    );
+
+
+    addEditInput(
+      fields,
+      "degree",
+      "ডিগ্রি",
+      data.degree || ""
+    );
+
+
+    addEditInput(
+      fields,
+      "specialty",
+      "বিশেষত্ব",
+      data.specialty || ""
+    );
+
+
+    addEditInput(
+      fields,
+      "chamber",
+      "চেম্বার",
+      data.chamber || ""
+    );
+
+
+    addEditInput(
+      fields,
+      "title",
+      "Title",
+      data.title || ""
+    );
+
+
+    addEditTextarea(
+      fields,
+      "details",
+      "বিস্তারিত তথ্য",
+      data.details || ""
+    );
+
+
+    addEditTextarea(
+      fields,
+      "description",
+      "Description",
+      data.description || ""
+    );
+
+
+    /* ================= IMAGE URL ================= */
+
+    if(data.imageUrl){
+
+      fields.innerHTML += `
+
+        <div class="edit-submission-field">
+
+          <label>
+            বর্তমান ছবি
+          </label>
+
+          <img
+            class="edit-submission-image"
+            src="${escapeAttribute(
+              data.imageUrl
+            )}"
+            onerror="this.style.display='none'">
+
+          <label>
+            Image URL পরিবর্তন করতে চাইলে
+          </label>
+
+          <input
+            type="text"
+            id="edit_imageUrl"
+            value="${escapeAttribute(
+              data.imageUrl
+            )}"
+            placeholder="Image URL">
+
+        </div>
+
+      `;
+
+    }
+
+
+    document
+    .getElementById(
+      "editSubmissionModal"
+    )
+    .style.display =
+    "block";
+
+
+  }catch(error){
+
+    console.error(
+      "Edit Submission Error:",
+      error
+    );
+
+
+    alert(
+      "❌ Submission Edit খুলতে সমস্যা হয়েছে।"
+    );
+
+  }
+
+}
+
+
+/* ================= EDIT INPUT ================= */
+
+function addEditInput(
+  container,
+  name,
+  label,
+  value,
+  type="text"
+){
+
+  if(
+    !value &&
+    [
+      "name",
+      "address",
+      "mobile",
+      "serialInfo",
+      "bloodGroup",
+      "degree",
+      "specialty",
+      "chamber",
+      "title"
+    ].indexOf(name) === -1
+  ){
+
+    return;
+
+  }
+
+
+  if(
+    !value &&
+    [
+      "name",
+      "address",
+      "mobile"
+    ].indexOf(name) === -1
+  ){
+
+    return;
+
+  }
+
+
+  container.innerHTML += `
+
+    <div class="edit-submission-field">
+
+      <label>
+        ${escapeHTML(label)}
+      </label>
+
+      <input
+        type="${escapeAttribute(type)}"
+        id="edit_${escapeAttribute(name)}"
+        value="${escapeAttribute(value)}">
+
+    </div>
+
+  `;
+
+}
+
+
+/* ================= EDIT TEXTAREA ================= */
+
+function addEditTextarea(
+  container,
+  name,
+  label,
+  value
+){
+
+  if(!value) return;
+
+
+  container.innerHTML += `
+
+    <div class="edit-submission-field">
+
+      <label>
+        ${escapeHTML(label)}
+      </label>
+
+      <textarea
+        id="edit_${escapeAttribute(name)}">${escapeHTML(value)}</textarea>
+
+    </div>
+
+  `;
+
+}
+
+
+/* ================= SAVE EDITED SUBMISSION ================= */
+
+document
+.getElementById(
+  "editSubmissionForm"
+)
+.addEventListener(
+"submit",
+async function(event){
+
+  event.preventDefault();
+
+
+  if(
+    !currentEditingSubmissionId
+  ){
+
+    return;
+
+  }
+
+
+  const button =
+  document.getElementById(
+    "saveEditedSubmissionBtn"
+  );
+
+
+  const updateData = {};
+
+
+  const fieldNames = [
+
+    "name",
+    "address",
+    "mobile",
+    "serialInfo",
+    "bloodGroup",
+    "degree",
+    "specialty",
+    "chamber",
+    "title",
+    "details",
+    "description",
+    "imageUrl"
+
+  ];
+
+
+  fieldNames.forEach(
+  function(name){
+
+    const input =
+    document.getElementById(
+      "edit_" + name
+    );
+
+
+    if(input){
+
+      updateData[name] =
+      input.value.trim();
+
+    }
+
+  });
+
+
+  try{
+
+    button.disabled = true;
+
+    button.textContent =
+    "💾 Update হচ্ছে...";
+
+
+    await updateDoc(
+      doc(
+        db,
+        "submissions",
+        currentEditingSubmissionId
+      ),
+      {
+        ...updateData,
+        updatedAt:serverTimestamp()
+      }
+    );
+
+
+    alert(
+      "✅ Submission Update হয়েছে।"
+    );
+
+
+    closeEditSubmissionModal();
+
+    await loadSubmissions();
+
+
+  }catch(error){
+
+    console.error(
+      "Update Submission Error:",
+      error
+    );
+
+
+    alert(
+      "❌ Submission Update করা যায়নি.\n\n" +
+      (error.code || error.message || "")
+    );
+
+  }finally{
+
+    button.disabled = false;
+
+    button.textContent =
+    "💾 Update Submission";
+
+  }
+
+});
+
+
+/* ================= CLOSE EDIT MODAL ================= */
+
+function closeEditSubmissionModal(){
+
+  currentEditingSubmissionId =
+  null;
+
+
+  document
+  .getElementById(
+    "editSubmissionModal"
+  )
+  .style.display =
+  "none";
+
+
+  document
+  .getElementById(
+    "editSubmissionFields"
+  )
+  .innerHTML = "";
+
+}
+
+
+document
+.getElementById(
+  "closeEditSubmissionModal"
+)
+.addEventListener(
+"click",
+closeEditSubmissionModal
+);
+
+
+window.addEventListener(
+"click",
+function(event){
+
+  const modal =
+  document.getElementById(
+    "editSubmissionModal"
+  );
+
+
+  if(event.target === modal){
+
+    closeEditSubmissionModal();
+
+  }
+
+});
+
+
 /* ================= DELETE SUBMISSION ================= */
 
 async function deleteSubmission(id){
@@ -4428,8 +5457,26 @@ document
 )
 .addEventListener(
 "change",
-loadSubmissions
-);
+function(){
+
+  loadSubmissions();
+
+});
+
+
+/* ================= APPROVED TOPIC FILTER ================= */
+
+document
+.getElementById(
+  "approvedTopicFilter"
+)
+.addEventListener(
+"change",
+function(){
+
+  loadSubmissions();
+
+});
 
 
 /* ================= REFRESH SUBMISSIONS ================= */
