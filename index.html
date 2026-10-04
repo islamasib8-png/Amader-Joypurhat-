@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="bn">
 <head>
@@ -9,9 +8,15 @@
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:Arial,sans-serif;background:#f5f7fa;color:#222}
-header{background:linear-gradient(135deg,#00695c,#00897b);color:white;padding:18px 12px;text-align:center}
+header{background:linear-gradient(135deg,#00695c,#00897b);color:white;padding:18px 12px;text-align:center;position:relative}
 header h1{font-size:27px;margin-bottom:5px}
 header p{font-size:14px;opacity:.95}
+.menu-wrap{position:absolute;right:12px;top:12px;z-index:100}
+.menu-btn{background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.4);color:white;border-radius:9px;width:40px;height:40px;font-size:25px;line-height:30px;cursor:pointer}
+.menu-dropdown{display:none;position:absolute;right:0;top:46px;width:220px;background:white;border-radius:11px;box-shadow:0 5px 20px rgba(0,0,0,.2);overflow:hidden;text-align:left}
+.menu-dropdown.show{display:block}
+.menu-dropdown button{display:block;width:100%;padding:12px 14px;border:0;background:white;text-align:left;font-size:14px;color:#263238;cursor:pointer}
+.menu-dropdown button:active,.menu-dropdown button:hover{background:#e0f2f1}
 .hero{margin:12px;border-radius:14px;overflow:hidden;background:#ddd;box-shadow:0 3px 10px rgba(0,0,0,.12)}
 .slider{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;scroll-behavior:smooth}
 .slider::-webkit-scrollbar{display:none}
@@ -43,11 +48,18 @@ footer a{color:#80cbc4;text-decoration:none}
 .sub-card .sub-icon{font-size:27px;display:block;margin-bottom:6px}
 .preview{margin-top:8px;max-width:130px;max-height:130px;border-radius:8px;display:none;object-fit:cover}
 .loading{text-align:center;padding:25px;color:#666}
+.info-content{font-size:14px;line-height:1.8;color:#333;overflow-wrap:anywhere}
+.info-content a{color:#00796b}
+.info-action{display:block;width:100%;padding:12px;margin-top:12px;border:0;border-radius:9px;background:#00695c;color:white;font-size:15px;font-weight:bold;cursor:pointer}
 @media(max-width:600px){
 .grid{grid-template-columns:repeat(4,1fr)}
 .card{min-height:88px;padding:10px 3px}
 .card .icon{font-size:25px}
 .card .name{font-size:11px}
+}
+@media(max-width:360px){
+header h1{font-size:23px}
+header p{font-size:12px}
 }
 </style>
 </head>
@@ -55,7 +67,20 @@ footer a{color:#80cbc4;text-decoration:none}
 <body>
 <header>
 <h1>আমাদের জয়পুরহাট</h1>
-<p>জয়পুরহাট জেলার তথ্যভান্ডার</p>
+<p id="liveDateTime">তারিখ ও সময় লোড হচ্ছে...</p>
+
+<div class="menu-wrap">
+<button class="menu-btn" id="menuBtn" type="button" aria-label="মেনু">⋮</button>
+<div class="menu-dropdown" id="menuDropdown">
+<button type="button" data-menu="add">➕ নতুন তথ্য এড করুন</button>
+<button type="button" data-menu="about">ℹ️ অ্যাপ সম্পর্কে</button>
+<button type="button" data-menu="share">📤 অ্যাপ শেয়ার করুন</button>
+<button type="button" data-menu="feedback">💬 মতামত ও অভিযোগ</button>
+<button type="button" data-menu="privacy">🔒 গোপনীয়তা নীতি</button>
+<button type="button" data-menu="contact">📞 যোগাযোগ</button>
+<button type="button" data-menu="version">📱 অ্যাপের ভার্সন</button>
+</div>
+</div>
 </header>
 
 <!-- IMAGE SLIDER -->
@@ -90,9 +115,9 @@ footer a{color:#80cbc4;text-decoration:none}
 <b>Md. Asib Islam</b><br>
 Uchan, Dharanji, Panchbibi, Joypurhat<br>
 📞 013-19058313<br>
-<a href="https://wa.me/8801319058313" target="_blank">WhatsApp</a>
+<a href="https://wa.me/8801319058313" target="_blank" rel="noopener">WhatsApp</a>
 &nbsp; | &nbsp;
-<a href="https://www.facebook.com/Asibislam01" target="_blank">Facebook</a>
+<a href="https://www.facebook.com/Asibislam01" target="_blank" rel="noopener">Facebook</a>
 </footer>
 
 <!-- CATEGORY MODAL -->
@@ -127,11 +152,20 @@ Uchan, Dharanji, Panchbibi, Joypurhat<br>
 </div>
 </div>
 
+<!-- MENU INFO MODAL -->
+<div id="menuInfoModal" class="modal">
+<div class="modal-box">
+<span class="close" id="closeMenuInfoModal">×</span>
+<div id="menuInfoTitle" class="modal-title"></div>
+<div id="menuInfoContent" class="info-content"></div>
+</div>
+</div>
+
 <script type="module">
 import {initializeApp} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
 import {getFirestore,collection,getDocs,addDoc,serverTimestamp} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
-/* FIREBASE */
+/* FIREBASE CONFIG: নিজের Firebase তথ্য বসাও */
 const firebaseConfig={
 apiKey:"YOUR_FIREBASE_API_KEY",
 authDomain:"amader-joypurhat-7b3fb.firebaseapp.com",
@@ -157,6 +191,111 @@ let selectedType="";
 let selectedSubCategory="";
 let selectedSubCategoryName="";
 
+/* BANGLADESH LIVE DATE AND TIME */
+function updateLiveDateTime(){
+const el=document.getElementById("liveDateTime");
+if(!el)return;
+const now=new Date();
+const date=new Intl.DateTimeFormat("bn-BD",{
+timeZone:"Asia/Dhaka",
+weekday:"long",
+day:"numeric",
+month:"long",
+year:"numeric"
+}).format(now);
+const time=new Intl.DateTimeFormat("bn-BD",{
+timeZone:"Asia/Dhaka",
+hour:"2-digit",
+minute:"2-digit",
+second:"2-digit",
+hour12:true
+}).format(now);
+el.textContent=date+" | "+time;
+}
+updateLiveDateTime();
+setInterval(updateLiveDateTime,1000);
+
+/* THREE DOT MENU */
+const menuBtn=document.getElementById("menuBtn");
+const menuDropdown=document.getElementById("menuDropdown");
+
+function closeMenu(){
+menuDropdown.classList.remove("show");
+}
+function showInfoModal(title,html){
+document.getElementById("menuInfoTitle").textContent=title;
+document.getElementById("menuInfoContent").innerHTML=html;
+document.getElementById("menuInfoModal").style.display="block";
+}
+menuBtn.addEventListener("click",function(e){
+e.stopPropagation();
+menuDropdown.classList.toggle("show");
+});
+menuDropdown.addEventListener("click",async function(e){
+const button=e.target.closest("button[data-menu]");
+if(!button)return;
+const action=button.dataset.menu;
+closeMenu();
+
+if(action==="add"){
+openSubmissionCategoryModal();
+}else if(action==="about"){
+showInfoModal("অ্যাপ সম্পর্কে",`
+<p>আমাদের জয়পুরহাট একটি তথ্যভিত্তিক অ্যাপ। এর মাধ্যমে জয়পুরহাট জেলার বিভিন্ন প্রয়োজনীয় তথ্য সহজে খুঁজে পাওয়া এবং নতুন তথ্য জমা দেওয়ার সুযোগ রয়েছে।</p>
+<p>এই অ্যাপের তথ্য সঠিক রাখতে ব্যবহারকারীদের সহযোগিতা কাম্য।</p>`);
+}else if(action==="share"){
+const shareData={
+title:"আমাদের জয়পুরহাট",
+text:"জয়পুরহাট জেলার প্রয়োজনীয় তথ্য জানতে আমাদের জয়পুরহাট অ্যাপটি দেখুন।",
+url:window.location.href
+};
+try{
+if(navigator.share){
+await navigator.share(shareData);
+}else if(navigator.clipboard){
+await navigator.clipboard.writeText(shareData.text+" "+shareData.url);
+showInfoModal("অ্যাপ শেয়ার করুন",`
+<p>অ্যাপের লিংক কপি করা হয়েছে। এখন বন্ধুদের সঙ্গে শেয়ার করতে পারো।</p>
+<p><a href="${escapeHtml(shareData.url)}" target="_blank" rel="noopener">অ্যাপের লিংক</a></p>`);
+}else{
+showInfoModal("অ্যাপ শেয়ার করুন",`
+<p>এই লিংকটি কপি করে শেয়ার করো:</p>
+<p>${escapeHtml(shareData.url)}</p>`);
+}
+}catch(err){
+if(err.name!=="AbortError"){
+showInfoModal("অ্যাপ শেয়ার করুন",`
+<p>এই লিংকটি কপি করে শেয়ার করো:</p>
+<p>${escapeHtml(shareData.url)}</p>`);
+}
+}
+}else if(action==="feedback"){
+showInfoModal("মতামত ও অভিযোগ",`
+<p>অ্যাপ সম্পর্কে কোনো মতামত, অভিযোগ বা সংশোধনের তথ্য জানাতে WhatsApp-এ যোগাযোগ করুন।</p>
+<a class="info-action" href="https://wa.me/8801319058313?text=${encodeURIComponent("আমাদের জয়পুরহাট অ্যাপ সম্পর্কে আমার মতামত/অভিযোগ: ")}" target="_blank" rel="noopener" style="text-align:center;text-decoration:none">WhatsApp-এ মতামত দিন</a>`);
+}else if(action==="privacy"){
+showInfoModal("গোপনীয়তা নীতি",`
+<p>আমাদের জয়পুরহাট অ্যাপে ব্যবহারকারীদের জমা দেওয়া তথ্য অ্যাপের তথ্যভান্ডার পরিচালনা ও প্রদর্শনের জন্য ব্যবহার করা হয়।</p>
+<p>তথ্য জমা দেওয়ার সময় সঠিক ও প্রয়োজনীয় তথ্য প্রদান করুন। ব্যক্তিগত বা সংবেদনশীল তথ্য অপ্রয়োজনে জমা দেবেন না।</p>
+<p>জমা দেওয়া তথ্য যাচাই ও প্রকাশের সিদ্ধান্ত অ্যাপ পরিচালনাকারীর অধীন।</p>
+<p>গোপনীয়তা সংক্রান্ত প্রশ্নের জন্য যোগাযোগ করুন: 013-19058313</p>`);
+}else if(action==="contact"){
+showInfoModal("যোগাযোগ",`
+<p><b>Md. Asib Islam</b></p>
+<p>Uchan, Dharanji, Panchbibi, Joypurhat</p>
+<p>📞 013-19058313</p>
+<p><a href="https://wa.me/8801319058313" target="_blank" rel="noopener">WhatsApp-এ যোগাযোগ</a></p>
+<p><a href="https://www.facebook.com/Asibislam01" target="_blank" rel="noopener">Facebook</a></p>`);
+}else if(action==="version"){
+showInfoModal("অ্যাপের ভার্সন",`
+<p><b>আমাদের জয়পুরহাট</b></p>
+<p>Version 1.0.0</p>`);
+}
+});
+document.addEventListener("click",function(e){
+if(!e.target.closest(".menu-wrap"))closeMenu();
+});
+
 /* AUTO SLIDER */
 const slider=document.getElementById("imageSlider");
 const sliderImages=slider?slider.querySelectorAll("img"):[];
@@ -172,7 +311,6 @@ if(sliderIndex>=sliderImages.length)sliderIndex=0;
 slider.scrollTo({left:sliderIndex*slider.clientWidth,behavior:"smooth"});
 },3000);
 }
-
 if(slider){
 slider.addEventListener("scroll",function(){
 const width=slider.clientWidth;
@@ -187,95 +325,50 @@ return String(name||"").trim().replace(/\s+/g," ");
 
 /* CATEGORIES NOT AVAILABLE FOR PUBLIC SUBMISSION */
 const disabledSubmissionCategories=new Set([
-"জয়পুরহাটের পরিচয়",
-"আজকের খবর",
-"আজকের নিউজ",
-"খবর",
-"আজকের সংবাদ",
-"ট্রেনের সময়সূচি",
-"বাসের সময়সূচি"
+"জয়পুরহাটের পরিচয়","আজকের খবর","আজকের নিউজ","খবর",
+"আজকের সংবাদ","ট্রেনের সময়সূচি","বাসের সময়সূচি"
 ]);
 
 /* CATEGORY ORDER */
 const categoryOrder={
-"জয়পুরহাটের পরিচয়":1,
-"উপজেলা পরিচয়":2,
-"উপজেলার পরিচয়":2,
-"উপজেলা পরিষদ":2,
-"দর্শনীয় স্থান":3,
-"ইসলামিক কর্নার":4,
-"রক্তদাতা":5,
-"রক্তদান":5,
-"জরুরি সেবা":6,
-"অ্যাম্বুলেন্স":7,
-"হাসপাতাল":8,
-"ক্লিনিক ও ডায়াগনস্টিক":9,
-"ক্লিনিক ও ডায়াগনস্টিক সেন্টার":9,
-"ডাক্তার":10,
-"থানা পুলিশ":11,
-"ফায়ার সার্ভিস":12,
-"আইনজীবী":13,
-"কৃষি অফিস":14,
-"বিদ্যুৎ অফিস":15,
-"ট্রেনের সময়সূচি":16,
-"বাসের সময়সূচি":17,
-"কুরিয়ার সার্ভিস":18,
-"আজকের খবর":19,
-"আজকের নিউজ":19,
-"খবর":19,
-"আজকের সংবাদ":19,
-"কবি ও সাহিত্য":20,
-"রেস্টুরেন্ট":21
+"জয়পুরহাটের পরিচয়":1,"উপজেলা পরিচয়":2,"উপজেলার পরিচয়":2,"উপজেলা পরিষদ":2,
+"দর্শনীয় স্থান":3,"ইসলামিক কর্নার":4,"রক্তদাতা":5,"রক্তদান":5,
+"জরুরি সেবা":6,"অ্যাম্বুলেন্স":7,"হাসপাতাল":8,
+"ক্লিনিক ও ডায়াগনস্টিক":9,"ক্লিনিক ও ডায়াগনস্টিক সেন্টার":9,
+"ডাক্তার":10,"থানা পুলিশ":11,"ফায়ার সার্ভিস":12,"আইনজীবী":13,
+"কৃষি অফিস":14,"বিদ্যুৎ অফিস":15,"ট্রেনের সময়সূচি":16,
+"বাসের সময়সূচি":17,"কুরিয়ার সার্ভিস":18,"আজকের খবর":19,
+"আজকের নিউজ":19,"খবর":19,"আজকের সংবাদ":19,"কবি ও সাহিত্য":20,"রেস্টুরেন্ট":21
 };
 
 /* SUBMISSION TYPES */
 const submissionTypes={
-blood:"রক্তদাতা",
-clinic:"ক্লিনিক ও ডায়াগনস্টিক সেন্টার",
-hospital:"হাসপাতাল",
-restaurant:"রেস্টুরেন্ট",
-lawyer:"আইনজীবী",
-courier:"কুরিয়ার সার্ভিস",
-institution:"বিভিন্ন প্রতিষ্ঠান",
-ambulance:"অ্যাম্বুলেন্স",
-place:"দর্শনীয় স্থান",
-person:"কৃতী ব্যক্তিত্ব",
-islamic:"ইসলামিক কর্নার",
-coaching:"কোচিং ও প্রাইভেট সেন্টার",
-doctor:"ডাক্তার",
-emergency:"জরুরি সেবা",
-police:"থানা পুলিশ",
-fireService:"ফায়ার সার্ভিস",
-electricity:"বিদ্যুৎ অফিস"
+blood:"রক্তদাতা",clinic:"ক্লিনিক ও ডায়াগনস্টিক সেন্টার",hospital:"হাসপাতাল",
+restaurant:"রেস্টুরেন্ট",lawyer:"আইনজীবী",courier:"কুরিয়ার সার্ভিস",
+institution:"বিভিন্ন প্রতিষ্ঠান",ambulance:"অ্যাম্বুলেন্স",place:"দর্শনীয় স্থান",
+person:"কৃতী ব্যক্তিত্ব",islamic:"ইসলামিক কর্নার",
+coaching:"কোচিং ও প্রাইভেট সেন্টার",doctor:"ডাক্তার",emergency:"জরুরি সেবা",
+police:"থানা পুলিশ",fireService:"ফায়ার সার্ভিস",electricity:"বিদ্যুৎ অফিস"
 };
 
 /* ALIASES */
 const submissionCategoryAliases={
 blood:["রক্তদাতা","রক্তদান"],
 clinic:["ক্লিনিক ও ডায়াগনস্টিক","ক্লিনিক ও ডায়াগনস্টিক সেন্টার"],
-hospital:["হাসপাতাল"],
-restaurant:["রেস্টুরেন্ট"],
-lawyer:["আইনজীবী"],
-courier:["কুরিয়ার সার্ভিস"],
-institution:["বিভিন্ন প্রতিষ্ঠান"],
-ambulance:["অ্যাম্বুলেন্স"],
-place:["দর্শনীয় স্থান"],
-person:["কৃতী ব্যক্তিত্ব"],
+hospital:["হাসপাতাল"],restaurant:["রেস্টুরেন্ট"],lawyer:["আইনজীবী"],
+courier:["কুরিয়ার সার্ভিস"],institution:["বিভিন্ন প্রতিষ্ঠান"],
+ambulance:["অ্যাম্বুলেন্স"],place:["দর্শনীয় স্থান"],person:["কৃতী ব্যক্তিত্ব"],
 islamic:["ইসলামিক কর্নার"],
 coaching:["কোচিং ও প্রাইভেট সেন্টার","কোচিং/প্রাইভেট সেন্টার"],
-doctor:["ডাক্তার"],
-emergency:["জরুরি সেবা"],
-police:["থানা পুলিশ"],
-fireService:["ফায়ার সার্ভিস"],
-electricity:["বিদ্যুৎ অফিস"]
+doctor:["ডাক্তার"],emergency:["জরুরি সেবা"],police:["থানা পুলিশ"],
+fireService:["ফায়ার সার্ভিস"],electricity:["বিদ্যুৎ অফিস"]
 };
 
 /* ICON */
 function getCategoryIcon(name){
 const n=normalizeCategoryName(name);
 if(n==="রক্তদাতা"||n==="রক্তদান")return "🩸";
-if(n.includes("ক্লিনিক"))return "🏥";
-if(n==="হাসপাতাল")return "🏥";
+if(n.includes("ক্লিনিক")||n==="হাসপাতাল")return "🏥";
 if(n==="রেস্টুরেন্ট")return "🍽️";
 if(n==="আইনজীবী")return "⚖️";
 if(n.includes("কুরিয়ার"))return "🚚";
@@ -302,8 +395,7 @@ return "📌";
 function getSubmissionTypeByCategoryName(name){
 const normalized=normalizeCategoryName(name);
 for(const type in submissionCategoryAliases){
-const aliases=submissionCategoryAliases[type];
-if(aliases.some(item=>normalizeCategoryName(item)===normalized))return type;
+if(submissionCategoryAliases[type].some(item=>normalizeCategoryName(item)===normalized))return type;
 }
 return null;
 }
@@ -314,10 +406,8 @@ try{
 const snap=await getDocs(collection(db,"categories"));
 categories=[];
 snap.forEach(docSnap=>{
-const data=docSnap.data();
-categories.push({id:docSnap.id,...data});
+categories.push({id:docSnap.id,...docSnap.data()});
 });
-
 categories.sort((a,b)=>{
 const aName=normalizeCategoryName(a.name);
 const bName=normalizeCategoryName(b.name);
@@ -326,12 +416,11 @@ const bOrder=categoryOrder[bName]??100;
 if(aOrder!==bOrder)return aOrder-bOrder;
 return aName.localeCompare(bName,"bn");
 });
-
 renderMainCategories();
 }catch(error){
 console.error("Category Load Error:",error);
-document.getElementById("categoryGrid").innerHTML=`
-<div class="info-box">তথ্য লোড করা যাচ্ছে না।</div>`;
+document.getElementById("categoryGrid").innerHTML=
+`<div class="info-box">তথ্য লোড করা যাচ্ছে না।</div>`;
 }
 }
 
@@ -347,8 +436,7 @@ categories.forEach(category=>{
 const card=document.createElement("div");
 card.className="card";
 const icon=category.icon||getCategoryIcon(category.name);
-card.innerHTML=`
-<div class="icon">${escapeHtml(icon)}</div>
+card.innerHTML=`<div class="icon">${escapeHtml(icon)}</div>
 <div class="name">${escapeHtml(category.name||"")}</div>`;
 card.addEventListener("click",()=>openMainTopic(category));
 grid.appendChild(card);
@@ -375,12 +463,11 @@ window.location.href="topic.html?id="+encodeURIComponent(category.id);
 
 /* PUBLIC SUBMISSION CATEGORY MODAL */
 async function openSubmissionCategoryModal(){
-const modal=document.getElementById("categoryModal");
-modal.style.display="block";
+document.getElementById("categoryModal").style.display="block";
 await loadSubmissionCategories();
 }
 
-/* LOAD SUBMISSION OPTIONS */
+/* LOAD SUBMISSION CATEGORIES */
 async function loadSubmissionCategories(){
 const box=document.getElementById("submissionCategoryList");
 box.innerHTML=`<div class="loading">তথ্য লোড হচ্ছে...</div>`;
@@ -393,7 +480,6 @@ const name=normalizeCategoryName(data.name);
 if(disabledSubmissionCategories.has(name))return;
 submissionCategories.push({id:docSnap.id,...data});
 });
-
 submissionCategories.sort((a,b)=>{
 const aName=normalizeCategoryName(a.name);
 const bName=normalizeCategoryName(b.name);
@@ -401,20 +487,16 @@ if(aName==="রক্তদাতা"&&bName!=="রক্তদাতা")return
 if(bName==="রক্তদাতা"&&aName!=="রক্তদাতা")return 1;
 return aName.localeCompare(bName,"bn");
 });
-
 box.innerHTML="";
 if(!submissionCategories.length){
 box.innerHTML=`<div class="info-box">এই মুহূর্তে কোনো তথ্য যোগ করার Topic নেই।</div>`;
 return;
 }
-
 submissionCategories.forEach(category=>{
 const card=document.createElement("div");
 card.className="sub-card";
 const icon=category.icon||getCategoryIcon(category.name);
-card.innerHTML=`
-<span class="sub-icon">${escapeHtml(icon)}</span>
-${escapeHtml(category.name||"")}`;
+card.innerHTML=`<span class="sub-icon">${escapeHtml(icon)}</span>${escapeHtml(category.name||"")}`;
 card.addEventListener("click",()=>loadSubmissionOptions(category));
 box.appendChild(card);
 });
@@ -431,7 +513,6 @@ selectedCategoryId=category.id;
 selectedCategoryName=categoryName;
 selectedSubCategory="";
 selectedSubCategoryName="";
-
 if(disabledSubmissionCategories.has(categoryName))return;
 
 if(categoryName==="ডাক্তার"){
@@ -446,7 +527,6 @@ if(categoryName==="ইসলামিক কর্নার"){
 showSubCategories("ইসলামিক কর্নার",getIslamicPostOnly());
 return;
 }
-
 const type=getSubmissionTypeByCategoryName(categoryName);
 if(!type){
 alert("এই Topic-এর জন্য তথ্য জমা দেওয়ার ফর্ম এখনো তৈরি করা হয়নি।");
@@ -456,7 +536,7 @@ closeModal("categoryModal");
 openSubmissionForm(type);
 }
 
-/* DOCTOR */
+/* DOCTOR SUBCATEGORIES */
 function getDoctorSubCategories(){
 return [
 {id:"cardiology",name:"হৃদরোগ বিশেষজ্ঞ",icon:"❤️"},
@@ -473,7 +553,7 @@ return [
 ];
 }
 
-/* COACHING */
+/* COACHING SUBCATEGORIES */
 function getCoachingSubCategories(){
 return [
 {id:"university",name:"বিশ্ববিদ্যালয় কোচিং",icon:"🎓"},
@@ -504,7 +584,7 @@ selectedSubCategory=item.id;
 selectedSubCategoryName=item.name;
 closeModal("subCategoryModal");
 const type=getSubmissionTypeByCategoryName(selectedCategoryName);
-openSubmissionForm(type);
+if(type)openSubmissionForm(type);
 });
 box.appendChild(card);
 });
@@ -524,8 +604,7 @@ if(imageInput)imageInput.addEventListener("change",previewImage);
 /* FORM FIELD */
 function field(name,label,type="text",required=true,placeholder=""){
 const isRequired=name==="address"?false:required;
-return `
-<div class="form-group">
+return `<div class="form-group">
 <label>${label}${isRequired?'<span class="required">*</span>':""}</label>
 <input id="${name}" name="${name}" type="${type}" ${isRequired?"required":""} placeholder="${placeholder}">
 </div>`;
@@ -533,8 +612,7 @@ return `
 
 /* TEXTAREA */
 function textareaField(name,label,required=false){
-return `
-<div class="form-group">
+return `<div class="form-group">
 <label>${label}${required?'<span class="required">*</span>':""}</label>
 <textarea id="${name}" name="${name}" ${required?"required":""}></textarea>
 </div>`;
@@ -542,8 +620,7 @@ return `
 
 /* IMAGE FIELD */
 function imageField(required=false){
-return `
-<div class="form-group">
+return `<div class="form-group">
 <label>ছবি${required?'<span class="required">*</span>':""}</label>
 <input id="image" name="image" type="file" accept="image/*" ${required?"required":""}>
 <img id="imagePreview" class="preview">
@@ -568,17 +645,13 @@ if(type==="blood"){
 html+=field("name","নাম");
 html+=field("address","ঠিকানা");
 html+=field("mobile","মোবাইল নং","tel");
-html+=`
-<div class="form-group">
+html+=`<div class="form-group">
 <label>রক্তের গ্রুপ <span class="required">*</span></label>
 <select id="bloodGroup" name="bloodGroup" required>
 <option value="">রক্তের গ্রুপ নির্বাচন করুন</option>
-<option>A+</option><option>A-</option>
-<option>B+</option><option>B-</option>
-<option>AB+</option><option>AB-</option>
-<option>O+</option><option>O-</option>
-</select>
-</div>`;
+<option>A+</option><option>A-</option><option>B+</option><option>B-</option>
+<option>AB+</option><option>AB-</option><option>O+</option><option>O-</option>
+</select></div>`;
 return html;
 }
 
@@ -709,6 +782,12 @@ if(!file){
 preview.style.display="none";
 return;
 }
+if(!file.type.startsWith("image/")){
+alert("অনুগ্রহ করে একটি ছবি নির্বাচন করুন।");
+event.target.value="";
+preview.style.display="none";
+return;
+}
 const reader=new FileReader();
 reader.onload=function(e){
 preview.src=e.target.result;
@@ -740,14 +819,13 @@ try{
 const form=e.target;
 const data={};
 const elements=form.querySelectorAll("input, textarea, select");
-
 elements.forEach(element=>{
 if(element.name&&element.type!=="file"){
 data[element.name]=element.value.trim();
 }
 });
 
-/* Required fields for the four new categories */
+/* REQUIRED FIELDS */
 if(["emergency","police","fireService","electricity"].includes(selectedType)){
 if(!data.name||!data.mobile){
 alert("নাম ও মোবাইল নম্বর পূরণ করুন।");
@@ -776,20 +854,17 @@ createdAt:serverTimestamp()
 
 alert("✅ আপনার তথ্য সফলভাবে জমা হয়েছে।");
 form.reset();
-
 const preview=document.getElementById("imagePreview");
 if(preview){
 preview.style.display="none";
 preview.src="";
 }
-
 closeModal("formModal");
 selectedSubCategory="";
 selectedSubCategoryName="";
-
 }catch(error){
-console.error(error);
-alert("❌ তথ্য জমা দিতে সমস্যা হয়েছে.\n\nদয়া করে আবার চেষ্টা করুন।");
+console.error("Submission Error:",error);
+alert("❌ তথ্য জমা দিতে সমস্যা হয়েছে।\n\nদয়া করে আবার চেষ্টা করুন।");
 }finally{
 button.disabled=false;
 button.textContent="তথ্য জমা দিন";
@@ -806,17 +881,17 @@ if(modal)modal.style.display="none";
 document.getElementById("addInfoBtn").addEventListener("click",function(){
 openSubmissionCategoryModal();
 });
-
 document.getElementById("closeCategoryModal").addEventListener("click",function(){
 closeModal("categoryModal");
 });
-
 document.getElementById("closeSubCategoryModal").addEventListener("click",function(){
 closeModal("subCategoryModal");
 });
-
 document.getElementById("closeFormModal").addEventListener("click",function(){
 closeModal("formModal");
+});
+document.getElementById("closeMenuInfoModal").addEventListener("click",function(){
+closeModal("menuInfoModal");
 });
 
 /* OUTSIDE CLICK */
