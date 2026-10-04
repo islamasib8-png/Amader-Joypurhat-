@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="bn">
 <head>
@@ -75,10 +76,6 @@ header p{font-size:12px}
 <button type="button" data-menu="add">➕ নতুন তথ্য এড করুন</button>
 <button type="button" data-menu="about">ℹ️ অ্যাপ সম্পর্কে</button>
 <button type="button" data-menu="share">📤 অ্যাপ শেয়ার করুন</button>
-<button type="button" data-menu="feedback">💬 মতামত ও অভিযোগ</button>
-<button type="button" data-menu="privacy">🔒 গোপনীয়তা নীতি</button>
-<button type="button" data-menu="contact">📞 যোগাযোগ</button>
-<button type="button" data-menu="version">📱 অ্যাপের ভার্সন</button>
 </div>
 </div>
 </header>
@@ -222,78 +219,44 @@ const menuDropdown=document.getElementById("menuDropdown");
 function closeMenu(){
 menuDropdown.classList.remove("show");
 }
+
 function showInfoModal(title,html){
 document.getElementById("menuInfoTitle").textContent=title;
 document.getElementById("menuInfoContent").innerHTML=html;
 document.getElementById("menuInfoModal").style.display="block";
 }
+
 menuBtn.addEventListener("click",function(e){
 e.stopPropagation();
 menuDropdown.classList.toggle("show");
 });
-menuDropdown.addEventListener("click",async function(e){
+
+menuDropdown.addEventListener("click",function(e){
 const button=e.target.closest("button[data-menu]");
 if(!button)return;
+
 const action=button.dataset.menu;
 closeMenu();
 
 if(action==="add"){
 openSubmissionCategoryModal();
-}else if(action==="about"){
+}
+else if(action==="about"){
 showInfoModal("অ্যাপ সম্পর্কে",`
-<p>আমাদের জয়পুরহাট একটি তথ্যভিত্তিক অ্যাপ। এর মাধ্যমে জয়পুরহাট জেলার বিভিন্ন প্রয়োজনীয় তথ্য সহজে খুঁজে পাওয়া এবং নতুন তথ্য জমা দেওয়ার সুযোগ রয়েছে।</p>
-<p>এই অ্যাপের তথ্য সঠিক রাখতে ব্যবহারকারীদের সহযোগিতা কাম্য।</p>`);
-}else if(action==="share"){
-const shareData={
-title:"আমাদের জয়পুরহাট",
-text:"জয়পুরহাট জেলার প্রয়োজনীয় তথ্য জানতে আমাদের জয়পুরহাট অ্যাপটি দেখুন।",
-url:window.location.href
-};
-try{
-if(navigator.share){
-await navigator.share(shareData);
-}else if(navigator.clipboard){
-await navigator.clipboard.writeText(shareData.text+" "+shareData.url);
-showInfoModal("অ্যাপ শেয়ার করুন",`
-<p>অ্যাপের লিংক কপি করা হয়েছে। এখন বন্ধুদের সঙ্গে শেয়ার করতে পারো।</p>
-<p><a href="${escapeHtml(shareData.url)}" target="_blank" rel="noopener">অ্যাপের লিংক</a></p>`);
-}else{
-showInfoModal("অ্যাপ শেয়ার করুন",`
-<p>এই লিংকটি কপি করে শেয়ার করো:</p>
-<p>${escapeHtml(shareData.url)}</p>`);
+<p>আমাদের জয়পুরহাট একটি তথ্যভিত্তিক অ্যাপ।</p>
+<p>এর মাধ্যমে জয়পুরহাট জেলার বিভিন্ন প্রয়োজনীয় তথ্য সহজে খুঁজে পাওয়া এবং নতুন তথ্য জমা দেওয়ার সুযোগ রয়েছে।</p>
+<p>এই অ্যাপের তথ্য সঠিক রাখতে ব্যবহারকারীদের সহযোগিতা কাম্য।</p>
+`);
 }
-}catch(err){
-if(err.name!=="AbortError"){
-showInfoModal("অ্যাপ শেয়ার করুন",`
-<p>এই লিংকটি কপি করে শেয়ার করো:</p>
-<p>${escapeHtml(shareData.url)}</p>`);
-}
-}
-}else if(action==="feedback"){
-showInfoModal("মতামত ও অভিযোগ",`
-<p>অ্যাপ সম্পর্কে কোনো মতামত, অভিযোগ বা সংশোধনের তথ্য জানাতে WhatsApp-এ যোগাযোগ করুন।</p>
-<a class="info-action" href="https://wa.me/8801319058313?text=${encodeURIComponent("আমাদের জয়পুরহাট অ্যাপ সম্পর্কে আমার মতামত/অভিযোগ: ")}" target="_blank" rel="noopener" style="text-align:center;text-decoration:none">WhatsApp-এ মতামত দিন</a>`);
-}else if(action==="privacy"){
-showInfoModal("গোপনীয়তা নীতি",`
-<p>আমাদের জয়পুরহাট অ্যাপে ব্যবহারকারীদের জমা দেওয়া তথ্য অ্যাপের তথ্যভান্ডার পরিচালনা ও প্রদর্শনের জন্য ব্যবহার করা হয়।</p>
-<p>তথ্য জমা দেওয়ার সময় সঠিক ও প্রয়োজনীয় তথ্য প্রদান করুন। ব্যক্তিগত বা সংবেদনশীল তথ্য অপ্রয়োজনে জমা দেবেন না।</p>
-<p>জমা দেওয়া তথ্য যাচাই ও প্রকাশের সিদ্ধান্ত অ্যাপ পরিচালনাকারীর অধীন।</p>
-<p>গোপনীয়তা সংক্রান্ত প্রশ্নের জন্য যোগাযোগ করুন: 013-19058313</p>`);
-}else if(action==="contact"){
-showInfoModal("যোগাযোগ",`
-<p><b>Md. Asib Islam</b></p>
-<p>Uchan, Dharanji, Panchbibi, Joypurhat</p>
-<p>📞 013-19058313</p>
-<p><a href="https://wa.me/8801319058313" target="_blank" rel="noopener">WhatsApp-এ যোগাযোগ</a></p>
-<p><a href="https://www.facebook.com/Asibislam01" target="_blank" rel="noopener">Facebook</a></p>`);
-}else if(action==="version"){
-showInfoModal("অ্যাপের ভার্সন",`
-<p><b>আমাদের জয়পুরহাট</b></p>
-<p>Version 1.0.0</p>`);
+else if(action==="share"){
+window.location.href="https://github.com/islamasib8-png/Amader-Joypurhat/releases/download/v1.0.0/AmaderJoypurhat.apk";
 }
 });
+
 document.addEventListener("click",function(e){
-if(!e.target.closest(".menu-wrap"))closeMenu();
+if(!e.target.closest(".menu-wrap")){
+closeMenu();
+}
 });
 
 /* AUTO SLIDER */
@@ -311,6 +274,7 @@ if(sliderIndex>=sliderImages.length)sliderIndex=0;
 slider.scrollTo({left:sliderIndex*slider.clientWidth,behavior:"smooth"});
 },3000);
 }
+
 if(slider){
 slider.addEventListener("scroll",function(){
 const width=slider.clientWidth;
