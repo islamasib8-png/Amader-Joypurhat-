@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="bn">
 <head>
@@ -8,56 +7,468 @@
 
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:Arial,sans-serif;background:#f5f7fa;color:#222}
-header{background:linear-gradient(135deg,#00695c,#00897b);color:white;padding:18px 12px;text-align:center;position:relative}
+
+body{
+font-family:Arial,sans-serif;
+background:#f5f7fa;
+color:#222;
+transition:background .25s,color .25s
+}
+
+header{
+background:linear-gradient(135deg,#00695c,#00897b);
+color:white;
+padding:18px 12px;
+text-align:center;
+position:relative
+}
+
 header h1{font-size:27px;margin-bottom:5px}
 header p{font-size:14px;opacity:.95}
-.menu-wrap{position:absolute;right:12px;top:12px;z-index:100}
-.menu-btn{background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.4);color:white;border-radius:9px;width:40px;height:40px;font-size:25px;line-height:30px;cursor:pointer}
-.menu-dropdown{display:none;position:absolute;right:0;top:46px;width:220px;background:white;border-radius:11px;box-shadow:0 5px 20px rgba(0,0,0,.2);overflow:hidden;text-align:left}
+
+.menu-wrap{
+position:absolute;
+right:12px;
+top:12px;
+z-index:100
+}
+
+.menu-btn{
+background:rgba(255,255,255,.18);
+border:1px solid rgba(255,255,255,.4);
+color:white;
+border-radius:9px;
+width:40px;
+height:40px;
+font-size:25px;
+line-height:30px;
+cursor:pointer
+}
+
+.menu-dropdown{
+display:none;
+position:absolute;
+right:0;
+top:46px;
+width:235px;
+background:white;
+border-radius:11px;
+box-shadow:0 5px 20px rgba(0,0,0,.2);
+overflow:hidden;
+text-align:left
+}
+
 .menu-dropdown.show{display:block}
-.menu-dropdown button{display:block;width:100%;padding:12px 14px;border:0;background:white;text-align:left;font-size:14px;color:#263238;cursor:pointer}
-.menu-dropdown button:active,.menu-dropdown button:hover{background:#e0f2f1}
-.hero{margin:12px;border-radius:14px;overflow:hidden;background:#ddd;box-shadow:0 3px 10px rgba(0,0,0,.12)}
-.slider{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;scroll-behavior:smooth}
+
+.menu-dropdown button{
+display:block;
+width:100%;
+padding:12px 14px;
+border:0;
+background:white;
+text-align:left;
+font-size:14px;
+color:#263238;
+cursor:pointer
+}
+
+.menu-dropdown button:active,
+.menu-dropdown button:hover{
+background:#e0f2f1
+}
+
+/* DARK MODE TOGGLE */
+.dark-toggle-row{
+display:flex !important;
+align-items:center;
+justify-content:space-between;
+gap:10px;
+cursor:pointer
+}
+
+.dark-toggle-left{
+display:flex;
+align-items:center;
+gap:7px
+}
+
+.toggle-switch{
+position:relative;
+width:42px;
+height:23px;
+flex-shrink:0
+}
+
+.toggle-switch input{
+opacity:0;
+width:0;
+height:0
+}
+
+.toggle-slider{
+position:absolute;
+inset:0;
+background:#b0bec5;
+border-radius:30px;
+transition:.25s
+}
+
+.toggle-slider:before{
+content:"";
+position:absolute;
+width:17px;
+height:17px;
+left:3px;
+top:3px;
+background:white;
+border-radius:50%;
+transition:.25s;
+box-shadow:0 1px 3px rgba(0,0,0,.3)
+}
+
+.toggle-switch input:checked + .toggle-slider{
+background:#00897b
+}
+
+.toggle-switch input:checked + .toggle-slider:before{
+transform:translateX(19px)
+}
+
+.hero{
+margin:12px;
+border-radius:14px;
+overflow:hidden;
+background:#ddd;
+box-shadow:0 3px 10px rgba(0,0,0,.12)
+}
+
+.slider{
+display:flex;
+overflow-x:auto;
+scroll-snap-type:x mandatory;
+scrollbar-width:none;
+scroll-behavior:smooth
+}
+
 .slider::-webkit-scrollbar{display:none}
-.slider img{width:100%;min-width:100%;height:190px;object-fit:cover;scroll-snap-align:start}
+
+.slider img{
+width:100%;
+min-width:100%;
+height:190px;
+object-fit:cover;
+scroll-snap-align:start
+}
+
 .container{padding:12px}
-.section-title{font-size:19px;font-weight:bold;margin:14px 0 10px;color:#00695c}
-.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:9px}
-.card{background:white;border-radius:12px;padding:13px 5px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,.08);border:1px solid #e6e6e6;cursor:pointer;min-height:92px;display:flex;flex-direction:column;justify-content:center;align-items:center}
+
+.section-title{
+font-size:19px;
+font-weight:bold;
+margin:14px 0 10px;
+color:#00695c
+}
+
+.grid{
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:9px
+}
+
+.card{
+background:white;
+border-radius:12px;
+padding:13px 5px;
+text-align:center;
+box-shadow:0 2px 8px rgba(0,0,0,.08);
+border:1px solid #e6e6e6;
+cursor:pointer;
+min-height:92px;
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center
+}
+
 .card:active{transform:scale(.97)}
-.card .icon{font-size:28px;margin-bottom:6px}
-.card .name{font-size:12px;font-weight:bold;line-height:1.35}
-.add-info{margin-top:18px;background:linear-gradient(135deg,#00695c,#00897b);color:white;border:0;width:100%;padding:15px;border-radius:12px;font-size:16px;font-weight:bold;box-shadow:0 3px 8px rgba(0,0,0,.15);cursor:pointer}
-.info-box{background:#fff;padding:14px;border-radius:12px;margin-top:15px;line-height:1.7;font-size:14px;border:1px solid #eee}
-footer{margin-top:25px;background:#263238;color:#fff;padding:20px 12px;text-align:center;font-size:13px;line-height:1.8}
-footer a{color:#80cbc4;text-decoration:none}
-.modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:9999;overflow-y:auto;padding:15px}
-.modal-box{background:#fff;max-width:550px;margin:20px auto;border-radius:15px;padding:18px;position:relative}
-.modal-title{font-size:20px;font-weight:bold;color:#00695c;margin-bottom:15px}
-.close{position:absolute;right:12px;top:8px;font-size:28px;cursor:pointer;color:#555}
+
+.card .icon{
+font-size:28px;
+margin-bottom:6px
+}
+
+.card .name{
+font-size:12px;
+font-weight:bold;
+line-height:1.35
+}
+
+.add-info{
+margin-top:18px;
+background:linear-gradient(135deg,#00695c,#00897b);
+color:white;
+border:0;
+width:100%;
+padding:15px;
+border-radius:12px;
+font-size:16px;
+font-weight:bold;
+box-shadow:0 3px 8px rgba(0,0,0,.15);
+cursor:pointer
+}
+
+.info-box{
+background:#fff;
+padding:14px;
+border-radius:12px;
+margin-top:15px;
+line-height:1.7;
+font-size:14px;
+border:1px solid #eee
+}
+
+footer{
+margin-top:25px;
+background:#263238;
+color:#fff;
+padding:20px 12px;
+text-align:center;
+font-size:13px;
+line-height:1.8
+}
+
+footer a{
+color:#80cbc4;
+text-decoration:none
+}
+
+.modal{
+display:none;
+position:fixed;
+inset:0;
+background:rgba(0,0,0,.55);
+z-index:9999;
+overflow-y:auto;
+padding:15px
+}
+
+.modal-box{
+background:#fff;
+max-width:550px;
+margin:20px auto;
+border-radius:15px;
+padding:18px;
+position:relative
+}
+
+.modal-title{
+font-size:20px;
+font-weight:bold;
+color:#00695c;
+margin-bottom:15px
+}
+
+.close{
+position:absolute;
+right:12px;
+top:8px;
+font-size:28px;
+cursor:pointer;
+color:#555
+}
+
 .form-group{margin-bottom:13px}
-.form-group label{display:block;font-weight:bold;font-size:14px;margin-bottom:6px}
-.form-group input,.form-group textarea,.form-group select{width:100%;padding:11px;border:1px solid #ccc;border-radius:8px;font-size:14px;outline:none}
-.form-group textarea{min-height:100px;resize:vertical}
+
+.form-group label{
+display:block;
+font-weight:bold;
+font-size:14px;
+margin-bottom:6px
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select{
+width:100%;
+padding:11px;
+border:1px solid #ccc;
+border-radius:8px;
+font-size:14px;
+outline:none
+}
+
+.form-group textarea{
+min-height:100px;
+resize:vertical
+}
+
 .required{color:red}
-.submit-btn{width:100%;padding:13px;background:#00695c;color:white;border:0;border-radius:9px;font-size:16px;font-weight:bold;cursor:pointer}
-.submit-btn:disabled{opacity:.6;cursor:not-allowed}
-.subcategory-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
-.sub-card{background:#f7f9fa;border:1px solid #ddd;border-radius:11px;padding:15px 8px;text-align:center;cursor:pointer;font-weight:bold}
-.sub-card .sub-icon{font-size:27px;display:block;margin-bottom:6px}
-.preview{margin-top:8px;max-width:130px;max-height:130px;border-radius:8px;display:none;object-fit:cover}
-.loading{text-align:center;padding:25px;color:#666}
-.info-content{font-size:14px;line-height:1.8;color:#333;overflow-wrap:anywhere}
+
+.submit-btn{
+width:100%;
+padding:13px;
+background:#00695c;
+color:white;
+border:0;
+border-radius:9px;
+font-size:16px;
+font-weight:bold;
+cursor:pointer
+}
+
+.submit-btn:disabled{
+opacity:.6;
+cursor:not-allowed
+}
+
+.subcategory-grid{
+display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:10px
+}
+
+.sub-card{
+background:#f7f9fa;
+border:1px solid #ddd;
+border-radius:11px;
+padding:15px 8px;
+text-align:center;
+cursor:pointer;
+font-weight:bold
+}
+
+.sub-card .sub-icon{
+font-size:27px;
+display:block;
+margin-bottom:6px
+}
+
+.preview{
+margin-top:8px;
+max-width:130px;
+max-height:130px;
+border-radius:8px;
+display:none;
+object-fit:cover
+}
+
+.loading{
+text-align:center;
+padding:25px;
+color:#666
+}
+
+.info-content{
+font-size:14px;
+line-height:1.8;
+color:#333;
+overflow-wrap:anywhere
+}
+
 .info-content a{color:#00796b}
-.info-action{display:block;width:100%;padding:12px;margin-top:12px;border:0;border-radius:9px;background:#00695c;color:white;font-size:15px;font-weight:bold;cursor:pointer}
+
+.info-action{
+display:block;
+width:100%;
+padding:12px;
+margin-top:12px;
+border:0;
+border-radius:9px;
+background:#00695c;
+color:white;
+font-size:15px;
+font-weight:bold;
+cursor:pointer
+}
+
+/* =========================
+   DARK MODE
+========================= */
+
+body.dark-mode{
+background:#121212;
+color:#eeeeee
+}
+
+body.dark-mode .section-title{
+color:#80cbc4
+}
+
+body.dark-mode .card{
+background:#1e1e1e;
+color:#eeeeee;
+border-color:#333;
+box-shadow:0 2px 8px rgba(0,0,0,.35)
+}
+
+body.dark-mode .menu-dropdown{
+background:#1e1e1e;
+box-shadow:0 5px 20px rgba(0,0,0,.5)
+}
+
+body.dark-mode .menu-dropdown button{
+background:#1e1e1e;
+color:#eeeeee
+}
+
+body.dark-mode .menu-dropdown button:hover,
+body.dark-mode .menu-dropdown button:active{
+background:#263a38
+}
+
+body.dark-mode .info-box{
+background:#1e1e1e;
+color:#eeeeee;
+border-color:#333
+}
+
+body.dark-mode .modal-box{
+background:#1e1e1e;
+color:#eeeeee
+}
+
+body.dark-mode .modal-title{
+color:#80cbc4
+}
+
+body.dark-mode .close{
+color:#eeeeee
+}
+
+body.dark-mode .info-content{
+color:#eeeeee
+}
+
+body.dark-mode .form-group input,
+body.dark-mode .form-group textarea,
+body.dark-mode .form-group select{
+background:#292929;
+color:#eeeeee;
+border-color:#555
+}
+
+body.dark-mode .form-group input::placeholder,
+body.dark-mode .form-group textarea::placeholder{
+color:#aaa
+}
+
+body.dark-mode .sub-card{
+background:#242424;
+color:#eeeeee;
+border-color:#444
+}
+
+body.dark-mode .hero{
+background:#222
+}
+
 @media(max-width:600px){
 .grid{grid-template-columns:repeat(4,1fr)}
 .card{min-height:88px;padding:10px 3px}
 .card .icon{font-size:25px}
 .card .name{font-size:11px}
 }
+
 @media(max-width:360px){
 header h1{font-size:23px}
 header p{font-size:12px}
@@ -66,16 +477,44 @@ header p{font-size:12px}
 </head>
 
 <body>
+
 <header>
 <h1>আমাদের জয়পুরহাট</h1>
 <p id="liveDateTime">তারিখ ও সময় লোড হচ্ছে...</p>
 
 <div class="menu-wrap">
+
 <button class="menu-btn" id="menuBtn" type="button" aria-label="মেনু">⋮</button>
+
 <div class="menu-dropdown" id="menuDropdown">
-<button type="button" data-menu="add">➕ নতুন তথ্য এড করুন</button>
-<button type="button" data-menu="about">ℹ️ অ্যাপ সম্পর্কে</button>
-<button type="button" data-menu="share">📤 অ্যাপ শেয়ার করুন</button>
+
+<button type="button" data-menu="add">
+➕ নতুন তথ্য এড করুন
+</button>
+
+<button type="button" data-menu="share">
+📤 অ্যাপ শেয়ার করুন
+</button>
+
+<!-- DARK MODE -->
+<button type="button" class="dark-toggle-row" data-menu="dark">
+
+<span class="dark-toggle-left">
+🌙 Dark Mode
+</span>
+
+<span class="toggle-switch">
+<input type="checkbox" id="darkModeToggle">
+<span class="toggle-slider"></span>
+</span>
+
+</button>
+
+<!-- ABOUT - সবার নিচে -->
+<button type="button" data-menu="about">
+ℹ️ অ্যাপ সম্পর্কে
+</button>
+
 </div>
 </div>
 </header>
@@ -83,6 +522,7 @@ header p{font-size:12px}
 <!-- IMAGE SLIDER -->
 <div class="hero">
 <div class="slider" id="imageSlider">
+
 <img src="joypurhat.jpg" alt="জয়পুরহাট">
 <img src="picjoypurhat2.jpg" alt="জয়পুরহাট">
 <img src="picjoypurhat3.jpg" alt="জয়পুরহাট">
@@ -95,15 +535,22 @@ header p{font-size:12px}
 <img src="picjoypurhat10.jpg" alt="জয়পুরহাট">
 <img src="picjoypurhat11.jpg" alt="জয়পুরহাট">
 <img src="picjoypurhat12.jpg" alt="জয়পুরহাট">
+
 </div>
 </div>
 
 <div class="container">
+
 <div class="section-title">📚 প্রয়োজনীয় তথ্য</div>
+
 <div id="categoryGrid" class="grid">
 <div class="loading">তথ্য লোড হচ্ছে...</div>
 </div>
-<button class="add-info" id="addInfoBtn" type="button">➕ আপনার তথ্য যোগ করুন</button>
+
+<button class="add-info" id="addInfoBtn" type="button">
+➕ আপনার তথ্য যোগ করুন
+</button>
+
 </div>
 
 <footer>
@@ -112,57 +559,112 @@ header p{font-size:12px}
 <b>Md. Asib Islam</b><br>
 Panchbibi, Joypurhat<br>
 📞 01319-058313<br>
-<a href="https://wa.me/8801319058313" target="_blank" rel="noopener">WhatsApp</a>
+
+<a href="https://wa.me/8801319058313" target="_blank" rel="noopener">
+WhatsApp
+</a>
+
 &nbsp; | &nbsp;
-<a href="https://www.facebook.com/Asibislam01" target="_blank" rel="noopener">Facebook</a>
+
+<a href="https://www.facebook.com/Asibislam01" target="_blank" rel="noopener">
+Facebook
+</a>
 </footer>
+
 
 <!-- CATEGORY MODAL -->
 <div id="categoryModal" class="modal">
+
 <div class="modal-box">
+
 <span class="close" id="closeCategoryModal">×</span>
-<div class="modal-title">আপনি কোন তথ্য যোগ করতে চান?</div>
+
+<div class="modal-title">
+আপনি কোন তথ্য যোগ করতে চান?
+</div>
+
 <div id="submissionCategoryList" class="subcategory-grid">
 <div class="loading">লোড হচ্ছে...</div>
 </div>
+
 </div>
 </div>
+
 
 <!-- SUB CATEGORY MODAL -->
 <div id="subCategoryModal" class="modal">
+
 <div class="modal-box">
+
 <span class="close" id="closeSubCategoryModal">×</span>
-<div id="subCategoryTitle" class="modal-title">বিভাগ নির্বাচন করুন</div>
+
+<div id="subCategoryTitle" class="modal-title">
+বিভাগ নির্বাচন করুন
+</div>
+
 <div id="subCategoryList" class="subcategory-grid"></div>
+
 </div>
 </div>
+
 
 <!-- FORM MODAL -->
 <div id="formModal" class="modal">
+
 <div class="modal-box">
+
 <span class="close" id="closeFormModal">×</span>
-<div id="formTitle" class="modal-title">তথ্য যোগ করুন</div>
+
+<div id="formTitle" class="modal-title">
+তথ্য যোগ করুন
+</div>
+
 <form id="submissionForm">
+
 <div id="formFields"></div>
-<button type="submit" class="submit-btn" id="saveSubmissionBtn">তথ্য জমা দিন</button>
+
+<button type="submit" class="submit-btn" id="saveSubmissionBtn">
+তথ্য জমা দিন
+</button>
+
 </form>
+
 </div>
 </div>
+
 
 <!-- MENU INFO MODAL -->
 <div id="menuInfoModal" class="modal">
+
 <div class="modal-box">
+
 <span class="close" id="closeMenuInfoModal">×</span>
+
 <div id="menuInfoTitle" class="modal-title"></div>
+
 <div id="menuInfoContent" class="info-content"></div>
+
 </div>
 </div>
+
 
 <script type="module">
-import {initializeApp} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
-import {getFirestore,collection,getDocs,addDoc,serverTimestamp} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
-/* FIREBASE CONFIG: নিজের Firebase তথ্য বসাও */
+import {
+initializeApp
+} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+
+import {
+getFirestore,
+collection,
+getDocs,
+addDoc,
+serverTimestamp
+} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+
+
+/* FIREBASE CONFIG */
+
 const firebaseConfig={
 apiKey:"YOUR_FIREBASE_API_KEY",
 authDomain:"amader-joypurhat-7b3fb.firebaseapp.com",
@@ -175,12 +677,18 @@ appId:"YOUR_FIREBASE_APP_ID"
 const app=initializeApp(firebaseConfig);
 const db=getFirestore(app);
 
+
 /* CLOUDINARY */
+
 const CLOUDINARY_CLOUD_NAME="lkuowv7e";
 const CLOUDINARY_UPLOAD_PRESET="amader_joypurhat_images";
-const CLOUDINARY_UPLOAD_URL=`https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload`;
+
+const CLOUDINARY_UPLOAD_URL=
+`https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload`;
+
 
 /* VARIABLES */
+
 let categories=[];
 let selectedCategoryId="";
 let selectedCategoryName="";
@@ -188,11 +696,71 @@ let selectedType="";
 let selectedSubCategory="";
 let selectedSubCategoryName="";
 
+
+/* =========================
+   DARK MODE
+========================= */
+
+const darkModeToggle=
+document.getElementById("darkModeToggle");
+
+/* আগের Save করা Mode */
+
+const savedDarkMode=
+localStorage.getItem("amaderJoypurhatDarkMode");
+
+if(savedDarkMode==="on"){
+document.body.classList.add("dark-mode");
+
+if(darkModeToggle){
+darkModeToggle.checked=true;
+}
+}
+
+
+/* Dark Mode পরিবর্তন */
+
+if(darkModeToggle){
+
+darkModeToggle.addEventListener("change",function(e){
+
+e.stopPropagation();
+
+if(this.checked){
+
+document.body.classList.add("dark-mode");
+
+localStorage.setItem(
+"amaderJoypurhatDarkMode",
+"on"
+);
+
+}else{
+
+document.body.classList.remove("dark-mode");
+
+localStorage.setItem(
+"amaderJoypurhatDarkMode",
+"off"
+);
+
+}
+
+});
+
+}
+
+
 /* BANGLADESH LIVE DATE AND TIME */
+
 function updateLiveDateTime(){
+
 const el=document.getElementById("liveDateTime");
+
 if(!el)return;
+
 const now=new Date();
+
 const date=new Intl.DateTimeFormat("bn-BD",{
 timeZone:"Asia/Dhaka",
 weekday:"long",
@@ -200,6 +768,7 @@ day:"numeric",
 month:"long",
 year:"numeric"
 }).format(now);
+
 const time=new Intl.DateTimeFormat("bn-BD",{
 timeZone:"Asia/Dhaka",
 hour:"2-digit",
@@ -207,302 +776,808 @@ minute:"2-digit",
 second:"2-digit",
 hour12:true
 }).format(now);
+
 el.textContent=date+" | "+time;
+
 }
+
 updateLiveDateTime();
+
 setInterval(updateLiveDateTime,1000);
 
-/* THREE DOT MENU */
-const menuBtn=document.getElementById("menuBtn");
-const menuDropdown=document.getElementById("menuDropdown");
+
+/* =========================
+   THREE DOT MENU
+========================= */
+
+const menuBtn=
+document.getElementById("menuBtn");
+
+const menuDropdown=
+document.getElementById("menuDropdown");
+
 
 function closeMenu(){
 menuDropdown.classList.remove("show");
 }
 
+
 function showInfoModal(title,html){
+
 document.getElementById("menuInfoTitle").textContent=title;
+
 document.getElementById("menuInfoContent").innerHTML=html;
+
 document.getElementById("menuInfoModal").style.display="block";
+
 }
 
+
 menuBtn.addEventListener("click",function(e){
+
 e.stopPropagation();
+
 menuDropdown.classList.toggle("show");
+
 });
 
+
 menuDropdown.addEventListener("click",function(e){
-const button=e.target.closest("button[data-menu]");
+
+const button=
+e.target.closest("button[data-menu]");
+
 if(!button)return;
 
 const action=button.dataset.menu;
+
+
+/* Dark Mode button হলে আগে বন্ধ করব না */
+
+if(action==="dark"){
+
+return;
+
+}
+
 closeMenu();
+
+
+/* নতুন তথ্য */
 
 if(action==="add"){
+
 openSubmissionCategoryModal();
+
 }
-else if(action==="about"){
-showInfoModal("অ্যাপ সম্পর্কে",`
-<p>আমাদের জয়পুরহাট একটি তথ্যভিত্তিক অ্যাপ।</p>
-<p>এর মাধ্যমে জয়পুরহাট জেলার বিভিন্ন প্রয়োজনীয় তথ্য সহজে খুঁজে পাওয়া এবং নতুন তথ্য জমা দেওয়ার সুযোগ রয়েছে।</p>
-<p>এই অ্যাপের তথ্য সঠিক রাখতে ব্যবহারকারীদের সহযোগিতা কাম্য।</p>
-`);
-}
+
+
+/* অ্যাপ শেয়ার */
+
 else if(action==="share"){
-window.location.href="https://github.com/islamasib8-png/Amader-Joypurhat/releases/download/v1.0.0/AmaderJoypurhat.apk";
-}
+
+const shareText=
+`আমাদের জয়পুরহাট অ্যাপ
+
+📥 অ্যাপ ডাউনলোড করুন:
+
+https://github.com/islamasib8-png/Amader-Joypurhat-APK/releases/download/v1.0.0/AmaderJoypurhat.apk`;
+
+
+/* Android / Browser System Share */
+
+if(navigator.share){
+
+navigator.share({
+
+title:"আমাদের জয়পুরহাট অ্যাপ",
+
+text:shareText
+
+}).catch(function(error){
+
+console.log("Share cancelled:",error);
+
 });
+
+}else{
+
+/* পুরোনো Browser-এর জন্য fallback */
+
+const shareUrl=
+"https://github.com/islamasib8-png/Amader-Joypurhat-APK/releases/download/v1.0.0/AmaderJoypurhat.apk";
+
+const encodedText=
+encodeURIComponent(shareText);
+
+const whatsappUrl=
+"https://wa.me/?text="+encodedText;
+
+window.open(whatsappUrl,"_blank");
+
+}
+
+}
+
+
+/* অ্যাপ সম্পর্কে */
+
+else if(action==="about"){
+
+showInfoModal(
+"অ্যাপ সম্পর্কে",
+`
+<p>আমাদের জয়পুরহাট একটি তথ্যভিত্তিক অ্যাপ।</p>
+
+<p>
+এর মাধ্যমে জয়পুরহাট জেলার বিভিন্ন প্রয়োজনীয় তথ্য
+সহজে খুঁজে পাওয়া এবং নতুন তথ্য জমা দেওয়ার
+সুযোগ রয়েছে।
+</p>
+
+<p>
+এই অ্যাপের তথ্য সঠিক রাখতে ব্যবহারকারীদের
+সহযোগিতা কাম্য।
+</p>
+`
+);
+
+}
+
+});
+
 
 document.addEventListener("click",function(e){
+
 if(!e.target.closest(".menu-wrap")){
+
 closeMenu();
+
 }
+
 });
 
+
 /* AUTO SLIDER */
-const slider=document.getElementById("imageSlider");
-const sliderImages=slider?slider.querySelectorAll("img"):[];
+
+const slider=
+document.getElementById("imageSlider");
+
+const sliderImages=
+slider?slider.querySelectorAll("img"):[];
+
 let sliderIndex=0;
 let sliderTimer=null;
 
+
 function startAutoSlider(){
+
 if(!slider||!sliderImages.length)return;
+
 if(sliderTimer)clearInterval(sliderTimer);
+
 sliderTimer=setInterval(function(){
+
 sliderIndex++;
-if(sliderIndex>=sliderImages.length)sliderIndex=0;
-slider.scrollTo({left:sliderIndex*slider.clientWidth,behavior:"smooth"});
+
+if(sliderIndex>=sliderImages.length)
+sliderIndex=0;
+
+slider.scrollTo({
+left:sliderIndex*slider.clientWidth,
+behavior:"smooth"
+});
+
 },3000);
+
 }
+
 
 if(slider){
+
 slider.addEventListener("scroll",function(){
+
 const width=slider.clientWidth;
-if(width>0)sliderIndex=Math.round(slider.scrollLeft/width);
-});
+
+if(width>0){
+
+sliderIndex=
+Math.round(slider.scrollLeft/width);
+
 }
+
+});
+
+}
+
 
 /* NORMALIZE */
+
 function normalizeCategoryName(name){
-return String(name||"").trim().replace(/\s+/g," ");
+
+return String(name||"")
+.trim()
+.replace(/\s+/g," ");
+
 }
 
-/* CATEGORIES NOT AVAILABLE FOR PUBLIC SUBMISSION */
+
+/* CATEGORY NOT AVAILABLE FOR PUBLIC SUBMISSION */
+
 const disabledSubmissionCategories=new Set([
-"জয়পুরহাটের পরিচয়","আজকের খবর","আজকের নিউজ","খবর",
-"আজকের সংবাদ","ট্রেনের সময়সূচি","বাসের সময়সূচি"
+
+"জয়পুরহাটের পরিচয়",
+"আজকের খবর",
+"আজকের নিউজ",
+"খবর",
+"আজকের সংবাদ",
+"ট্রেনের সময়সূচি",
+"বাসের সময়সূচি"
+
 ]);
 
+
 /* CATEGORY ORDER */
+
 const categoryOrder={
-"জয়পুরহাটের পরিচয়":1,"উপজেলা পরিচয়":2,"উপজেলার পরিচয়":2,"উপজেলা পরিষদ":2,
-"দর্শনীয় স্থান":3,"ইসলামিক কর্নার":4,"রক্তদাতা":5,"রক্তদান":5,
-"জরুরি সেবা":6,"অ্যাম্বুলেন্স":7,"হাসপাতাল":8,
-"ক্লিনিক ও ডায়াগনস্টিক":9,"ক্লিনিক ও ডায়াগনস্টিক সেন্টার":9,
-"ডাক্তার":10,"থানা পুলিশ":11,"ফায়ার সার্ভিস":12,"আইনজীবী":13,
-"কৃষি অফিস":14,"বিদ্যুৎ অফিস":15,"ট্রেনের সময়সূচি":16,
-"বাসের সময়সূচি":17,"কুরিয়ার সার্ভিস":18,"আজকের খবর":19,
-"আজকের নিউজ":19,"খবর":19,"আজকের সংবাদ":19,"কবি ও সাহিত্য":20,"রেস্টুরেন্ট":21
+
+"জয়পুরহাটের পরিচয়":1,
+"উপজেলা পরিচয়":2,
+"উপজেলার পরিচয়":2,
+"উপজেলা পরিষদ":2,
+"দর্শনীয় স্থান":3,
+"ইসলামিক কর্নার":4,
+"রক্তদাতা":5,
+"রক্তদান":5,
+"জরুরি সেবা":6,
+"অ্যাম্বুলেন্স":7,
+"হাসপাতাল":8,
+"ক্লিনিক ও ডায়াগনস্টিক":9,
+"ক্লিনিক ও ডায়াগনস্টিক সেন্টার":9,
+"ডাক্তার":10,
+"থানা পুলিশ":11,
+"ফায়ার সার্ভিস":12,
+"আইনজীবী":13,
+"কৃষি অফিস":14,
+"বিদ্যুৎ অফিস":15,
+"ট্রেনের সময়সূচি":16,
+"বাসের সময়সূচি":17,
+"কুরিয়ার সার্ভিস":18,
+"আজকের খবর":19,
+"আজকের নিউজ":19,
+"খবর":19,
+"আজকের সংবাদ":19,
+"কবি ও সাহিত্য":20,
+"রেস্টুরেন্ট":21
+
 };
+
 
 /* SUBMISSION TYPES */
+
 const submissionTypes={
-blood:"রক্তদাতা",clinic:"ক্লিনিক ও ডায়াগনস্টিক সেন্টার",hospital:"হাসপাতাল",
-restaurant:"রেস্টুরেন্ট",lawyer:"আইনজীবী",courier:"কুরিয়ার সার্ভিস",
-institution:"বিভিন্ন প্রতিষ্ঠান",ambulance:"অ্যাম্বুলেন্স",place:"দর্শনীয় স্থান",
-person:"কৃতী ব্যক্তিত্ব",islamic:"ইসলামিক কর্নার",
-coaching:"কোচিং ও প্রাইভেট সেন্টার",doctor:"ডাক্তার",emergency:"জরুরি সেবা",
-police:"থানা পুলিশ",fireService:"ফায়ার সার্ভিস",electricity:"বিদ্যুৎ অফিস"
+
+blood:"রক্তদাতা",
+clinic:"ক্লিনিক ও ডায়াগনস্টিক সেন্টার",
+hospital:"হাসপাতাল",
+restaurant:"রেস্টুরেন্ট",
+lawyer:"আইনজীবী",
+courier:"কুরিয়ার সার্ভিস",
+institution:"বিভিন্ন প্রতিষ্ঠান",
+ambulance:"অ্যাম্বুলেন্স",
+place:"দর্শনীয় স্থান",
+person:"কৃতী ব্যক্তিত্ব",
+islamic:"ইসলামিক কর্নার",
+coaching:"কোচিং ও প্রাইভেট সেন্টার",
+doctor:"ডাক্তার",
+emergency:"জরুরি সেবা",
+police:"থানা পুলিশ",
+fireService:"ফায়ার সার্ভিস",
+electricity:"বিদ্যুৎ অফিস"
+
 };
+
 
 /* ALIASES */
+
 const submissionCategoryAliases={
+
 blood:["রক্তদাতা","রক্তদান"],
-clinic:["ক্লিনিক ও ডায়াগনস্টিক","ক্লিনিক ও ডায়াগনস্টিক সেন্টার"],
-hospital:["হাসপাতাল"],restaurant:["রেস্টুরেন্ট"],lawyer:["আইনজীবী"],
-courier:["কুরিয়ার সার্ভিস"],institution:["বিভিন্ন প্রতিষ্ঠান"],
-ambulance:["অ্যাম্বুলেন্স"],place:["দর্শনীয় স্থান"],person:["কৃতী ব্যক্তিত্ব"],
+
+clinic:[
+"ক্লিনিক ও ডায়াগনস্টিক",
+"ক্লিনিক ও ডায়াগনস্টিক সেন্টার"
+],
+
+hospital:["হাসপাতাল"],
+
+restaurant:["রেস্টুরেন্ট"],
+
+lawyer:["আইনজীবী"],
+
+courier:["কুরিয়ার সার্ভিস"],
+
+institution:["বিভিন্ন প্রতিষ্ঠান"],
+
+ambulance:["অ্যাম্বুলেন্স"],
+
+place:["দর্শনীয় স্থান"],
+
+person:["কৃতী ব্যক্তিত্ব"],
+
 islamic:["ইসলামিক কর্নার"],
-coaching:["কোচিং ও প্রাইভেট সেন্টার","কোচিং/প্রাইভেট সেন্টার"],
-doctor:["ডাক্তার"],emergency:["জরুরি সেবা"],police:["থানা পুলিশ"],
-fireService:["ফায়ার সার্ভিস"],electricity:["বিদ্যুৎ অফিস"]
+
+coaching:[
+"কোচিং ও প্রাইভেট সেন্টার",
+"কোচিং/প্রাইভেট সেন্টার"
+],
+
+doctor:["ডাক্তার"],
+
+emergency:["জরুরি সেবা"],
+
+police:["থানা পুলিশ"],
+
+fireService:["ফায়ার সার্ভিস"],
+
+electricity:["বিদ্যুৎ অফিস"]
+
 };
 
+
 /* ICON */
+
 function getCategoryIcon(name){
+
 const n=normalizeCategoryName(name);
+
 if(n==="রক্তদাতা"||n==="রক্তদান")return "🩸";
+
 if(n.includes("ক্লিনিক")||n==="হাসপাতাল")return "🏥";
+
 if(n==="রেস্টুরেন্ট")return "🍽️";
+
 if(n==="আইনজীবী")return "⚖️";
+
 if(n.includes("কুরিয়ার"))return "🚚";
+
 if(n.includes("প্রতিষ্ঠান"))return "🏪";
+
 if(n==="অ্যাম্বুলেন্স")return "🚑";
+
 if(n==="ফায়ার সার্ভিস")return "🚒";
+
 if(n==="থানা পুলিশ")return "👮";
+
 if(n==="বিদ্যুৎ অফিস")return "⚡";
+
 if(n.includes("বাস"))return "🚌";
+
 if(n.includes("ট্রেন"))return "🚆";
+
 if(n==="দর্শনীয় স্থান")return "🏞️";
+
 if(n==="কৃতী ব্যক্তিত্ব")return "🌟";
+
 if(n.includes("খবর"))return "📰";
+
 if(n==="ইসলামিক কর্নার")return "☪️";
+
 if(n==="জরুরি সেবা")return "🆘";
+
 if(n.includes("কোচিং"))return "📚";
+
 if(n==="ডাক্তার")return "👨‍⚕️";
+
 if(n==="জয়পুরহাটের পরিচয়")return "🏛️";
-if(n==="উপজেলার পরিচয়"||n==="উপজেলা পরিচয়"||n==="উপজেলা পরিষদ")return "📍";
+
+if(
+n==="উপজেলার পরিচয়"||
+n==="উপজেলা পরিচয়"||
+n==="উপজেলা পরিষদ"
+)return "📍";
+
 return "📌";
+
 }
+
 
 /* GET TYPE */
+
 function getSubmissionTypeByCategoryName(name){
-const normalized=normalizeCategoryName(name);
+
+const normalized=
+normalizeCategoryName(name);
+
 for(const type in submissionCategoryAliases){
-if(submissionCategoryAliases[type].some(item=>normalizeCategoryName(item)===normalized))return type;
+
+if(
+submissionCategoryAliases[type].some(
+item=>normalizeCategoryName(item)===normalized
+)
+)return type;
+
 }
+
 return null;
+
 }
+
 
 /* LOAD MAIN TOPICS */
+
 async function loadMainCategories(){
+
 try{
-const snap=await getDocs(collection(db,"categories"));
+
+const snap=
+await getDocs(collection(db,"categories"));
+
 categories=[];
+
 snap.forEach(docSnap=>{
-categories.push({id:docSnap.id,...docSnap.data()});
+
+categories.push({
+id:docSnap.id,
+...docSnap.data()
 });
+
+});
+
 categories.sort((a,b)=>{
-const aName=normalizeCategoryName(a.name);
-const bName=normalizeCategoryName(b.name);
-const aOrder=categoryOrder[aName]??100;
-const bOrder=categoryOrder[bName]??100;
-if(aOrder!==bOrder)return aOrder-bOrder;
+
+const aName=
+normalizeCategoryName(a.name);
+
+const bName=
+normalizeCategoryName(b.name);
+
+const aOrder=
+categoryOrder[aName]??100;
+
+const bOrder=
+categoryOrder[bName]??100;
+
+if(aOrder!==bOrder)
+return aOrder-bOrder;
+
 return aName.localeCompare(bName,"bn");
+
 });
+
 renderMainCategories();
+
 }catch(error){
+
 console.error("Category Load Error:",error);
+
 document.getElementById("categoryGrid").innerHTML=
-`<div class="info-box">তথ্য লোড করা যাচ্ছে না।</div>`;
+`<div class="info-box">
+তথ্য লোড করা যাচ্ছে না।
+</div>`;
+
 }
+
 }
+
 
 /* RENDER MAIN TOPICS */
+
 function renderMainCategories(){
-const grid=document.getElementById("categoryGrid");
+
+const grid=
+document.getElementById("categoryGrid");
+
 grid.innerHTML="";
+
 if(!categories.length){
-grid.innerHTML=`<div class="info-box">কোনো Topic পাওয়া যায়নি।</div>`;
+
+grid.innerHTML=
+`<div class="info-box">
+কোনো Topic পাওয়া যায়নি।
+</div>`;
+
 return;
+
 }
+
 categories.forEach(category=>{
-const card=document.createElement("div");
+
+const card=
+document.createElement("div");
+
 card.className="card";
-const icon=category.icon||getCategoryIcon(category.name);
-card.innerHTML=`<div class="icon">${escapeHtml(icon)}</div>
-<div class="name">${escapeHtml(category.name||"")}</div>`;
-card.addEventListener("click",()=>openMainTopic(category));
+
+const icon=
+category.icon||
+getCategoryIcon(category.name);
+
+card.innerHTML=
+`<div class="icon">
+${escapeHtml(icon)}
+</div>
+
+<div class="name">
+${escapeHtml(category.name||"")}
+</div>`;
+
+card.addEventListener(
+"click",
+()=>openMainTopic(category)
+);
+
 grid.appendChild(card);
+
 });
+
 }
+
 
 /* OPEN MAIN TOPIC */
+
 function openMainTopic(category){
-const name=normalizeCategoryName(category.name);
+
+const name=
+normalizeCategoryName(category.name);
+
 if(name.includes("ট্রেন")){
-window.open("https://eticket.railway.gov.bd/","_blank");
+
+window.open(
+"https://eticket.railway.gov.bd/",
+"_blank"
+);
+
 return;
+
 }
+
 if(name.includes("বাস")){
-window.open("https://www.shohoz.com/bus-tickets","_blank");
+
+window.open(
+"https://www.shohoz.com/bus-tickets",
+"_blank"
+);
+
 return;
+
 }
-if(name.includes("আজকের খবর")||name.includes("আজকের নিউজ")||name==="খবর"||name.includes("আজকের সংবাদ")){
-window.open("https://joypurhatnews24.com/","_blank");
+
+if(
+name.includes("আজকের খবর")||
+name.includes("আজকের নিউজ")||
+name==="খবর"||
+name.includes("আজকের সংবাদ")
+){
+
+window.open(
+"https://joypurhatnews24.com/",
+"_blank"
+);
+
 return;
+
 }
-window.location.href="topic.html?id="+encodeURIComponent(category.id);
+
+window.location.href=
+"topic.html?id="+
+encodeURIComponent(category.id);
+
 }
+
 
 /* PUBLIC SUBMISSION CATEGORY MODAL */
+
 async function openSubmissionCategoryModal(){
+
 document.getElementById("categoryModal").style.display="block";
+
 await loadSubmissionCategories();
+
 }
+
 
 /* LOAD SUBMISSION CATEGORIES */
+
 async function loadSubmissionCategories(){
-const box=document.getElementById("submissionCategoryList");
-box.innerHTML=`<div class="loading">তথ্য লোড হচ্ছে...</div>`;
+
+const box=
+document.getElementById(
+"submissionCategoryList"
+);
+
+box.innerHTML=
+`<div class="loading">
+তথ্য লোড হচ্ছে...
+</div>`;
+
 try{
-const snap=await getDocs(collection(db,"categories"));
+
+const snap=
+await getDocs(collection(db,"categories"));
+
 let submissionCategories=[];
+
 snap.forEach(docSnap=>{
+
 const data=docSnap.data();
-const name=normalizeCategoryName(data.name);
-if(disabledSubmissionCategories.has(name))return;
-submissionCategories.push({id:docSnap.id,...data});
+
+const name=
+normalizeCategoryName(data.name);
+
+if(
+disabledSubmissionCategories.has(name)
+)return;
+
+submissionCategories.push({
+id:docSnap.id,
+...data
 });
+
+});
+
 submissionCategories.sort((a,b)=>{
-const aName=normalizeCategoryName(a.name);
-const bName=normalizeCategoryName(b.name);
-if(aName==="রক্তদাতা"&&bName!=="রক্তদাতা")return -1;
-if(bName==="রক্তদাতা"&&aName!=="রক্তদাতা")return 1;
+
+const aName=
+normalizeCategoryName(a.name);
+
+const bName=
+normalizeCategoryName(b.name);
+
+if(
+aName==="রক্তদাতা"&&
+bName!=="রক্তদাতা"
+)return -1;
+
+if(
+bName==="রক্তদাতা"&&
+aName!=="রক্তদাতা"
+)return 1;
+
 return aName.localeCompare(bName,"bn");
+
 });
+
 box.innerHTML="";
+
 if(!submissionCategories.length){
-box.innerHTML=`<div class="info-box">এই মুহূর্তে কোনো তথ্য যোগ করার Topic নেই।</div>`;
+
+box.innerHTML=
+`<div class="info-box">
+এই মুহূর্তে কোনো তথ্য যোগ করার Topic নেই।
+</div>`;
+
 return;
+
 }
+
 submissionCategories.forEach(category=>{
-const card=document.createElement("div");
+
+const card=
+document.createElement("div");
+
 card.className="sub-card";
-const icon=category.icon||getCategoryIcon(category.name);
-card.innerHTML=`<span class="sub-icon">${escapeHtml(icon)}</span>${escapeHtml(category.name||"")}`;
-card.addEventListener("click",()=>loadSubmissionOptions(category));
+
+const icon=
+category.icon||
+getCategoryIcon(category.name);
+
+card.innerHTML=
+`<span class="sub-icon">
+${escapeHtml(icon)}
+</span>
+${escapeHtml(category.name||"")}`;
+
+card.addEventListener(
+"click",
+()=>loadSubmissionOptions(category)
+);
+
 box.appendChild(card);
+
 });
+
 }catch(error){
-console.error("Submission Category Error:",error);
-box.innerHTML=`<div class="info-box">তথ্য লোড করতে সমস্যা হয়েছে।</div>`;
+
+console.error(
+"Submission Category Error:",
+error
+);
+
+box.innerHTML=
+`<div class="info-box">
+তথ্য লোড করতে সমস্যা হয়েছে।
+</div>`;
+
 }
+
 }
+
 
 /* SUBMISSION OPTION */
+
 function loadSubmissionOptions(category){
-const categoryName=normalizeCategoryName(category.name);
+
+const categoryName=
+normalizeCategoryName(category.name);
+
 selectedCategoryId=category.id;
 selectedCategoryName=categoryName;
+
 selectedSubCategory="";
 selectedSubCategoryName="";
-if(disabledSubmissionCategories.has(categoryName))return;
+
+if(
+disabledSubmissionCategories.has(categoryName)
+)return;
+
 
 if(categoryName==="ডাক্তার"){
-showSubCategories("ডাক্তার",getDoctorSubCategories());
+
+showSubCategories(
+"ডাক্তার",
+getDoctorSubCategories()
+);
+
 return;
-}
-if(categoryName==="কোচিং ও প্রাইভেট সেন্টার"||categoryName==="কোচিং/প্রাইভেট সেন্টার"){
-showSubCategories("কোচিং ও প্রাইভেট সেন্টার",getCoachingSubCategories());
-return;
-}
-if(categoryName==="ইসলামিক কর্নার"){
-showSubCategories("ইসলামিক কর্নার",getIslamicPostOnly());
-return;
-}
-const type=getSubmissionTypeByCategoryName(categoryName);
-if(!type){
-alert("এই Topic-এর জন্য তথ্য জমা দেওয়ার ফর্ম এখনো তৈরি করা হয়নি।");
-return;
-}
-closeModal("categoryModal");
-openSubmissionForm(type);
+
 }
 
+
+if(
+categoryName==="কোচিং ও প্রাইভেট সেন্টার"||
+categoryName==="কোচিং/প্রাইভেট সেন্টার"
+){
+
+showSubCategories(
+"কোচিং ও প্রাইভেট সেন্টার",
+getCoachingSubCategories()
+);
+
+return;
+
+}
+
+
+if(categoryName==="ইসলামিক কর্নার"){
+
+showSubCategories(
+"ইসলামিক কর্নার",
+getIslamicPostOnly()
+);
+
+return;
+
+}
+
+
+const type=
+getSubmissionTypeByCategoryName(
+categoryName
+);
+
+if(!type){
+
+alert(
+"এই Topic-এর জন্য তথ্য জমা দেওয়ার ফর্ম এখনো তৈরি করা হয়নি।"
+);
+
+return;
+
+}
+
+closeModal("categoryModal");
+
+openSubmissionForm(type);
+
+}
+
+
 /* DOCTOR SUBCATEGORIES */
+
 function getDoctorSubCategories(){
+
 return [
+
 {id:"cardiology",name:"হৃদরোগ বিশেষজ্ঞ",icon:"❤️"},
 {id:"child",name:"শিশু বিশেষজ্ঞ",icon:"👶"},
 {id:"medicine",name:"মেডিসিন বিশেষজ্ঞ",icon:"💊"},
@@ -514,370 +1589,1097 @@ return [
 {id:"skin",name:"চর্মরোগ বিশেষজ্ঞ",icon:"🩺"},
 {id:"dental",name:"দন্ত বিশেষজ্ঞ",icon:"🦷"},
 {id:"other-doctor",name:"অন্যান্য বিশেষজ্ঞ",icon:"👨‍⚕️"}
+
 ];
+
 }
 
+
 /* COACHING SUBCATEGORIES */
+
 function getCoachingSubCategories(){
+
 return [
+
 {id:"university",name:"বিশ্ববিদ্যালয় কোচিং",icon:"🎓"},
 {id:"medical",name:"মেডিকেল কোচিং",icon:"🩺"},
 {id:"nursing",name:"নার্সিং কোচিং",icon:"👩‍⚕️"},
 {id:"class6-12",name:"৬ষ্ঠ-১২ কোচিং",icon:"📚"}
+
 ];
+
 }
+
 
 /* ISLAMIC SUBMISSION */
+
 function getIslamicPostOnly(){
-return [{id:"islamic-post",name:"ইসলামিক পোস্ট",icon:"📝"}];
+
+return [
+{
+id:"islamic-post",
+name:"ইসলামিক পোস্ট",
+icon:"📝"
 }
+];
+
+}
+
 
 /* SHOW SUBCATEGORIES */
+
 function showSubCategories(title,items){
+
 closeModal("categoryModal");
-document.getElementById("subCategoryModal").style.display="block";
-document.getElementById("subCategoryTitle").textContent=title+" নির্বাচন করুন";
-const box=document.getElementById("subCategoryList");
+
+document.getElementById(
+"subCategoryModal"
+).style.display="block";
+
+document.getElementById(
+"subCategoryTitle"
+).textContent=
+title+" নির্বাচন করুন";
+
+const box=
+document.getElementById(
+"subCategoryList"
+);
+
 box.innerHTML="";
+
 items.forEach(item=>{
-const card=document.createElement("div");
+
+const card=
+document.createElement("div");
+
 card.className="sub-card";
-card.innerHTML=`<span class="sub-icon">${escapeHtml(item.icon)}</span>${escapeHtml(item.name)}`;
-card.addEventListener("click",()=>{
+
+card.innerHTML=
+`<span class="sub-icon">
+${escapeHtml(item.icon)}
+</span>
+${escapeHtml(item.name)}`;
+
+card.addEventListener(
+"click",
+()=>{
+
 selectedSubCategory=item.id;
+
 selectedSubCategoryName=item.name;
+
 closeModal("subCategoryModal");
-const type=getSubmissionTypeByCategoryName(selectedCategoryName);
-if(type)openSubmissionForm(type);
+
+const type=
+getSubmissionTypeByCategoryName(
+selectedCategoryName
+);
+
+if(type)
+openSubmissionForm(type);
+
 });
+
 box.appendChild(card);
+
 });
+
 }
+
 
 /* OPEN FORM */
+
 function openSubmissionForm(type){
+
 selectedType=type;
-const title=submissionTypes[type]||"তথ্য যোগ করুন";
-document.getElementById("formTitle").textContent="➕ "+title+" তথ্য যোগ করুন";
-document.getElementById("formFields").innerHTML=buildForm(type);
-document.getElementById("formModal").style.display="block";
-const imageInput=document.getElementById("image");
-if(imageInput)imageInput.addEventListener("change",previewImage);
+
+const title=
+submissionTypes[type]||
+"তথ্য যোগ করুন";
+
+document.getElementById(
+"formTitle"
+).textContent=
+"➕ "+title+" তথ্য যোগ করুন";
+
+document.getElementById(
+"formFields"
+).innerHTML=
+buildForm(type);
+
+document.getElementById(
+"formModal"
+).style.display="block";
+
+const imageInput=
+document.getElementById("image");
+
+if(imageInput)
+imageInput.addEventListener(
+"change",
+previewImage
+);
+
 }
+
 
 /* FORM FIELD */
-function field(name,label,type="text",required=true,placeholder=""){
-const isRequired=name==="address"?false:required;
-return `<div class="form-group">
-<label>${label}${isRequired?'<span class="required">*</span>':""}</label>
-<input id="${name}" name="${name}" type="${type}" ${isRequired?"required":""} placeholder="${placeholder}">
-</div>`;
+
+function field(
+name,
+label,
+type="text",
+required=true,
+placeholder=""
+){
+
+const isRequired=
+name==="address"?false:required;
+
+return `
+<div class="form-group">
+
+<label>
+${label}
+${isRequired?
+'<span class="required">*</span>':
+""}
+</label>
+
+<input
+id="${name}"
+name="${name}"
+type="${type}"
+${isRequired?"required":""}
+placeholder="${placeholder}"
+>
+
+</div>
+`;
+
 }
+
 
 /* TEXTAREA */
-function textareaField(name,label,required=false){
-return `<div class="form-group">
-<label>${label}${required?'<span class="required">*</span>':""}</label>
-<textarea id="${name}" name="${name}" ${required?"required":""}></textarea>
-</div>`;
+
+function textareaField(
+name,
+label,
+required=false
+){
+
+return `
+<div class="form-group">
+
+<label>
+${label}
+${required?
+'<span class="required">*</span>':
+""}
+</label>
+
+<textarea
+id="${name}"
+name="${name}"
+${required?"required":""}
+></textarea>
+
+</div>
+`;
+
 }
+
 
 /* IMAGE FIELD */
+
 function imageField(required=false){
-return `<div class="form-group">
-<label>ছবি${required?'<span class="required">*</span>':""}</label>
-<input id="image" name="image" type="file" accept="image/*" ${required?"required":""}>
-<img id="imagePreview" class="preview">
-</div>`;
+
+return `
+<div class="form-group">
+
+<label>
+ছবি
+${required?
+'<span class="required">*</span>':
+""}
+</label>
+
+<input
+id="image"
+name="image"
+type="file"
+accept="image/*"
+${required?"required":""}
+>
+
+<img
+id="imagePreview"
+class="preview"
+>
+
+</div>
+`;
+
 }
+
 
 /* BUILD FORM */
+
 function buildForm(type){
+
 let html="";
 
+
 /* EMERGENCY / POLICE / FIRE / ELECTRICITY */
-if(["emergency","police","fireService","electricity"].includes(type)){
-html+=field("name","নাম","text",true);
+
+if([
+"emergency",
+"police",
+"fireService",
+"electricity"
+].includes(type)){
+
+html+=field(
+"name",
+"নাম",
+"text",
+true
+);
+
 html+=imageField(false);
-html+=field("address","ঠিকানা","text",false);
-html+=field("mobile","মোবাইল নং","tel",true);
+
+html+=field(
+"address",
+"ঠিকানা",
+"text",
+false
+);
+
+html+=field(
+"mobile",
+"মোবাইল নং",
+"tel",
+true
+);
+
 return html;
+
 }
+
 
 /* BLOOD */
+
 if(type==="blood"){
+
 html+=field("name","নাম");
+
 html+=field("address","ঠিকানা");
-html+=field("mobile","মোবাইল নং","tel");
-html+=`<div class="form-group">
-<label>রক্তের গ্রুপ <span class="required">*</span></label>
-<select id="bloodGroup" name="bloodGroup" required>
-<option value="">রক্তের গ্রুপ নির্বাচন করুন</option>
-<option>A+</option><option>A-</option><option>B+</option><option>B-</option>
-<option>AB+</option><option>AB-</option><option>O+</option><option>O-</option>
-</select></div>`;
+
+html+=field(
+"mobile",
+"মোবাইল নং",
+"tel"
+);
+
+html+=`
+
+<div class="form-group">
+
+<label>
+রক্তের গ্রুপ
+<span class="required">*</span>
+</label>
+
+<select
+id="bloodGroup"
+name="bloodGroup"
+required
+>
+
+<option value="">
+রক্তের গ্রুপ নির্বাচন করুন
+</option>
+
+<option>A+</option>
+<option>A-</option>
+<option>B+</option>
+<option>B-</option>
+<option>AB+</option>
+<option>AB-</option>
+<option>O+</option>
+<option>O-</option>
+
+</select>
+
+</div>
+`;
+
 return html;
+
 }
+
 
 /* RESTAURANT */
+
 if(type==="restaurant"){
-html+=field("name","নাম");
+
+html+=field(
+"name",
+"নাম"
+);
+
 html+=imageField();
-html+=field("address","ঠিকানা");
-html+=field("mobile","মোবাইল নম্বর","tel");
-html+=textareaField("details","বিস্তারিত তথ্য",false);
+
+html+=field(
+"address",
+"ঠিকানা"
+);
+
+html+=field(
+"mobile",
+"মোবাইল নম্বর",
+"tel"
+);
+
+html+=textareaField(
+"details",
+"বিস্তারিত তথ্য",
+false
+);
+
 return html;
+
 }
+
 
 /* CLINIC */
+
 if(type==="clinic"){
-html+=field("name","ক্লিনিক ও ডায়াগনস্টিক সেন্টারের নাম");
+
+html+=field(
+"name",
+"ক্লিনিক ও ডায়াগনস্টিক সেন্টারের নাম"
+);
+
 html+=imageField();
-html+=field("address","ঠিকানা");
-html+=field("serialInfo","তথ্য সিরিয়ালের জন্য মোবাইল নম্বর","tel");
+
+html+=field(
+"address",
+"ঠিকানা"
+);
+
+html+=field(
+"serialInfo",
+"তথ্য সিরিয়ালের জন্য মোবাইল নম্বর",
+"tel"
+);
+
 return html;
+
 }
+
 
 /* HOSPITAL */
+
 if(type==="hospital"){
-html+=field("name","হাসপাতালের নাম");
+
+html+=field(
+"name",
+"হাসপাতালের নাম"
+);
+
 html+=imageField();
-html+=field("address","ঠিকানা");
-html+=field("mobile","মোবাইল নং","tel");
-html+=textareaField("details","বিস্তারিত তথ্য",false);
+
+html+=field(
+"address",
+"ঠিকানা"
+);
+
+html+=field(
+"mobile",
+"মোবাইল নং",
+"tel"
+);
+
+html+=textareaField(
+"details",
+"বিস্তারিত তথ্য",
+false
+);
+
 return html;
+
 }
+
 
 /* LAWYER */
+
 if(type==="lawyer"){
-html+=field("name","আইনজীবীর নাম");
+
+html+=field(
+"name",
+"আইনজীবীর নাম"
+);
+
 html+=imageField();
-html+=field("chamber","চেম্বারের নাম/স্থান","text",false);
-html+=field("address","ঠিকানা");
-html+=field("mobile","মোবাইল নং","tel");
+
+html+=field(
+"chamber",
+"চেম্বারের নাম/স্থান",
+"text",
+false
+);
+
+html+=field(
+"address",
+"ঠিকানা"
+);
+
+html+=field(
+"mobile",
+"মোবাইল নং",
+"tel"
+);
+
 return html;
+
 }
+
 
 /* COURIER */
+
 if(type==="courier"){
-html+=field("name","কুরিয়ার সার্ভিসের নাম");
+
+html+=field(
+"name",
+"কুরিয়ার সার্ভিসের নাম"
+);
+
 html+=imageField();
-html+=field("address","ঠিকানা");
-html+=field("mobile","মোবাইল নং","tel");
-html+=textareaField("details","বিস্তারিত তথ্য",false);
+
+html+=field(
+"address",
+"ঠিকানা"
+);
+
+html+=field(
+"mobile",
+"মোবাইল নং",
+"tel"
+);
+
+html+=textareaField(
+"details",
+"বিস্তারিত তথ্য",
+false
+);
+
 return html;
+
 }
+
 
 /* INSTITUTION */
+
 if(type==="institution"){
-html+=field("name","প্রতিষ্ঠানের নাম");
+
+html+=field(
+"name",
+"প্রতিষ্ঠানের নাম"
+);
+
 html+=imageField();
-html+=field("address","ঠিকানা");
-html+=field("mobile","মোবাইল নং","tel");
-html+=textareaField("details","বিস্তারিত তথ্য",false);
+
+html+=field(
+"address",
+"ঠিকানা"
+);
+
+html+=field(
+"mobile",
+"মোবাইল নং",
+"tel"
+);
+
+html+=textareaField(
+"details",
+"বিস্তারিত তথ্য",
+false
+);
+
 return html;
+
 }
+
 
 /* AMBULANCE */
+
 if(type==="ambulance"){
-html+=field("name","নাম","text",false);
-html+=field("address","ঠিকানা","text",false);
+
+html+=field(
+"name",
+"নাম",
+"text",
+false
+);
+
+html+=field(
+"address",
+"ঠিকানা",
+"text",
+false
+);
+
 html+=imageField(false);
-html+=field("mobile","মোবাইল নং","tel",false);
+
+html+=field(
+"mobile",
+"মোবাইল নং",
+"tel",
+false
+);
+
 return html;
+
 }
+
 
 /* PLACE */
+
 if(type==="place"){
-html+=field("name","নাম");
+
+html+=field(
+"name",
+"নাম"
+);
+
 html+=imageField();
-html+=field("address","ঠিকানা");
-html+=textareaField("details","বিস্তারিত",false);
+
+html+=field(
+"address",
+"ঠিকানা"
+);
+
+html+=textareaField(
+"details",
+"বিস্তারিত",
+false
+);
+
 return html;
+
 }
+
 
 /* PERSON */
+
 if(type==="person"){
-html+=field("name","নাম");
+
+html+=field(
+"name",
+"নাম"
+);
+
 html+=imageField();
-html+=textareaField("details","বিস্তারিত তথ্য",true);
+
+html+=textareaField(
+"details",
+"বিস্তারিত তথ্য",
+true
+);
+
 return html;
+
 }
+
 
 /* DOCTOR */
+
 if(type==="doctor"){
-html+=field("name","ডাক্তারের নাম");
+
+html+=field(
+"name",
+"ডাক্তারের নাম"
+);
+
 html+=imageField();
-html+=field("degree","ডিগ্রি","text",false);
-html+=field("specialty","বিশেষত্ব","text",false);
-html+=field("chamber","চেম্বারের নাম/স্থান","text",false);
-html+=field("address","ঠিকানা","text",false);
-html+=field("mobile","মোবাইল নং","tel");
-html+=textareaField("details","বিস্তারিত তথ্য",false);
+
+html+=field(
+"degree",
+"ডিগ্রি",
+"text",
+false
+);
+
+html+=field(
+"specialty",
+"বিশেষত্ব",
+"text",
+false
+);
+
+html+=field(
+"chamber",
+"চেম্বারের নাম/স্থান",
+"text",
+false
+);
+
+html+=field(
+"address",
+"ঠিকানা",
+"text",
+false
+);
+
+html+=field(
+"mobile",
+"মোবাইল নং",
+"tel"
+);
+
+html+=textareaField(
+"details",
+"বিস্তারিত তথ্য",
+false
+);
+
 return html;
+
 }
+
 
 /* COACHING */
+
 if(type==="coaching"){
-html+=field("name","কোচিং/প্রাইভেট সেন্টারের নাম");
+
+html+=field(
+"name",
+"কোচিং/প্রাইভেট সেন্টারের নাম"
+);
+
 html+=imageField();
-html+=field("address","ঠিকানা");
-html+=field("mobile","মোবাইল নং","tel");
-html+=textareaField("details","বিস্তারিত তথ্য",false);
+
+html+=field(
+"address",
+"ঠিকানা"
+);
+
+html+=field(
+"mobile",
+"মোবাইল নং",
+"tel"
+);
+
+html+=textareaField(
+"details",
+"বিস্তারিত তথ্য",
+false
+);
+
 return html;
+
 }
+
 
 /* ISLAMIC POST */
+
 if(type==="islamic"){
+
 html+=imageField(false);
-html+=textareaField("details","ছবি রিলেটেড পোস্ট",true);
+
+html+=textareaField(
+"details",
+"ছবি রিলেটেড পোস্ট",
+true
+);
+
 return html;
+
 }
 
-return `<div class="info-box">এই তথ্যের জন্য ফর্ম পাওয়া যায়নি।</div>`;
+
+return `
+<div class="info-box">
+এই তথ্যের জন্য ফর্ম পাওয়া যায়নি।
+</div>
+`;
+
 }
+
 
 /* IMAGE PREVIEW */
+
 function previewImage(event){
-const file=event.target.files[0];
-const preview=document.getElementById("imagePreview");
+
+const file=
+event.target.files[0];
+
+const preview=
+document.getElementById(
+"imagePreview"
+);
+
 if(!preview)return;
+
 if(!file){
+
 preview.style.display="none";
+
 return;
+
 }
+
 if(!file.type.startsWith("image/")){
-alert("অনুগ্রহ করে একটি ছবি নির্বাচন করুন।");
+
+alert(
+"অনুগ্রহ করে একটি ছবি নির্বাচন করুন।"
+);
+
 event.target.value="";
+
 preview.style.display="none";
+
 return;
+
 }
-const reader=new FileReader();
+
+const reader=
+new FileReader();
+
 reader.onload=function(e){
+
 preview.src=e.target.result;
+
 preview.style.display="block";
+
 };
+
 reader.readAsDataURL(file);
+
 }
+
 
 /* UPLOAD IMAGE */
+
 async function uploadImage(file){
+
 if(!file)return "";
-const formData=new FormData();
-formData.append("file",file);
-formData.append("upload_preset",CLOUDINARY_UPLOAD_PRESET);
-const response=await fetch(CLOUDINARY_UPLOAD_URL,{method:"POST",body:formData});
-if(!response.ok)throw new Error("ছবি আপলোড করা যায়নি।");
-const data=await response.json();
-return data.secure_url||"";
+
+const formData=
+new FormData();
+
+formData.append(
+"file",
+file
+);
+
+formData.append(
+"upload_preset",
+CLOUDINARY_UPLOAD_PRESET
+);
+
+const response=
+await fetch(
+CLOUDINARY_UPLOAD_URL,
+{
+method:"POST",
+body:formData
 }
+);
+
+if(!response.ok)
+throw new Error(
+"ছবি আপলোড করা যায়নি।"
+);
+
+const data=
+await response.json();
+
+return data.secure_url||"";
+
+}
+
 
 /* FORM SUBMIT */
-document.getElementById("submissionForm").addEventListener("submit",async function(e){
+
+document.getElementById(
+"submissionForm"
+).addEventListener(
+"submit",
+async function(e){
+
 e.preventDefault();
-const button=document.getElementById("saveSubmissionBtn");
+
+const button=
+document.getElementById(
+"saveSubmissionBtn"
+);
+
 button.disabled=true;
-button.textContent="জমা হচ্ছে...";
+
+button.textContent=
+"জমা হচ্ছে...";
 
 try{
+
 const form=e.target;
+
 const data={};
-const elements=form.querySelectorAll("input, textarea, select");
+
+const elements=
+form.querySelectorAll(
+"input, textarea, select"
+);
+
 elements.forEach(element=>{
-if(element.name&&element.type!=="file"){
-data[element.name]=element.value.trim();
+
+if(
+element.name&&
+element.type!=="file"
+){
+
+data[element.name]=
+element.value.trim();
+
 }
+
 });
+
 
 /* REQUIRED FIELDS */
-if(["emergency","police","fireService","electricity"].includes(selectedType)){
+
+if([
+"emergency",
+"police",
+"fireService",
+"electricity"
+].includes(selectedType)){
+
 if(!data.name||!data.mobile){
-alert("নাম ও মোবাইল নম্বর পূরণ করুন।");
+
+alert(
+"নাম ও মোবাইল নম্বর পূরণ করুন।"
+);
+
 return;
-}
+
 }
 
-const imageInput=document.getElementById("image");
+}
+
+
+const imageInput=
+document.getElementById("image");
+
 let imageUrl="";
-if(imageInput&&imageInput.files&&imageInput.files[0]){
-imageUrl=await uploadImage(imageInput.files[0]);
-}
-if(imageUrl)data.imageUrl=imageUrl;
 
-await addDoc(collection(db,"submissions"),{
+if(
+imageInput&&
+imageInput.files&&
+imageInput.files[0]
+){
+
+imageUrl=
+await uploadImage(
+imageInput.files[0]
+);
+
+}
+
+if(imageUrl)
+data.imageUrl=imageUrl;
+
+
+await addDoc(
+collection(db,"submissions"),
+{
+
 type:selectedType,
+
 categoryId:selectedCategoryId,
+
 categoryName:selectedCategoryName,
-subCategory:selectedSubCategory||"",
-subCategoryName:selectedSubCategoryName||"",
+
+subCategory:
+selectedSubCategory||"",
+
+subCategoryName:
+selectedSubCategoryName||"",
+
 ...data,
+
 consent:true,
+
 status:"pending",
+
 createdAt:serverTimestamp()
+
+}
+);
+
+
+alert(
+"✅ আপনার তথ্য সফলভাবে জমা হয়েছে।"
+);
+
+form.reset();
+
+const preview=
+document.getElementById(
+"imagePreview"
+);
+
+if(preview){
+
+preview.style.display="none";
+
+preview.src="";
+
+}
+
+closeModal("formModal");
+
+selectedSubCategory="";
+
+selectedSubCategoryName="";
+
+
+}catch(error){
+
+console.error(
+"Submission Error:",
+error
+);
+
+alert(
+"❌ তথ্য জমা দিতে সমস্যা হয়েছে।\n\nদয়া করে আবার চেষ্টা করুন।"
+);
+
+}finally{
+
+button.disabled=false;
+
+button.textContent=
+"তথ্য জমা দিন";
+
+}
+
 });
 
-alert("✅ আপনার তথ্য সফলভাবে জমা হয়েছে।");
-form.reset();
-const preview=document.getElementById("imagePreview");
-if(preview){
-preview.style.display="none";
-preview.src="";
-}
-closeModal("formModal");
-selectedSubCategory="";
-selectedSubCategoryName="";
-}catch(error){
-console.error("Submission Error:",error);
-alert("❌ তথ্য জমা দিতে সমস্যা হয়েছে।\n\nদয়া করে আবার চেষ্টা করুন।");
-}finally{
-button.disabled=false;
-button.textContent="তথ্য জমা দিন";
-}
-});
 
 /* CLOSE MODAL */
+
 function closeModal(id){
-const modal=document.getElementById(id);
-if(modal)modal.style.display="none";
+
+const modal=
+document.getElementById(id);
+
+if(modal)
+modal.style.display="none";
+
 }
+
 
 /* BUTTON EVENTS */
-document.getElementById("addInfoBtn").addEventListener("click",function(){
+
+document.getElementById(
+"addInfoBtn"
+).addEventListener(
+"click",
+function(){
+
 openSubmissionCategoryModal();
+
 });
-document.getElementById("closeCategoryModal").addEventListener("click",function(){
+
+
+document.getElementById(
+"closeCategoryModal"
+).addEventListener(
+"click",
+function(){
+
 closeModal("categoryModal");
+
 });
-document.getElementById("closeSubCategoryModal").addEventListener("click",function(){
+
+
+document.getElementById(
+"closeSubCategoryModal"
+).addEventListener(
+"click",
+function(){
+
 closeModal("subCategoryModal");
+
 });
-document.getElementById("closeFormModal").addEventListener("click",function(){
+
+
+document.getElementById(
+"closeFormModal"
+).addEventListener(
+"click",
+function(){
+
 closeModal("formModal");
+
 });
-document.getElementById("closeMenuInfoModal").addEventListener("click",function(){
+
+
+document.getElementById(
+"closeMenuInfoModal"
+).addEventListener(
+"click",
+function(){
+
 closeModal("menuInfoModal");
+
 });
+
 
 /* OUTSIDE CLICK */
-window.addEventListener("click",function(e){
+
+window.addEventListener(
+"click",
+function(e){
+
 if(e.target.classList.contains("modal")){
+
 e.target.style.display="none";
+
 }
+
 });
 
+
 /* ESCAPE HTML */
+
 function escapeHtml(value){
+
 return String(value||"")
+
 .replace(/&/g,"&amp;")
+
 .replace(/</g,"&lt;")
+
 .replace(/>/g,"&gt;")
+
 .replace(/"/g,"&quot;")
+
 .replace(/'/g,"&#039;");
+
 }
 
+
 /* INITIAL LOAD */
+
 startAutoSlider();
+
 loadMainCategories();
+
 </script>
+
 </body>
 </html>
