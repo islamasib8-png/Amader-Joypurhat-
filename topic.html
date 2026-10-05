@@ -22,6 +22,7 @@ body{
 font-family:Arial,"Noto Sans Bengali",sans-serif;
 background:#f5f7fa;
 color:#222;
+transition:background .25s,color .25s;
 }
 
 header{
@@ -65,6 +66,11 @@ border-radius:16px;
 margin-bottom:14px;
 box-shadow:
 0 3px 12px rgba(0,0,0,0.08);
+transition:
+background .25s,
+color .25s,
+box-shadow .25s,
+border-color .25s;
 }
 
 .title .icon,
@@ -86,7 +92,7 @@ font-size:16px;
 
 .card{
 cursor:pointer;
-transition:0.2s;
+transition:.2s;
 }
 
 .card:active{
@@ -182,6 +188,11 @@ padding:17px 8px;
 text-align:center;
 box-shadow:0 2px 8px rgba(0,0,0,.07);
 cursor:pointer;
+transition:
+background .25s,
+color .25s,
+border-color .25s,
+box-shadow .25s;
 }
 
 .subcategory-card:active{
@@ -295,6 +306,10 @@ margin-bottom:12px;
 box-shadow:
 0 3px 12px rgba(0,0,0,0.08);
 border-left:5px solid #dc3545;
+transition:
+background .25s,
+color .25s,
+box-shadow .25s;
 }
 
 .blood-group{
@@ -385,6 +400,10 @@ text-align:center;
 background:#f1f5f9;
 border-top:1px solid #ddd;
 line-height:1.7;
+transition:
+background .25s,
+color .25s,
+border-color .25s;
 }
 
 footer a{
@@ -403,6 +422,178 @@ background:#25D366;
 
 .facebook{
 background:#1877F2;
+}
+
+
+/* ================================================= */
+/* ================= DARK MODE ===================== */
+/* ================================================= */
+
+body.dark-mode{
+background:#121212;
+color:#eeeeee;
+}
+
+body.dark-mode header{
+background:linear-gradient(
+135deg,
+#064e49,
+#087f76
+);
+}
+
+body.dark-mode .back{
+color:#80cbc4;
+}
+
+body.dark-mode .title,
+body.dark-mode .card,
+body.dark-mode .info-section,
+body.dark-mode .post-card,
+body.dark-mode .submission-card,
+body.dark-mode .empty-message,
+body.dark-mode .blood-card,
+body.dark-mode .subcategory-card{
+
+background:#1e1e1e;
+color:#eeeeee;
+border-color:#333;
+box-shadow:
+0 3px 12px rgba(0,0,0,.45);
+}
+
+body.dark-mode .title h2{
+color:#eeeeee;
+}
+
+body.dark-mode .title p{
+color:#cfcfcf;
+}
+
+body.dark-mode .card h3{
+color:#80cbc4;
+}
+
+body.dark-mode .card p{
+color:#bdbdbd;
+}
+
+body.dark-mode .info-heading{
+color:#80cbc4;
+}
+
+body.dark-mode .info-text{
+color:#dddddd;
+}
+
+body.dark-mode .info-text a{
+color:#80cbc4;
+}
+
+body.dark-mode .section-title{
+color:#eeeeee;
+}
+
+body.dark-mode .loading{
+color:#bdbdbd;
+}
+
+body.dark-mode .empty-message{
+color:#bdbdbd;
+}
+
+body.dark-mode .error{
+background:#1e1e1e;
+color:#ff8a8a;
+}
+
+body.dark-mode .subcategory-title{
+color:#eeeeee;
+}
+
+body.dark-mode .subcategory-card{
+background:#1e1e1e;
+border-color:#444;
+}
+
+body.dark-mode .subcategory-name{
+color:#80cbc4;
+}
+
+body.dark-mode .subcategory-card.active{
+background:#173b37;
+border-color:#0f766e;
+}
+
+body.dark-mode .submission-section-title{
+color:#eeeeee;
+}
+
+body.dark-mode .submission-title{
+color:#80cbc4;
+}
+
+body.dark-mode .submission-row{
+color:#dddddd;
+}
+
+body.dark-mode .submission-row a{
+color:#80cbc4;
+}
+
+body.dark-mode .submission-details{
+color:#dddddd;
+border-top-color:#444;
+}
+
+body.dark-mode .submission-details a{
+color:#80cbc4;
+}
+
+body.dark-mode .blood-section-title{
+color:#eeeeee;
+}
+
+body.dark-mode .blood-card{
+background:#1e1e1e;
+border-left-color:#dc3545;
+}
+
+body.dark-mode .blood-group{
+background:#421c20;
+color:#ff8a8a;
+}
+
+body.dark-mode .blood-name{
+color:#eeeeee;
+}
+
+body.dark-mode .blood-info,
+body.dark-mode .blood-mobile{
+color:#dddddd;
+}
+
+body.dark-mode .posts-section-title{
+color:#eeeeee;
+}
+
+body.dark-mode .post-caption{
+color:#dddddd;
+}
+
+body.dark-mode .post-time{
+color:#999;
+}
+
+body.dark-mode .submission-image,
+body.dark-mode .post-images img{
+background:#252525;
+}
+
+body.dark-mode footer{
+background:#181818;
+color:#dddddd;
+border-top-color:#333;
 }
 
 
@@ -501,7 +692,8 @@ style="font-size:14px;margin-top:4px;">
 <a
 class="whatsapp"
 href="https://wa.me/8801319058313"
-target="_blank">
+target="_blank"
+rel="noopener">
 
 💬 WhatsApp
 
@@ -510,7 +702,8 @@ target="_blank">
 <a
 class="facebook"
 href="https://www.facebook.com/Asibislam01"
-target="_blank">
+target="_blank"
+rel="noopener">
 
 📘 Facebook
 
@@ -570,6 +763,68 @@ const db =
 getFirestore(app);
 
 
+/* ================================================= */
+/* ================= DARK MODE ===================== */
+/* ================================================= */
+
+function applyDarkMode(){
+
+const savedMode =
+localStorage.getItem(
+"amaderJoypurhatDarkMode"
+);
+
+if(savedMode === "on"){
+
+document.body.classList.add(
+"dark-mode"
+);
+
+}else{
+
+document.body.classList.remove(
+"dark-mode"
+);
+
+}
+
+}
+
+
+/*
+Home page থেকে Dark Mode ON/OFF করলে
+এই page-এও একই setting থাকবে।
+*/
+
+applyDarkMode();
+
+
+/*
+একই browser/app-এর অন্য page থেকে
+setting পরিবর্তন হলে detect করবে।
+*/
+
+window.addEventListener(
+"storage",
+function(event){
+
+if(
+event.key ===
+"amaderJoypurhatDarkMode"
+){
+
+applyDarkMode();
+
+}
+
+}
+);
+
+
+/* ================================================= */
+/* ================= URL PARAM ===================== */
+/* ================================================= */
+
 const params =
 new URLSearchParams(
 window.location.search
@@ -584,6 +839,7 @@ params.get("id");
 /* ================================================= */
 
 let selectedSubCategory = "";
+
 let selectedSubCategoryName = "";
 
 
@@ -816,16 +1072,22 @@ ids:[
 /* ================================================= */
 
 let hasContent = false;
+
 let hasApprovedSubmission = false;
+
 let hasBloodDonor = false;
+
 let hasImagePost = false;
 
 
 function resetEmptyState(){
 
 hasContent = false;
+
 hasApprovedSubmission = false;
+
 hasBloodDonor = false;
+
 hasImagePost = false;
 
 document
@@ -883,6 +1145,7 @@ safeText.replace(
 function(url){
 
 let cleanUrl = url;
+
 let ending = "";
 
 while(
@@ -2049,6 +2312,7 @@ posts.sort(
 function(a,b){
 
 let dateA = 0;
+
 let dateB = 0;
 
 if(
