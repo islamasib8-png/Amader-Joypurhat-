@@ -6,7 +6,11 @@
 <title>আমাদের জয়পুরহাট</title>
 
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
+*{
+box-sizing:border-box;
+margin:0;
+padding:0
+}
 
 body{
 font-family:Arial,sans-serif;
@@ -23,8 +27,19 @@ text-align:center;
 position:relative
 }
 
-header h1{font-size:27px;margin-bottom:5px}
-header p{font-size:14px;opacity:.95}
+header h1{
+font-size:27px;
+margin-bottom:5px
+}
+
+header p{
+font-size:14px;
+opacity:.95
+}
+
+/* =========================
+   THREE DOT MENU
+========================= */
 
 .menu-wrap{
 position:absolute;
@@ -58,7 +73,9 @@ overflow:hidden;
 text-align:left
 }
 
-.menu-dropdown.show{display:block}
+.menu-dropdown.show{
+display:block
+}
 
 .menu-dropdown button{
 display:block;
@@ -77,12 +94,19 @@ cursor:pointer
 background:#e0f2f1
 }
 
-/* DARK MODE TOGGLE */
+/* =========================
+   DARK MODE TOGGLE
+========================= */
+
 .dark-toggle-row{
-display:flex !important;
+display:flex;
 align-items:center;
 justify-content:space-between;
-gap:10px;
+width:100%;
+padding:12px 14px;
+background:white;
+color:#263238;
+font-size:14px;
 cursor:pointer
 }
 
@@ -94,15 +118,18 @@ gap:7px
 
 .toggle-switch{
 position:relative;
+display:block;
 width:42px;
 height:23px;
-flex-shrink:0
+flex-shrink:0;
+cursor:pointer
 }
 
 .toggle-switch input{
 opacity:0;
 width:0;
-height:0
+height:0;
+position:absolute
 }
 
 .toggle-slider{
@@ -134,6 +161,10 @@ background:#00897b
 transform:translateX(19px)
 }
 
+/* =========================
+   SLIDER
+========================= */
+
 .hero{
 margin:12px;
 border-radius:14px;
@@ -150,7 +181,9 @@ scrollbar-width:none;
 scroll-behavior:smooth
 }
 
-.slider::-webkit-scrollbar{display:none}
+.slider::-webkit-scrollbar{
+display:none
+}
 
 .slider img{
 width:100%;
@@ -160,7 +193,13 @@ object-fit:cover;
 scroll-snap-align:start
 }
 
-.container{padding:12px}
+/* =========================
+   MAIN
+========================= */
+
+.container{
+padding:12px
+}
 
 .section-title{
 font-size:19px;
@@ -187,10 +226,13 @@ min-height:92px;
 display:flex;
 flex-direction:column;
 justify-content:center;
-align-items:center
+align-items:center;
+transition:background .25s,color .25s,border .25s
 }
 
-.card:active{transform:scale(.97)}
+.card:active{
+transform:scale(.97)
+}
 
 .card .icon{
 font-size:28px;
@@ -227,6 +269,10 @@ font-size:14px;
 border:1px solid #eee
 }
 
+/* =========================
+   FOOTER
+========================= */
+
 footer{
 margin-top:25px;
 background:#263238;
@@ -241,6 +287,10 @@ footer a{
 color:#80cbc4;
 text-decoration:none
 }
+
+/* =========================
+   MODAL
+========================= */
 
 .modal{
 display:none;
@@ -277,7 +327,9 @@ cursor:pointer;
 color:#555
 }
 
-.form-group{margin-bottom:13px}
+.form-group{
+margin-bottom:13px
+}
 
 .form-group label{
 display:block;
@@ -302,7 +354,9 @@ min-height:100px;
 resize:vertical
 }
 
-.required{color:red}
+.required{
+color:red
+}
 
 .submit-btn{
 width:100%;
@@ -365,7 +419,9 @@ color:#333;
 overflow-wrap:anywhere
 }
 
-.info-content a{color:#00796b}
+.info-content a{
+color:#00796b
+}
 
 .info-action{
 display:block;
@@ -416,6 +472,11 @@ body.dark-mode .menu-dropdown button:active{
 background:#263a38
 }
 
+body.dark-mode .dark-toggle-row{
+background:#1e1e1e;
+color:#eeeeee
+}
+
 body.dark-mode .info-box{
 background:#1e1e1e;
 color:#eeeeee;
@@ -458,20 +519,45 @@ color:#eeeeee;
 border-color:#444
 }
 
-body.dark-mode .hero{
-background:#222
+body.dark-mode .loading{
+color:#aaa
 }
 
+/* =========================
+   MOBILE
+========================= */
+
 @media(max-width:600px){
-.grid{grid-template-columns:repeat(4,1fr)}
-.card{min-height:88px;padding:10px 3px}
-.card .icon{font-size:25px}
-.card .name{font-size:11px}
+
+.grid{
+grid-template-columns:repeat(4,1fr)
+}
+
+.card{
+min-height:88px;
+padding:10px 3px
+}
+
+.card .icon{
+font-size:25px
+}
+
+.card .name{
+font-size:11px
+}
+
 }
 
 @media(max-width:360px){
-header h1{font-size:23px}
-header p{font-size:12px}
+
+header h1{
+font-size:23px
+}
+
+header p{
+font-size:12px
+}
+
 }
 </style>
 </head>
@@ -479,143 +565,322 @@ header p{font-size:12px}
 <body>
 
 <header>
+
 <h1>আমাদের জয়পুরহাট</h1>
-<p id="liveDateTime">তারিখ ও সময় লোড হচ্ছে...</p>
+
+<p id="liveDateTime">
+তারিখ ও সময় লোড হচ্ছে...
+</p>
+
+<!-- THREE DOT -->
 
 <div class="menu-wrap">
 
-<button class="menu-btn" id="menuBtn" type="button" aria-label="মেনু">⋮</button>
+<button
+class="menu-btn"
+id="menuBtn"
+type="button"
+aria-label="মেনু"
+>
+⋮
+</button>
 
-<div class="menu-dropdown" id="menuDropdown">
+<div
+class="menu-dropdown"
+id="menuDropdown"
+>
 
-<button type="button" data-menu="add">
+<!-- ১. নতুন তথ্য -->
+
+<button
+type="button"
+data-menu="add"
+>
 ➕ নতুন তথ্য এড করুন
 </button>
 
-<button type="button" data-menu="share">
-📤 অ্যাপ শেয়ার করুন
-</button>
 
-<!-- DARK MODE -->
-<button type="button" class="dark-toggle-row" data-menu="dark">
+<!-- ২. DARK MODE -->
+
+<div
+class="dark-toggle-row"
+id="darkModeRow"
+>
 
 <span class="dark-toggle-left">
 🌙 Dark Mode
 </span>
 
-<span class="toggle-switch">
-<input type="checkbox" id="darkModeToggle">
+<label
+class="toggle-switch"
+onclick="event.stopPropagation()"
+>
+
+<input
+type="checkbox"
+id="darkModeToggle"
+>
+
 <span class="toggle-slider"></span>
-</span>
 
-</button>
+</label>
 
-<!-- ABOUT - সবার নিচে -->
-<button type="button" data-menu="about">
+</div>
+
+
+<!-- ৩. অ্যাপ সম্পর্কে - সবার নিচে -->
+
+<button
+type="button"
+data-menu="about"
+>
 ℹ️ অ্যাপ সম্পর্কে
 </button>
 
 </div>
 </div>
+
 </header>
 
-<!-- IMAGE SLIDER -->
+
+<!-- =========================
+     IMAGE SLIDER
+========================= -->
+
 <div class="hero">
-<div class="slider" id="imageSlider">
 
-<img src="joypurhat.jpg" alt="জয়পুরহাট">
-<img src="picjoypurhat2.jpg" alt="জয়পুরহাট">
-<img src="picjoypurhat3.jpg" alt="জয়পুরহাট">
-<img src="picjoypurhat4.jpg" alt="জয়পুরহাট">
-<img src="picjoypurhat5.jpg" alt="জয়পুরহাট">
-<img src="picjoypurhat6.jpg" alt="জয়পুরহাট">
-<img src="picjoypurhat7.jpg" alt="জয়পুরহাট">
-<img src="picjoypurhat8.jpg" alt="জয়পুরহাট">
-<img src="picjoypurhat9.jpg" alt="জয়পুরহাট">
-<img src="picjoypurhat10.jpg" alt="জয়পুরহাট">
-<img src="picjoypurhat11.jpg" alt="জয়পুরহাট">
-<img src="picjoypurhat12.jpg" alt="জয়পুরহাট">
+<div
+class="slider"
+id="imageSlider"
+>
+
+<img
+src="joypurhat.jpg"
+alt="জয়পুরহাট"
+>
+
+<img
+src="picjoypurhat2.jpg"
+alt="জয়পুরহাট"
+>
+
+<img
+src="picjoypurhat3.jpg"
+alt="জয়পুরহাট"
+>
+
+<img
+src="picjoypurhat4.jpg"
+alt="জয়পুরহাট"
+>
+
+<img
+src="picjoypurhat5.jpg"
+alt="জয়পুরহাট"
+>
+
+<img
+src="picjoypurhat6.jpg"
+alt="জয়পুরহাট"
+>
+
+<img
+src="picjoypurhat7.jpg"
+alt="জয়পুরহাট"
+>
+
+<img
+src="picjoypurhat8.jpg"
+alt="জয়পুরহাট"
+>
+
+<img
+src="picjoypurhat9.jpg"
+alt="জয়পুরহাট"
+>
+
+<img
+src="picjoypurhat10.jpg"
+alt="জয়পুরহাট"
+>
+
+<img
+src="picjoypurhat11.jpg"
+alt="জয়পুরহাট"
+>
+
+<img
+src="picjoypurhat12.jpg"
+alt="জয়পুরহাট"
+>
 
 </div>
 </div>
+
+
+<!-- =========================
+     MAIN CATEGORY
+========================= -->
 
 <div class="container">
 
-<div class="section-title">📚 প্রয়োজনীয় তথ্য</div>
-
-<div id="categoryGrid" class="grid">
-<div class="loading">তথ্য লোড হচ্ছে...</div>
+<div class="section-title">
+📚 প্রয়োজনীয় তথ্য
 </div>
 
-<button class="add-info" id="addInfoBtn" type="button">
+<div
+id="categoryGrid"
+class="grid"
+>
+
+<div class="loading">
+তথ্য লোড হচ্ছে...
+</div>
+
+</div>
+
+
+<button
+class="add-info"
+id="addInfoBtn"
+type="button"
+>
 ➕ আপনার তথ্য যোগ করুন
 </button>
 
 </div>
 
+
+<!-- =========================
+     FOOTER
+========================= -->
+
 <footer>
+
 © 2026 আমাদের জয়পুরহাট<br>
+
 উপরোক্ত তথ্যে কোনো ভুল থাকলে অথবা তথ্য সংশোধন/সংযোজনের প্রয়োজন হলে যোগাযোগ করুন।<br>
+
 <b>Md. Asib Islam</b><br>
+
 Panchbibi, Joypurhat<br>
+
 📞 01319-058313<br>
 
-<a href="https://wa.me/8801319058313" target="_blank" rel="noopener">
+<a
+href="https://wa.me/8801319058313"
+target="_blank"
+rel="noopener"
+>
 WhatsApp
 </a>
 
 &nbsp; | &nbsp;
 
-<a href="https://www.facebook.com/Asibislam01" target="_blank" rel="noopener">
+<a
+href="https://www.facebook.com/Asibislam01"
+target="_blank"
+rel="noopener"
+>
 Facebook
 </a>
+
 </footer>
 
 
-<!-- CATEGORY MODAL -->
-<div id="categoryModal" class="modal">
+<!-- =========================
+     CATEGORY MODAL
+========================= -->
+
+<div
+id="categoryModal"
+class="modal"
+>
 
 <div class="modal-box">
 
-<span class="close" id="closeCategoryModal">×</span>
+<span
+class="close"
+id="closeCategoryModal"
+>
+×
+</span>
 
 <div class="modal-title">
 আপনি কোন তথ্য যোগ করতে চান?
 </div>
 
-<div id="submissionCategoryList" class="subcategory-grid">
-<div class="loading">লোড হচ্ছে...</div>
+<div
+id="submissionCategoryList"
+class="subcategory-grid"
+>
+
+<div class="loading">
+লোড হচ্ছে...
+</div>
+
 </div>
 
 </div>
 </div>
 
 
-<!-- SUB CATEGORY MODAL -->
-<div id="subCategoryModal" class="modal">
+<!-- =========================
+     SUB CATEGORY MODAL
+========================= -->
+
+<div
+id="subCategoryModal"
+class="modal"
+>
 
 <div class="modal-box">
 
-<span class="close" id="closeSubCategoryModal">×</span>
+<span
+class="close"
+id="closeSubCategoryModal"
+>
+×
+</span>
 
-<div id="subCategoryTitle" class="modal-title">
+<div
+id="subCategoryTitle"
+class="modal-title"
+>
 বিভাগ নির্বাচন করুন
 </div>
 
-<div id="subCategoryList" class="subcategory-grid"></div>
+<div
+id="subCategoryList"
+class="subcategory-grid"
+></div>
 
 </div>
 </div>
 
 
-<!-- FORM MODAL -->
-<div id="formModal" class="modal">
+<!-- =========================
+     FORM MODAL
+========================= -->
+
+<div
+id="formModal"
+class="modal"
+>
 
 <div class="modal-box">
 
-<span class="close" id="closeFormModal">×</span>
+<span
+class="close"
+id="closeFormModal"
+>
+×
+</span>
 
-<div id="formTitle" class="modal-title">
+<div
+id="formTitle"
+class="modal-title"
+>
 তথ্য যোগ করুন
 </div>
 
@@ -623,7 +888,11 @@ Facebook
 
 <div id="formFields"></div>
 
-<button type="submit" class="submit-btn" id="saveSubmissionBtn">
+<button
+type="submit"
+class="submit-btn"
+id="saveSubmissionBtn"
+>
 তথ্য জমা দিন
 </button>
 
@@ -633,16 +902,33 @@ Facebook
 </div>
 
 
-<!-- MENU INFO MODAL -->
-<div id="menuInfoModal" class="modal">
+<!-- =========================
+     ABOUT MODAL
+========================= -->
+
+<div
+id="menuInfoModal"
+class="modal"
+>
 
 <div class="modal-box">
 
-<span class="close" id="closeMenuInfoModal">×</span>
+<span
+class="close"
+id="closeMenuInfoModal"
+>
+×
+</span>
 
-<div id="menuInfoTitle" class="modal-title"></div>
+<div
+id="menuInfoTitle"
+class="modal-title"
+></div>
 
-<div id="menuInfoContent" class="info-content"></div>
+<div
+id="menuInfoContent"
+class="info-content"
+></div>
 
 </div>
 </div>
@@ -650,9 +936,15 @@ Facebook
 
 <script type="module">
 
+/* =========================
+   FIREBASE
+========================= */
+
 import {
 initializeApp
-} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+}
+from
+"https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
 
 import {
 getFirestore,
@@ -660,40 +952,71 @@ collection,
 getDocs,
 addDoc,
 serverTimestamp
-} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+}
+from
+"https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
-
-/* FIREBASE CONFIG */
 
 const firebaseConfig={
-apiKey:"YOUR_FIREBASE_API_KEY",
-authDomain:"amader-joypurhat-7b3fb.firebaseapp.com",
-projectId:"amader-joypurhat-7b3fb",
-storageBucket:"amader-joypurhat-7b3fb.firebasestorage.app",
-messagingSenderId:"YOUR_MESSAGING_SENDER_ID",
-appId:"YOUR_FIREBASE_APP_ID"
+
+apiKey:
+"AIzaSyAG05o2MjHH3UL8Gp7VNw"
+
+,
+
+authDomain:
+"amader-joypurhat-7b3fb.firebaseapp.com",
+
+projectId:
+"amader-joypurhat-7b3fb",
+
+storageBucket:
+"amader-joypurhat-7b3fb.firebasestorage.app",
+
+messagingSenderId:
+"542366008798",
+
+appId:
+"1:542366008798:web:4f9a7c210b561406a5494f"
+
 };
 
-const app=initializeApp(firebaseConfig);
-const db=getFirestore(app);
+
+const app=
+initializeApp(firebaseConfig);
+
+const db=
+getFirestore(app);
 
 
-/* CLOUDINARY */
+/* =========================
+   CLOUDINARY
+========================= */
 
-const CLOUDINARY_CLOUD_NAME="lkuowv7e";
-const CLOUDINARY_UPLOAD_PRESET="amader_joypurhat_images";
+const CLOUDINARY_CLOUD_NAME=
+"lkuowv7e";
+
+const CLOUDINARY_UPLOAD_PRESET=
+"amader_joypurhat_images";
 
 const CLOUDINARY_UPLOAD_URL=
 `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload`;
 
 
-/* VARIABLES */
+/* =========================
+   VARIABLES
+========================= */
 
 let categories=[];
+
 let selectedCategoryId="";
+
 let selectedCategoryName="";
+
 let selectedType="";
+
 let selectedSubCategory="";
+
 let selectedSubCategoryName="";
 
 
@@ -702,33 +1025,25 @@ let selectedSubCategoryName="";
 ========================= */
 
 const darkModeToggle=
-document.getElementById("darkModeToggle");
+document.getElementById(
+"darkModeToggle"
+);
 
-/* আগের Save করা Mode */
-
-const savedDarkMode=
-localStorage.getItem("amaderJoypurhatDarkMode");
-
-if(savedDarkMode==="on"){
-document.body.classList.add("dark-mode");
-
-if(darkModeToggle){
-darkModeToggle.checked=true;
-}
-}
+const darkModeRow=
+document.getElementById(
+"darkModeRow"
+);
 
 
-/* Dark Mode পরিবর্তন */
+/* APPLY DARK MODE */
 
-if(darkModeToggle){
+function applyDarkMode(isDark){
 
-darkModeToggle.addEventListener("change",function(e){
+if(isDark){
 
-e.stopPropagation();
-
-if(this.checked){
-
-document.body.classList.add("dark-mode");
+document.body.classList.add(
+"dark-mode"
+);
 
 localStorage.setItem(
 "amaderJoypurhatDarkMode",
@@ -737,7 +1052,9 @@ localStorage.setItem(
 
 }else{
 
-document.body.classList.remove("dark-mode");
+document.body.classList.remove(
+"dark-mode"
+);
 
 localStorage.setItem(
 "amaderJoypurhatDarkMode",
@@ -746,44 +1063,127 @@ localStorage.setItem(
 
 }
 
-});
+if(darkModeToggle){
+
+darkModeToggle.checked=
+isDark;
+
+}
 
 }
 
 
-/* BANGLADESH LIVE DATE AND TIME */
+/* LOAD SAVED MODE */
+
+const savedDarkMode=
+localStorage.getItem(
+"amaderJoypurhatDarkMode"
+);
+
+applyDarkMode(
+savedDarkMode==="on"
+);
+
+
+/* TOGGLE */
+
+if(darkModeToggle){
+
+darkModeToggle.addEventListener(
+"change",
+function(e){
+
+e.stopPropagation();
+
+applyDarkMode(
+this.checked
+);
+
+}
+);
+
+}
+
+
+/* ROW CLICK */
+
+if(darkModeRow){
+
+darkModeRow.addEventListener(
+"click",
+function(e){
+
+if(
+e.target.closest(
+".toggle-switch"
+)
+){
+
+return;
+
+}
+
+applyDarkMode(
+!darkModeToggle.checked
+);
+
+}
+);
+
+}
+
+
+/* =========================
+   LIVE DATE & TIME
+========================= */
 
 function updateLiveDateTime(){
 
-const el=document.getElementById("liveDateTime");
+const el=
+document.getElementById(
+"liveDateTime"
+);
 
 if(!el)return;
 
-const now=new Date();
+const now=
+new Date();
 
-const date=new Intl.DateTimeFormat("bn-BD",{
+const date=
+new Intl.DateTimeFormat(
+"bn-BD",
+{
 timeZone:"Asia/Dhaka",
 weekday:"long",
 day:"numeric",
 month:"long",
 year:"numeric"
-}).format(now);
+}
+).format(now);
 
-const time=new Intl.DateTimeFormat("bn-BD",{
+const time=
+new Intl.DateTimeFormat(
+"bn-BD",
+{
 timeZone:"Asia/Dhaka",
 hour:"2-digit",
 minute:"2-digit",
 second:"2-digit",
 hour12:true
-}).format(now);
+}
+).format(now);
 
-el.textContent=date+" | "+time;
+el.textContent=
+date+" | "+time;
 
 }
 
 updateLiveDateTime();
 
-setInterval(updateLiveDateTime,1000);
+setInterval(
+updateLiveDateTime,
+1000
+);
 
 
 /* =========================
@@ -791,54 +1191,79 @@ setInterval(updateLiveDateTime,1000);
 ========================= */
 
 const menuBtn=
-document.getElementById("menuBtn");
+document.getElementById(
+"menuBtn"
+);
 
 const menuDropdown=
-document.getElementById("menuDropdown");
+document.getElementById(
+"menuDropdown"
+);
 
 
 function closeMenu(){
-menuDropdown.classList.remove("show");
-}
 
-
-function showInfoModal(title,html){
-
-document.getElementById("menuInfoTitle").textContent=title;
-
-document.getElementById("menuInfoContent").innerHTML=html;
-
-document.getElementById("menuInfoModal").style.display="block";
+menuDropdown.classList.remove(
+"show"
+);
 
 }
 
 
-menuBtn.addEventListener("click",function(e){
+function showInfoModal(
+title,
+html
+){
+
+document.getElementById(
+"menuInfoTitle"
+).textContent=
+title;
+
+document.getElementById(
+"menuInfoContent"
+).innerHTML=
+html;
+
+document.getElementById(
+"menuInfoModal"
+).style.display=
+"block";
+
+}
+
+
+/* MENU BUTTON */
+
+menuBtn.addEventListener(
+"click",
+function(e){
 
 e.stopPropagation();
 
-menuDropdown.classList.toggle("show");
+menuDropdown.classList.toggle(
+"show"
+);
 
-});
+}
+);
 
 
-menuDropdown.addEventListener("click",function(e){
+/* MENU ACTIONS */
+
+menuDropdown.addEventListener(
+"click",
+function(e){
 
 const button=
-e.target.closest("button[data-menu]");
+e.target.closest(
+"button[data-menu]"
+);
 
 if(!button)return;
 
-const action=button.dataset.menu;
-
-
-/* Dark Mode button হলে আগে বন্ধ করব না */
-
-if(action==="dark"){
-
-return;
-
-}
+const action=
+button.dataset.menu;
 
 closeMenu();
 
@@ -852,66 +1277,21 @@ openSubmissionCategoryModal();
 }
 
 
-/* অ্যাপ শেয়ার */
-
-else if(action==="share"){
-
-const shareText=
-`আমাদের জয়পুরহাট অ্যাপ
-
-📥 অ্যাপ ডাউনলোড করুন:
-
-https://github.com/islamasib8-png/Amader-Joypurhat-APK/releases/download/v1.0.0/AmaderJoypurhat.apk`;
-
-
-/* Android / Browser System Share */
-
-if(navigator.share){
-
-navigator.share({
-
-title:"আমাদের জয়পুরহাট অ্যাপ",
-
-text:shareText
-
-}).catch(function(error){
-
-console.log("Share cancelled:",error);
-
-});
-
-}else{
-
-/* পুরোনো Browser-এর জন্য fallback */
-
-const shareUrl=
-"https://github.com/islamasib8-png/Amader-Joypurhat-APK/releases/download/v1.0.0/AmaderJoypurhat.apk";
-
-const encodedText=
-encodeURIComponent(shareText);
-
-const whatsappUrl=
-"https://wa.me/?text="+encodedText;
-
-window.open(whatsappUrl,"_blank");
-
-}
-
-}
-
-
 /* অ্যাপ সম্পর্কে */
 
 else if(action==="about"){
 
 showInfoModal(
 "অ্যাপ সম্পর্কে",
+
 `
-<p>আমাদের জয়পুরহাট একটি তথ্যভিত্তিক অ্যাপ।</p>
+<p>
+আমাদের জয়পুরহাট একটি তথ্যভিত্তিক অ্যাপ।
+</p>
 
 <p>
-এর মাধ্যমে জয়পুরহাট জেলার বিভিন্ন প্রয়োজনীয় তথ্য
-সহজে খুঁজে পাওয়া এবং নতুন তথ্য জমা দেওয়ার
+এর মাধ্যমে জয়পুরহাট জেলার বিভিন্ন প্রয়োজনীয়
+তথ্য সহজে খুঁজে পাওয়া এবং নতুন তথ্য জমা দেওয়ার
 সুযোগ রয়েছে।
 </p>
 
@@ -920,80 +1300,130 @@ showInfoModal(
 সহযোগিতা কাম্য।
 </p>
 `
+
 );
 
 }
 
-});
+}
+);
 
 
-document.addEventListener("click",function(e){
+/* OUTSIDE MENU CLICK */
 
-if(!e.target.closest(".menu-wrap")){
+document.addEventListener(
+"click",
+function(e){
+
+if(
+!e.target.closest(
+".menu-wrap"
+)
+){
 
 closeMenu();
 
 }
 
-});
+}
+);
 
 
-/* AUTO SLIDER */
+/* =========================
+   AUTO SLIDER
+========================= */
 
 const slider=
-document.getElementById("imageSlider");
+document.getElementById(
+"imageSlider"
+);
 
 const sliderImages=
-slider?slider.querySelectorAll("img"):[];
+slider?
+slider.querySelectorAll("img"):
+[];
 
 let sliderIndex=0;
+
 let sliderTimer=null;
 
 
 function startAutoSlider(){
 
-if(!slider||!sliderImages.length)return;
+if(
+!slider||
+!sliderImages.length
+)return;
 
-if(sliderTimer)clearInterval(sliderTimer);
+if(sliderTimer)
+clearInterval(
+sliderTimer
+);
 
-sliderTimer=setInterval(function(){
+sliderTimer=
+setInterval(
+function(){
 
 sliderIndex++;
 
-if(sliderIndex>=sliderImages.length)
+if(
+sliderIndex>=
+sliderImages.length
+){
+
 sliderIndex=0;
 
+}
+
 slider.scrollTo({
-left:sliderIndex*slider.clientWidth,
+
+left:
+sliderIndex*
+slider.clientWidth,
+
 behavior:"smooth"
+
 });
 
-},3000);
+},
+3000
+);
 
 }
 
 
 if(slider){
 
-slider.addEventListener("scroll",function(){
+slider.addEventListener(
+"scroll",
+function(){
 
-const width=slider.clientWidth;
+const width=
+slider.clientWidth;
 
 if(width>0){
 
 sliderIndex=
-Math.round(slider.scrollLeft/width);
+Math.round(
+slider.scrollLeft/
+width
+);
 
 }
 
-});
+}
+);
 
 }
 
 
-/* NORMALIZE */
+/* =========================
+   NORMALIZE
+========================= */
 
-function normalizeCategoryName(name){
+function normalizeCategoryName(
+name
+){
 
 return String(name||"")
 .trim()
@@ -1002,200 +1432,334 @@ return String(name||"")
 }
 
 
-/* CATEGORY NOT AVAILABLE FOR PUBLIC SUBMISSION */
+/* =========================
+   DISABLED SUBMISSION
+========================= */
 
-const disabledSubmissionCategories=new Set([
+const disabledSubmissionCategories=
+new Set([
 
 "জয়পুরহাটের পরিচয়",
+
 "আজকের খবর",
+
 "আজকের নিউজ",
+
 "খবর",
+
 "আজকের সংবাদ",
+
 "ট্রেনের সময়সূচি",
+
 "বাসের সময়সূচি"
 
 ]);
 
 
-/* CATEGORY ORDER */
+/* =========================
+   CATEGORY ORDER
+========================= */
 
 const categoryOrder={
 
 "জয়পুরহাটের পরিচয়":1,
+
 "উপজেলা পরিচয়":2,
+
 "উপজেলার পরিচয়":2,
+
 "উপজেলা পরিষদ":2,
+
 "দর্শনীয় স্থান":3,
+
 "ইসলামিক কর্নার":4,
+
 "রক্তদাতা":5,
+
 "রক্তদান":5,
+
 "জরুরি সেবা":6,
+
 "অ্যাম্বুলেন্স":7,
+
 "হাসপাতাল":8,
+
 "ক্লিনিক ও ডায়াগনস্টিক":9,
+
 "ক্লিনিক ও ডায়াগনস্টিক সেন্টার":9,
+
 "ডাক্তার":10,
+
 "থানা পুলিশ":11,
+
 "ফায়ার সার্ভিস":12,
+
 "আইনজীবী":13,
+
 "কৃষি অফিস":14,
+
 "বিদ্যুৎ অফিস":15,
+
 "ট্রেনের সময়সূচি":16,
+
 "বাসের সময়সূচি":17,
+
 "কুরিয়ার সার্ভিস":18,
+
 "আজকের খবর":19,
+
 "আজকের নিউজ":19,
+
 "খবর":19,
+
 "আজকের সংবাদ":19,
+
 "কবি ও সাহিত্য":20,
+
 "রেস্টুরেন্ট":21
 
 };
 
 
-/* SUBMISSION TYPES */
+/* =========================
+   SUBMISSION TYPES
+========================= */
 
 const submissionTypes={
 
 blood:"রক্তদাতা",
+
 clinic:"ক্লিনিক ও ডায়াগনস্টিক সেন্টার",
+
 hospital:"হাসপাতাল",
+
 restaurant:"রেস্টুরেন্ট",
+
 lawyer:"আইনজীবী",
+
 courier:"কুরিয়ার সার্ভিস",
+
 institution:"বিভিন্ন প্রতিষ্ঠান",
+
 ambulance:"অ্যাম্বুলেন্স",
+
 place:"দর্শনীয় স্থান",
+
 person:"কৃতী ব্যক্তিত্ব",
+
 islamic:"ইসলামিক কর্নার",
+
 coaching:"কোচিং ও প্রাইভেট সেন্টার",
+
 doctor:"ডাক্তার",
+
 emergency:"জরুরি সেবা",
+
 police:"থানা পুলিশ",
+
 fireService:"ফায়ার সার্ভিস",
+
 electricity:"বিদ্যুৎ অফিস"
 
 };
 
 
-/* ALIASES */
+/* =========================
+   ALIASES
+========================= */
 
 const submissionCategoryAliases={
 
-blood:["রক্তদাতা","রক্তদান"],
+blood:[
+"রক্তদাতা",
+"রক্তদান"
+],
 
 clinic:[
 "ক্লিনিক ও ডায়াগনস্টিক",
 "ক্লিনিক ও ডায়াগনস্টিক সেন্টার"
 ],
 
-hospital:["হাসপাতাল"],
+hospital:[
+"হাসপাতাল"
+],
 
-restaurant:["রেস্টুরেন্ট"],
+restaurant:[
+"রেস্টুরেন্ট"
+],
 
-lawyer:["আইনজীবী"],
+lawyer:[
+"আইনজীবী"
+],
 
-courier:["কুরিয়ার সার্ভিস"],
+courier:[
+"কুরিয়ার সার্ভিস"
+],
 
-institution:["বিভিন্ন প্রতিষ্ঠান"],
+institution:[
+"বিভিন্ন প্রতিষ্ঠান"
+],
 
-ambulance:["অ্যাম্বুলেন্স"],
+ambulance:[
+"অ্যাম্বুলেন্স"
+],
 
-place:["দর্শনীয় স্থান"],
+place:[
+"দর্শনীয় স্থান"
+],
 
-person:["কৃতী ব্যক্তিত্ব"],
+person:[
+"কৃতী ব্যক্তিত্ব"
+],
 
-islamic:["ইসলামিক কর্নার"],
+islamic:[
+"ইসলামিক কর্নার"
+],
 
 coaching:[
 "কোচিং ও প্রাইভেট সেন্টার",
 "কোচিং/প্রাইভেট সেন্টার"
 ],
 
-doctor:["ডাক্তার"],
+doctor:[
+"ডাক্তার"
+],
 
-emergency:["জরুরি সেবা"],
+emergency:[
+"জরুরি সেবা"
+],
 
-police:["থানা পুলিশ"],
+police:[
+"থানা পুলিশ"
+],
 
-fireService:["ফায়ার সার্ভিস"],
+fireService:[
+"ফায়ার সার্ভিস"
+],
 
-electricity:["বিদ্যুৎ অফিস"]
+electricity:[
+"বিদ্যুৎ অফিস"
+]
 
 };
 
 
-/* ICON */
+/* =========================
+   ICON
+========================= */
 
 function getCategoryIcon(name){
 
-const n=normalizeCategoryName(name);
+const n=
+normalizeCategoryName(name);
 
-if(n==="রক্তদাতা"||n==="রক্তদান")return "🩸";
+if(
+n==="রক্তদাতা"||
+n==="রক্তদান"
+)
+return "🩸";
 
-if(n.includes("ক্লিনিক")||n==="হাসপাতাল")return "🏥";
+if(
+n.includes("ক্লিনিক")||
+n==="হাসপাতাল"
+)
+return "🏥";
 
-if(n==="রেস্টুরেন্ট")return "🍽️";
+if(n==="রেস্টুরেন্ট")
+return "🍽️";
 
-if(n==="আইনজীবী")return "⚖️";
+if(n==="আইনজীবী")
+return "⚖️";
 
-if(n.includes("কুরিয়ার"))return "🚚";
+if(n.includes("কুরিয়ার"))
+return "🚚";
 
-if(n.includes("প্রতিষ্ঠান"))return "🏪";
+if(n.includes("প্রতিষ্ঠান"))
+return "🏪";
 
-if(n==="অ্যাম্বুলেন্স")return "🚑";
+if(n==="অ্যাম্বুলেন্স")
+return "🚑";
 
-if(n==="ফায়ার সার্ভিস")return "🚒";
+if(n==="ফায়ার সার্ভিস")
+return "🚒";
 
-if(n==="থানা পুলিশ")return "👮";
+if(n==="থানা পুলিশ")
+return "👮";
 
-if(n==="বিদ্যুৎ অফিস")return "⚡";
+if(n==="বিদ্যুৎ অফিস")
+return "⚡";
 
-if(n.includes("বাস"))return "🚌";
+if(n.includes("বাস"))
+return "🚌";
 
-if(n.includes("ট্রেন"))return "🚆";
+if(n.includes("ট্রেন"))
+return "🚆";
 
-if(n==="দর্শনীয় স্থান")return "🏞️";
+if(n==="দর্শনীয় স্থান")
+return "🏞️";
 
-if(n==="কৃতী ব্যক্তিত্ব")return "🌟";
+if(n==="কৃতী ব্যক্তিত্ব")
+return "🌟";
 
-if(n.includes("খবর"))return "📰";
+if(n.includes("খবর"))
+return "📰";
 
-if(n==="ইসলামিক কর্নার")return "☪️";
+if(n==="ইসলামিক কর্নার")
+return "☪️";
 
-if(n==="জরুরি সেবা")return "🆘";
+if(n==="জরুরি সেবা")
+return "🆘";
 
-if(n.includes("কোচিং"))return "📚";
+if(n.includes("কোচিং"))
+return "📚";
 
-if(n==="ডাক্তার")return "👨‍⚕️";
+if(n==="ডাক্তার")
+return "👨‍⚕️";
 
-if(n==="জয়পুরহাটের পরিচয়")return "🏛️";
+if(n==="জয়পুরহাটের পরিচয়")
+return "🏛️";
 
 if(
 n==="উপজেলার পরিচয়"||
 n==="উপজেলা পরিচয়"||
 n==="উপজেলা পরিষদ"
-)return "📍";
+)
+return "📍";
 
 return "📌";
 
 }
 
 
-/* GET TYPE */
+/* =========================
+   GET SUBMISSION TYPE
+========================= */
 
-function getSubmissionTypeByCategoryName(name){
+function getSubmissionTypeByCategoryName(
+name
+){
 
 const normalized=
 normalizeCategoryName(name);
 
-for(const type in submissionCategoryAliases){
+for(
+const type in
+submissionCategoryAliases
+){
 
 if(
-submissionCategoryAliases[type].some(
-item=>normalizeCategoryName(item)===normalized
+submissionCategoryAliases[type]
+.some(
+item=>
+normalizeCategoryName(item)
+===
+normalized
 )
-)return type;
+){
+
+return type;
+
+}
 
 }
 
@@ -1204,33 +1768,51 @@ return null;
 }
 
 
-/* LOAD MAIN TOPICS */
+/* =========================
+   LOAD MAIN TOPICS
+========================= */
 
 async function loadMainCategories(){
 
 try{
 
 const snap=
-await getDocs(collection(db,"categories"));
+await getDocs(
+collection(
+db,
+"categories"
+)
+);
 
 categories=[];
 
-snap.forEach(docSnap=>{
+snap.forEach(
+docSnap=>{
 
 categories.push({
+
 id:docSnap.id,
+
 ...docSnap.data()
-});
 
 });
 
-categories.sort((a,b)=>{
+}
+);
+
+
+categories.sort(
+(a,b)=>{
 
 const aName=
-normalizeCategoryName(a.name);
+normalizeCategoryName(
+a.name
+);
 
 const bName=
-normalizeCategoryName(b.name);
+normalizeCategoryName(
+b.name
+);
 
 const aOrder=
 categoryOrder[aName]??100;
@@ -1238,87 +1820,138 @@ categoryOrder[aName]??100;
 const bOrder=
 categoryOrder[bName]??100;
 
-if(aOrder!==bOrder)
+if(
+aOrder!==bOrder
+){
+
 return aOrder-bOrder;
 
-return aName.localeCompare(bName,"bn");
+}
 
-});
+return aName.localeCompare(
+bName,
+"bn"
+);
+
+}
+);
+
 
 renderMainCategories();
 
+
 }catch(error){
 
-console.error("Category Load Error:",error);
+console.error(
+"Category Load Error:",
+error
+);
 
-document.getElementById("categoryGrid").innerHTML=
-`<div class="info-box">
+document.getElementById(
+"categoryGrid"
+).innerHTML=
+
+`
+<div class="info-box">
 তথ্য লোড করা যাচ্ছে না।
-</div>`;
+</div>
+`;
 
 }
 
 }
 
 
-/* RENDER MAIN TOPICS */
+/* =========================
+   RENDER MAIN TOPICS
+========================= */
 
 function renderMainCategories(){
 
 const grid=
-document.getElementById("categoryGrid");
+document.getElementById(
+"categoryGrid"
+);
 
 grid.innerHTML="";
+
 
 if(!categories.length){
 
 grid.innerHTML=
-`<div class="info-box">
+
+`
+<div class="info-box">
 কোনো Topic পাওয়া যায়নি।
-</div>`;
+</div>
+`;
 
 return;
 
 }
 
-categories.forEach(category=>{
+
+categories.forEach(
+category=>{
 
 const card=
-document.createElement("div");
+document.createElement(
+"div"
+);
 
-card.className="card";
+card.className=
+"card";
 
 const icon=
 category.icon||
-getCategoryIcon(category.name);
+getCategoryIcon(
+category.name
+);
 
 card.innerHTML=
-`<div class="icon">
+
+`
+<div class="icon">
 ${escapeHtml(icon)}
 </div>
 
 <div class="name">
-${escapeHtml(category.name||"")}
-</div>`;
+${escapeHtml(
+category.name||""
+)}
+</div>
+`;
+
 
 card.addEventListener(
 "click",
-()=>openMainTopic(category)
+()=>openMainTopic(
+category
+)
 );
+
 
 grid.appendChild(card);
 
-});
+}
+);
 
 }
 
 
-/* OPEN MAIN TOPIC */
+/* =========================
+   OPEN MAIN TOPIC
+========================= */
 
-function openMainTopic(category){
+function openMainTopic(
+category
+){
 
 const name=
-normalizeCategoryName(category.name);
+normalizeCategoryName(
+category.name
+);
+
 
 if(name.includes("ট্রেন")){
 
@@ -1331,6 +1964,7 @@ return;
 
 }
 
+
 if(name.includes("বাস")){
 
 window.open(
@@ -1341,6 +1975,7 @@ window.open(
 return;
 
 }
+
 
 if(
 name.includes("আজকের খবর")||
@@ -1358,25 +1993,35 @@ return;
 
 }
 
+
 window.location.href=
 "topic.html?id="+
-encodeURIComponent(category.id);
+encodeURIComponent(
+category.id
+);
 
 }
 
 
-/* PUBLIC SUBMISSION CATEGORY MODAL */
+/* =========================
+   PUBLIC SUBMISSION MODAL
+========================= */
 
 async function openSubmissionCategoryModal(){
 
-document.getElementById("categoryModal").style.display="block";
+document.getElementById(
+"categoryModal"
+).style.display=
+"block";
 
 await loadSubmissionCategories();
 
 }
 
 
-/* LOAD SUBMISSION CATEGORIES */
+/* =========================
+   LOAD SUBMISSION CATEGORIES
+========================= */
 
 async function loadSubmissionCategories(){
 
@@ -1386,95 +2031,166 @@ document.getElementById(
 );
 
 box.innerHTML=
-`<div class="loading">
+`
+<div class="loading">
 তথ্য লোড হচ্ছে...
-</div>`;
+</div>
+`;
+
 
 try{
 
 const snap=
-await getDocs(collection(db,"categories"));
+await getDocs(
+collection(
+db,
+"categories"
+)
+);
 
 let submissionCategories=[];
 
-snap.forEach(docSnap=>{
 
-const data=docSnap.data();
+snap.forEach(
+docSnap=>{
+
+const data=
+docSnap.data();
 
 const name=
-normalizeCategoryName(data.name);
+normalizeCategoryName(
+data.name
+);
+
 
 if(
-disabledSubmissionCategories.has(name)
-)return;
-
-submissionCategories.push({
-id:docSnap.id,
-...data
-});
-
-});
-
-submissionCategories.sort((a,b)=>{
-
-const aName=
-normalizeCategoryName(a.name);
-
-const bName=
-normalizeCategoryName(b.name);
-
-if(
-aName==="রক্তদাতা"&&
-bName!=="রক্তদাতা"
-)return -1;
-
-if(
-bName==="রক্তদাতা"&&
-aName!=="রক্তদাতা"
-)return 1;
-
-return aName.localeCompare(bName,"bn");
-
-});
-
-box.innerHTML="";
-
-if(!submissionCategories.length){
-
-box.innerHTML=
-`<div class="info-box">
-এই মুহূর্তে কোনো তথ্য যোগ করার Topic নেই।
-</div>`;
+disabledSubmissionCategories
+.has(name)
+){
 
 return;
 
 }
 
-submissionCategories.forEach(category=>{
+
+submissionCategories.push({
+
+id:docSnap.id,
+
+...data
+
+});
+
+}
+);
+
+
+submissionCategories.sort(
+(a,b)=>{
+
+const aName=
+normalizeCategoryName(
+a.name
+);
+
+const bName=
+normalizeCategoryName(
+b.name
+);
+
+
+if(
+aName==="রক্তদাতা"&&
+bName!=="রক্তদাতা"
+){
+
+return -1;
+
+}
+
+
+if(
+bName==="রক্তদাতা"&&
+aName!=="রক্তদাতা"
+){
+
+return 1;
+
+}
+
+
+return aName.localeCompare(
+bName,
+"bn"
+);
+
+}
+);
+
+
+box.innerHTML="";
+
+
+if(
+!submissionCategories.length
+){
+
+box.innerHTML=
+
+`
+<div class="info-box">
+এই মুহূর্তে কোনো তথ্য যোগ করার Topic নেই।
+</div>
+`;
+
+return;
+
+}
+
+
+submissionCategories.forEach(
+category=>{
 
 const card=
-document.createElement("div");
+document.createElement(
+"div"
+);
 
-card.className="sub-card";
+card.className=
+"sub-card";
 
 const icon=
 category.icon||
-getCategoryIcon(category.name);
+getCategoryIcon(
+category.name
+);
 
 card.innerHTML=
-`<span class="sub-icon">
+
+`
+<span class="sub-icon">
 ${escapeHtml(icon)}
 </span>
-${escapeHtml(category.name||"")}`;
+
+${escapeHtml(
+category.name||""
+)}
+`;
+
 
 card.addEventListener(
 "click",
-()=>loadSubmissionOptions(category)
+()=>loadSubmissionOptions(
+category
+)
 );
+
 
 box.appendChild(card);
 
-});
+}
+);
+
 
 }catch(error){
 
@@ -1484,34 +2200,55 @@ error
 );
 
 box.innerHTML=
-`<div class="info-box">
+
+`
+<div class="info-box">
 তথ্য লোড করতে সমস্যা হয়েছে।
-</div>`;
+</div>
+`;
 
 }
 
 }
 
 
-/* SUBMISSION OPTION */
+/* =========================
+   SUBMISSION OPTION
+========================= */
 
-function loadSubmissionOptions(category){
+function loadSubmissionOptions(
+category
+){
 
 const categoryName=
-normalizeCategoryName(category.name);
+normalizeCategoryName(
+category.name
+);
 
-selectedCategoryId=category.id;
-selectedCategoryName=categoryName;
+selectedCategoryId=
+category.id;
+
+selectedCategoryName=
+categoryName;
 
 selectedSubCategory="";
+
 selectedSubCategoryName="";
 
+
 if(
-disabledSubmissionCategories.has(categoryName)
-)return;
+disabledSubmissionCategories
+.has(categoryName)
+){
+
+return;
+
+}
 
 
-if(categoryName==="ডাক্তার"){
+if(
+categoryName==="ডাক্তার"
+){
 
 showSubCategories(
 "ডাক্তার",
@@ -1524,8 +2261,10 @@ return;
 
 
 if(
-categoryName==="কোচিং ও প্রাইভেট সেন্টার"||
-categoryName==="কোচিং/প্রাইভেট সেন্টার"
+categoryName===
+"কোচিং ও প্রাইভেট সেন্টার"||
+categoryName===
+"কোচিং/প্রাইভেট সেন্টার"
 ){
 
 showSubCategories(
@@ -1538,7 +2277,9 @@ return;
 }
 
 
-if(categoryName==="ইসলামিক কর্নার"){
+if(
+categoryName==="ইসলামিক কর্নার"
+){
 
 showSubCategories(
 "ইসলামিক কর্নার",
@@ -1555,6 +2296,7 @@ getSubmissionTypeByCategoryName(
 categoryName
 );
 
+
 if(!type){
 
 alert(
@@ -1565,81 +2307,174 @@ return;
 
 }
 
-closeModal("categoryModal");
+
+closeModal(
+"categoryModal"
+);
 
 openSubmissionForm(type);
 
 }
 
 
-/* DOCTOR SUBCATEGORIES */
+/* =========================
+   DOCTOR SUBCATEGORIES
+========================= */
 
 function getDoctorSubCategories(){
 
 return [
 
-{id:"cardiology",name:"হৃদরোগ বিশেষজ্ঞ",icon:"❤️"},
-{id:"child",name:"শিশু বিশেষজ্ঞ",icon:"👶"},
-{id:"medicine",name:"মেডিসিন বিশেষজ্ঞ",icon:"💊"},
-{id:"surgery",name:"সার্জন",icon:"🔬"},
-{id:"gynecology",name:"স্ত্রীরোগ ও প্রসূতি বিশেষজ্ঞ",icon:"👩"},
-{id:"orthopedic",name:"অর্থোপেডিক বিশেষজ্ঞ",icon:"🦴"},
-{id:"ent",name:"নাক-কান-গলা বিশেষজ্ঞ",icon:"👂"},
-{id:"eye",name:"চক্ষু বিশেষজ্ঞ",icon:"👁️"},
-{id:"skin",name:"চর্মরোগ বিশেষজ্ঞ",icon:"🩺"},
-{id:"dental",name:"দন্ত বিশেষজ্ঞ",icon:"🦷"},
-{id:"other-doctor",name:"অন্যান্য বিশেষজ্ঞ",icon:"👨‍⚕️"}
+{
+id:"cardiology",
+name:"হৃদরোগ বিশেষজ্ঞ",
+icon:"❤️"
+},
+
+{
+id:"child",
+name:"শিশু বিশেষজ্ঞ",
+icon:"👶"
+},
+
+{
+id:"medicine",
+name:"মেডিসিন বিশেষজ্ঞ",
+icon:"💊"
+},
+
+{
+id:"surgery",
+name:"সার্জন",
+icon:"🔬"
+},
+
+{
+id:"gynecology",
+name:"স্ত্রীরোগ ও প্রসূতি বিশেষজ্ঞ",
+icon:"👩"
+},
+
+{
+id:"orthopedic",
+name:"অর্থোপেডিক বিশেষজ্ঞ",
+icon:"🦴"
+},
+
+{
+id:"ent",
+name:"নাক-কান-গলা বিশেষজ্ঞ",
+icon:"👂"
+},
+
+{
+id:"eye",
+name:"চক্ষু বিশেষজ্ঞ",
+icon:"👁️"
+},
+
+{
+id:"skin",
+name:"চর্মরোগ বিশেষজ্ঞ",
+icon:"🩺"
+},
+
+{
+id:"dental",
+name:"দন্ত বিশেষজ্ঞ",
+icon:"🦷"
+},
+
+{
+id:"other-doctor",
+name:"অন্যান্য বিশেষজ্ঞ",
+icon:"👨‍⚕️"
+}
 
 ];
 
 }
 
 
-/* COACHING SUBCATEGORIES */
+/* =========================
+   COACHING SUBCATEGORIES
+========================= */
 
 function getCoachingSubCategories(){
 
 return [
 
-{id:"university",name:"বিশ্ববিদ্যালয় কোচিং",icon:"🎓"},
-{id:"medical",name:"মেডিকেল কোচিং",icon:"🩺"},
-{id:"nursing",name:"নার্সিং কোচিং",icon:"👩‍⚕️"},
-{id:"class6-12",name:"৬ষ্ঠ-১২ কোচিং",icon:"📚"}
+{
+id:"university",
+name:"বিশ্ববিদ্যালয় কোচিং",
+icon:"🎓"
+},
+
+{
+id:"medical",
+name:"মেডিকেল কোচিং",
+icon:"🩺"
+},
+
+{
+id:"nursing",
+name:"নার্সিং কোচিং",
+icon:"👩‍⚕️"
+},
+
+{
+id:"class6-12",
+name:"৬ষ্ঠ-১২ কোচিং",
+icon:"📚"
+}
 
 ];
 
 }
 
 
-/* ISLAMIC SUBMISSION */
+/* =========================
+   ISLAMIC
+========================= */
 
 function getIslamicPostOnly(){
 
 return [
+
 {
 id:"islamic-post",
 name:"ইসলামিক পোস্ট",
 icon:"📝"
 }
+
 ];
 
 }
 
 
-/* SHOW SUBCATEGORIES */
+/* =========================
+   SHOW SUBCATEGORIES
+========================= */
 
-function showSubCategories(title,items){
+function showSubCategories(
+title,
+items
+){
 
-closeModal("categoryModal");
+closeModal(
+"categoryModal"
+);
 
 document.getElementById(
 "subCategoryModal"
-).style.display="block";
+).style.display=
+"block";
 
 document.getElementById(
 "subCategoryTitle"
 ).textContent=
 title+" নির্বাচন করুন";
+
 
 const box=
 document.getElementById(
@@ -1648,74 +2483,116 @@ document.getElementById(
 
 box.innerHTML="";
 
-items.forEach(item=>{
+
+items.forEach(
+item=>{
 
 const card=
-document.createElement("div");
+document.createElement(
+"div"
+);
 
-card.className="sub-card";
+card.className=
+"sub-card";
+
 
 card.innerHTML=
-`<span class="sub-icon">
+
+`
+<span class="sub-icon">
 ${escapeHtml(item.icon)}
 </span>
-${escapeHtml(item.name)}`;
+
+${escapeHtml(item.name)}
+`;
+
 
 card.addEventListener(
 "click",
 ()=>{
 
-selectedSubCategory=item.id;
+selectedSubCategory=
+item.id;
 
-selectedSubCategoryName=item.name;
+selectedSubCategoryName=
+item.name;
 
-closeModal("subCategoryModal");
+closeModal(
+"subCategoryModal"
+);
+
 
 const type=
 getSubmissionTypeByCategoryName(
 selectedCategoryName
 );
 
-if(type)
-openSubmissionForm(type);
 
-});
+if(type){
+
+openSubmissionForm(
+type
+);
+
+}
+
+}
+);
+
 
 box.appendChild(card);
 
-});
+}
+);
 
 }
 
 
-/* OPEN FORM */
+/* =========================
+   OPEN FORM
+========================= */
 
-function openSubmissionForm(type){
+function openSubmissionForm(
+type
+){
 
-selectedType=type;
+selectedType=
+type;
+
 
 const title=
 submissionTypes[type]||
 "তথ্য যোগ করুন";
 
+
 document.getElementById(
 "formTitle"
 ).textContent=
-"➕ "+title+" তথ্য যোগ করুন";
+"➕ "+
+title+
+" তথ্য যোগ করুন";
+
 
 document.getElementById(
 "formFields"
 ).innerHTML=
 buildForm(type);
 
+
 document.getElementById(
 "formModal"
-).style.display="block";
+).style.display=
+"block";
+
 
 const imageInput=
-document.getElementById("image");
+document.getElementById(
+"image"
+);
 
-if(imageInput)
+
+if(imageInput){
+
 imageInput.addEventListener(
 "change",
 previewImage
@@ -1723,8 +2600,12 @@ previewImage
 
 }
 
+}
 
-/* FORM FIELD */
+
+/* =========================
+   FORM FIELD
+========================= */
 
 function field(
 name,
@@ -1735,16 +2616,25 @@ placeholder=""
 ){
 
 const isRequired=
-name==="address"?false:required;
+name==="address"?
+false:
+required;
+
 
 return `
+
 <div class="form-group">
 
 <label>
+
 ${label}
-${isRequired?
+
+${
+isRequired?
 '<span class="required">*</span>':
-""}
+""
+}
+
 </label>
 
 <input
@@ -1756,12 +2646,15 @@ placeholder="${placeholder}"
 >
 
 </div>
+
 `;
 
 }
 
 
-/* TEXTAREA */
+/* =========================
+   TEXTAREA
+========================= */
 
 function textareaField(
 name,
@@ -1770,13 +2663,19 @@ required=false
 ){
 
 return `
+
 <div class="form-group">
 
 <label>
+
 ${label}
-${required?
+
+${
+required?
 '<span class="required">*</span>':
-""}
+""
+}
+
 </label>
 
 <textarea
@@ -1786,23 +2685,34 @@ ${required?"required":""}
 ></textarea>
 
 </div>
+
 `;
 
 }
 
 
-/* IMAGE FIELD */
+/* =========================
+   IMAGE FIELD
+========================= */
 
-function imageField(required=false){
+function imageField(
+required=false
+){
 
 return `
+
 <div class="form-group">
 
 <label>
+
 ছবি
-${required?
+
+${
+required?
 '<span class="required">*</span>':
-""}
+""
+}
+
 </label>
 
 <input
@@ -1819,12 +2729,15 @@ class="preview"
 >
 
 </div>
+
 `;
 
 }
 
 
-/* BUILD FORM */
+/* =========================
+   BUILD FORM
+========================= */
 
 function buildForm(type){
 
@@ -1872,9 +2785,15 @@ return html;
 
 if(type==="blood"){
 
-html+=field("name","নাম");
+html+=field(
+"name",
+"নাম"
+);
 
-html+=field("address","ঠিকানা");
+html+=field(
+"address",
+"ঠিকানা"
+);
 
 html+=field(
 "mobile",
@@ -1882,13 +2801,16 @@ html+=field(
 "tel"
 );
 
+
 html+=`
 
 <div class="form-group">
 
 <label>
+
 রক্তের গ্রুপ
 <span class="required">*</span>
+
 </label>
 
 <select
@@ -1913,6 +2835,7 @@ required
 </select>
 
 </div>
+
 `;
 
 return html;
@@ -2283,7 +3206,7 @@ return html;
 }
 
 
-/* ISLAMIC POST */
+/* ISLAMIC */
 
 if(type==="islamic"){
 
@@ -2301,15 +3224,21 @@ return html;
 
 
 return `
+
 <div class="info-box">
+
 এই তথ্যের জন্য ফর্ম পাওয়া যায়নি।
+
 </div>
+
 `;
 
 }
 
 
-/* IMAGE PREVIEW */
+/* =========================
+   IMAGE PREVIEW
+========================= */
 
 function previewImage(event){
 
@@ -2323,13 +3252,16 @@ document.getElementById(
 
 if(!preview)return;
 
+
 if(!file){
 
-preview.style.display="none";
+preview.style.display=
+"none";
 
 return;
 
 }
+
 
 if(!file.type.startsWith("image/")){
 
@@ -2339,31 +3271,42 @@ alert(
 
 event.target.value="";
 
-preview.style.display="none";
+preview.style.display=
+"none";
 
 return;
 
 }
 
+
 const reader=
 new FileReader();
 
-reader.onload=function(e){
 
-preview.src=e.target.result;
+reader.onload=
+function(e){
 
-preview.style.display="block";
+preview.src=
+e.target.result;
+
+preview.style.display=
+"block";
 
 };
+
 
 reader.readAsDataURL(file);
 
 }
 
 
-/* UPLOAD IMAGE */
+/* =========================
+   UPLOAD IMAGE
+========================= */
 
-async function uploadImage(file){
+async function uploadImage(
+file
+){
 
 if(!file)return "";
 
@@ -2380,6 +3323,7 @@ formData.append(
 CLOUDINARY_UPLOAD_PRESET
 );
 
+
 const response=
 await fetch(
 CLOUDINARY_UPLOAD_URL,
@@ -2389,20 +3333,28 @@ body:formData
 }
 );
 
-if(!response.ok)
+
+if(!response.ok){
+
 throw new Error(
 "ছবি আপলোড করা যায়নি।"
 );
 
+}
+
+
 const data=
 await response.json();
+
 
 return data.secure_url||"";
 
 }
 
 
-/* FORM SUBMIT */
+/* =========================
+   FORM SUBMIT
+========================= */
 
 document.getElementById(
 "submissionForm"
@@ -2412,15 +3364,18 @@ async function(e){
 
 e.preventDefault();
 
+
 const button=
 document.getElementById(
 "saveSubmissionBtn"
 );
 
+
 button.disabled=true;
 
 button.textContent=
 "জমা হচ্ছে...";
+
 
 try{
 
@@ -2428,12 +3383,15 @@ const form=e.target;
 
 const data={};
 
+
 const elements=
 form.querySelectorAll(
 "input, textarea, select"
 );
 
-elements.forEach(element=>{
+
+elements.forEach(
+element=>{
 
 if(
 element.name&&
@@ -2445,19 +3403,24 @@ element.value.trim();
 
 }
 
-});
+}
+);
 
 
-/* REQUIRED FIELDS */
+/* REQUIRED */
 
 if([
 "emergency",
 "police",
 "fireService",
 "electricity"
-].includes(selectedType)){
+].includes(selectedType)
+){
 
-if(!data.name||!data.mobile){
+if(
+!data.name||
+!data.mobile
+){
 
 alert(
 "নাম ও মোবাইল নম্বর পূরণ করুন।"
@@ -2470,10 +3433,15 @@ return;
 }
 
 
+/* IMAGE */
+
 const imageInput=
-document.getElementById("image");
+document.getElementById(
+"image"
+);
 
 let imageUrl="";
+
 
 if(
 imageInput&&
@@ -2488,19 +3456,31 @@ imageInput.files[0]
 
 }
 
-if(imageUrl)
-data.imageUrl=imageUrl;
 
+if(imageUrl){
+
+data.imageUrl=
+imageUrl;
+
+}
+
+
+/* SAVE */
 
 await addDoc(
-collection(db,"submissions"),
+collection(
+db,
+"submissions"
+),
 {
 
 type:selectedType,
 
-categoryId:selectedCategoryId,
+categoryId:
+selectedCategoryId,
 
-categoryName:selectedCategoryName,
+categoryName:
+selectedCategoryName,
 
 subCategory:
 selectedSubCategory||"",
@@ -2514,7 +3494,8 @@ consent:true,
 
 status:"pending",
 
-createdAt:serverTimestamp()
+createdAt:
+serverTimestamp()
 
 }
 );
@@ -2524,22 +3505,30 @@ alert(
 "✅ আপনার তথ্য সফলভাবে জমা হয়েছে।"
 );
 
+
 form.reset();
+
 
 const preview=
 document.getElementById(
 "imagePreview"
 );
 
+
 if(preview){
 
-preview.style.display="none";
+preview.style.display=
+"none";
 
 preview.src="";
 
 }
 
-closeModal("formModal");
+
+closeModal(
+"formModal"
+);
+
 
 selectedSubCategory="";
 
@@ -2566,23 +3555,32 @@ button.textContent=
 
 }
 
-});
+}
+);
 
 
-/* CLOSE MODAL */
+/* =========================
+   CLOSE MODAL
+========================= */
 
 function closeModal(id){
 
 const modal=
 document.getElementById(id);
 
-if(modal)
-modal.style.display="none";
+if(modal){
+
+modal.style.display=
+"none";
+
+}
 
 }
 
 
-/* BUTTON EVENTS */
+/* =========================
+   BUTTON EVENTS
+========================= */
 
 document.getElementById(
 "addInfoBtn"
@@ -2592,7 +3590,8 @@ function(){
 
 openSubmissionCategoryModal();
 
-});
+}
+);
 
 
 document.getElementById(
@@ -2601,9 +3600,12 @@ document.getElementById(
 "click",
 function(){
 
-closeModal("categoryModal");
+closeModal(
+"categoryModal"
+);
 
-});
+}
+);
 
 
 document.getElementById(
@@ -2612,9 +3614,12 @@ document.getElementById(
 "click",
 function(){
 
-closeModal("subCategoryModal");
+closeModal(
+"subCategoryModal"
+);
 
-});
+}
+);
 
 
 document.getElementById(
@@ -2623,9 +3628,12 @@ document.getElementById(
 "click",
 function(){
 
-closeModal("formModal");
+closeModal(
+"formModal"
+);
 
-});
+}
+);
 
 
 document.getElementById(
@@ -2634,46 +3642,78 @@ document.getElementById(
 "click",
 function(){
 
-closeModal("menuInfoModal");
+closeModal(
+"menuInfoModal"
+);
 
-});
+}
+);
 
 
-/* OUTSIDE CLICK */
+/* =========================
+   OUTSIDE MODAL CLICK
+========================= */
 
 window.addEventListener(
 "click",
 function(e){
 
-if(e.target.classList.contains("modal")){
+if(
+e.target.classList.contains(
+"modal"
+)
+){
 
-e.target.style.display="none";
+e.target.style.display=
+"none";
 
 }
 
-});
+}
+);
 
 
-/* ESCAPE HTML */
+/* =========================
+   ESCAPE HTML
+========================= */
 
-function escapeHtml(value){
+function escapeHtml(
+value
+){
 
 return String(value||"")
 
-.replace(/&/g,"&amp;")
+.replace(
+/&/g,
+"&amp;"
+)
 
-.replace(/</g,"&lt;")
+.replace(
+/</g,
+"&lt;"
+)
 
-.replace(/>/g,"&gt;")
+.replace(
+/>/g,
+"&gt;"
+)
 
-.replace(/"/g,"&quot;")
+.replace(
+/"/g,
+"&quot;"
+)
 
-.replace(/'/g,"&#039;");
+.replace(
+/'/g,
+"&#039;"
+);
 
 }
 
 
-/* INITIAL LOAD */
+/* =========================
+   INITIAL LOAD
+========================= */
 
 startAutoSlider();
 
