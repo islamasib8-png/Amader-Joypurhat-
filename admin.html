@@ -2780,7 +2780,7 @@ async function deleteContent(id){
   }catch(error){
 
     console.error(error);
-    
+
     alert(
       "❌ Content Delete করা যায়নি।"
     );
@@ -3559,6 +3559,10 @@ async function deletePost(id){
 
 /* ================= NOTIFICATION ================= */
 
+const NOTIFICATION_WORKER_URL =
+"https://amader-joypurhat-notification.islamasib8.workers.dev/";
+
+
 const notificationMessageInput =
 document.getElementById(
   "notificationMessage"
@@ -3627,6 +3631,42 @@ async function(){
     "📤 Sending...";
 
 
+    const response =
+    await fetch(
+      NOTIFICATION_WORKER_URL,
+      {
+        method:"POST",
+        headers:{
+          "Content-Type":"application/json"
+        },
+        body:JSON.stringify({
+          title:"আমাদের জয়পুরহাট",
+          body:message
+        })
+      }
+    );
+
+
+    let result = {};
+
+    try{
+      result = await response.json();
+    }catch(jsonError){
+      result = {};
+    }
+
+
+    if(!response.ok || result.success === false){
+
+      throw new Error(
+        result.message ||
+        result.error ||
+        "Notification Worker Error"
+      );
+
+    }
+
+
     await addDoc(
       collection(
         db,
@@ -3644,7 +3684,7 @@ async function(){
 
 
     notificationMessageBox.innerHTML =
-    "<div class='message'>✅ Notification সফলভাবে Save হয়েছে।</div>";
+    "<div class='message'>✅ Notification সফলভাবে পাঠানো হয়েছে।</div>";
 
 
     await loadNotifications();
@@ -5563,4 +5603,3 @@ function escapeAttribute(value){
 </body>
 
 </html>
-
