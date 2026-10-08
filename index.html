@@ -57,7 +57,8 @@ width:40px;
 height:40px;
 font-size:25px;
 line-height:30px;
-cursor:pointer
+cursor:pointer;
+position:relative
 }
 
 .menu-dropdown{
@@ -92,6 +93,93 @@ cursor:pointer
 .menu-dropdown button:active,
 .menu-dropdown button:hover{
 background:#e0f2f1
+}
+
+/* =========================
+   NOTIFICATION MENU
+========================= */
+
+.notification-menu-btn{
+position:relative;
+}
+
+.notification-badge{
+display:none;
+position:absolute;
+right:8px;
+top:7px;
+min-width:9px;
+height:9px;
+background:#f44336;
+border:2px solid white;
+border-radius:50%;
+box-shadow:0 1px 4px rgba(0,0,0,.3)
+}
+
+/* =========================
+   NOTIFICATION CENTER
+========================= */
+
+.notification-list{
+display:flex;
+flex-direction:column;
+gap:10px
+}
+
+.notification-item{
+background:#f7f9fa;
+border:1px solid #e1e5e7;
+border-radius:11px;
+padding:13px;
+box-shadow:0 2px 6px rgba(0,0,0,.06)
+}
+
+.notification-item.new{
+border-left:4px solid #00897b
+}
+
+.notification-message{
+font-size:15px;
+line-height:1.7;
+color:#263238;
+word-break:break-word
+}
+
+.notification-time{
+margin-top:7px;
+font-size:12px;
+color:#777
+}
+
+.notification-empty{
+text-align:center;
+padding:30px 10px;
+color:#777;
+font-size:14px
+}
+
+.notification-loading{
+text-align:center;
+padding:25px;
+color:#777
+}
+
+body.dark-mode .notification-item{
+background:#242424;
+border-color:#444
+}
+
+body.dark-mode .notification-message{
+color:#eeeeee
+}
+
+body.dark-mode .notification-time{
+color:#aaa
+}
+
+body.dark-mode .notification-empty,
+body.dark-mode .notification-loading{
+color:#aaa
 }
 
 /* =========================
@@ -583,6 +671,10 @@ type="button"
 aria-label="মেনু"
 >
 ⋮
+<span
+class="notification-badge"
+id="notificationBadge"
+></span>
 </button>
 
 <div
@@ -599,8 +691,17 @@ data-menu="add"
 ➕ নতুন তথ্য এড করুন
 </button>
 
+<!-- ২. NOTIFICATION -->
 
-<!-- ২. DARK MODE -->
+<button
+type="button"
+data-menu="notifications"
+class="notification-menu-btn"
+>
+🔔 নোটিফিকেশন
+</button>
+
+<!-- ৩. DARK MODE -->
 
 <div
 class="dark-toggle-row"
@@ -627,8 +728,7 @@ id="darkModeToggle"
 
 </div>
 
-
-<!-- ৩. অ্যাপ সম্পর্কে - সবার নিচে -->
+<!-- ৪. অ্যাপ সম্পর্কে -->
 
 <button
 type="button"
@@ -786,6 +886,43 @@ Facebook
 </a>
 
 </footer>
+
+
+<!-- =========================
+     NOTIFICATION MODAL
+========================= -->
+
+<div
+id="notificationModal"
+class="modal"
+>
+
+<div class="modal-box">
+
+<span
+class="close"
+id="closeNotificationModal"
+>
+×
+</span>
+
+<div class="modal-title">
+🔔 নোটিফিকেশন
+</div>
+
+<div
+id="notificationList"
+class="notification-list"
+>
+
+<div class="notification-loading">
+নোটিফিকেশন লোড হচ্ছে...
+</div>
+
+</div>
+
+</div>
+</div>
 
 
 <!-- =========================
@@ -951,7 +1088,10 @@ getFirestore,
 collection,
 getDocs,
 addDoc,
-serverTimestamp
+serverTimestamp,
+onSnapshot,
+query,
+orderBy
 }
 from
 "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
@@ -960,9 +1100,7 @@ from
 const firebaseConfig={
 
 apiKey:
-"AIzaSyAG05o2MjHH3UL8Gp7VNw"
-
-,
+"AIzaSyAG05o2MjHH3UL8Gp7VNw",
 
 authDomain:
 "amader-joypurhat-7b3fb.firebaseapp.com",
@@ -1018,6 +1156,18 @@ let selectedType="";
 let selectedSubCategory="";
 
 let selectedSubCategoryName="";
+
+
+/* =========================
+   NOTIFICATION VARIABLES
+========================= */
+
+let notificationItems=[];
+
+let notificationUnsubscribe=null;
+
+const NOTIFICATION_SEEN_KEY=
+"amaderJoypurhatNotificationLastSeen";
 
 
 /* =========================
@@ -1249,7 +1399,414 @@ menuDropdown.classList.toggle(
 );
 
 
-/* MENU ACTIONS */
+/* =========================
+   NOTIFICATION STORAGE
+========================= */
+
+function getLastSeenNotificationTime(){
+
+return Number(
+localStorage.getItem(
+NOTIFICATION_SEEN_KEY
+)||0
+);
+
+}
+
+
+function setLastSeenNotificationTime(
+time
+){
+
+localStorage.setItem(
+NOTIFICATION_SEEN_KEY,
+String(time)
+);
+
+}
+
+
+/* =========================
+   NOTIFICATION BADGE
+========================= */
+
+function updateNotificationBadge(){
+
+const badge=
+document.getElementById(
+"notificationBadge"
+);
+
+if(!badge)return;
+
+
+const lastSeen=
+getLastSeenNotificationTime();
+
+
+let hasNew=false;
+
+
+for(
+const item of notificationItems
+){
+
+const time=
+getNotificationTime(
+item.createdAt
+);
+
+if(
+time>lastSeen
+){
+
+hasNew=true;
+break;
+
+}
+
+}
+
+
+badge.style.display=
+hasNew?
+"block":
+"none";
+
+}
+
+
+/* =========================
+   NOTIFICATION DATE
+========================= */
+
+function getNotificationTime(
+timestamp
+){
+
+if(!timestamp)return 0;
+
+if(
+typeof timestamp.toMillis===
+"function"
+){
+
+return timestamp.toMillis();
+
+}
+
+if(
+timestamp.seconds
+){
+
+return timestamp.seconds*1000;
+
+}
+
+if(
+timestamp instanceof Date
+){
+
+return timestamp.getTime();
+
+}
+
+return 0;
+
+}
+
+
+function formatNotificationDate(
+timestamp
+){
+
+const time=
+getNotificationTime(
+timestamp
+);
+
+if(!time){
+
+return "সময় পাওয়া যাচ্ছে না";
+
+}
+
+
+return new Intl.DateTimeFormat(
+"bn-BD",
+{
+timeZone:"Asia/Dhaka",
+day:"numeric",
+month:"long",
+year:"numeric",
+hour:"numeric",
+minute:"2-digit",
+second:"2-digit",
+hour12:true
+}
+).format(
+new Date(time)
+);
+
+}
+
+
+/* =========================
+   RENDER NOTIFICATIONS
+========================= */
+
+function renderNotifications(){
+
+const list=
+document.getElementById(
+"notificationList"
+);
+
+if(!list)return;
+
+
+if(!notificationItems.length){
+
+list.innerHTML=
+
+`
+<div class="notification-empty">
+🔔 এখনো কোনো নোটিফিকেশন নেই।
+</div>
+`;
+
+return;
+
+}
+
+
+list.innerHTML="";
+
+
+notificationItems.forEach(
+(item,index)=>{
+
+const box=
+document.createElement(
+"div"
+);
+
+box.className=
+"notification-item";
+
+
+const lastSeen=
+getLastSeenNotificationTime();
+
+const itemTime=
+getNotificationTime(
+item.createdAt
+);
+
+
+if(itemTime>lastSeen){
+
+box.classList.add(
+"new"
+);
+
+}
+
+
+const message=
+document.createElement(
+"div"
+);
+
+message.className=
+"notification-message";
+
+message.textContent=
+item.message||"";
+
+
+const time=
+document.createElement(
+"div"
+);
+
+time.className=
+"notification-time";
+
+time.textContent=
+"🕐 "+
+formatNotificationDate(
+item.createdAt
+);
+
+
+box.appendChild(
+message
+);
+
+box.appendChild(
+time
+);
+
+list.appendChild(
+box
+);
+
+}
+);
+
+}
+
+
+/* =========================
+   LOAD NOTIFICATIONS
+========================= */
+
+function startNotificationListener(){
+
+if(notificationUnsubscribe){
+
+notificationUnsubscribe();
+
+notificationUnsubscribe=null;
+
+}
+
+
+const list=
+document.getElementById(
+"notificationList"
+);
+
+
+try{
+
+const notificationQuery=
+query(
+collection(
+db,
+"notifications"
+),
+orderBy(
+"createdAt",
+"desc"
+)
+);
+
+
+notificationUnsubscribe=
+onSnapshot(
+notificationQuery,
+snapshot=>{
+
+notificationItems=[];
+
+
+snapshot.forEach(
+docSnap=>{
+
+notificationItems.push({
+
+id:docSnap.id,
+
+...docSnap.data()
+
+});
+
+}
+);
+
+
+renderNotifications();
+
+updateNotificationBadge();
+
+},
+error=>{
+
+console.error(
+"Notification Listener Error:",
+error
+);
+
+
+if(list){
+
+list.innerHTML=
+
+`
+<div class="notification-empty">
+❌ নোটিফিকেশন লোড করা যাচ্ছে না।
+</div>
+`;
+
+}
+
+}
+);
+
+
+}catch(error){
+
+console.error(
+"Notification Query Error:",
+error
+);
+
+}
+
+}
+
+
+/* =========================
+   OPEN NOTIFICATION CENTER
+========================= */
+
+function openNotificationCenter(){
+
+closeMenu();
+
+
+document.getElementById(
+"notificationModal"
+).style.display=
+"block";
+
+
+/*
+  সর্বশেষ notification-এর সময়
+  LocalStorage-এ save করা হবে।
+*/
+
+if(notificationItems.length){
+
+const newestTime=
+getNotificationTime(
+notificationItems[0].createdAt
+);
+
+
+if(newestTime){
+
+setLastSeenNotificationTime(
+newestTime
+);
+
+}
+
+}
+
+
+renderNotifications();
+
+updateNotificationBadge();
+
+}
+
+
+/* =========================
+   MENU ACTIONS
+========================= */
 
 menuDropdown.addEventListener(
 "click",
@@ -1273,6 +1830,15 @@ closeMenu();
 if(action==="add"){
 
 openSubmissionCategoryModal();
+
+}
+
+
+/* নোটিফিকেশন */
+
+else if(action==="notifications"){
+
+openNotificationCenter();
 
 }
 
@@ -1324,6 +1890,24 @@ if(
 closeMenu();
 
 }
+
+}
+);
+
+
+/* =========================
+   NOTIFICATION CLOSE
+========================= */
+
+document.getElementById(
+"closeNotificationModal"
+).addEventListener(
+"click",
+function(){
+
+closeModal(
+"notificationModal"
+);
 
 }
 );
@@ -3669,8 +4253,7 @@ e.target.style.display=
 
 }
 
-}
-);
+});
 
 
 /* =========================
@@ -3718,6 +4301,10 @@ return String(value||"")
 startAutoSlider();
 
 loadMainCategories();
+
+/* NOTIFICATION LISTENER */
+
+startNotificationListener();
 
 </script>
 
