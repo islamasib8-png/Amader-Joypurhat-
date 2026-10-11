@@ -93,6 +93,17 @@ body.dark-mode .sub-card,body.dark-mode .notification-item{background:#242f29}
 body.dark-mode footer{background:#081e16}
 @media(min-width:650px){.top-header,.container{padding-left:max(20px,calc((100% - 850px)/2));padding-right:max(20px,calc((100% - 850px)/2))}.top-header{padding-top:25px;padding-bottom:32px}.hero{max-width:850px;margin:14px auto 20px}.slider img{height:270px}.grid{gap:13px}.card{min-height:115px}.card .name{font-size:13px}}
 @media(max-width:360px){.top-header h1{font-size:20px}.grid,.quick-services{gap:6px}.card{min-height:87px}.card .icon{width:37px;height:37px;font-size:22px}.card .name{font-size:10px}.quick-service{font-size:10px}}
+
+/* ক্যাটাগরি গ্রুপ */
+.category-section{margin:0 0 20px}
+.category-section .section-heading{margin:22px 1px 12px;padding-left:10px;border-left:4px solid var(--green2);min-height:28px}
+.category-section .grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:9px}
+.category-section .card{min-width:0;min-height:100px;padding:10px 3px;border-radius:15px}
+.category-section .card .name{font-size:11px;line-height:1.5;overflow-wrap:anywhere}
+.category-section[hidden]{display:none!important}
+body.dark-mode .category-section .section-heading{color:#9de8bb}
+@media(min-width:650px){.category-section .grid{gap:13px}.category-section .card{min-height:115px}.category-section .card .name{font-size:13px}}
+@media(max-width:360px){.category-section .grid{gap:6px}.category-section .card{min-height:87px}.category-section .card .icon{width:37px;height:37px;font-size:22px}.category-section .card .name{font-size:10px}}
 </style>
 </head>
 <body>
@@ -192,39 +203,345 @@ function updateNotificationBadge(){const last=Number(localStorage.getItem(NOTIFI
 function startNotificationListener(){if(notificationUnsubscribe)notificationUnsubscribe();notificationUnsubscribe=onSnapshot(query(collection(db,"notifications"),orderBy("createdAt","desc")),snap=>{notificationItems=snap.docs.map(d=>({id:d.id,...d.data()}));renderNotifications();updateNotificationBadge()},err=>{$("notificationList").innerHTML='<div class="notification-empty">নোটিফিকেশন লোড করা যাচ্ছে না।</div>';console.error(err)})}
 function openNotificationCenter(){closeMenu();$("notificationModal").style.display="block";if(notificationItems.length){const newest=getNotificationTime(notificationItems[0].createdAt);if(newest)localStorage.setItem(NOTIFICATION_SEEN_KEY,String(newest))}renderNotifications();updateNotificationBadge()}
 $("closeNotificationModal").onclick=()=>closeModal("notificationModal");
+
 const slider=$("imageSlider"),sliderImages=slider.querySelectorAll("img");let sliderIndex=0;
 setInterval(()=>{if(!sliderImages.length)return;sliderIndex=(sliderIndex+1)%sliderImages.length;slider.scrollTo({left:sliderIndex*slider.clientWidth,behavior:"smooth"})},3500);
 slider.addEventListener("scroll",()=>{if(slider.clientWidth)sliderIndex=Math.round(slider.scrollLeft/slider.clientWidth)});
+
 const disabledSubmissionCategories=new Set(["জয়পুরহাটের পরিচয়","আজকের খবর","আজকের নিউজ","খবর","আজকের সংবাদ","ট্রেনের সময়সূচি","বাসের সময়সূচি"]);
 const categoryOrder={"জয়পুরহাটের পরিচয়":1,"উপজেলা পরিচয়":2,"উপজেলার পরিচয়":2,"উপজেলা পরিষদ":2,"দর্শনীয় স্থান":3,"ইসলামিক কর্নার":4,"রক্তদাতা":5,"রক্তদান":5,"জরুরি সেবা":6,"অ্যাম্বুলেন্স":7,"হাসপাতাল":8,"ক্লিনিক ও ডায়াগনস্টিক":9,"ক্লিনিক ও ডায়াগনস্টিক সেন্টার":9,"ডাক্তার":10,"থানা পুলিশ":11,"ফায়ার সার্ভিস":12,"আইনজীবী":13,"কৃষি অফিস":14,"বিদ্যুৎ অফিস":15,"ট্রেনের সময়সূচি":16,"বাসের সময়সূচি":17,"কুরিয়ার সার্ভিস":18,"আজকের খবর":19,"আজকের নিউজ":19,"খবর":19,"আজকের সংবাদ":19,"কবি ও সাহিত্য":20,"রেস্টুরেন্ট":21};
 const submissionTypes={blood:"রক্তদাতা",clinic:"ক্লিনিক ও ডায়াগনস্টিক সেন্টার",hospital:"হাসপাতাল",restaurant:"রেস্টুরেন্ট",lawyer:"আইনজীবী",courier:"কুরিয়ার সার্ভিস",institution:"বিভিন্ন প্রতিষ্ঠান",ambulance:"অ্যাম্বুলেন্স",place:"দর্শনীয় স্থান",person:"কৃতী ব্যক্তিত্ব",islamic:"ইসলামিক কর্নার",coaching:"কোচিং ও প্রাইভেট সেন্টার",doctor:"ডাক্তার",emergency:"জরুরি সেবা",police:"থানা পুলিশ",fireService:"ফায়ার সার্ভিস",electricity:"বিদ্যুৎ অফিস"};
 const aliases={blood:["রক্তদাতা","রক্তদান"],clinic:["ক্লিনিক ও ডায়াগনস্টিক","ক্লিনিক ও ডায়াগনস্টিক সেন্টার"],hospital:["হাসপাতাল"],restaurant:["রেস্টুরেন্ট"],lawyer:["আইনজীবী"],courier:["কুরিয়ার সার্ভিস"],institution:["বিভিন্ন প্রতিষ্ঠান"],ambulance:["অ্যাম্বুলেন্স"],place:["দর্শনীয় স্থান"],person:["কৃতী ব্যক্তিত্ব"],islamic:["ইসলামিক কর্নার"],coaching:["কোচিং ও প্রাইভেট সেন্টার","কোচিং/প্রাইভেট সেন্টার"],doctor:["ডাক্তার"],emergency:["জরুরি সেবা"],police:["থানা পুলিশ"],fireService:["ফায়ার সার্ভিস"],electricity:["বিদ্যুৎ অফিস"]};
 function getSubmissionTypeByCategoryName(name){const n=normalizeCategoryName(name);for(const type in aliases)if(aliases[type].some(x=>normalizeCategoryName(x)===n))return type;return null}
 function getCategoryIcon(name){const n=normalizeCategoryName(name);if(n==="রক্তদাতা"||n==="রক্তদান")return "🩸";if(n.includes("ক্লিনিক")||n==="হাসপাতাল")return "🏥";if(n==="রেস্টুরেন্ট")return "🍽️";if(n==="আইনজীবী")return "⚖️";if(n.includes("কুরিয়ার"))return "🚚";if(n.includes("প্রতিষ্ঠান"))return "🏪";if(n==="অ্যাম্বুলেন্স")return "🚑";if(n==="ফায়ার সার্ভিস")return "🚒";if(n==="থানা পুলিশ")return "👮";if(n==="বিদ্যুৎ অফিস")return "⚡";if(n.includes("বাস"))return "🚌";if(n.includes("ট্রেন"))return "🚆";if(n==="দর্শনীয় স্থান")return "🏞️";if(n==="কৃতী ব্যক্তিত্ব")return "🌟";if(n.includes("খবর"))return "📰";if(n==="ইসলামিক কর্নার")return "☪️";if(n==="জরুরি সেবা")return "🆘";if(n.includes("কোচিং"))return "📚";if(n==="ডাক্তার")return "🩺";if(n==="জয়পুরহাটের পরিচয়")return "🏛️";if(n.includes("উপজেলা"))return "📍";return "📌"}
-async function loadMainCategories(){try{const snap=await getDocs(collection(db,"categories"));categories=snap.docs.map(d=>({id:d.id,...d.data()}));categories.sort((a,b)=>{const an=normalizeCategoryName(a.name),bn=normalizeCategoryName(b.name),ao=categoryOrder[an]??100,bo=categoryOrder[bn]??100;return ao-bo||an.localeCompare(bn,"bn")});renderMainCategories()}catch(e){console.error("Category Load Error:",e);$("categoryGrid").innerHTML='<div class="info-box">তথ্য লোড করা যাচ্ছে না। ইন্টারনেট সংযোগ পরীক্ষা করুন।</div>'}}
-function renderMainCategories(){const grid=$("categoryGrid");grid.innerHTML="";if(!categories.length){grid.innerHTML='<div class="info-box">কোনো Topic পাওয়া যায়নি।</div>';return}categories.forEach(category=>{const card=document.createElement("button");card.type="button";card.className="card";card.dataset.categoryName=category.name||"";card.innerHTML=`<span class="icon">${escapeHtml(category.icon||getCategoryIcon(category.name))}</span><span class="name">${escapeHtml(category.name||"")}</span>`;card.addEventListener("click",()=>openMainTopic(category));grid.append(card)});filterCategories();$("categoryCount").textContent=`${categories.length}টি ক্যাটাগরি`}
-function filterCategories(){const term=$("categorySearch").value.trim().toLocaleLowerCase();let shown=0;document.querySelectorAll("#categoryGrid .card").forEach(card=>{const match=card.dataset.categoryName.toLocaleLowerCase().includes(term);card.style.display=match?"":"none";if(match)shown++});$("categoryCount").textContent=term?`${shown}টি পাওয়া গেছে`:`${categories.length}টি ক্যাটাগরি`}
+
+async function loadMainCategories(){
+  try{
+    const snap=await getDocs(collection(db,"categories"));
+    categories=snap.docs.map(d=>({id:d.id,...d.data()}));
+    categories.sort((a,b)=>{
+      const an=normalizeCategoryName(a.name),bn=normalizeCategoryName(b.name);
+      const ao=categoryOrder[an]??100,bo=categoryOrder[bn]??100;
+      return ao-bo||an.localeCompare(bn,"bn");
+    });
+    renderMainCategories();
+  }catch(e){
+    console.error("Category Load Error:",e);
+    $("categoryGrid").innerHTML='<div class="info-box">তথ্য লোড করা যাচ্ছে না। ইন্টারনেট সংযোগ পরীক্ষা করুন।</div>';
+  }
+}
+
+const categorySections = [
+  {title:"🗺️ জয়পুরহাট পরিচিতি",names:["একনজরে জয়পুরহাট","জয়পুরহাটের পরিচয়","জয়পুরহাট পরিচিতি","উপজেলার পরিচয়","উপজেলা পরিচয়","উপজেলা পরিষদ","কৃতী ব্যক্তিত্ব","দর্শনীয় স্থান"]},
+  {title:"🏥 স্বাস্থ্য ও চিকিৎসা",names:["হাসপাতাল","ক্লিনিক ও ডায়াগনস্টিক","ক্লিনিক ও ডায়াগনস্টিক সেন্টার","ডাক্তার","রক্তদাতা","রক্তদান"]},
+  {title:"🚨 জরুরি সেবা",names:["অ্যাম্বুলেন্স","এম্বুলেন্স","থানা পুলিশ","ফায়ার সার্ভিস","বিদ্যুৎ অফিস","জরুরি সেবা"]},
+  {title:"🎓 শিক্ষা ও কোচিং",names:["কোচিং ও প্রাইভেট সেন্টার","কোচিং/প্রাইভেট সেন্টার"]},
+  {title:"🕌 ধর্মীয় তথ্য",names:["ইসলামিক কর্নার"]},
+  {title:"⚖️ আইন ও আইনি সহায়তা",names:["আইনজীবী"]},
+  {title:"🚆 যাতায়াত ও পরিবহন",names:["ট্রেনের সময়সূচি","বাসের সময়সূচি","কুরিয়ার সার্ভিস"]},
+  {title:"📰 সংবাদ ও আপডেট",names:["আজকের খবর","আজকের নিউজ","খবর","আজকের সংবাদ"]},
+  {title:"🍽️ খাবার ও রেস্টুরেন্ট",names:["রেস্টুরেন্ট"]}
+];
+
+function getCategorySectionIndex(category){
+  const name=normalizeCategoryName(category.name);
+  return categorySections.findIndex(section=>section.names.some(item=>normalizeCategoryName(item)===name));
+}
+
+function renderMainCategories(){
+  const grid=$("categoryGrid");
+  grid.innerHTML="";
+  if(!categories.length){
+    grid.innerHTML='<div class="info-box">কোনো Topic পাওয়া যায়নি।</div>';
+    $("categoryCount").textContent="০টি ক্যাটাগরি";
+    return;
+  }
+
+  const grouped=categorySections.map(()=>[]);
+  const others=[];
+  categories.forEach(category=>{
+    const index=getCategorySectionIndex(category);
+    if(index<0)others.push(category);
+    else grouped[index].push(category);
+  });
+
+  function createCategoryCard(category){
+    const card=document.createElement("button");
+    card.type="button";
+    card.className="card";
+    card.dataset.categoryName=category.name||"";
+    card.innerHTML=`<span class="icon">${escapeHtml(category.icon||getCategoryIcon(category.name))}</span><span class="name">${escapeHtml(category.name||"")}</span>`;
+    card.addEventListener("click",()=>openMainTopic(category));
+    return card;
+  }
+
+  function createSection(title,items){
+    if(!items.length)return;
+    const section=document.createElement("section");
+    section.className="category-section";
+    const heading=document.createElement("div");
+    heading.className="section-heading";
+    const label=document.createElement("span");
+    label.textContent=title;
+    const count=document.createElement("small");
+    count.textContent=`${items.length}টি`;
+    heading.append(label,count);
+    const cards=document.createElement("div");
+    cards.className="grid";
+    items.forEach(category=>cards.appendChild(createCategoryCard(category)));
+    section.append(heading,cards);
+    grid.appendChild(section);
+  }
+
+  categorySections.forEach((section,index)=>createSection(section.title,grouped[index]));
+  createSection("📌 অন্যান্য তথ্য",others);
+  filterCategories();
+}
+
+function filterCategories(){
+  const term=$("categorySearch").value.trim().toLocaleLowerCase();
+  let shown=0;
+  document.querySelectorAll("#categoryGrid .category-section").forEach(section=>{
+    let sectionShown=0;
+    section.querySelectorAll(".card").forEach(card=>{
+      const match=(card.dataset.categoryName||"").toLocaleLowerCase().includes(term);
+      card.style.display=match?"":"none";
+      if(match){sectionShown++;shown++}
+    });
+    section.hidden=sectionShown===0;
+  });
+  $("categoryCount").textContent=term?`${shown}টি পাওয়া গেছে`:`${categories.length}টি ক্যাটাগরি`;
+}
 $("categorySearch").addEventListener("input",filterCategories);
-function openMainTopic(category){const name=normalizeCategoryName(category.name);if(name.includes("ট্রেন")){window.open("https://eticket.railway.gov.bd/","_blank","noopener");return}if(name.includes("বাস")){window.open("https://www.shohoz.com/bus-tickets","_blank","noopener");return}if(["আজকের খবর","আজকের নিউজ","খবর","আজকের সংবাদ"].some(x=>name.includes(x))){window.open("https://joypurhatnews24.com/","_blank","noopener");return}window.location.href="topic.html?id="+encodeURIComponent(category.id)}
-document.querySelectorAll(".quick-service").forEach(btn=>btn.addEventListener("click",()=>{const target=btn.dataset.category;const cat=categories.find(c=>normalizeCategoryName(c.name)===normalizeCategoryName(target));if(cat)openMainTopic(cat);else alert("এই ক্যাটাগরিটি Firebase-এ পাওয়া যায়নি।")}));
-async function openSubmissionCategoryModal(){$("categoryModal").style.display="block";await loadSubmissionCategories()}
-async function loadSubmissionCategories(){const box=$("submissionCategoryList");box.innerHTML='<div class="loading">তথ্য লোড হচ্ছে...</div>';try{const snap=await getDocs(collection(db,"categories"));let items=snap.docs.map(d=>({id:d.id,...d.data()})).filter(c=>!disabledSubmissionCategories.has(normalizeCategoryName(c.name)));items.sort((a,b)=>{const an=normalizeCategoryName(a.name),bn=normalizeCategoryName(b.name);if(an==="রক্তদাতা")return -1;if(bn==="রক্তদাতা")return 1;return an.localeCompare(bn,"bn")});box.innerHTML="";if(!items.length){box.innerHTML='<div class="info-box">এই মুহূর্তে কোনো তথ্য যোগ করার Topic নেই।</div>';return}items.forEach(c=>{const b=document.createElement("button");b.className="sub-card";b.innerHTML=`<span class="sub-icon">${escapeHtml(c.icon||getCategoryIcon(c.name))}</span>${escapeHtml(c.name||"")}`;b.onclick=()=>loadSubmissionOptions(c);box.append(b)})}catch(e){console.error(e);box.innerHTML='<div class="info-box">তথ্য লোড করতে সমস্যা হয়েছে।</div>'}}
-function getDoctorSubCategories(){return [{id:"cardiology",name:"হৃদরোগ বিশেষজ্ঞ",icon:"❤️"},{id:"child",name:"শিশু বিশেষজ্ঞ",icon:"👶"},{id:"medicine",name:"মেডিসিন বিশেষজ্ঞ",icon:"💊"},{id:"surgery",name:"সার্জন",icon:"🔬"},{id:"gynecology",name:"স্ত্রীরোগ ও প্রসূতি বিশেষজ্ঞ",icon:"👩"},{id:"orthopedic",name:"অর্থোপেডিক বিশেষজ্ঞ",icon:"🦴"},{id:"ent",name:"নাক-কান-গলা বিশেষজ্ঞ",icon:"👂"},{id:"eye",name:"চক্ষু বিশেষজ্ঞ",icon:"👁️"},{id:"skin",name:"চর্মরোগ বিশেষজ্ঞ",icon:"🩺"},{id:"dental",name:"দন্ত বিশেষজ্ঞ",icon:"🦷"},{id:"other-doctor",name:"অন্যান্য বিশেষজ্ঞ",icon:"👨‍⚕️"}]}
-function getCoachingSubCategories(){return [{id:"university",name:"বিশ্ববিদ্যালয় কোচিং",icon:"🎓"},{id:"medical",name:"মেডিকেল কোচিং",icon:"🩺"},{id:"nursing",name:"নার্সিং কোচিং",icon:"👩‍⚕️"},{id:"class6-12",name:"৬ষ্ঠ-১২ কোচিং",icon:"📚"}]}
-function loadSubmissionOptions(category){const name=normalizeCategoryName(category.name);selectedCategoryId=category.id;selectedCategoryName=name;selectedSubCategory="";selectedSubCategoryName="";if(disabledSubmissionCategories.has(name))return;if(name==="ডাক্তার"){showSubCategories("ডাক্তার",getDoctorSubCategories());return}if(name==="কোচিং ও প্রাইভেট সেন্টার"||name==="কোচিং/প্রাইভেট সেন্টার"){showSubCategories("কোচিং ও প্রাইভেট সেন্টার",getCoachingSubCategories());return}if(name==="ইসলামিক কর্নার"){showSubCategories("ইসলামিক কর্নার",[{id:"islamic-post",name:"ইসলামিক পোস্ট",icon:"📝"}]);return}const type=getSubmissionTypeByCategoryName(name);if(!type){alert("এই Topic-এর জন্য তথ্য জমা দেওয়ার ফর্ম এখনো তৈরি করা হয়নি।");return}closeModal("categoryModal");openSubmissionForm(type)}
-function showSubCategories(title,items){closeModal("categoryModal");$("subCategoryModal").style.display="block";$("subCategoryTitle").textContent=title+" নির্বাচন করুন";const box=$("subCategoryList");box.innerHTML="";items.forEach(item=>{const b=document.createElement("button");b.className="sub-card";b.innerHTML=`<span class="sub-icon">${escapeHtml(item.icon)}</span>${escapeHtml(item.name)}`;b.onclick=()=>{selectedSubCategory=item.id;selectedSubCategoryName=item.name;closeModal("subCategoryModal");const type=getSubmissionTypeByCategoryName(selectedCategoryName);if(type)openSubmissionForm(type)};box.append(b)})}
-function field(name,label,type="text",required=true,placeholder=""){const req=name==="address"?false:required;return `<div class="form-group"><label>${label}${req?'<span class="required"> *</span>':""}</label><input id="${name}" name="${name}" type="${type}" ${req?"required":""} placeholder="${escapeHtml(placeholder)}"></div>`}
-function textareaField(name,label,required=false){return `<div class="form-group"><label>${label}${required?'<span class="required"> *</span>':""}</label><textarea id="${name}" name="${name}" ${required?"required":""}></textarea></div>`}
-function imageField(required=false){return `<div class="form-group"><label>ছবি${required?'<span class="required"> *</span>':""}</label><input id="image" name="image" type="file" accept="image/*" ${required?"required":""}><img id="imagePreview" class="preview" alt="ছবির প্রিভিউ"></div>`}
-function buildForm(type){let h="";if(["emergency","police","fireService","electricity"].includes(type))return field("name","নাম")+imageField(false)+field("address","ঠিকানা","text",false)+field("mobile","মোবাইল নং","tel",true);if(type==="blood")return field("name","নাম")+field("address","ঠিকানা")+field("mobile","মোবাইল নং","tel")+`<div class="form-group"><label>রক্তের গ্রুপ <span class="required">*</span></label><select id="bloodGroup" name="bloodGroup" required><option value="">রক্তের গ্রুপ নির্বাচন করুন</option>${["A+","A-","B+","B-","AB+","AB-","O+","O-"].map(x=>`<option>${x}</option>`).join("")}</select></div>`;if(type==="restaurant")return field("name","নাম")+imageField()+field("address","ঠিকানা")+field("mobile","মোবাইল নম্বর","tel")+textareaField("details","বিস্তারিত তথ্য");if(type==="clinic")return field("name","ক্লিনিক ও ডায়াগনস্টিক সেন্টারের নাম")+imageField()+field("address","ঠিকানা")+field("serialInfo","সিরিয়ালের জন্য মোবাইল নম্বর","tel");if(type==="hospital")return field("name","হাসপাতালের নাম")+imageField()+field("address","ঠিকানা")+field("mobile","মোবাইল নং","tel")+textareaField("details","বিস্তারিত তথ্য");if(type==="lawyer")return field("name","আইনজীবীর নাম")+imageField()+field("chamber","চেম্বারের নাম/স্থান","text",false)+field("address","ঠিকানা")+field("mobile","মোবাইল নং","tel");if(type==="courier"||type==="institution")return field("name",type==="courier"?"কুরিয়ার সার্ভিসের নাম":"প্রতিষ্ঠানের নাম")+imageField()+field("address","ঠিকানা")+field("mobile","মোবাইল নং","tel")+textareaField("details","বিস্তারিত তথ্য");if(type==="ambulance")return field("name","নাম","text",false)+field("address","ঠিকানা","text",false)+imageField(false)+field("mobile","মোবাইল নং","tel",false);if(type==="place")return field("name","নাম")+imageField()+field("address","ঠিকানা")+textareaField("details","বিস্তারিত");if(type==="person")return field("name","নাম")+imageField()+textareaField("details","বিস্তারিত তথ্য",true);if(type==="doctor")return field("name","ডাক্তারের নাম")+imageField()+field("degree","ডিগ্রি","text",false)+field("specialty","বিশেষত্ব","text",false)+field("chamber","চেম্বারের নাম/স্থান","text",false)+field("address","ঠিকানা","text",false)+field("mobile","মোবাইল নং","tel")+textareaField("details","বিস্তারিত তথ্য");if(type==="coaching")return field("name","কোচিং/প্রাইভেট সেন্টারের নাম")+imageField()+field("address","ঠিকানা")+field("mobile","মোবাইল নং","tel")+textareaField("details","বিস্তারিত তথ্য");if(type==="islamic")return imageField(false)+textareaField("details","ছবি রিলেটেড পোস্ট",true);return '<div class="info-box">এই তথ্যের জন্য ফর্ম পাওয়া যায়নি।</div>'}
-function openSubmissionForm(type){selectedType=type;$("formTitle").textContent="➕ "+(submissionTypes[type]||"তথ্য")+" তথ্য যোগ করুন";$("formFields").innerHTML=buildForm(type);$("formModal").style.display="block";const input=$("image");if(input)input.addEventListener("change",e=>{const file=e.target.files[0],preview=$("imagePreview");if(!file){preview.style.display="none";return}if(!file.type.startsWith("image/")){alert("অনুগ্রহ করে একটি ছবি নির্বাচন করুন।");input.value="";return}const reader=new FileReader();reader.onload=ev=>{preview.src=ev.target.result;preview.style.display="block"};reader.readAsDataURL(file)})}
-async function uploadImage(file){const fd=new FormData();fd.append("file",file);fd.append("upload_preset",CLOUDINARY_UPLOAD_PRESET);const response=await fetch(CLOUDINARY_UPLOAD_URL,{method:"POST",body:fd});if(!response.ok)throw new Error("ছবি আপলোড করা যায়নি।");const data=await response.json();return data.secure_url||""}
-$("submissionForm").addEventListener("submit",async e=>{e.preventDefault();const btn=$("saveSubmissionBtn");btn.disabled=true;btn.textContent="জমা হচ্ছে...";try{const data={};new FormData(e.target).forEach((v,k)=>{if(k!=="image"&&typeof v==="string")data[k]=v.trim()});if(["emergency","police","fireService","electricity"].includes(selectedType)&&(!data.name||!data.mobile)){alert("নাম ও মোবাইল নম্বর পূরণ করুন।");return}const file=$("image")?.files?.[0];if(file)data.imageUrl=await uploadImage(file);await addDoc(collection(db,"submissions"),{type:selectedType,categoryId:selectedCategoryId,categoryName:selectedCategoryName,subCategory:selectedSubCategory||"",subCategoryName:selectedSubCategoryName||"",...data,consent:true,status:"pending",createdAt:serverTimestamp()});alert("✅ আপনার তথ্য সফলভাবে জমা হয়েছে। Admin অনুমোদনের পর প্রকাশ করা হবে।");e.target.reset();if($("imagePreview"))$("imagePreview").style.display="none";closeModal("formModal");selectedSubCategory="";selectedSubCategoryName=""}catch(err){console.error("Submission Error:",err);alert("❌ তথ্য জমা দিতে সমস্যা হয়েছে। আবার চেষ্টা করুন।")}finally{btn.disabled=false;btn.textContent="তথ্য জমা দিন"}});
+
+function openMainTopic(category){
+  const name=normalizeCategoryName(category.name);
+  if(name.includes("ট্রেন")){window.open("https://eticket.railway.gov.bd/","_blank","noopener");return}
+  if(name.includes("বাস")){window.open("https://www.shohoz.com/bus-tickets","_blank","noopener");return}
+  if(["আজকের খবর","আজকের নিউজ","খবর","আজকের সংবাদ"].some(x=>name.includes(x))){window.open("https://joypurhatnews24.com/","_blank","noopener");return}
+  window.location.href="topic.html?id="+encodeURIComponent(category.id);
+}
+
+document.querySelectorAll(".quick-service").forEach(btn=>btn.addEventListener("click",()=>{
+  const target=btn.dataset.category;
+  const cat=categories.find(c=>normalizeCategoryName(c.name)===normalizeCategoryName(target));
+  if(cat)openMainTopic(cat);
+  else alert("এই ক্যাটাগরিটি Firebase-এ পাওয়া যায়নি।");
+}));
+
+async function openSubmissionCategoryModal(){
+  $("categoryModal").style.display="block";
+  await loadSubmissionCategories();
+}
+
+async function loadSubmissionCategories(){
+  const box=$("submissionCategoryList");
+  box.innerHTML='<div class="loading">তথ্য লোড হচ্ছে...</div>';
+  try{
+    const snap=await getDocs(collection(db,"categories"));
+    let items=snap.docs.map(d=>({id:d.id,...d.data()})).filter(c=>!disabledSubmissionCategories.has(normalizeCategoryName(c.name)));
+    items.sort((a,b)=>{
+      const an=normalizeCategoryName(a.name),bn=normalizeCategoryName(b.name);
+      if(an==="রক্তদাতা")return -1;
+      if(bn==="রক্তদাতা")return 1;
+      return an.localeCompare(bn,"bn");
+    });
+    box.innerHTML="";
+    if(!items.length){
+      box.innerHTML='<div class="info-box">এই মুহূর্তে কোনো তথ্য যোগ করার Topic নেই।</div>';
+      return;
+    }
+    items.forEach(c=>{
+      const b=document.createElement("button");
+      b.className="sub-card";
+      b.innerHTML=`<span class="sub-icon">${escapeHtml(c.icon||getCategoryIcon(c.name))}</span>${escapeHtml(c.name||"")}`;
+      b.onclick=()=>loadSubmissionOptions(c);
+      box.append(b);
+    });
+  }catch(e){
+    console.error(e);
+    box.innerHTML='<div class="info-box">তথ্য লোড করতে সমস্যা হয়েছে।</div>';
+  }
+}
+
+function getDoctorSubCategories(){
+  return [
+    {id:"cardiology",name:"হৃদরোগ বিশেষজ্ঞ",icon:"❤️"},
+    {id:"child",name:"শিশু বিশেষজ্ঞ",icon:"👶"},
+    {id:"medicine",name:"মেডিসিন বিশেষজ্ঞ",icon:"💊"},
+    {id:"surgery",name:"সার্জন",icon:"🔬"},
+    {id:"gynecology",name:"স্ত্রীরোগ ও প্রসূতি বিশেষজ্ঞ",icon:"👩"},
+    {id:"orthopedic",name:"অর্থোপেডিক বিশেষজ্ঞ",icon:"🦴"},
+    {id:"ent",name:"নাক-কান-গলা বিশেষজ্ঞ",icon:"👂"},
+    {id:"eye",name:"চক্ষু বিশেষজ্ঞ",icon:"👁️"},
+    {id:"skin",name:"চর্মরোগ বিশেষজ্ঞ",icon:"🩺"},
+    {id:"dental",name:"দন্ত বিশেষজ্ঞ",icon:"🦷"},
+    {id:"other-doctor",name:"অন্যান্য বিশেষজ্ঞ",icon:"👨‍⚕️"}
+  ];
+}
+
+function getCoachingSubCategories(){
+  return [
+    {id:"university",name:"বিশ্ববিদ্যালয় কোচিং",icon:"🎓"},
+    {id:"medical",name:"মেডিকেল কোচিং",icon:"🩺"},
+    {id:"nursing",name:"নার্সিং কোচিং",icon:"👩‍⚕️"},
+    {id:"class6-12",name:"৬ষ্ঠ-১২ কোচিং",icon:"📚"}
+  ];
+}
+
+function loadSubmissionOptions(category){
+  const name=normalizeCategoryName(category.name);
+  selectedCategoryId=category.id;
+  selectedCategoryName=name;
+  selectedSubCategory="";
+  selectedSubCategoryName="";
+  if(disabledSubmissionCategories.has(name))return;
+  if(name==="ডাক্তার"){showSubCategories("ডাক্তার",getDoctorSubCategories());return}
+  if(name==="কোচিং ও প্রাইভেট সেন্টার"||name==="কোচিং/প্রাইভেট সেন্টার"){showSubCategories("কোচিং ও প্রাইভেট সেন্টার",getCoachingSubCategories());return}
+  if(name==="ইসলামিক কর্নার"){showSubCategories("ইসলামিক কর্নার",[{id:"islamic-post",name:"ইসলামিক পোস্ট",icon:"📝"}]);return}
+  const type=getSubmissionTypeByCategoryName(name);
+  if(!type){alert("এই Topic-এর জন্য তথ্য জমা দেওয়ার ফর্ম এখনো তৈরি করা হয়নি।");return}
+  closeModal("categoryModal");
+  openSubmissionForm(type);
+}
+
+function showSubCategories(title,items){
+  closeModal("categoryModal");
+  $("subCategoryModal").style.display="block";
+  $("subCategoryTitle").textContent=title+" নির্বাচন করুন";
+  const box=$("subCategoryList");
+  box.innerHTML="";
+  items.forEach(item=>{
+    const b=document.createElement("button");
+    b.className="sub-card";
+    b.innerHTML=`<span class="sub-icon">${escapeHtml(item.icon)}</span>${escapeHtml(item.name)}`;
+    b.onclick=()=>{
+      selectedSubCategory=item.id;
+      selectedSubCategoryName=item.name;
+      closeModal("subCategoryModal");
+      const type=getSubmissionTypeByCategoryName(selectedCategoryName);
+      if(type)openSubmissionForm(type);
+    };
+    box.append(b);
+  });
+}
+
+function field(name,label,type="text",required=true,placeholder=""){
+  const req=name==="address"?false:required;
+  return `<div class="form-group"><label>${label}${req?'<span class="required"> *</span>':""}</label><input id="${name}" name="${name}" type="${type}" ${req?"required":""} placeholder="${escapeHtml(placeholder)}"></div>`;
+}
+function textareaField(name,label,required=false){
+  return `<div class="form-group"><label>${label}${required?'<span class="required"> *</span>':""}</label><textarea id="${name}" name="${name}" ${required?"required":""}></textarea></div>`;
+}
+function imageField(required=false){
+  return `<div class="form-group"><label>ছবি${required?'<span class="required"> *</span>':""}</label><input id="image" name="image" type="file" accept="image/*" ${required?"required":""}><img id="imagePreview" class="preview" alt="ছবির প্রিভিউ"></div>`;
+}
+
+function buildForm(type){
+  if(["emergency","police","fireService","electricity"].includes(type))return field("name","নাম")+imageField(false)+field("address","ঠিকানা","text",false)+field("mobile","মোবাইল নং","tel",true);
+  if(type==="blood")return field("name","নাম")+field("address","ঠিকানা")+field("mobile","মোবাইল নং","tel")+`<div class="form-group"><label>রক্তের গ্রুপ <span class="required">*</span></label><select id="bloodGroup" name="bloodGroup" required><option value="">রক্তের গ্রুপ নির্বাচন করুন</option>${["A+","A-","B+","B-","AB+","AB-","O+","O-"].map(x=>`<option>${x}</option>`).join("")}</select></div>`;
+  if(type==="restaurant")return field("name","নাম")+imageField()+field("address","ঠিকানা")+field("mobile","মোবাইল নম্বর","tel")+textareaField("details","বিস্তারিত তথ্য");
+  if(type==="clinic")return field("name","ক্লিনিক ও ডায়াগনস্টিক সেন্টারের নাম")+imageField()+field("address","ঠিকানা")+field("serialInfo","সিরিয়ালের জন্য মোবাইল নম্বর","tel");
+  if(type==="hospital")return field("name","হাসপাতালের নাম")+imageField()+field("address","ঠিকানা")+field("mobile","মোবাইল নং","tel")+textareaField("details","বিস্তারিত তথ্য");
+  if(type==="lawyer")return field("name","আইনজীবীর নাম")+imageField()+field("chamber","চেম্বারের নাম/স্থান","text",false)+field("address","ঠিকানা")+field("mobile","মোবাইল নং","tel");
+  if(type==="courier"||type==="institution")return field("name",type==="courier"?"কুরিয়ার সার্ভিসের নাম":"প্রতিষ্ঠানের নাম")+imageField()+field("address","ঠিকানা")+field("mobile","মোবাইল নং","tel")+textareaField("details","বিস্তারিত তথ্য");
+  if(type==="ambulance")return field("name","নাম","text",false)+field("address","ঠিকানা","text",false)+imageField(false)+field("mobile","মোবাইল নং","tel",false);
+  if(type==="place")return field("name","নাম")+imageField()+field("address","ঠিকানা")+textareaField("details","বিস্তারিত");
+  if(type==="person")return field("name","নাম")+imageField()+textareaField("details","বিস্তারিত তথ্য",true);
+  if(type==="doctor")return field("name","ডাক্তারের নাম")+imageField()+field("degree","ডিগ্রি","text",false)+field("specialty","বিশেষত্ব","text",false)+field("chamber","চেম্বারের নাম/স্থান","text",false)+field("address","ঠিকানা","text",false)+field("mobile","মোবাইল নং","tel")+textareaField("details","বিস্তারিত তথ্য");
+  if(type==="coaching")return field("name","কোচিং/প্রাইভেট সেন্টারের নাম")+imageField()+field("address","ঠিকানা")+field("mobile","মোবাইল নং","tel")+textareaField("details","বিস্তারিত তথ্য");
+  if(type==="islamic")return imageField(false)+textareaField("details","ছবি রিলেটেড পোস্ট",true);
+  return '<div class="info-box">এই তথ্যের জন্য ফর্ম পাওয়া যায়নি।</div>';
+}
+
+function openSubmissionForm(type){
+  selectedType=type;
+  $("formTitle").textContent="➕ "+(submissionTypes[type]||"তথ্য")+" তথ্য যোগ করুন";
+  $("formFields").innerHTML=buildForm(type);
+  $("formModal").style.display="block";
+  const input=$("image");
+  if(input)input.addEventListener("change",e=>{
+    const file=e.target.files[0],preview=$("imagePreview");
+    if(!file){preview.style.display="none";return}
+    if(!file.type.startsWith("image/")){alert("অনুগ্রহ করে একটি ছবি নির্বাচন করুন।");input.value="";return}
+    const reader=new FileReader();
+    reader.onload=ev=>{preview.src=ev.target.result;preview.style.display="block"};
+    reader.readAsDataURL(file);
+  });
+}
+
+async function uploadImage(file){
+  const fd=new FormData();
+  fd.append("file",file);
+  fd.append("upload_preset",CLOUDINARY_UPLOAD_PRESET);
+  const response=await fetch(CLOUDINARY_UPLOAD_URL,{method:"POST",body:fd});
+  if(!response.ok)throw new Error("ছবি আপলোড করা যায়নি।");
+  const data=await response.json();
+  return data.secure_url||"";
+}
+
+$("submissionForm").addEventListener("submit",async e=>{
+  e.preventDefault();
+  const btn=$("saveSubmissionBtn");
+  btn.disabled=true;
+  btn.textContent="জমা হচ্ছে...";
+  try{
+    const data={};
+    new FormData(e.target).forEach((v,k)=>{if(k!=="image"&&typeof v==="string")data[k]=v.trim()});
+    if(["emergency","police","fireService","electricity"].includes(selectedType)&&(!data.name||!data.mobile)){alert("নাম ও মোবাইল নম্বর পূরণ করুন।");return}
+    const file=$("image")?.files?.[0];
+    if(file)data.imageUrl=await uploadImage(file);
+    await addDoc(collection(db,"submissions"),{
+      type:selectedType,
+      categoryId:selectedCategoryId,
+      categoryName:selectedCategoryName,
+      subCategory:selectedSubCategory||"",
+      subCategoryName:selectedSubCategoryName||"",
+      ...data,
+      consent:true,
+      status:"pending",
+      createdAt:serverTimestamp()
+    });
+    alert("✅ আপনার তথ্য সফলভাবে জমা হয়েছে। Admin অনুমোদনের পর প্রকাশ করা হবে।");
+    e.target.reset();
+    if($("imagePreview"))$("imagePreview").style.display="none";
+    closeModal("formModal");
+    selectedSubCategory="";
+    selectedSubCategoryName="";
+  }catch(err){
+    console.error("Submission Error:",err);
+    alert("❌ তথ্য জমা দিতে সমস্যা হয়েছে। আবার চেষ্টা করুন।");
+  }finally{
+    btn.disabled=false;
+    btn.textContent="তথ্য জমা দিন";
+  }
+});
+
 $("addInfoBtn").onclick=openSubmissionCategoryModal;
-$("closeCategoryModal").onclick=()=>closeModal("categoryModal");$("closeSubCategoryModal").onclick=()=>closeModal("subCategoryModal");$("closeFormModal").onclick=()=>closeModal("formModal");$("closeMenuInfoModal").onclick=()=>closeModal("menuInfoModal");
-window.addEventListener("click",e=>{if(e.target.classList.contains("modal"))e.target.style.display="none"});
-document.querySelectorAll(".bottom-nav button").forEach(btn=>btn.addEventListener("click",()=>{document.querySelectorAll(".bottom-nav button").forEach(b=>b.classList.remove("active"));btn.classList.add("active");const nav=btn.dataset.nav;if(nav==="home")window.scrollTo({top:0,behavior:"smooth"});else if(nav==="categories"){document.querySelector(".section-heading").scrollIntoView({behavior:"smooth"});$("categorySearch").focus({preventScroll:true})}else if(nav==="notifications")openNotificationCenter();else if(nav==="favorites")showInfoModal("প্রিয় তালিকা","প্রিয় তালিকার জন্য আলাদা সংরক্ষণ ব্যবস্থা এখনো যুক্ত করা হয়নি।");else if(nav==="profile")showInfoModal("প্রোফাইল",'<p>আমাদের জয়পুরহাট</p><p>তথ্য জমা দিতে “আপনার তথ্য যোগ করুন” ব্যবহার করুন।</p>')}));
-startNotificationListener();loadMainCategories();
+$("closeCategoryModal").onclick=()=>closeModal("categoryModal");
+$("closeSubCategoryModal").onclick=()=>closeModal("subCategoryModal");
+$("closeFormModal").onclick=()=>closeModal("formModal");
+$("closeMenuInfoModal").onclick=()=>closeModal("menuInfoModal");
+
+window.addEventListener("click",e=>{
+  if(e.target.classList.contains("modal"))e.target.style.display="none";
+});
+
+document.querySelectorAll(".bottom-nav button").forEach(btn=>btn.addEventListener("click",()=>{
+  document.querySelectorAll(".bottom-nav button").forEach(b=>b.classList.remove("active"));
+  btn.classList.add("active");
+  const nav=btn.dataset.nav;
+  if(nav==="home")window.scrollTo({top:0,behavior:"smooth"});
+  else if(nav==="categories"){
+    document.querySelector(".section-heading").scrollIntoView({behavior:"smooth"});
+    $("categorySearch").focus({preventScroll:true});
+  }else if(nav==="notifications")openNotificationCenter();
+  else if(nav==="favorites")showInfoModal("প্রিয় তালিকা","প্রিয় তালিকার জন্য আলাদা সংরক্ষণ ব্যবস্থা এখনো যুক্ত করা হয়নি।");
+  else if(nav==="profile")showInfoModal("প্রোফাইল",'<p>আমাদের জয়পুরহাট</p><p>তথ্য জমা দিতে “আপনার তথ্য যোগ করুন” ব্যবহার করুন।</p>');
+}));
+
+startNotificationListener();
+loadMainCategories();
 </script>
 </body>
 </html>
