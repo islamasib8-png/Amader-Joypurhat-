@@ -49,11 +49,11 @@ color:#e6fff0
 position:absolute;
 right:58px;
 top:48px;
-font-size:12px;
+font-size:10px;
 font-weight:600;
 background:transparent;
 border:0;
-padding:4px 0;
+padding:2px 0;
 border-radius:0;
 white-space:nowrap;
 max-width:100px;
@@ -247,7 +247,6 @@ padding-right:max(20px,calc((100% - 850px)/2))
 .grid{gap:13px}
 .card{min-height:115px}
 .card .name{font-size:13px}
-.weather-pill{left:max(20px,calc((100% - 850px)/2))}
 }
 @media(max-width:360px){
 .top-header h1{font-size:20px}
@@ -267,7 +266,7 @@ padding-right:max(20px,calc((100% - 850px)/2))
   </div>
 
   <p id="liveDateTime">তারিখ ও সময় লোড হচ্ছে...</p>
-  <div class="weather-pill" id="weatherPill">🌤️ জয়পুরহাটের আবহাওয়া লোড হচ্ছে...</div>
+  <div class="weather-pill" id="weatherPill">🌤️ --°C</div>
 
   <div class="menu-wrap">
     <button class="menu-btn" id="menuBtn" type="button" aria-label="মেনু">
@@ -442,12 +441,12 @@ function normalizeCategoryName(name){
   return String(name||"").trim().replace(/\s+/g," ");
 }
 
+/* মোডাল বন্ধ */
 function closeModal(id){
   if($(id))$(id).style.display="none";
 }
 
-/* ডার্ক মোড: আগে সংরক্ষিত থাকলে সেই সেটিং থাকবে,
-   নতুন ইনস্টল/প্রথমবার হলে স্বাভাবিক মোড থাকবে। */
+/* ডার্ক মোড */
 function applyDarkMode(on){
   document.body.classList.toggle("dark-mode",on);
   $("darkModeToggle").checked=on;
@@ -466,7 +465,7 @@ $("darkModeRow").addEventListener("click",e=>{
   }
 });
 
-/* বাংলাদেশ সময়: ঘণ্টা, মিনিট ও সেকেন্ড */
+/* বাংলাদেশ সময় */
 function updateLiveDateTime(){
   const now=new Date();
 
@@ -492,19 +491,19 @@ function updateLiveDateTime(){
 updateLiveDateTime();
 setInterval(updateLiveDateTime,1000);
 
-/* জয়পুরহাটের লাইভ আবহাওয়া — Open-Meteo API */
+/* জয়পুরহাটের আবহাওয়া */
 function getWeatherDescription(code,isDay){
-  if(code===0)return isDay?"☀️ পরিষ্কার আকাশ":"🌙 পরিষ্কার আকাশ";
-  if(code===1)return "🌤️ প্রায় পরিষ্কার";
-  if(code===2)return "⛅ আংশিক মেঘলা";
-  if(code===3)return "☁️ মেঘলা";
-  if(code===45||code===48)return "🌫️ কুয়াশা";
-  if([51,53,55,56,57].includes(code))return "🌦️ গুঁড়ি গুঁড়ি বৃষ্টি";
-  if([61,63,65,66,67].includes(code))return "🌧️ বৃষ্টি";
-  if([71,73,75,77,85,86].includes(code))return "❄️ তুষারপাত";
-  if([80,81,82].includes(code))return "🌧️ বৃষ্টির ঝাপটা";
-  if([95,96,99].includes(code))return "⛈️ বজ্রসহ ঝড়";
-  return "🌤️ আবহাওয়া পরিবর্তনশীল";
+  if(code===0)return isDay?"☀️":"🌙";
+  if(code===1)return "🌤️";
+  if(code===2)return "⛅";
+  if(code===3)return "☁️";
+  if(code===45||code===48)return "🌫️";
+  if([51,53,55,56,57].includes(code))return "🌦️";
+  if([61,63,65,66,67].includes(code))return "🌧️";
+  if([71,73,75,77,85,86].includes(code))return "❄️";
+  if([80,81,82].includes(code))return "🌧️";
+  if([95,96,99].includes(code))return "⛈️";
+  return "🌤️";
 }
 
 async function loadJoypurhatWeather(){
@@ -527,21 +526,22 @@ async function loadJoypurhatWeather(){
     if(!result.current)throw new Error("Weather data missing");
 
     const current=result.current;
+
     const temperature=new Intl.NumberFormat("bn-BD",{
       maximumFractionDigits:1
     }).format(current.temperature_2m);
 
-    const description=getWeatherDescription(
+    const emoji=getWeatherDescription(
       Number(current.weather_code),
       Number(current.is_day)===1
     );
 
-    pill.textContent=
-      "📍 জয়পুরহাট · "+temperature+"°C · "+description;
+    /* শুধু ইমোজি ও তাপমাত্রা দেখাবে */
+    pill.textContent=emoji+" "+temperature+"°C";
 
   }catch(error){
     console.error("Weather Load Error:",error);
-    pill.textContent="🌤️ জয়পুরহাটের আবহাওয়া এখন পাওয়া যাচ্ছে না";
+    pill.textContent="🌤️ --°C";
   }
 }
 
@@ -873,7 +873,7 @@ function renderMainCategories(){
   $("categoryCount").textContent=`${categories.length}টি ক্যাটাগরি`;
 }
 
-/* সার্চ করলে মিল থাকা ক্যাটাগরিগুলোই দেখাবে */
+/* সার্চ */
 function filterCategories(){
   const term=$("categorySearch").value.trim().toLocaleLowerCase();
   let shown=0;
@@ -1064,6 +1064,10 @@ function showSubCategories(title,items){
         type="coaching";
       }
 
+      if(selectedCategoryName==="ইসলামিক কর্নার"){
+        type="islamic";
+      }
+
       if(type)openSubmissionForm(type);
     };
 
@@ -1198,7 +1202,7 @@ function buildForm(type){
 
   if(type==="islamic"){
     return imageField(false)+
-      textareaField("details","ছবি রিলেটেড পোস্ট",true);
+      textareaField("details","ইসলামিক পোস্টের লেখা",true);
   }
 
   return '<div class="info-box">এই তথ্যের জন্য ফর্ম পাওয়া যায়নি।</div>';
