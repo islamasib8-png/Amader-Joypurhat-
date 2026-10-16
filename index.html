@@ -4,8 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#08753f">
-<title>আমাদের জয়পুরহাট</title>
-
+<title>আমাদের জয়পুরহাট</title>
 <style>
 :root{
 --green:#08753f;
@@ -153,6 +152,12 @@ padding:15px;color:#fff;
 background:linear-gradient(135deg,#08753f,#00965b);
 font-weight:800;box-shadow:var(--shadow)
 }
+.result-corner-btn{
+width:100%;border:0;border-radius:13px;margin-top:20px;
+padding:15px;color:#fff;
+background:linear-gradient(135deg,#0a5c8a,#0b8f8a);
+font-weight:800;box-shadow:var(--shadow)
+}
 .info-box{
 background:var(--card);border:1px solid var(--line);
 border-radius:12px;padding:14px;margin-top:12px;line-height:1.7;font-size:14px
@@ -226,6 +231,19 @@ object-fit:cover;border-radius:8px
 .info-content a{color:var(--green2)}
 .info-action{margin-top:12px}
 
+.result-list{display:flex;flex-direction:column;gap:9px}
+.result-item{
+display:flex;align-items:center;gap:11px;width:100%;text-align:left;
+padding:13px;border:1px solid var(--line);border-radius:12px;
+background:#f6faf7;color:inherit;font-size:14px;font-weight:700;line-height:1.5
+}
+.result-item .r-icon{font-size:24px}
+.result-item .r-arrow{margin-left:auto;color:var(--muted)}
+.result-back{
+border:0;background:transparent;color:var(--green2);
+font-weight:700;margin-bottom:12px;font-size:13px
+}
+
 body.dark-mode{
 --bg:#101714;--card:#1d2722;--ink:#edf5ef;
 --muted:#a5b4aa;--line:#344239;--shadow:0 4px 14px #0003
@@ -233,7 +251,7 @@ body.dark-mode{
 body.dark-mode .top-header{background:linear-gradient(135deg,#062f1c,#075a36,#064a43)}
 body.dark-mode .card .icon{background:#293c31}
 body.dark-mode .menu-dropdown button:hover{background:#293c31}
-body.dark-mode .sub-card,body.dark-mode .notification-item{background:#242f29}
+body.dark-mode .sub-card,body.dark-mode .notification-item,body.dark-mode .result-item{background:#242f29}
 body.dark-mode footer{background:#081e16}
 
 @media(min-width:650px){
@@ -257,17 +275,14 @@ padding-right:max(20px,calc((100% - 850px)/2))
 }
 </style>
 </head>
-
 <body>
 
 <header class="top-header">
   <div class="brand-row">
-    <div><h1>আমাদের জয়পুরহাট</h1></div>
+    <div><h1>আমাদের জয়পুরহাট</h1></div>
   </div>
-
-  <p id="liveDateTime">তারিখ ও সময় লোড হচ্ছে...</p>
+  <p id="liveDateTime">তারিখ ও সময় লোড হচ্ছে...</p>
   <div class="weather-pill" id="weatherPill">🌤️ --°C</div>
-
   <div class="menu-wrap">
     <button class="menu-btn" id="menuBtn" type="button" aria-label="মেনু">
       ⋮<span class="notification-badge" id="notificationBadge"></span>
@@ -296,24 +311,24 @@ padding-right:max(20px,calc((100% - 850px)/2))
 
 <div class="hero">
   <div class="slider" id="imageSlider">
-    <img src="joypurhat.jpg" alt="জয়পুরহাটের দৃশ্য">
-    <img src="picjoypurhat2.jpg" alt="জয়পুরহাটের দৃশ্য">
-    <img src="picjoypurhat3.jpg" alt="জয়পুরহাটের দৃশ্য">
-    <img src="picjoypurhat4.jpg" alt="জয়পুরহাটের দৃশ্য">
-    <img src="picjoypurhat5.jpg" alt="জয়পুরহাটের দৃশ্য">
-    <img src="picjoypurhat6.jpg" alt="জয়পুরহাটের দৃশ্য">
-    <img src="picjoypurhat7.jpg" alt="জয়পুরহাটের দৃশ্য">
-    <img src="picjoypurhat8.jpg" alt="জয়পুরহাটের দৃশ্য">
-    <img src="picjoypurhat9.jpg" alt="জয়পুরহাটের দৃশ্য">
-    <img src="picjoypurhat10.jpg" alt="জয়পুরহাটের দৃশ্য">
-    <img src="picjoypurhat11.jpg" alt="জয়পুরহাটের দৃশ্য">
-    <img src="picjoypurhat12.jpg" alt="জয়পুরহাটের দৃশ্য">
+    <img src="joypurhat.jpg" alt="জয়পুরহাটের দৃশ্য">
+    <img src="picjoypurhat2.jpg" alt="জয়পুরহাটের দৃশ্য">
+    <img src="picjoypurhat3.jpg" alt="জয়পুরহাটের দৃশ্য">
+    <img src="picjoypurhat4.jpg" alt="জয়পুরহাটের দৃশ্য">
+    <img src="picjoypurhat5.jpg" alt="জয়পুরহাটের দৃশ্য">
+    <img src="picjoypurhat6.jpg" alt="জয়পুরহাটের দৃশ্য">
+    <img src="picjoypurhat7.jpg" alt="জয়পুরহাটের দৃশ্য">
+    <img src="picjoypurhat8.jpg" alt="জয়পুরহাটের দৃশ্য">
+    <img src="picjoypurhat9.jpg" alt="জয়পুরহাটের দৃশ্য">
+    <img src="picjoypurhat10.jpg" alt="জয়পুরহাটের দৃশ্য">
+    <img src="picjoypurhat11.jpg" alt="জয়পুরহাটের দৃশ্য">
+    <img src="picjoypurhat12.jpg" alt="জয়পুরহাটের দৃশ্য">
   </div>
 </div>
 
 <main class="container">
   <div class="section-heading">
-    <span>📚 প্রয়োজনীয় তথ্য</span>
+    <span>📚 প্রয়োজনীয় তথ্য</span>
     <small id="categoryCount">সব ক্যাটাগরি</small>
   </div>
 
@@ -327,8 +342,8 @@ padding-right:max(20px,calc((100% - 850px)/2))
 </main>
 
 <footer>
-  © 2026 আমাদের জয়পুরহাট<br>
-  উপরোক্ত তথ্যে কোনো ভুল থাকলে অথবা তথ্য সংশোধন/সংযোজনের প্রয়োজন হলে যোগাযোগ করুন।<br>
+  © 2026 আমাদের জয়পুরহাট<br>
+  উপরোক্ত তথ্যে কোনো ভুল থাকলে অথবা তথ্য সংশোধন/সংযোজনের প্রয়োজন হলে যোগাযোগ করুন।<br>
   <b>Md. Asib Islam</b><br>
   Panchbibi, Joypurhat<br>
   📞 01319-058313<br>
@@ -340,7 +355,7 @@ padding-right:max(20px,calc((100% - 850px)/2))
 <nav class="bottom-nav" aria-label="নিচের মেনু">
   <button class="active" data-nav="home"><span class="nav-icon">⌂</span>হোম</button>
   <button data-nav="categories"><span class="nav-icon">▦</span>ক্যাটাগরি</button>
-  <button data-nav="favorites"><span class="nav-icon">♡</span>প্রিয়</button>
+  <button data-nav="favorites"><span class="nav-icon">♡</span>প্রিয়</button>
   <button data-nav="notifications"><span class="nav-icon">♧</span>নোটিফিকেশন</button>
   <button data-nav="profile"><span class="nav-icon">♙</span>প্রোফাইল</button>
 </nav>
@@ -389,6 +404,14 @@ padding-right:max(20px,calc((100% - 850px)/2))
     <span class="close" id="closeMenuInfoModal">×</span>
     <div id="menuInfoTitle" class="modal-title"></div>
     <div id="menuInfoContent" class="info-content"></div>
+  </div>
+</div>
+
+<div id="resultModal" class="modal">
+  <div class="modal-box">
+    <span class="close" id="closeResultModal">×</span>
+    <div id="resultTitle" class="modal-title">🎓 রেজাল্ট কর্নার</div>
+    <div id="resultBody"></div>
   </div>
 </div>
 
@@ -465,7 +488,7 @@ $("darkModeRow").addEventListener("click",e=>{
   }
 });
 
-/* বাংলাদেশ সময় */
+/* বাংলাদেশ সময় */
 function updateLiveDateTime(){
   const now=new Date();
 
@@ -491,7 +514,7 @@ function updateLiveDateTime(){
 updateLiveDateTime();
 setInterval(updateLiveDateTime,1000);
 
-/* জয়পুরহাটের আবহাওয়া */
+/* জয়পুরহাটের আবহাওয়া */
 function getWeatherDescription(code,isDay){
   if(code===0)return isDay?"☀️":"🌙";
   if(code===1)return "🌤️";
@@ -580,8 +603,8 @@ $("menuDropdown").addEventListener("click",e=>{
 
   if(action==="about"){
     showInfoModal("অ্যাপ সম্পর্কে",`
-      <p>আমাদের জয়পুরহাট একটি তথ্যভিত্তিক অ্যাপ।</p>
-      <p>এর মাধ্যমে জয়পুরহাট জেলার প্রয়োজনীয় তথ্য খুঁজে পাওয়া এবং নতুন তথ্য জমা দেওয়ার সুযোগ রয়েছে।</p>
+      <p>আমাদের জয়পুরহাট একটি তথ্যভিত্তিক অ্যাপ।</p>
+      <p>এর মাধ্যমে জয়পুরহাট জেলার প্রয়োজনীয় তথ্য খুঁজে পাওয়া এবং নতুন তথ্য জমা দেওয়ার সুযোগ রয়েছে।</p>
       <p>জেলার তথ্য সঠিক রাখতে সবার সহযোগিতা কাম্য।</p>
     `);
   }
@@ -609,7 +632,7 @@ function formatNotificationDate(t){
       minute:"2-digit",
       hour12:true
     }).format(new Date(n))
-    :"সময় পাওয়া যাচ্ছে না";
+    :"সময় পাওয়া যাচ্ছে না";
 }
 
 function renderNotifications(){
@@ -707,33 +730,33 @@ slider.addEventListener("scroll",()=>{
 
 /* ক্যাটাগরি ও তথ্য জমা */
 const disabledSubmissionCategories=new Set([
-  "জয়পুরহাটের পরিচয়","আজকের খবর","আজকের নিউজ","খবর",
-  "আজকের সংবাদ","ট্রেনের সময়সূচি","বাসের সময়সূচি"
+  "জয়পুরহাটের পরিচয়","আজকের খবর","আজকের নিউজ","খবর",
+  "আজকের সংবাদ","ট্রেনের সময়সূচি","বাসের সময়সূচি"
 ]);
 
 const categoryOrder={
-  "জয়পুরহাটের পরিচয়":1,
-  "উপজেলা পরিচয়":2,
-  "উপজেলার পরিচয়":2,
+  "জয়পুরহাটের পরিচয়":1,
+  "উপজেলা পরিচয়":2,
+  "উপজেলার পরিচয়":2,
   "উপজেলা পরিষদ":2,
-  "দর্শনীয় স্থান":3,
+  "দর্শনীয় স্থান":3,
   "ইসলামিক কর্নার":4,
   "রক্তদাতা":5,
   "রক্তদান":5,
   "জরুরি সেবা":6,
   "অ্যাম্বুলেন্স":7,
   "হাসপাতাল":8,
-  "ক্লিনিক ও ডায়াগনস্টিক":9,
-  "ক্লিনিক ও ডায়াগনস্টিক সেন্টার":9,
+  "ক্লিনিক ও ডায়াগনস্টিক":9,
+  "ক্লিনিক ও ডায়াগনস্টিক সেন্টার":9,
   "ডাক্তার":10,
   "থানা পুলিশ":11,
-  "ফায়ার সার্ভিস":12,
+  "ফায়ার সার্ভিস":12,
   "আইনজীবী":13,
   "কৃষি অফিস":14,
   "বিদ্যুৎ অফিস":15,
-  "ট্রেনের সময়সূচি":16,
-  "বাসের সময়সূচি":17,
-  "কুরিয়ার সার্ভিস":18,
+  "ট্রেনের সময়সূচি":16,
+  "বাসের সময়সূচি":17,
+  "কুরিয়ার সার্ভিস":18,
   "আজকের খবর":19,
   "আজকের নিউজ":19,
   "খবর":19,
@@ -744,41 +767,41 @@ const categoryOrder={
 
 const submissionTypes={
   blood:"রক্তদাতা",
-  clinic:"ক্লিনিক ও ডায়াগনস্টিক সেন্টার",
+  clinic:"ক্লিনিক ও ডায়াগনস্টিক সেন্টার",
   hospital:"হাসপাতাল",
   restaurant:"রেস্টুরেন্ট",
   lawyer:"আইনজীবী",
-  courier:"কুরিয়ার সার্ভিস",
+  courier:"কুরিয়ার সার্ভিস",
   institution:"বিভিন্ন প্রতিষ্ঠান",
   ambulance:"অ্যাম্বুলেন্স",
-  place:"দর্শনীয় স্থান",
+  place:"দর্শনীয় স্থান",
   person:"কৃতী ব্যক্তিত্ব",
   islamic:"ইসলামিক কর্নার",
   coaching:"কোচিং ও প্রাইভেট সেন্টার",
   doctor:"ডাক্তার",
   emergency:"জরুরি সেবা",
   police:"থানা পুলিশ",
-  fireService:"ফায়ার সার্ভিস",
+  fireService:"ফায়ার সার্ভিস",
   electricity:"বিদ্যুৎ অফিস"
 };
 
 const aliases={
   blood:["রক্তদাতা","রক্তদান"],
-  clinic:["ক্লিনিক ও ডায়াগনস্টিক","ক্লিনিক ও ডায়াগনস্টিক সেন্টার"],
+  clinic:["ক্লিনিক ও ডায়াগনস্টিক","ক্লিনিক ও ডায়াগনস্টিক সেন্টার"],
   hospital:["হাসপাতাল"],
   restaurant:["রেস্টুরেন্ট"],
   lawyer:["আইনজীবী"],
-  courier:["কুরিয়ার সার্ভিস"],
+  courier:["কুরিয়ার সার্ভিস"],
   institution:["বিভিন্ন প্রতিষ্ঠান"],
   ambulance:["অ্যাম্বুলেন্স"],
-  place:["দর্শনীয় স্থান"],
+  place:["দর্শনীয় স্থান"],
   person:["কৃতী ব্যক্তিত্ব"],
   islamic:["ইসলামিক কর্নার"],
   coaching:["কোচিং ও প্রাইভেট সেন্টার","কোচিং/প্রাইভেট সেন্টার"],
   doctor:["ডাক্তার"],
   emergency:["জরুরি সেবা"],
   police:["থানা পুলিশ"],
-  fireService:["ফায়ার সার্ভিস"],
+  fireService:["ফায়ার সার্ভিস"],
   electricity:["বিদ্যুৎ অফিস"]
 };
 
@@ -801,22 +824,22 @@ function getCategoryIcon(name){
   if(n.includes("ক্লিনিক")||n==="হাসপাতাল")return "🏥";
   if(n==="রেস্টুরেন্ট")return "🍽️";
   if(n==="আইনজীবী")return "⚖️";
-  if(n.includes("কুরিয়ার"))return "🚚";
+  if(n.includes("কুরিয়ার"))return "🚚";
   if(n.includes("প্রতিষ্ঠান"))return "🏪";
   if(n==="অ্যাম্বুলেন্স")return "🚑";
-  if(n==="ফায়ার সার্ভিস")return "🚒";
+  if(n==="ফায়ার সার্ভিস")return "🚒";
   if(n==="থানা পুলিশ")return "👮";
   if(n==="বিদ্যুৎ অফিস")return "⚡";
   if(n.includes("বাস"))return "🚌";
   if(n.includes("ট্রেন"))return "🚆";
-  if(n==="দর্শনীয় স্থান")return "🏞️";
+  if(n==="দর্শনীয় স্থান")return "🏞️";
   if(n==="কৃতী ব্যক্তিত্ব")return "🌟";
   if(n.includes("খবর"))return "📰";
   if(n==="ইসলামিক কর্নার")return "☪️";
   if(n==="জরুরি সেবা")return "🆘";
   if(n.includes("কোচিং"))return "📚";
   if(n==="ডাক্তার")return "🩺";
-  if(n==="জয়পুরহাটের পরিচয়")return "🏛️";
+  if(n==="জয়পুরহাটের পরিচয়")return "🏛️";
   if(n.includes("উপজেলা"))return "📍";
 
   return "📌";
@@ -842,7 +865,8 @@ async function loadMainCategories(){
   }catch(e){
     console.error("Category Load Error:",e);
     $("categoryGrid").innerHTML=
-      '<div class="info-box">তথ্য লোড করা যাচ্ছে না। ইন্টারনেট সংযোগ পরীক্ষা করুন।</div>';
+      '<div class="info-box">তথ্য লোড করা যাচ্ছে না। ইন্টারনেট সংযোগ পরীক্ষা করুন।<br><small>ত্রুটি: '+
+      escapeHtml((e&&(e.code||e.message))||"unknown")+'</small></div>';
   }
 }
 
@@ -851,7 +875,7 @@ function renderMainCategories(){
   grid.innerHTML="";
 
   if(!categories.length){
-    grid.innerHTML='<div class="info-box">কোনো Topic পাওয়া যায়নি।</div>';
+    grid.innerHTML='<div class="info-box">কোনো Topic পাওয়া যায়নি।</div>';
     return;
   }
 
@@ -885,7 +909,7 @@ function filterCategories(){
   });
 
   $("categoryCount").textContent=
-    term?`${shown}টি পাওয়া গেছে`:`${categories.length}টি ক্যাটাগরি`;
+    term?`${shown}টি পাওয়া গেছে`:`${categories.length}টি ক্যাটাগরি`;
 
   const oldMessage=$("noSearchResults");
   if(oldMessage)oldMessage.remove();
@@ -894,7 +918,7 @@ function filterCategories(){
     const message=document.createElement("div");
     message.id="noSearchResults";
     message.className="info-box";
-    message.textContent="দুঃখিত, এই নামে কোনো ক্যাটাগরি পাওয়া যায়নি।";
+    message.textContent="দুঃখিত, এই নামে কোনো ক্যাটাগরি পাওয়া যায়নি।";
     $("categoryGrid").append(message);
   }
 }
@@ -903,6 +927,11 @@ $("categorySearch").addEventListener("input",filterCategories);
 
 function openMainTopic(category){
   const name=normalizeCategoryName(category.name);
+
+  if(name.includes("রেজাল্ট")||name.includes("ফলাফল")){
+    openResultCorner();
+    return;
+  }
 
   if(name.includes("ট্রেন")){
     window.open("https://eticket.railway.gov.bd/","_blank","noopener");
@@ -922,7 +951,7 @@ function openMainTopic(category){
   window.location.href="topic.html?id="+encodeURIComponent(category.id);
 }
 
-/* তথ্য জমা দেওয়ার ক্যাটাগরি */
+/* তথ্য জমা দেওয়ার ক্যাটাগরি */
 async function openSubmissionCategoryModal(){
   $("categoryModal").style.display="block";
   await loadSubmissionCategories();
@@ -970,7 +999,7 @@ async function loadSubmissionCategories(){
 
   }catch(e){
     console.error(e);
-    box.innerHTML='<div class="info-box">তথ্য লোড করতে সমস্যা হয়েছে।</div>';
+    box.innerHTML='<div class="info-box">তথ্য লোড করতে সমস্যা হয়েছে।</div>';
   }
 }
 
@@ -992,7 +1021,7 @@ function getDoctorSubCategories(){
 
 function getCoachingSubCategories(){
   return [
-    {id:"university",name:"বিশ্ববিদ্যালয় কোচিং",icon:"🎓"},
+    {id:"university",name:"বিশ্ববিদ্যালয় কোচিং",icon:"🎓"},
     {id:"medical",name:"মেডিকেল কোচিং",icon:"🩺"},
     {id:"nursing",name:"নার্সিং কোচিং",icon:"👩‍⚕️"},
     {id:"class6-12",name:"৬ষ্ঠ-১২ কোচিং",icon:"📚"}
@@ -1029,7 +1058,7 @@ function loadSubmissionOptions(category){
   const type=getSubmissionTypeByCategoryName(name);
 
   if(!type){
-    alert("এই Topic-এর জন্য তথ্য জমা দেওয়ার ফর্ম এখনো তৈরি করা হয়নি।");
+    alert("এই Topic-এর জন্য তথ্য জমা দেওয়ার ফর্ম এখনো তৈরি করা হয়নি।");
     return;
   }
 
@@ -1131,10 +1160,10 @@ function buildForm(type){
   }
 
   if(type==="clinic"){
-    return field("name","ক্লিনিক ও ডায়াগনস্টিক সেন্টারের নাম")+
+    return field("name","ক্লিনিক ও ডায়াগনস্টিক সেন্টারের নাম")+
       imageField()+
       field("address","ঠিকানা")+
-      field("serialInfo","সিরিয়ালের জন্য মোবাইল নম্বর","tel");
+      field("serialInfo","সিরিয়ালের জন্য মোবাইল নম্বর","tel");
   }
 
   if(type==="hospital"){
@@ -1154,7 +1183,7 @@ function buildForm(type){
   }
 
   if(type==="courier"||type==="institution"){
-    return field("name",type==="courier"?"কুরিয়ার সার্ভিসের নাম":"প্রতিষ্ঠানের নাম")+
+    return field("name",type==="courier"?"কুরিয়ার সার্ভিসের নাম":"প্রতিষ্ঠানের নাম")+
       imageField()+
       field("address","ঠিকানা")+
       field("mobile","মোবাইল নং","tel")+
@@ -1205,7 +1234,7 @@ function buildForm(type){
       textareaField("details","ইসলামিক পোস্টের লেখা",true);
   }
 
-  return '<div class="info-box">এই তথ্যের জন্য ফর্ম পাওয়া যায়নি।</div>';
+  return '<div class="info-box">এই তথ্যের জন্য ফর্ম পাওয়া যায়নি।</div>';
 }
 
 function openSubmissionForm(type){
@@ -1258,11 +1287,11 @@ async function uploadImage(file){
     body:fd
   });
 
-  if(!response.ok)throw new Error("ছবি আপলোড করা যায়নি।");
+  if(!response.ok)throw new Error("ছবি আপলোড করা যায়নি।");
 
   const data=await response.json();
 
-  if(!data.secure_url)throw new Error("ছবির URL পাওয়া যায়নি।");
+  if(!data.secure_url)throw new Error("ছবির URL পাওয়া যায়নি।");
 
   return data.secure_url;
 }
@@ -1310,7 +1339,7 @@ $("submissionForm").addEventListener("submit",async e=>{
       createdAt:serverTimestamp()
     });
 
-    alert("✅ আপনার তথ্য সফলভাবে জমা হয়েছে। Admin অনুমোদনের পর প্রকাশ করা হবে।");
+    alert("✅ আপনার তথ্য সফলভাবে জমা হয়েছে। Admin অনুমোদনের পর প্রকাশ করা হবে।");
 
     e.target.reset();
 
@@ -1325,7 +1354,7 @@ $("submissionForm").addEventListener("submit",async e=>{
 
   }catch(err){
     console.error("Submission Error:",err);
-    alert("❌ তথ্য জমা দিতে সমস্যা হয়েছে। ইন্টারনেট ও Firebase সেটআপ পরীক্ষা করে আবার চেষ্টা করুন।");
+    alert("❌ তথ্য জমা দিতে সমস্যা হয়েছে। ইন্টারনেট ও Firebase সেটআপ পরীক্ষা করে আবার চেষ্টা করুন।");
 
   }finally{
     btn.disabled=false;
@@ -1366,22 +1395,92 @@ document.querySelectorAll(".bottom-nav button").forEach(btn=>{
       openNotificationCenter();
     }else if(nav==="favorites"){
       showInfoModal(
-        "প্রিয় তালিকা",
-        "প্রিয় তালিকার জন্য আলাদা সংরক্ষণ ব্যবস্থা এখনো যুক্ত করা হয়নি।"
+        "প্রিয় তালিকা",
+        "প্রিয় তালিকার জন্য আলাদা সংরক্ষণ ব্যবস্থা এখনো যুক্ত করা হয়নি।"
       );
     }else if(nav==="profile"){
       showInfoModal(
         "প্রোফাইল",
-        '<p>আমাদের জয়পুরহাট</p><p>তথ্য জমা দিতে “নতুন তথ্য যোগ করুন” ব্যবহার করুন।</p>'
+        '<p>আমাদের জয়পুরহাট</p><p>তথ্য জমা দিতে “নতুন তথ্য যোগ করুন” ব্যবহার করুন।</p>'
       );
     }
   });
 });
 
+/* রেজাল্ট কর্নার */
+const RESULT_ITEMS=[
+  {icon:"📝",name:"SSC রেজাল্ট",url:"http://www.educationboardresults.gov.bd/"},
+  {icon:"📝",name:"HSC রেজাল্ট",url:"http://www.educationboardresults.gov.bd/"},
+  {icon:"🏛️",name:"জাতীয় বিশ্ববিদ্যালয়",url:"https://www.nu.ac.bd/results/"},
+  {icon:"🎓",name:"বিশ্ববিদ্যালয় এডমিশন রেজাল্ট",sub:[
+    {icon:"🏫",name:"ঢাকা বিশ্ববিদ্যালয় (DU)",url:"https://admission.eis.du.ac.bd/"},
+    {icon:"🏫",name:"রাজশাহী বিশ্ববিদ্যালয় (RU)",url:"https://admission.ru.ac.bd/"},
+    {icon:"🏫",name:"জাহাঙ্গীরনগর বিশ্ববিদ্যালয় (JU)",url:"https://admission.juniv.edu/"},
+    {icon:"🏫",name:"চট্টগ্রাম বিশ্ববিদ্যালয় (CU)",url:"https://admission.cu.ac.bd/"},
+    {icon:"🏫",name:"গুচ্ছ (GST) ভর্তি",url:"https://gstadmission.ac.bd/"},
+    {icon:"⚙️",name:"বুয়েট (BUET)",url:"https://admission.buet.ac.bd/"},
+    {icon:"⚙️",name:"কুয়েট (KUET)",url:"https://admission.kuet.ac.bd/"},
+    {icon:"⚙️",name:"রুয়েট (RUET)",url:"https://admission.ruet.ac.bd/"},
+    {icon:"⚙️",name:"চুয়েট (CUET)",url:"https://admission.cuet.ac.bd/"},
+    {icon:"🔬",name:"শাবিপ্রবি (SUST)",url:"https://admission.sust.edu/"},
+    {icon:"🌾",name:"হাজী দানেশ বিজ্ঞান ও প্রযুক্তি বিশ্ববিদ্যালয় (HSTU)",url:"https://hstu.ac.bd/"}
+  ]},
+  {icon:"🎒",name:"প্রাথমিক বৃত্তি ফলাফল",url:"https://dpe.gov.bd/"},
+  {icon:"👩‍⚕️",name:"নার্সিং এডমিশন রেজাল্ট",url:"https://dgnm.gov.bd/"},
+  {icon:"👩‍⚕️",name:"নার্সিং চূড়ান্ত পরীক্ষার রেজাল্ট",url:"https://bnmc.gov.bd/"},
+  {icon:"🩺",name:"মেডিকেল এডমিশন রেজাল্ট",url:"https://dgme.gov.bd/"},
+  {icon:"🛠️",name:"কারিগরি ও পলিটেকনিক রেজাল্ট",url:"http://result.bteb.gov.bd/"}
+];
+
+function openLink(url){
+  window.open(url,"_blank","noopener");
+}
+
+function renderResultList(items,title,showBack){
+  $("resultTitle").textContent=title;
+  const body=$("resultBody");
+  body.innerHTML="";
+
+  if(showBack){
+    const back=document.createElement("button");
+    back.type="button";
+    back.className="result-back";
+    back.textContent="← পেছনে যান";
+    back.onclick=()=>renderResultList(RESULT_ITEMS,"🎓 রেজাল্ট কর্নার",false);
+    body.append(back);
+  }
+
+  const list=document.createElement("div");
+  list.className="result-list";
+
+  items.forEach(item=>{
+    const b=document.createElement("button");
+    b.type="button";
+    b.className="result-item";
+    b.innerHTML=
+      `<span class="r-icon">${escapeHtml(item.icon)}</span>`+
+      `<span>${escapeHtml(item.name)}</span>`+
+      `<span class="r-arrow">${item.sub?"›":"↗"}</span>`;
+    b.onclick=()=>{
+      if(item.sub)renderResultList(item.sub,item.name,true);
+      else openLink(item.url);
+    };
+    list.append(b);
+  });
+
+  body.append(list);
+}
+
+function openResultCorner(){
+  renderResultList(RESULT_ITEMS,"🎓 রেজাল্ট কর্নার",false);
+  $("resultModal").style.display="block";
+}
+
+$("closeResultModal").onclick=()=>closeModal("resultModal");
+
 /* অ্যাপ চালু */
 startNotificationListener();
 loadMainCategories();
-
 </script>
 </body>
 </html>
