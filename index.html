@@ -244,6 +244,26 @@ border:0;background:transparent;color:var(--green2);
 font-weight:700;margin-bottom:12px;font-size:13px
 }
 
+/* সোশ্যাল মিডিয়া হাব */
+.social-section-title{margin:6px 1px 10px;font-size:14px;font-weight:800;color:var(--green)}
+.social-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px;margin-bottom:16px}
+.social-card{
+display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;
+min-height:92px;padding:11px 4px;text-align:center;text-decoration:none;
+background:#f6faf7;border:1px solid var(--line);border-radius:14px;color:inherit;
+transition:transform .15s
+}
+.social-card:active{transform:scale(.96)}
+.social-icon{
+display:grid;place-items:center;width:46px;height:46px;border-radius:13px;
+background:#fff;border:1px solid var(--line);overflow:hidden;
+font-size:21px;font-weight:800;line-height:1;font-family:Arial,sans-serif
+}
+.social-icon img{width:32px;height:32px;object-fit:contain}
+.social-name{font-size:11px;font-weight:700;line-height:1.4;overflow-wrap:anywhere}
+body.dark-mode .social-card{background:#242f29}
+@media(max-width:340px){.social-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
 /* ভর্তি ও আবেদন কর্নার */
 .adm-actions{display:flex;flex-direction:column;gap:11px;margin-top:4px}
 .adm-link{
@@ -438,6 +458,15 @@ padding-right:max(20px,calc((100% - 850px)/2))
     <span class="close" id="closeAdmissionModal">×</span>
     <div id="admissionTitle" class="modal-title">📝 ভর্তি ও আবেদন</div>
     <div id="admissionBody"></div>
+  </div>
+</div>
+
+<div id="socialModal" class="modal">
+  <div class="modal-box">
+    <span class="close" id="closeSocialModal">×</span>
+    <button type="button" class="result-back" id="socialBackBtn">← পেছনে যান</button>
+    <div class="modal-title">🌐 সোশ্যাল মিডিয়া</div>
+    <div id="socialBody"></div>
   </div>
 </div>
 
@@ -868,6 +897,7 @@ function getCategoryIcon(name){
   if(n==="জয়পুরহাটের পরিচয়")return "🏛️";
   if(n.includes("উপজেলা"))return "📍";
   if(n.includes("ভর্তি")||n.includes("আবেদন")||n.includes("এডমিশন"))return "📝";
+  if(n.includes("সোশ্যাল"))return "🌐";
 
   return "📌";
 }
@@ -920,8 +950,21 @@ function renderMainCategories(){
     grid.append(card);
   });
 
+  /* সোশ্যাল মিডিয়া ক্যাটাগরি (Firebase-এ আলাদা না থাকলে এখান থেকে যুক্ত হবে) */
+  if(!categories.some(c=>normalizeCategoryName(c.name).includes("সোশ্যাল"))){
+    const social=document.createElement("button");
+    social.type="button";
+    social.className="card";
+    social.dataset.categoryName="সোশ্যাল মিডিয়া";
+    social.innerHTML=
+      '<span class="icon">🌐</span>'+
+      '<span class="name">সোশ্যাল মিডিয়া</span>';
+    social.addEventListener("click",openSocialHub);
+    grid.append(social);
+  }
+
   filterCategories();
-  $("categoryCount").textContent=`${categories.length}টি ক্যাটাগরি`;
+  $("categoryCount").textContent=`${grid.querySelectorAll(".card").length}টি ক্যাটাগরি`;
 }
 
 /* সার্চ */
@@ -936,7 +979,7 @@ function filterCategories(){
   });
 
   $("categoryCount").textContent=
-    term?`${shown}টি পাওয়া গেছে`:`${categories.length}টি ক্যাটাগরি`;
+    term?`${shown}টি পাওয়া গেছে`:`${document.querySelectorAll("#categoryGrid .card").length}টি ক্যাটাগরি`;
 
   const oldMessage=$("noSearchResults");
   if(oldMessage)oldMessage.remove();
@@ -957,6 +1000,11 @@ function openMainTopic(category){
 
   if(name.includes("রেজাল্ট")||name.includes("ফলাফল")){
     openResultCorner();
+    return;
+  }
+
+  if(name.includes("সোশ্যাল")){
+    openSocialHub();
     return;
   }
 
@@ -1661,6 +1709,120 @@ function openAdmissionCorner(){
 }
 
 $("closeAdmissionModal").onclick=()=>closeModal("admissionModal");
+
+/* ===========================================================
+   সোশ্যাল মিডিয়া হাব
+   লিংক/লোগো বদলাতে শুধু SOCIAL_SECTIONS তালিকা এডিট করুন।
+   url = অফিসিয়াল ওয়েবসাইট, domain = লোগো আনার জন্য, pkg = Android অ্যাপ প্যাকেজ
+   =========================================================== */
+const SOCIAL_SECTIONS=[
+  {title:"🌐 সামাজিক যোগাযোগমাধ্যম",items:[
+    {name:"Facebook",domain:"facebook.com",color:"#1877f2",url:"https://www.facebook.com/",pkg:"com.facebook.katana"},
+    {name:"Instagram",domain:"instagram.com",color:"#d6249f",url:"https://www.instagram.com/",pkg:"com.instagram.android"},
+    {name:"YouTube",domain:"youtube.com",color:"#ff0000",url:"https://www.youtube.com/",pkg:"com.google.android.youtube"},
+    {name:"WhatsApp",domain:"whatsapp.com",color:"#25d366",url:"https://www.whatsapp.com/",pkg:"com.whatsapp"},
+    {name:"TikTok",domain:"tiktok.com",color:"#111111",url:"https://www.tiktok.com/",pkg:"com.zhiliaoapp.musically"},
+    {name:"Telegram",domain:"telegram.org",color:"#229ed9",url:"https://web.telegram.org/",pkg:"org.telegram.messenger"},
+    {name:"Messenger",domain:"messenger.com",color:"#0084ff",url:"https://www.messenger.com/",pkg:"com.facebook.orca"},
+    {name:"IMO",domain:"imo.im",color:"#1c9bef",url:"https://imo.im/",pkg:"com.imo.android.imoim"},
+    {name:"X (Twitter)",domain:"x.com",color:"#000000",url:"https://x.com/",pkg:"com.twitter.android"},
+    {name:"LinkedIn",domain:"linkedin.com",color:"#0a66c2",url:"https://www.linkedin.com/",pkg:"com.linkedin.android"}
+  ]},
+  {title:"🤖 AI ও স্মার্ট সহকারী",items:[
+    {name:"ChatGPT",domain:"chatgpt.com",color:"#10a37f",url:"https://chatgpt.com/",pkg:"com.openai.chatgpt"},
+    {name:"Google Gemini",domain:"gemini.google.com",color:"#4285f4",url:"https://gemini.google.com/",pkg:"com.google.android.apps.bard"},
+    {name:"DeepSeek",domain:"deepseek.com",color:"#4d6bfe",url:"https://chat.deepseek.com/",pkg:"com.deepseek.chat"},
+    {name:"Microsoft Copilot",domain:"copilot.microsoft.com",color:"#0f6cbd",url:"https://copilot.microsoft.com/",pkg:"com.microsoft.copilot"},
+    {name:"Perplexity AI",domain:"perplexity.ai",color:"#20808d",url:"https://www.perplexity.ai/",pkg:"ai.perplexity.app.android"},
+    {name:"Google Search",domain:"google.com",color:"#ea4335",url:"https://www.google.com/",pkg:"com.google.android.googlequicksearchbox"}
+  ]}
+];
+
+/* Android Chrome-এ অ্যাপ ইনস্টল থাকলে অ্যাপ খুলবে, না থাকলে ওয়েবসাইট।
+   WebView (যেমন Kodular) ও অন্য ডিভাইসে সরাসরি ওয়েবসাইট খুলবে। */
+function isAndroidBrowser(){
+  const ua=navigator.userAgent||"";
+  return /Android/i.test(ua)&&!/; wv\)/i.test(ua)&&!/Version\/[\d.]+.*Chrome/i.test(ua);
+}
+
+function buildAndroidIntent(item){
+  try{
+    const u=new URL(item.url);
+    return "intent://"+u.host+u.pathname+u.search+
+      "#Intent;scheme=https;package="+item.pkg+
+      ";S.browser_fallback_url="+encodeURIComponent(item.url)+";end";
+  }catch(e){
+    return item.url;
+  }
+}
+
+function makeSocialLogo(item){
+  const box=document.createElement("span");
+  box.className="social-icon";
+
+  const img=document.createElement("img");
+  img.alt=item.name;
+  img.loading="lazy";
+  img.src="https://www.google.com/s2/favicons?domain="+encodeURIComponent(item.domain)+"&sz=128";
+
+  /* লোগো লোড না হলে নামের প্রথম অক্ষর দেখাবে */
+  img.onerror=()=>{
+    box.textContent=item.name.charAt(0);
+    box.style.background=item.color;
+    box.style.color="#fff";
+    box.classList.add("fallback");
+  };
+
+  box.append(img);
+  return box;
+}
+
+function renderSocialHub(){
+  const body=$("socialBody");
+  body.innerHTML="";
+
+  SOCIAL_SECTIONS.forEach(section=>{
+    const title=document.createElement("div");
+    title.className="social-section-title";
+    title.textContent=section.title;
+
+    const grid=document.createElement("div");
+    grid.className="social-grid";
+
+    section.items.forEach(item=>{
+      const a=document.createElement("a");
+      a.className="social-card";
+      a.href=item.url;
+      a.target="_blank";
+      a.rel="noopener noreferrer";
+
+      const name=document.createElement("span");
+      name.className="social-name";
+      name.textContent=item.name;
+
+      a.append(makeSocialLogo(item),name);
+
+      a.addEventListener("click",e=>{
+        if(item.pkg&&isAndroidBrowser()){
+          e.preventDefault();
+          window.location.href=buildAndroidIntent(item);
+        }
+      });
+
+      grid.append(a);
+    });
+
+    body.append(title,grid);
+  });
+}
+
+function openSocialHub(){
+  renderSocialHub();
+  $("socialModal").style.display="block";
+}
+
+$("closeSocialModal").onclick=()=>closeModal("socialModal");
+$("socialBackBtn").onclick=()=>closeModal("socialModal");
 
 /* অ্যাপ চালু */
 startNotificationListener();
