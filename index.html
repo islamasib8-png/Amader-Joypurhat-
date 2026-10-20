@@ -162,8 +162,6 @@ font-weight:800;box-shadow:var(--shadow)
 background:var(--card);border:1px solid var(--line);
 border-radius:12px;padding:14px;margin-top:12px;line-height:1.7;font-size:14px
 }
-/* ক্যাটাগরি গ্রিডের ভেতরে বার্তা (লোডিং/ত্রুটি/সার্চে কিছু না পেলে) পুরো প্রস্থ নেবে */
-.grid .info-box,.grid .loading{grid-column:1/-1}
 footer{
 background:#12372a;color:#fff;text-align:center;padding:22px 14px;
 font-size:12px;line-height:1.9;margin-top:18px
@@ -246,44 +244,6 @@ border:0;background:transparent;color:var(--green2);
 font-weight:700;margin-bottom:12px;font-size:13px
 }
 
-/* সোশ্যাল মিডিয়া হাব */
-.social-section-title{margin:6px 1px 10px;font-size:14px;font-weight:800;color:var(--green)}
-.social-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px;margin-bottom:16px}
-.social-card{
-display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;
-min-height:92px;padding:11px 4px;text-align:center;text-decoration:none;
-background:#f6faf7;border:1px solid var(--line);border-radius:14px;color:inherit;
-transition:transform .15s
-}
-.social-card:active{transform:scale(.96)}
-.social-icon{
-display:grid;place-items:center;width:46px;height:46px;border-radius:13px;
-background:#fff;border:1px solid var(--line);overflow:hidden;
-font-size:21px;font-weight:800;line-height:1;font-family:Arial,sans-serif
-}
-.social-icon img{width:32px;height:32px;object-fit:contain}
-.social-name{font-size:11px;font-weight:700;line-height:1.4;overflow-wrap:anywhere}
-body.dark-mode .social-card{background:#242f29}
-@media(max-width:340px){.social-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
-
-/* ভর্তি ও আবেদন কর্নার */
-.adm-actions{display:flex;flex-direction:column;gap:11px;margin-top:4px}
-.adm-link{
-display:flex;align-items:center;gap:11px;width:100%;
-padding:15px 14px;border-radius:12px;text-decoration:none;
-font-size:15px;font-weight:800;line-height:1.5;color:#fff;
-box-shadow:var(--shadow)
-}
-.adm-link .adm-ic{font-size:24px}
-.adm-link .adm-arrow{margin-left:auto;font-size:18px}
-.adm-apply{background:linear-gradient(135deg,#08753f,#00965b)}
-.adm-notice{background:linear-gradient(135deg,#0a5c8a,#0b8f8a)}
-.adm-site{background:linear-gradient(135deg,#5b4a9a,#7a5ec4)}
-.adm-note{
-margin-top:14px;font-size:12px;line-height:1.7;color:var(--muted);
-background:#f6faf7;border:1px solid var(--line);border-radius:10px;padding:10px 12px
-}
-
 body.dark-mode{
 --bg:#101714;--card:#1d2722;--ink:#edf5ef;
 --muted:#a5b4aa;--line:#344239;--shadow:0 4px 14px #0003
@@ -291,7 +251,7 @@ body.dark-mode{
 body.dark-mode .top-header{background:linear-gradient(135deg,#062f1c,#075a36,#064a43)}
 body.dark-mode .card .icon{background:#293c31}
 body.dark-mode .menu-dropdown button:hover{background:#293c31}
-body.dark-mode .sub-card,body.dark-mode .notification-item,body.dark-mode .result-item,body.dark-mode .adm-note{background:#242f29}
+body.dark-mode .sub-card,body.dark-mode .notification-item,body.dark-mode .result-item{background:#242f29}
 body.dark-mode footer{background:#081e16}
 
 @media(min-width:650px){
@@ -452,23 +412,6 @@ padding-right:max(20px,calc((100% - 850px)/2))
     <span class="close" id="closeResultModal">×</span>
     <div id="resultTitle" class="modal-title">🎓 রেজাল্ট কর্নার</div>
     <div id="resultBody"></div>
-  </div>
-</div>
-
-<div id="admissionModal" class="modal">
-  <div class="modal-box">
-    <span class="close" id="closeAdmissionModal">×</span>
-    <div id="admissionTitle" class="modal-title">📝 ভর্তি ও আবেদন</div>
-    <div id="admissionBody"></div>
-  </div>
-</div>
-
-<div id="socialModal" class="modal">
-  <div class="modal-box">
-    <span class="close" id="closeSocialModal">×</span>
-    <button type="button" class="result-back" id="socialBackBtn">← পেছনে যান</button>
-    <div class="modal-title">🌐 সোশ্যাল মিডিয়া</div>
-    <div id="socialBody"></div>
   </div>
 </div>
 
@@ -898,8 +841,6 @@ function getCategoryIcon(name){
   if(n==="ডাক্তার")return "🩺";
   if(n==="জয়পুরহাটের পরিচয়")return "🏛️";
   if(n.includes("উপজেলা"))return "📍";
-  if(n.includes("ভর্তি")||n.includes("আবেদন")||n.includes("এডমিশন"))return "📝";
-  if(n.includes("সোশ্যাল"))return "🌐";
 
   return "📌";
 }
@@ -929,102 +870,31 @@ async function loadMainCategories(){
   }
 }
 
-/* ===========================================================
-   হোম পেজের ক্যাটাগরির নির্দিষ্ট ক্রম (৬ সারি × ৪টি = ২৪টি)
-   name    = হোম পেজে যে নামে দেখাবে
-   icon    = Firebase-এ আইকন না থাকলে ব্যবহৃত আইকন
-   aliases = Firebase-এর ক্যাটাগরির সম্ভাব্য নাম (হুবহু মিল)
-   inc     = হুবহু মিল না পেলে নামের ভেতরে এই শব্দ থাকলে মিলবে
-   ক্রম বদলাতে শুধু এই তালিকার সারি সরান।
-   =========================================================== */
-const HOME_LAYOUT=[
-  /* ১ম সারি */
-  {name:"একনজরে জয়পুরহাট",icon:"🏛️",aliases:["একনজরে জয়পুরহাট","জয়পুরহাটের পরিচয়"]},
-  {name:"উপজেলার পরিচয়",icon:"📍",aliases:["উপজেলার পরিচয়","উপজেলা পরিচয়","উপজেলা পরিষদ"]},
-  {name:"দর্শনীয় স্থান",icon:"🏞️",aliases:["দর্শনীয় স্থান"]},
-  {name:"ইসলামিক কর্নার",icon:"☪️",aliases:["ইসলামিক কর্নার"]},
-
-  /* ২য় সারি */
-  {name:"রক্তদাতা",icon:"🩸",aliases:["রক্তদাতা","রক্তদান"]},
-  {name:"ডাক্তার",icon:"🩺",aliases:["ডাক্তার"]},
-  {name:"হাসপাতাল",icon:"🏥",aliases:["হাসপাতাল"]},
-  {name:"ক্লিনিক ও ডায়াগনস্টিক",icon:"🏥",aliases:["ক্লিনিক ও ডায়াগনস্টিক","ক্লিনিক ও ডায়াগনস্টিক সেন্টার"]},
-
-  /* ৩য় সারি */
-  {name:"রেজাল্ট কর্নার",icon:"🎓",aliases:["রেজাল্ট কর্নার"],inc:["রেজাল্ট","ফলাফল"]},
-  {name:"ভর্তি ও আবেদন",icon:"📝",aliases:["ভর্তি ও আবেদন","ভর্তি ও আবেদন কর্নার"],inc:["ভর্তি","এডমিশন","আবেদন"]},
-  {name:"কোচিং ও প্রাইভেট সেন্টার",icon:"📚",aliases:["কোচিং ও প্রাইভেট সেন্টার","কোচিং/প্রাইভেট সেন্টার"]},
-  {name:"ট্রেনের সময়সূচি/অনলাইন টিকিট",icon:"🚆",aliases:["ট্রেনের সময়সূচি/অনলাইন টিকিট","ট্রেনের সময়সূচি"],inc:["ট্রেন"]},
-
-  /* ৪র্থ সারি */
-  {name:"বাসের সময়সূচি/অনলাইন টিকিট",icon:"🚌",aliases:["বাসের সময়সূচি/অনলাইন টিকিট","বাসের সময়সূচি"],inc:["বাস"]},
-  {name:"আজকের খবর",icon:"📰",aliases:["আজকের খবর","আজকের নিউজ","খবর","আজকের সংবাদ"],inc:["খবর","নিউজ","সংবাদ"]},
-  {name:"সোশ্যাল মিডিয়া",icon:"🌐",aliases:["সোশ্যাল মিডিয়া"],inc:["সোশ্যাল"]},
-  {name:"জরুরি সেবা",icon:"🆘",aliases:["জরুরি সেবা"]},
-
-  /* ৫ম সারি */
-  {name:"এম্বুলেন্স",icon:"🚑",aliases:["এম্বুলেন্স","অ্যাম্বুলেন্স"]},
-  {name:"থানা পুলিশ",icon:"👮",aliases:["থানা পুলিশ"]},
-  {name:"ফায়ার সার্ভিস",icon:"🚒",aliases:["ফায়ার সার্ভিস"]},
-  {name:"আইনজীবী",icon:"⚖️",aliases:["আইনজীবী"]},
-
-  /* ৬ষ্ঠ সারি */
-  {name:"বিদ্যুৎ অফিস",icon:"⚡",aliases:["বিদ্যুৎ অফিস"]},
-  {name:"কুরিয়ার সার্ভিস",icon:"🚚",aliases:["কুরিয়ার সার্ভিস"]},
-  {name:"রেস্টুরেন্ট",icon:"🍽️",aliases:["রেস্টুরেন্ট"]},
-  {name:"কৃতী ব্যক্তিত্ব",icon:"🌟",aliases:["কৃতী ব্যক্তিত্ব"]}
-];
-
-/* Firebase-এর ক্যাটাগরি থেকে নির্দিষ্ট স্লটের জন্য মিল খোঁজা (একটি ক্যাটাগরি একবারই ব্যবহার হবে) */
-function findCategoryForSlot(slot,used){
-  const al=slot.aliases.map(normalizeCategoryName);
-
-  let found=categories.find(c=>
-    !used.has(c.id)&&al.includes(normalizeCategoryName(c.name))
-  );
-
-  if(!found&&slot.inc){
-    found=categories.find(c=>
-      !used.has(c.id)&&
-      slot.inc.some(k=>normalizeCategoryName(c.name).includes(k))
-    );
-  }
-
-  return found||null;
-}
-
 function renderMainCategories(){
   const grid=$("categoryGrid");
   grid.innerHTML="";
 
-  const used=new Set();
+  if(!categories.length){
+    grid.innerHTML='<div class="info-box">কোনো Topic পাওয়া যায়নি।</div>';
+    return;
+  }
 
-  HOME_LAYOUT.forEach(slot=>{
-    const fb=findCategoryForSlot(slot,used);
-    if(fb)used.add(fb.id);
-
-    /* ক্লিকের কাজ আগের মতোই openMainTopic দিয়ে চলবে।
-       Firebase-এ মিল থাকলে তার id নেওয়া হয়, না থাকলে নাম দিয়ে বিশেষ কাজ (রেজাল্ট, ভর্তি, সোশ্যাল, ট্রেন, বাস, খবর) চলবে। */
-    const category={...(fb||{}),id:fb?fb.id:"",name:slot.name};
-
-    let icon=(fb&&fb.icon)||getCategoryIcon(fb?fb.name:slot.name);
-    if(icon==="📌")icon=slot.icon;
-
+  categories.forEach(category=>{
     const card=document.createElement("button");
     card.type="button";
     card.className="card";
-    card.dataset.categoryName=slot.name+(fb&&fb.name&&fb.name!==slot.name?" "+fb.name:"");
+    card.dataset.categoryName=category.name||"";
 
     card.innerHTML=
-      `<span class="icon">${escapeHtml(icon)}</span>`+
-      `<span class="name">${escapeHtml(slot.name).replace("/","/<wbr>")}</span>`;
+      `<span class="icon">${escapeHtml(category.icon||getCategoryIcon(category.name))}</span>`+
+      `<span class="name">${escapeHtml(category.name||"")}</span>`;
 
     card.addEventListener("click",()=>openMainTopic(category));
     grid.append(card);
   });
 
   filterCategories();
-  $("categoryCount").textContent=`${grid.querySelectorAll(".card").length}টি ক্যাটাগরি`;
+  $("categoryCount").textContent=`${categories.length}টি ক্যাটাগরি`;
 }
 
 /* সার্চ */
@@ -1039,7 +909,7 @@ function filterCategories(){
   });
 
   $("categoryCount").textContent=
-    term?`${shown}টি পাওয়া গেছে`:`${document.querySelectorAll("#categoryGrid .card").length}টি ক্যাটাগরি`;
+    term?`${shown}টি পাওয়া গেছে`:`${categories.length}টি ক্যাটাগরি`;
 
   const oldMessage=$("noSearchResults");
   if(oldMessage)oldMessage.remove();
@@ -1063,17 +933,6 @@ function openMainTopic(category){
     return;
   }
 
-  if(name.includes("সোশ্যাল")){
-    openSocialHub();
-    return;
-  }
-
-  /* ভর্তি ও আবেদন কর্নার */
-  if(name.includes("ভর্তি")||name.includes("এডমিশন")||name.includes("আবেদন")){
-    openAdmissionCorner();
-    return;
-  }
-
   if(name.includes("ট্রেন")){
     window.open("https://eticket.railway.gov.bd/","_blank","noopener");
     return;
@@ -1086,12 +945,6 @@ function openMainTopic(category){
 
   if(["আজকের খবর","আজকের নিউজ","খবর","আজকের সংবাদ"].some(x=>name.includes(x))){
     window.open("https://joypurhatnews24.com/","_blank","noopener");
-    return;
-  }
-
-  /* Firebase-এ এই ক্যাটাগরি এখনো তৈরি না থাকলে */
-  if(!category.id){
-    alert("এই ক্যাটাগরির তথ্য শীঘ্রই যুক্ত করা হবে।");
     return;
   }
 
@@ -1573,8 +1426,9 @@ const RESULT_ITEMS=[
     {icon:"🌾",name:"হাজী দানেশ বিজ্ঞান ও প্রযুক্তি বিশ্ববিদ্যালয় (HSTU)",url:"https://hstu.ac.bd/"}
   ]},
   {icon:"🎒",name:"প্রাথমিক বৃত্তি ফলাফল",url:"https://dpe.gov.bd/"},
-  {icon:"👩‍⚕️",name:"নার্সিং এডমিশন রেজাল্ট",url:"http://bnmc.teletalk.com.bd/options/result.php"},
-   {icon:"🩺",name:"মেডিকেল এডমিশন রেজাল্ট",url:"https://dgme.gov.bd/"},
+  {icon:"👩‍⚕️",name:"নার্সিং এডমিশন রেজাল্ট",url:"https://dgnm.gov.bd/"},
+  {icon:"👩‍⚕️",name:"নার্সিং চূড়ান্ত পরীক্ষার রেজাল্ট",url:"https://bnmc.gov.bd/"},
+  {icon:"🩺",name:"মেডিকেল এডমিশন রেজাল্ট",url:"https://dgme.gov.bd/"},
   {icon:"🛠️",name:"কারিগরি ও পলিটেকনিক রেজাল্ট",url:"http://result.bteb.gov.bd/"}
 ];
 
@@ -1623,272 +1477,6 @@ function openResultCorner(){
 }
 
 $("closeResultModal").onclick=()=>closeModal("resultModal");
-
-/* ===========================================================
-   ভর্তি ও আবেদন কর্নার
-   লিংক পরিবর্তন করতে শুধু নিচের ADMISSION_ITEMS তালিকা এডিট করুন।
-   apply  = আবেদন লিংক
-   notice = অফিসিয়াল ভর্তি বিজ্ঞপ্তি লিংক
-   site   = শুধু অফিসিয়াল ওয়েবসাইট (আলাদা আবেদন/বিজ্ঞপ্তি লিংক না থাকলে)
-   sub    = ভেতরে আরও তালিকা থাকলে
-   =========================================================== */
-const ADMISSION_ITEMS=[
-  {icon:"🩺",name:"মেডিকেল ও ডেন্টাল ভর্তি",
-    apply:"https://dgme.teletalk.com.bd/",
-    notice:"https://dgme.gov.bd/"},
-
-  {icon:"🎓",name:"GST গুচ্ছ ও বিশ্ববিদ্যালয় ভর্তি",sub:[
-    {icon:"🏫",name:"GST গুচ্ছ বিশ্ববিদ্যালয়",
-      apply:"https://gstadmission.ac.bd/",
-      notice:"https://gstadmission.ac.bd/"},
-    {icon:"🏫",name:"ঢাকা বিশ্ববিদ্যালয়",
-      apply:"https://admission.eis.du.ac.bd/",
-      notice:"https://admission.eis.du.ac.bd/"},
-    {icon:"🏫",name:"রাজশাহী বিশ্ববিদ্যালয়",
-      apply:"https://admission.ru.ac.bd/",
-      notice:"https://admission.ru.ac.bd/"},
-    {icon:"🏫",name:"চট্টগ্রাম বিশ্ববিদ্যালয়",
-      apply:"https://admission.cu.ac.bd/",
-      notice:"https://admission.cu.ac.bd/"},
-    {icon:"🏫",name:"জগন্নাথ বিশ্ববিদ্যালয়",
-      apply:"https://admission.jnu.ac.bd/",
-      notice:"https://admission.jnu.ac.bd/"},
-    {icon:"🏫",name:"জাহাঙ্গীরনগর বিশ্ববিদ্যালয়",
-      site:"https://www.juniv.edu/"}
-  ]},
-
-  {icon:"📘",name:"একাদশ শ্রেণি ও কলেজ ভর্তি",
-    apply:"https://xiclassadmission.gov.bd/",
-    notice:"https://xiclassadmission.gov.bd/"},
-
-  {icon:"🛠️",name:"পলিটেকনিক ও ডিপ্লোমা ভর্তি",
-    apply:"https://app1.btebadmission.gov.bd/",
-    notice:"https://bteb.gov.bd/"},
-
-  {icon:"🏛️",name:"জাতীয় বিশ্ববিদ্যালয় ভর্তি",
-    apply:"https://www.nu.ac.bd/admissions",
-    notice:"https://www.nu.ac.bd/"},
-
-  {icon:"🕌",name:"মাদ্রাসা ও ইসলামি আরবি বিশ্ববিদ্যালয় ভর্তি",sub:[
-    {icon:"📖",name:"বাংলাদেশ মাদ্রাসা শিক্ষা বোর্ড",
-      site:"https://bmeb.gov.bd/"},
-    {icon:"🕌",name:"ইসলামি আরবি বিশ্ববিদ্যালয়",
-      site:"https://iau.edu.bd/"}
-  ]},
-
-  {icon:"📡",name:"উন্মুক্ত বিশ্ববিদ্যালয় ভর্তি",
-    apply:"https://bou.ac.bd/BOU/Admission",
-    notice:"https://bou.ac.bd/"},
-
-  {icon:"🏥",name:"IHT ও MATS ভর্তি",
-    apply:"https://dgme.gov.bd/",
-    notice:"https://dgme.gov.bd/"},
-
-  {icon:"🌿",name:"BUMS, BAMS ও BHMS ভর্তি",
-    apply:"https://dgme.gov.bd/",
-    notice:"https://dgme.gov.bd/"},
-
-  {icon:"🏢",name:"অন্যান্য সরকারি ও বেসরকারি প্রতিষ্ঠানের ভর্তি",sub:[
-    {icon:"🎖️",name:"বাংলাদেশ ইউনিভার্সিটি অব প্রফেশনালস (BUP)",
-      apply:"https://admission.bup.edu.bd/",
-      notice:"https://admission.bup.edu.bd/"}
-  ]}
-];
-
-function admLinkHtml(url,cls,icon,label){
-  return `<a class="adm-link ${cls}" href="${escapeHtml(url)}" target="_blank" rel="noopener noreferrer">`+
-    `<span class="adm-ic">${icon}</span>`+
-    `<span>${escapeHtml(label)}</span>`+
-    `<span class="adm-arrow">↗</span></a>`;
-}
-
-function admBackButton(onBack){
-  const back=document.createElement("button");
-  back.type="button";
-  back.className="result-back";
-  back.textContent="← পেছনে যান";
-  back.onclick=onBack;
-  return back;
-}
-
-function renderAdmissionList(items,title,onBack){
-  $("admissionTitle").textContent=title;
-  const body=$("admissionBody");
-  body.innerHTML="";
-
-  if(onBack)body.append(admBackButton(onBack));
-
-  const list=document.createElement("div");
-  list.className="result-list";
-
-  items.forEach(item=>{
-    const b=document.createElement("button");
-    b.type="button";
-    b.className="result-item";
-    b.innerHTML=
-      `<span class="r-icon">${escapeHtml(item.icon)}</span>`+
-      `<span>${escapeHtml(item.name)}</span>`+
-      `<span class="r-arrow">›</span>`;
-
-    b.onclick=()=>{
-      const backToThis=()=>renderAdmissionList(items,title,onBack);
-      if(item.sub){
-        renderAdmissionList(item.sub,item.name,backToThis);
-      }else{
-        renderAdmissionDetail(item,backToThis);
-      }
-    };
-
-    list.append(b);
-  });
-
-  body.append(list);
-}
-
-function renderAdmissionDetail(item,onBack){
-  $("admissionTitle").textContent=(item.icon||"")+" "+item.name;
-  const body=$("admissionBody");
-  body.innerHTML="";
-
-  body.append(admBackButton(onBack));
-
-  const actions=document.createElement("div");
-  actions.className="adm-actions";
-
-  let html="";
-  if(item.apply)html+=admLinkHtml(item.apply,"adm-apply","📝","আবেদন লিংক");
-  if(item.notice)html+=admLinkHtml(item.notice,"adm-notice","📢","অফিসিয়াল ভর্তি বিজ্ঞপ্তি");
-  if(item.site)html+=admLinkHtml(item.site,"adm-site","🌐","অফিসিয়াল ওয়েবসাইট");
-
-  actions.innerHTML=html;
-  body.append(actions);
-
-  const note=document.createElement("div");
-  note.className="adm-note";
-  note.textContent="ℹ️ আবেদন চালু আছে কি না এবং নতুন বিজ্ঞপ্তি এসেছে কি না, তা অফিসিয়াল পোর্টালে গিয়ে দেখে নিন। আবেদন বন্ধ থাকলেও পোর্টাল ও বিজ্ঞপ্তি দেখা যাবে।";
-  body.append(note);
-}
-
-function openAdmissionCorner(){
-  renderAdmissionList(ADMISSION_ITEMS,"📝 ভর্তি ও আবেদন",null);
-  $("admissionModal").style.display="block";
-}
-
-$("closeAdmissionModal").onclick=()=>closeModal("admissionModal");
-
-/* ===========================================================
-   সোশ্যাল মিডিয়া হাব
-   লিংক/লোগো বদলাতে শুধু SOCIAL_SECTIONS তালিকা এডিট করুন।
-   url = অফিসিয়াল ওয়েবসাইট, domain = লোগো আনার জন্য, pkg = Android অ্যাপ প্যাকেজ
-   =========================================================== */
-const SOCIAL_SECTIONS=[
-  {title:"🌐 সামাজিক যোগাযোগমাধ্যম",items:[
-    {name:"Facebook",domain:"facebook.com",color:"#1877f2",url:"https://www.facebook.com/",pkg:"com.facebook.katana"},
-    {name:"Instagram",domain:"instagram.com",color:"#d6249f",url:"https://www.instagram.com/",pkg:"com.instagram.android"},
-    {name:"YouTube",domain:"youtube.com",color:"#ff0000",url:"https://www.youtube.com/",pkg:"com.google.android.youtube"},
-    {name:"WhatsApp",domain:"whatsapp.com",color:"#25d366",url:"https://www.whatsapp.com/",pkg:"com.whatsapp"},
-    {name:"TikTok",domain:"tiktok.com",color:"#111111",url:"https://www.tiktok.com/",pkg:"com.zhiliaoapp.musically"},
-    {name:"Telegram",domain:"telegram.org",color:"#229ed9",url:"https://web.telegram.org/",pkg:"org.telegram.messenger"},
-    {name:"Messenger",domain:"messenger.com",color:"#0084ff",url:"https://www.messenger.com/",pkg:"com.facebook.orca"},
-    {name:"IMO",domain:"imo.im",color:"#1c9bef",url:"https://imo.im/",pkg:"com.imo.android.imoim"},
-    {name:"X (Twitter)",domain:"x.com",color:"#000000",url:"https://x.com/",pkg:"com.twitter.android"},
-    {name:"LinkedIn",domain:"linkedin.com",color:"#0a66c2",url:"https://www.linkedin.com/",pkg:"com.linkedin.android"}
-  ]},
-  {title:"🤖 AI ও স্মার্ট সহকারী",items:[
-    {name:"ChatGPT",domain:"chatgpt.com",color:"#10a37f",url:"https://chatgpt.com/",pkg:"com.openai.chatgpt"},
-    {name:"Google Gemini",domain:"gemini.google.com",color:"#4285f4",url:"https://gemini.google.com/",pkg:"com.google.android.apps.bard"},
-    {name:"DeepSeek",domain:"deepseek.com",color:"#4d6bfe",url:"https://chat.deepseek.com/",pkg:"com.deepseek.chat"},
-    {name:"Microsoft Copilot",domain:"copilot.microsoft.com",color:"#0f6cbd",url:"https://copilot.microsoft.com/",pkg:"com.microsoft.copilot"},
-    {name:"Perplexity AI",domain:"perplexity.ai",color:"#20808d",url:"https://www.perplexity.ai/",pkg:"ai.perplexity.app.android"},
-    {name:"Google Search",domain:"google.com",color:"#ea4335",url:"https://www.google.com/",pkg:"com.google.android.googlequicksearchbox"}
-  ]}
-];
-
-/* Android Chrome-এ অ্যাপ ইনস্টল থাকলে অ্যাপ খুলবে, না থাকলে ওয়েবসাইট।
-   WebView (যেমন Kodular) ও অন্য ডিভাইসে সরাসরি ওয়েবসাইট খুলবে। */
-function isAndroidBrowser(){
-  const ua=navigator.userAgent||"";
-  return /Android/i.test(ua)&&!/; wv\)/i.test(ua)&&!/Version\/[\d.]+.*Chrome/i.test(ua);
-}
-
-function buildAndroidIntent(item){
-  try{
-    const u=new URL(item.url);
-    return "intent://"+u.host+u.pathname+u.search+
-      "#Intent;scheme=https;package="+item.pkg+
-      ";S.browser_fallback_url="+encodeURIComponent(item.url)+";end";
-  }catch(e){
-    return item.url;
-  }
-}
-
-function makeSocialLogo(item){
-  const box=document.createElement("span");
-  box.className="social-icon";
-
-  const img=document.createElement("img");
-  img.alt=item.name;
-  img.loading="lazy";
-  img.src="https://www.google.com/s2/favicons?domain="+encodeURIComponent(item.domain)+"&sz=128";
-
-  /* লোগো লোড না হলে নামের প্রথম অক্ষর দেখাবে */
-  img.onerror=()=>{
-    box.textContent=item.name.charAt(0);
-    box.style.background=item.color;
-    box.style.color="#fff";
-    box.classList.add("fallback");
-  };
-
-  box.append(img);
-  return box;
-}
-
-function renderSocialHub(){
-  const body=$("socialBody");
-  body.innerHTML="";
-
-  SOCIAL_SECTIONS.forEach(section=>{
-    const title=document.createElement("div");
-    title.className="social-section-title";
-    title.textContent=section.title;
-
-    const grid=document.createElement("div");
-    grid.className="social-grid";
-
-    section.items.forEach(item=>{
-      const a=document.createElement("a");
-      a.className="social-card";
-      a.href=item.url;
-      a.target="_blank";
-      a.rel="noopener noreferrer";
-
-      const name=document.createElement("span");
-      name.className="social-name";
-      name.textContent=item.name;
-
-      a.append(makeSocialLogo(item),name);
-
-      a.addEventListener("click",e=>{
-        if(item.pkg&&isAndroidBrowser()){
-          e.preventDefault();
-          window.location.href=buildAndroidIntent(item);
-        }
-      });
-
-      grid.append(a);
-    });
-
-    body.append(title,grid);
-  });
-}
-
-function openSocialHub(){
-  renderSocialHub();
-  $("socialModal").style.display="block";
-}
-
-$("closeSocialModal").onclick=()=>closeModal("socialModal");
-$("socialBackBtn").onclick=()=>closeModal("socialModal");
 
 /* অ্যাপ চালু */
 startNotificationListener();
