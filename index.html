@@ -162,6 +162,8 @@ font-weight:800;box-shadow:var(--shadow)
 background:var(--card);border:1px solid var(--line);
 border-radius:12px;padding:14px;margin-top:12px;line-height:1.7;font-size:14px
 }
+/* ক্যাটাগরি গ্রিডের ভেতরে বার্তা (লোডিং/ত্রুটি/সার্চে কিছু না পেলে) পুরো প্রস্থ নেবে */
+.grid .info-box,.grid .loading{grid-column:1/-1}
 footer{
 background:#12372a;color:#fff;text-align:center;padding:22px 14px;
 font-size:12px;line-height:1.9;margin-top:18px
@@ -927,41 +929,99 @@ async function loadMainCategories(){
   }
 }
 
+/* ===========================================================
+   হোম পেজের ক্যাটাগরির নির্দিষ্ট ক্রম (৬ সারি × ৪টি = ২৪টি)
+   name    = হোম পেজে যে নামে দেখাবে
+   icon    = Firebase-এ আইকন না থাকলে ব্যবহৃত আইকন
+   aliases = Firebase-এর ক্যাটাগরির সম্ভাব্য নাম (হুবহু মিল)
+   inc     = হুবহু মিল না পেলে নামের ভেতরে এই শব্দ থাকলে মিলবে
+   ক্রম বদলাতে শুধু এই তালিকার সারি সরান।
+   =========================================================== */
+const HOME_LAYOUT=[
+  /* ১ম সারি */
+  {name:"একনজরে জয়পুরহাট",icon:"🏛️",aliases:["একনজরে জয়পুরহাট","জয়পুরহাটের পরিচয়"]},
+  {name:"উপজেলার পরিচয়",icon:"📍",aliases:["উপজেলার পরিচয়","উপজেলা পরিচয়","উপজেলা পরিষদ"]},
+  {name:"দর্শনীয় স্থান",icon:"🏞️",aliases:["দর্শনীয় স্থান"]},
+  {name:"ইসলামিক কর্নার",icon:"☪️",aliases:["ইসলামিক কর্নার"]},
+
+  /* ২য় সারি */
+  {name:"রক্তদাতা",icon:"🩸",aliases:["রক্তদাতা","রক্তদান"]},
+  {name:"ডাক্তার",icon:"🩺",aliases:["ডাক্তার"]},
+  {name:"হাসপাতাল",icon:"🏥",aliases:["হাসপাতাল"]},
+  {name:"ক্লিনিক ও ডায়াগনস্টিক",icon:"🏥",aliases:["ক্লিনিক ও ডায়াগনস্টিক","ক্লিনিক ও ডায়াগনস্টিক সেন্টার"]},
+
+  /* ৩য় সারি */
+  {name:"রেজাল্ট কর্নার",icon:"🎓",aliases:["রেজাল্ট কর্নার"],inc:["রেজাল্ট","ফলাফল"]},
+  {name:"ভর্তি ও আবেদন",icon:"📝",aliases:["ভর্তি ও আবেদন","ভর্তি ও আবেদন কর্নার"],inc:["ভর্তি","এডমিশন","আবেদন"]},
+  {name:"কোচিং ও প্রাইভেট সেন্টার",icon:"📚",aliases:["কোচিং ও প্রাইভেট সেন্টার","কোচিং/প্রাইভেট সেন্টার"]},
+  {name:"ট্রেনের সময়সূচি/অনলাইন টিকিট",icon:"🚆",aliases:["ট্রেনের সময়সূচি/অনলাইন টিকিট","ট্রেনের সময়সূচি"],inc:["ট্রেন"]},
+
+  /* ৪র্থ সারি */
+  {name:"বাসের সময়সূচি/অনলাইন টিকিট",icon:"🚌",aliases:["বাসের সময়সূচি/অনলাইন টিকিট","বাসের সময়সূচি"],inc:["বাস"]},
+  {name:"আজকের খবর",icon:"📰",aliases:["আজকের খবর","আজকের নিউজ","খবর","আজকের সংবাদ"],inc:["খবর","নিউজ","সংবাদ"]},
+  {name:"সোশ্যাল মিডিয়া",icon:"🌐",aliases:["সোশ্যাল মিডিয়া"],inc:["সোশ্যাল"]},
+  {name:"জরুরি সেবা",icon:"🆘",aliases:["জরুরি সেবা"]},
+
+  /* ৫ম সারি */
+  {name:"এম্বুলেন্স",icon:"🚑",aliases:["এম্বুলেন্স","অ্যাম্বুলেন্স"]},
+  {name:"থানা পুলিশ",icon:"👮",aliases:["থানা পুলিশ"]},
+  {name:"ফায়ার সার্ভিস",icon:"🚒",aliases:["ফায়ার সার্ভিস"]},
+  {name:"আইনজীবী",icon:"⚖️",aliases:["আইনজীবী"]},
+
+  /* ৬ষ্ঠ সারি */
+  {name:"বিদ্যুৎ অফিস",icon:"⚡",aliases:["বিদ্যুৎ অফিস"]},
+  {name:"কুরিয়ার সার্ভিস",icon:"🚚",aliases:["কুরিয়ার সার্ভিস"]},
+  {name:"রেস্টুরেন্ট",icon:"🍽️",aliases:["রেস্টুরেন্ট"]},
+  {name:"কৃতী ব্যক্তিত্ব",icon:"🌟",aliases:["কৃতী ব্যক্তিত্ব"]}
+];
+
+/* Firebase-এর ক্যাটাগরি থেকে নির্দিষ্ট স্লটের জন্য মিল খোঁজা (একটি ক্যাটাগরি একবারই ব্যবহার হবে) */
+function findCategoryForSlot(slot,used){
+  const al=slot.aliases.map(normalizeCategoryName);
+
+  let found=categories.find(c=>
+    !used.has(c.id)&&al.includes(normalizeCategoryName(c.name))
+  );
+
+  if(!found&&slot.inc){
+    found=categories.find(c=>
+      !used.has(c.id)&&
+      slot.inc.some(k=>normalizeCategoryName(c.name).includes(k))
+    );
+  }
+
+  return found||null;
+}
+
 function renderMainCategories(){
   const grid=$("categoryGrid");
   grid.innerHTML="";
 
-  if(!categories.length){
-    grid.innerHTML='<div class="info-box">কোনো Topic পাওয়া যায়নি।</div>';
-    return;
-  }
+  const used=new Set();
 
-  categories.forEach(category=>{
+  HOME_LAYOUT.forEach(slot=>{
+    const fb=findCategoryForSlot(slot,used);
+    if(fb)used.add(fb.id);
+
+    /* ক্লিকের কাজ আগের মতোই openMainTopic দিয়ে চলবে।
+       Firebase-এ মিল থাকলে তার id নেওয়া হয়, না থাকলে নাম দিয়ে বিশেষ কাজ (রেজাল্ট, ভর্তি, সোশ্যাল, ট্রেন, বাস, খবর) চলবে। */
+    const category={...(fb||{}),id:fb?fb.id:"",name:slot.name};
+
+    let icon=(fb&&fb.icon)||getCategoryIcon(fb?fb.name:slot.name);
+    if(icon==="📌")icon=slot.icon;
+
     const card=document.createElement("button");
     card.type="button";
     card.className="card";
-    card.dataset.categoryName=category.name||"";
+    card.dataset.categoryName=slot.name+(fb&&fb.name&&fb.name!==slot.name?" "+fb.name:"");
 
     card.innerHTML=
-      `<span class="icon">${escapeHtml(category.icon||getCategoryIcon(category.name))}</span>`+
-      `<span class="name">${escapeHtml(category.name||"")}</span>`;
+      `<span class="icon">${escapeHtml(icon)}</span>`+
+      `<span class="name">${escapeHtml(slot.name).replace("/","/<wbr>")}</span>`;
 
     card.addEventListener("click",()=>openMainTopic(category));
     grid.append(card);
   });
-
-  /* সোশ্যাল মিডিয়া ক্যাটাগরি (Firebase-এ আলাদা না থাকলে এখান থেকে যুক্ত হবে) */
-  if(!categories.some(c=>normalizeCategoryName(c.name).includes("সোশ্যাল"))){
-    const social=document.createElement("button");
-    social.type="button";
-    social.className="card";
-    social.dataset.categoryName="সোশ্যাল মিডিয়া";
-    social.innerHTML=
-      '<span class="icon">🌐</span>'+
-      '<span class="name">সোশ্যাল মিডিয়া</span>';
-    social.addEventListener("click",openSocialHub);
-    grid.append(social);
-  }
 
   filterCategories();
   $("categoryCount").textContent=`${grid.querySelectorAll(".card").length}টি ক্যাটাগরি`;
@@ -1026,6 +1086,12 @@ function openMainTopic(category){
 
   if(["আজকের খবর","আজকের নিউজ","খবর","আজকের সংবাদ"].some(x=>name.includes(x))){
     window.open("https://joypurhatnews24.com/","_blank","noopener");
+    return;
+  }
+
+  /* Firebase-এ এই ক্যাটাগরি এখনো তৈরি না থাকলে */
+  if(!category.id){
+    alert("এই ক্যাটাগরির তথ্য শীঘ্রই যুক্ত করা হবে।");
     return;
   }
 
